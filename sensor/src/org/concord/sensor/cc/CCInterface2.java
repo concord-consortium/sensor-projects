@@ -4,7 +4,7 @@ import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
-import org.concord.sensor.device.AbstractJavaSensorDevice;
+import org.concord.sensor.device.AbstractJavaSensorDeviceTmp;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorDeviceMode;
@@ -12,7 +12,7 @@ import org.concord.sensor.device.SensorDeviceMode;
 import waba.io.SerialPort;
 import waba.sys.Vm;
 
-public class CCInterface2 extends AbstractJavaSensorDevice
+public class CCInterface2 extends AbstractJavaSensorDeviceTmp
 	implements CCModes
 {
 	public final static int DATUM_ONE_CH_10_BIT = 0;

@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.7 $
- * $Date: 2005-01-27 16:55:36 $
+ * $Revision: 1.8 $
+ * $Date: 2005-02-19 13:40:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -87,6 +87,8 @@ public class JavaDeviceFactory
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
 				break;				
 			case FOURIER:
+			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
+			    break;
 			case DATA_HARVEST_USB:
 			case DATA_HARVEST_CF:
 			case IMAGIWORKS_SERIAL:

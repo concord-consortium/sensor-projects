@@ -39,7 +39,8 @@ public class SensorDataProducerImpl
 	private boolean inDeviceRead;
 	private int totalDataRead;
 	private SensorDevice device;
-
+	private ExperimentConfig experimentConfig = null;
+	
 	public SensorDataProducerImpl(SensorDevice device, Ticker t, UserMessageHandler h)
 	{
 		this.device = device;
@@ -161,6 +162,7 @@ public class SensorDataProducerImpl
 	public final ExperimentConfig configure(ExperimentRequest request, 
 			ExperimentConfig result)
 	{
+	    experimentConfig = result;
 		DataStreamDescUtil.setupDescription(dDesc, request, result);
 		return result;		
 	}
@@ -172,7 +174,8 @@ public class SensorDataProducerImpl
 		timeWithoutData = 0;
 
 		startTimer = Vm.getTimeStamp();
-		ticker.startTicking(device.getRightMilliseconds());
+		int dataReadMillis = (int)(experimentConfig.getDataReadPeriod()*1000.0);
+		ticker.startTicking(dataReadMillis);
 
 	}
 	

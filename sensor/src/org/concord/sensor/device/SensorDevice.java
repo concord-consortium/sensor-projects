@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2005-02-08 21:29:42 $
+ * $Revision: 1.4 $
+ * $Date: 2005-02-19 13:40:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -24,17 +24,6 @@ import org.concord.sensor.ExperimentRequest;
  */
 public interface SensorDevice
 {
-	/**
-	 * This method is called just after the device is started.
-	 * The returned value is used for the milli seconds between
-	 * read() calls. It is an approximation, the caller doesn't guarruntee
-	 * to call read() exactly this many ms.  Implementors should return 
-	 * smallest reasonable value.  Most likely the data will be displayed
-	 * in realtime, so a faster response time is better. 
-	 * @return
-	 */
-	public int getRightMilliseconds();
-	
 	/**
 	 * This is the first method called in the life cycle of this object.
 	 * The passed in string can contain whatever configuration information

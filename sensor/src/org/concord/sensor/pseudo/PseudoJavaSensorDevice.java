@@ -8,19 +8,20 @@ import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.AbstractJavaSensorDevice;
+import org.concord.sensor.device.AbstractJavaSensorDeviceTmp;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorUnit;
+import org.concord.sensor.device.impl.ExperimentConfigImpl;
 
 /**
  * @author scott
  *
  */
-public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice 
+public class PseudoJavaSensorDevice extends AbstractJavaSensorDeviceTmp 
 {
 	float time = 0;
-	PseudoExperimentConfig expConfig = null;
+	ExperimentConfigImpl expConfig = null;
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.AbstractJavaSensorDevice#checkMode(org.concord.sensor.device.Sensor, java.lang.Object)
@@ -29,15 +30,6 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 	{
 		// We have no real sensors so the mode is always ok
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.device.SensorDevice#getRightMilliseconds()
-	 */
-	public int getRightMilliseconds() 
-	{
-		// send a default read time of 0.1 s
-		return 100;
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +55,13 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 	{
 		// We need to return a valid config that matches the request
 		// because we are going to pretend to handle anything.
-		expConfig = new PseudoExperimentConfig();
+		expConfig = new ExperimentConfigImpl();
+		expConfig.setValid(true);
+		expConfig.setDeviceName("Psuedo Device");
+		expConfig.setExactPeriod(true);
+		expConfig.setPeriod(0.1f);
+		expConfig.setDataReadPeriod(0.1f);
+		
 		SensorRequest [] sensRequests = request.getSensorRequests();
 		SensorConfig [] sensConfigs = new SensorConfig [sensRequests.length]; 
 		for(int i =0; i<sensRequests.length; i++) {
@@ -151,7 +149,7 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 		
 		// We need to return a valid config that matches the request
 		// because we are going to pretend to handle anything.
-		expConfig = new PseudoExperimentConfig();
+		expConfig = new ExperimentConfigImpl();
 		SensorConfig [] sensConfigs = new SensorConfig [1]; 
 		PseudoSensorConfig sensConfig = new PseudoSensorConfig();
 		sensConfigs[0] = sensConfig;

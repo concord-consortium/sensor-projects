@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.7 $
- * $Date: 2005-02-08 21:29:42 $
+ * $Revision: 1.8 $
+ * $Date: 2005-02-19 13:40:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -61,6 +61,18 @@ public interface ExperimentConfig
 	 */
 	public boolean getExactPeriod();
 	
+	/**
+	 * This is the time between read calls that the device
+	 * prefers.  The units are seconds per read.  It can't be
+	 * guarunteed but the call will do its best to call 
+	 * read at these times. Implementors should return 
+	 * smallest reasonable value.  Most likely the data will be displayed
+	 * in realtime, so a faster response time is better.
+	 * 
+	 * @return
+	 */
+	public float getDataReadPeriod();
+		
 	/**
 	 * An array of SensorConfig, each SensorConfig contains configuration
 	 * information about the sensor.

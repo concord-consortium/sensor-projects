@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="org/concord/sensor/contrib/|org/concord/sensor/meld/|org/concord/sensor/transformers/" kind="src" path="src"/>
+	<classpathentry excluding="org/concord/sensor/meld/|org/concord/sensor/transformers/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/WabaJVM"/>
 	<classpathentry kind="src" path="/Framework"/>

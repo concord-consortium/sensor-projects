@@ -42,6 +42,15 @@ public class ByteBufferStream
         return (short)value;
     }
 
+    public static final long readULong(byte [] inBuf, int offset)
+    {
+        long value = ((long)((inBuf[offset++] & 0xFFL) << 24)) |
+        	((inBuf[offset++] & 0xFF) << 16) |
+        	((inBuf[offset++] & 0xFF) << 8) | 
+        	(inBuf[offset] & 0xFF);
+        return value;        
+    }
+
     public static final void writeULong(long value, byte [] buf, int offset)
     {
         buf[offset]   = (byte)((value & 0xFF000000) >> 24);

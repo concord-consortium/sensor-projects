@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2005-02-08 21:46:21 $
+ * $Revision: 1.4 $
+ * $Date: 2005-02-10 20:43:07 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -46,7 +46,9 @@ public class NativeVernierSensorDevice
 	public NativeVernierSensorDevice()
 	{
 		try {
-			System.loadLibrary("GoIO_DLL");
+			if(System.getProperty("os.name").startsWith("Windows")) {
+				System.loadLibrary("GoIO_DLL");
+			} 
 			System.loadLibrary("vernier_ccsd");
 			nativeLibAvailable = true;
 //			System.loadLibrary("blah");

@@ -44,9 +44,11 @@ int main()
 	SensDev_start(hDevice);
 		
 	float dataBuffer [200];
+	float timestampBuffer [200];
 	int i;
 	for(i=0; i<100; i++) {
-		int numValues = SensDev_read(hDevice, dataBuffer, 200);
+		int numValues = SensDev_read(hDevice, dataBuffer, 
+			timestampBuffer, 200);
 				
 		int j;
 		for(j=0; j<numValues; j++) {

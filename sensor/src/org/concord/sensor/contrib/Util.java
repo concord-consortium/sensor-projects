@@ -40,23 +40,6 @@ public class Util
 		SensorDataProducer producer = sdManager.createDataProducer();
 		if(producer != null){
 		    org.concord.sensor.ExperimentConfig ec = producer.configure(request);
-		    System.out.println("11 ExperimentConfig "+ec); 
-		    if(ec != null){
-		        org.concord.sensor.SensorConfig []scs = ec.getSensorConfigs();
-		        if(scs != null){
-		            for(int i = 0; i < scs.length; i++){
-		               org.concord.sensor.SensorConfig sc = scs[i];
-		               String name = sc.getName();
-		               String portName = sc.getPortName();
-		               System.out.println("name "+name+" portName "+portName+" type "+sc.getType()); 
-		               System.out.println("getUnit "+sc.getUnit().getDimension()); 
-		               if(sc instanceof ccsd.vernier.SensorConfig){
-		                    ccsd.vernier.SensorConfig vsc = (ccsd.vernier.SensorConfig)sc;
-		                    System.out.println("getNumSensorParams "+vsc.getNumSensorParams()); 
-		                }
-		            }
-		        }
-		    }
 	    }
 		return producer;
 	}

@@ -56,7 +56,7 @@ int main()
 			fflush(stdout);
 		}
 		
-		usleep(expRequest.dataReadPeriod * 1000000);
+		usleep(expResponse->dataReadPeriod * 1000000);
 	}			
 
 	SensDev_stop(hDevice);

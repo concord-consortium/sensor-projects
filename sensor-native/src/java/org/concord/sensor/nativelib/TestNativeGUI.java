@@ -35,37 +35,57 @@ import org.concord.sensor.contrib.SimpleSensorDataConsumer;
  * gcc  -o libSetDylibPath.jnilib  SetDylibPath.c   "-arch" "ppc" "-bundle"  build string 
  * install path in the libvernier_ccsd.jnilib should be./libGoIO.dylib
  */
-public class TestNativeGUI 
+public class TestNativeGUI extends JPanel
 {
-static JTextArea            textArea;
-static SensorDataProducer   dataProducer;
+JTextArea            textArea;
+SensorDataProducer   dataProducer;
+    public TestNativeGUI(){
+	    initGUI();
+		dataProducer = initHardware();
+    }
+
+    public void close(){
+        stopSensor();
+        if(dataProducer != null) dataProducer.close();
+    }
+
 	public static void main(String[] args) 
 	{
+	    final TestNativeGUI sensorComponent = new TestNativeGUI();
         try{
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){
                 public void run(){
                     try{
                         System.out.println("SHUTDOWNHOOK");
-                        stopSensor();
-                        if(dataProducer != null) dataProducer.close();
+                        sensorComponent.close();
                     }catch(Throwable t){}
                 }
             }));
         }catch(Throwable t){}	
-	    initGUI();
-		dataProducer = initHardware();
+	    JFrame frame = new JFrame("Sensor GUI Test");
+	    Container container = frame.getContentPane();
+	    container.setLayout(new BorderLayout());
+	    container.add(sensorComponent,BorderLayout.CENTER);
+	    frame.pack();
+	    frame.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent evt){
+		        System.exit(0);
+            }
+	    });
+	
+	    frame.setVisible(true);
 	}
 
-	static void startSensor(){
+	public void startSensor(){
 		if(dataProducer != null) dataProducer.start();
 	}
 
-	static void stopSensor(){
+	public void stopSensor(){
 		if(dataProducer == null) return;
         dataProducer.stop();
 	}
 
-	static SensorDataProducer initHardware(){
+	SensorDataProducer initHardware(){
 		UserMessageHandler messenger = new UserMessageHandlerImpl();
 		SensorDataManager  sdManager = new InterfaceManager(messenger);
 		DeviceConfig [] dConfigs = new DeviceConfig[1];
@@ -77,14 +97,12 @@ static SensorDataProducer   dataProducer;
 		return consumer.getSensorDataProducer();
 	}
 	
-	static void initGUI(){
-	    JFrame frame = new JFrame("Sensor GUI Test");
-	    Container container = frame.getContentPane();
+	void initGUI(){
 	    textArea = new JTextArea();
 	    JScrollPane scrollPane = new JScrollPane(textArea);
 	    scrollPane.setPreferredSize(new Dimension(300,300));
-	    container.setLayout(new BorderLayout());
-	    container.add(scrollPane,BorderLayout.CENTER);
+	    setLayout(new BorderLayout());
+	    add(scrollPane,BorderLayout.CENTER);
 	    
 	    Box buttonBox = Box.createHorizontalBox();
 	    JButton clearB = new JButton("Clear");
@@ -121,18 +139,8 @@ static SensorDataProducer   dataProducer;
             }
         });
 
-	    container.add(buttonBox,BorderLayout.SOUTH);
+	   add(buttonBox,BorderLayout.SOUTH);
 	    
-	    frame.pack();
-	    
-	    
-	    frame.addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent evt){
-		        System.exit(0);
-            }
-	    });
-	
-	    frame.setVisible(true);
 	}
 }
 

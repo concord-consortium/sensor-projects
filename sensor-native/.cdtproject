@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse-cdt version="2.0"?>
+
+<cdtproject id="org.eclipse.cdt.make.core.make">
+<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.ELF"/>
+<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.PE"/>
+<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.Cygwin_PE">
+<attribute key="cygpath" value="cygpath"/>
+<attribute key="addr2line" value="addr2line"/>
+<attribute key="c++filt" value="c++filt"/>
+</extension>
+<data>
+
+<item id="cdt_resolver">
+<custom value="false"/>
+</item>
+<item id="org.eclipse.cdt.core.pathentry">
+<pathentry kind="inc" path="" include="include" base-path="NativeSensor"/>
+<pathentry kind="inc" path="" include="include/GoIO" base-path="NativeSensor"/>
+<pathentry kind="inc" path="" include="C:/cygwin/usr/include"/>
+<pathentry kind="mac" path="" name="__CYGWIN__" value=""/>
+<pathentry kind="src" path=""/>
+<pathentry kind="out" path=""/>
+</item>
+<item id="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="all-test" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>c:/cygwin/bin/make</buildCommand>
+<buildTarget>all</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/GoLinkQuery" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>c:/cygwin/bin/make</buildCommand>
+<buildTarget>bin/GoLinkQuery</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+</target>
+<target name="all" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>c:/cygwin/bin/make</buildCommand>
+<buildTarget>all</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/GoLinkPrintData" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>c:/cygwin/bin/make</buildCommand>
+<buildTarget>bin/GoLinkPrintData</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+</target>
+<target name="pseudo_swig" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>pseudo_swig</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="ti_swig" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>ti_swig</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="vernier_swig" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>vernier_swig</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/TIPrintData" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>bin/TIPrintData</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/TIQuery" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>bin/TIQuery</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/ti_ccsd.dll" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>bin/ti_ccsd.dll</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="bin/vernier_ccsd.dll" targetID="org.eclipse.cdt.make.MakeTargetBuilder" path="">
+<buildCommand>make</buildCommand>
+<buildTarget>bin/vernier_ccsd.dll</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+</buildTargets>
+</item>
+<item id="cdt_indexer">
+<indexEnabled indexValue="true"/>
+<indexerProblemsEnabled indexProblemsValue="7"/>
+</item>
+</data>
+</cdtproject>

@@ -6,7 +6,7 @@ SWIG = /cygdrive/c/swig-1.3.21/swig
 QUERY_OBJS = nativelib/test/QueryDevice.o nativelib/test/CCSensorUtils.o 
 PRINTDATA_OBJS = nativelib/test/PrintData.o nativelib/test/CCSensorUtils.o 
 PSEUDO_OBJS = nativelib/PseudoSensorDevice.o
-GOLINK_OBJS = nativelib/GoLinkSensorDevice.o libGoIO_DLL.dylib
+GOLINK_OBJS = nativelib/GoLinkSensorDevice.o libGoIO_DLL.a
 TI_OBJS = nativelib/TISensorDevice.o
 
 SWIG_OUTPUT_DIR = src/swig/java
@@ -14,13 +14,13 @@ SWIG_OUTPUT_DIR = src/swig/java
 # this is used to build native test executables
 # this filter grabs the .o and .lib files from the dependency list
 define build-static-executable
-gcc -o $@  $(filter %.o %.lib %.dylib,$^)  
+gcc -o $@  $(filter %.o %.lib %.a,$^)  
 endef
 
 # this builds a jni comptable dll with gcc
 # this filter grabs the .o and .lib files from the dependency list
 define build-jni-dll
-gcc -dynamiclib $(filter %.dylib %.o %.lib ,$^) -o $@ -framework JavaVM 
+gcc -dynamiclib $(filter %.a %.o %.lib ,$^) -o $@ -framework JavaVM 
 endef
 
 all: vernier_swig

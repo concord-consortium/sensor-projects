@@ -1,6 +1,8 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
+import org.concord.sensor.device.DefaultSensorDevice;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorProducer;
 
 public class CCSensorProducer extends SensorProducer
 {
@@ -70,7 +72,7 @@ public class CCSensorProducer extends SensorProducer
 		return newProb;
 	}
 
-	public InterfaceManager createInterface(int id)
+	public DefaultSensorDevice createInterface(int id)
 	{
 		// Make a new ticker if this one is already being used 
 		if(ticker.getInterfaceManager() != null) {

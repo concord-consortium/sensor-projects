@@ -1,10 +1,10 @@
-package org.concord.sensor;
+package org.concord.sensor.device;
 
-import waba.util.Vector;
+import org.concord.framework.text.UserMessageHandler;
+import org.concord.waba.extra.io.DataStream;
+
 import waba.sys.Vm;
-
-import org.concord.waba.extra.io.*;
-import org.concord.framework.text.*;
+import waba.util.Vector;
 
 public class SensorFactory
 {
@@ -69,7 +69,7 @@ public class SensorFactory
 		return null;		
 	}
 
-	public static void storeProbeToStream(Sensor sensor, DataStream out)
+	public static void storeSensorToStream(Sensor sensor, DataStream out)
 	{
 		if(sensor == null){
 			out.writeInt(INVALID_PROBE);
@@ -81,9 +81,9 @@ public class SensorFactory
 		}			
 	}
 
-	public static InterfaceManager getInterface(int id)
+	public static DefaultSensorDevice getInterface(int id)
 	{
-		InterfaceManager im = null;
+		DefaultSensorDevice im = null;
 
 		SensorProducer pp = null;
 		for(int i=0; i<producers.getCount(); i++){

@@ -1,7 +1,7 @@
-package org.concord.sensor;
+package org.concord.sensor.device;
 
-import org.concord.waba.extra.io.*;
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.waba.extra.io.DataStream;
 
 public abstract class SensorProducer
 {
@@ -90,7 +90,7 @@ public abstract class SensorProducer
 		return interfaceNames;
     }
 
-    public abstract InterfaceManager createInterface(int id);
+    public abstract DefaultSensorDevice createInterface(int id);
     
     public void setTicker(Ticker t)
     {

@@ -1,17 +1,19 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.waba.extra.util.*;
-
-import org.concord.framework.data.*;
-import org.concord.framework.data.stream.*;
+import org.concord.framework.data.DecoratedValue;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.CalibrationDesc;
+import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.Maths;
 
 public class CCSmartWheel extends Sensor
 	implements CCModes
 {
 float  			[]wheelData 	= new float[CCSensorProducer.BUF_SIZE*2];
 int  			[]wheelIntData 	= new int[CCSensorProducer.BUF_SIZE*2];
-float  			dtChannel = 0.0f;
 int				nTicks = 660;
 float				radius = 0.06f;
 float				koeff = 2f*Maths.PI;
@@ -22,10 +24,11 @@ float				koeff = 2f*Maths.PI;
 	*/
 
 	public final static String	[]wheelModes =  {"Position", "Velocity", "Ang. Velocity"};
-	public final static int		ANG_MODE_OUT 		= 0;
-	public final static int		LINEAR_MODE_OUT 	= 1;
-    public final static int     LIN_POS_MODE_OUT        = 2;
-	//	int	 outputMode = LIN_POS_MODE_OUT;
+	public final static int MODE_LINEAR_POS = 0;
+	public final static int MODE_LINEAR_VELO = 1;
+	public final static int MODE_ANGULAR_VELO = 2;	
+	
+	private int[] outputModes;
 
 	CCSmartWheel(boolean init, short type, SensorProducer p){
 		super(init, type, p);
@@ -36,16 +39,6 @@ float				koeff = 2f*Maths.PI;
 		activeChannels = 1;
 		interfaceMode = CCInterface2.getMode(PORT_A, DIG_COUNT_MODE);
 
-		dDesc.setNextSampleOffset(1);
-		dDesc.setChannelPerSample(1);
-		dDesc.setDt(0.01f);
-		dDesc.setDataOffset(0);
-
-		dEvent.setDataDescription(dDesc);
-		dEvent.setNumSamples(1);
-		dEvent.setData(wheelData);
-		dEvent.setIntData(wheelIntData);
-
 		//		addProperty(modeProp);
 
 		if(init){
@@ -54,32 +47,21 @@ float				koeff = 2f*Maths.PI;
 		}		
 	}
 	
-	DataListener veloListener = null;
-	DataListener posListener = null;
-	public DataListener setModeDataListener(DataListener l, int mode)
+	public void setOutputModes(int [] outputModes)
 	{
-		DataListener old = null;
-
-		switch(mode){
-		case 0:
-			old = posListener;
-			posListener = l;
-			break;
-		case 1:
-			old = veloListener;
-			veloListener = l;
-			break;
-		}
-		return old;
+		this.outputModes = outputModes;
 	}
-
+	
 	public String getQuantityUnit(int mode)
 	{
 		switch(mode){
-		case 0:
+		case MODE_LINEAR_POS:
 			return "m";
-		case 1:
+		case MODE_LINEAR_VELO:
 			return "m/s";
+		case MODE_ANGULAR_VELO:
+		case DEFAULT_OUTPUT_MODE:
+			return "rad/s";	
 		}
 		return null;
 	}
@@ -87,22 +69,15 @@ float				koeff = 2f*Maths.PI;
 	public int getQuantityPrecision(int mode)
 	{
 		switch(mode){
-		case 0:
-			return -4;
-		case 1:
-			return -2;
-		}
-
+			case MODE_LINEAR_POS:
+				return -4;
+			case MODE_LINEAR_VELO:
+				return -2;
+			case MODE_ANGULAR_VELO:
+			case DEFAULT_OUTPUT_MODE:
+				return -1;				
+			}
 		return DecoratedValue.UNKNOWN_PRECISION;
-	}
-
-
-	public int getPrecision(){ return -1; }
-
-	// Get the default unit
-	public String getUnit()
-	{
-		return "rad/s";
 	}
 
 	public Object getInterfaceMode()
@@ -123,44 +98,22 @@ float				koeff = 2f*Maths.PI;
 	{
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
-		dEvent.type = e.type;
-		dDesc.setDt(eDesc.getDt());
 
-		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
-
-		dDesc.setChannelPerSample(1);
-
-		dEvent.setNumSamples(1);
-		dtChannel = dDesc.getDt() / (float)dDesc.getChannelPerSample();
 		posOffset = 0f;
-		dt = dDesc.getDt();
-		dEvent.setData(wheelData);
-		dEvent.setIntData(wheelIntData);
-
+		dt = eDesc.getDt();
+		
 		calFactor = -(koeff/(float)nTicks/dt);
-		float tuneValue = dDesc.getChannelDescription().getTuneValue();
+		float tuneValue = eDesc.getChannelDescription().getTuneValue();
 		posCalFactor = -(koeff/(float)nTicks) * tuneValue  * radius;
 		velCalFactor = -(koeff/(float)nTicks/dt) * tuneValue * radius;
 
-		// This will call notifyDataListenersEvent
-		return super.startSampling(dEvent);
+		return true;		
 	}
 
-	public void notifyDataListenersEvent(DataStreamEvent e)
+    // This could be done as a generic multi linear transform sensor
+	public int dataArrived(DataStreamEvent e, float result[],
+			int resultOffset, int resultNextSampleOffset)
 	{
-		if(veloListener != null){
-			veloListener.dataStreamEvent(e);
-		}
-		if(posListener != null){
-			posListener.dataStreamEvent(e);
-		}
-
-		super.notifyDataListenersEvent(e);
-	}
-    	
-	public boolean dataArrived(DataStreamEvent e)
-	{
-		dEvent.type = e.type;
 		DataStreamDescription eDesc = e.getDataDescription();
 
 		int[] data = e.getIntData();
@@ -169,47 +122,41 @@ float				koeff = 2f*Maths.PI;
 		int nextSampleOff = eDesc.getNextSampleOffset();
 		int ndata = e.getNumSamples()*nextSampleOff;
 
-		if(ndata < nextSampleOff) return false;
-
-		int  	chPerSample = dDesc.getChannelPerSample();
-
-		// note this is the time at the begining of the event
-		dEvent.numSamples = e.getNumSamples();
-		dEvent.setData(wheelData);
+		if(ndata < nextSampleOff) return -1;
 
 		boolean ret = true;
-		if(dataListeners != null){
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				wheelIntData[i] = data[nOffset+i];
-				wheelData[i] = (float)wheelIntData[i]*calFactor;			    
+		for(int modeIndex = 0; modeIndex<outputModes.length; modeIndex++) {
+			if(outputModes[modeIndex] == MODE_ANGULAR_VELO) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					int rawData = data[nOffset+i];
+					result[resultOffset + i*resultNextSampleOffset + modeIndex] = 
+						(float)rawData*calFactor;			    
+				}				
+			} else if(outputModes[modeIndex] == MODE_LINEAR_VELO) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					int rawData = data[nOffset+i];
+					result[resultOffset + i*resultNextSampleOffset + modeIndex] = 
+						(float)rawData*velCalFactor;			    
+				}				
+			} else if(outputModes[modeIndex] == MODE_LINEAR_POS) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					int rawData = data[nOffset+i];
+					result[resultOffset + i*resultNextSampleOffset + modeIndex] = 
+						(float)rawData*posCalFactor;			    
+				}				
 			}
-			ret = super.dataArrived(dEvent);
 		}
-
-		if(veloListener != null){
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				wheelIntData[i] = data[nOffset+i];
-				wheelData[i] = (float)wheelIntData[i]*velCalFactor;
-			}
-			veloListener.dataReceived(dEvent);
-		}
-
-		if(posListener != null){
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				wheelIntData[i] = data[nOffset+i];
-				wheelData[i] = posOffset = posOffset + (float)wheelIntData[i]*posCalFactor;				
-			}
-			posListener.dataReceived(dEvent);
-		}			
-
-		return ret;
+		
+		return e.getNumSamples();
 	}
 
 	public void  calibrationDone(float []row1,float []row2,float []calibrated){
 		if(row1 == null || calibrated == null) return;
 		
 		if(Maths.abs(row1[0]) < 1e-5) return;//zero
-		radius = calibrated[0] / koeff / koeff / nTicks/ row1[0] / dDesc.getDt();
+		// FIXME: the last value should be the dt of the data
+		// I don't know where to get that dt yet.
+		radius = calibrated[0] / koeff / koeff / nTicks/ row1[0] / Float.NaN;
 		if(calibrationDesc != null){
 			CalibrationParam p = calibrationDesc.getCalibrationParam(0);
 			if(p != null) p.setValue(radius);

@@ -1,16 +1,15 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.framework.data.stream.*;
-import org.concord.waba.extra.util.*;
+import org.concord.framework.data.DecoratedValue;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
-public class CCRawData extends Sensor
+public class CCRawData extends CCSensor
 	implements CCModes
 {
-	float  			[]rawData = new float[CCSensorProducer.BUF_SIZE];
-	int  			[]rawIntData = new int[CCSensorProducer.BUF_SIZE];
 	int				firstIndex,secondIndex;
-
 
 	public final static int		SAMPLING_24BIT_MODE = 0;
 	public final static int		SAMPLING_10BIT_MODE = 1;
@@ -30,21 +29,12 @@ public class CCRawData extends Sensor
 
 		activeChannels = 2;
 		defQuantityName = "Voltage";
-
-		dDesc.setChannelPerSample(2);
-		dDesc.setDt(0.0f);
-		dDesc.setDataOffset(0);
-		dEvent.setDataDescription(dDesc);
-
-		dEvent.setNumSamples(1);
-		dEvent.setData(rawData);
-		dEvent.setIntData(rawIntData);
+		unit = "V";
 
 		addProperty(sampProp);
 		addProperty(chanProp);
 		addProperty(speedProp);
 
-		unit = "V";
 	}
 
 	public String getLabel()
@@ -52,24 +42,28 @@ public class CCRawData extends Sensor
 		return "Voltage " + "Ch. " + curChannel;
 	}
 
-    public boolean startSampling(DataStreamEvent e){
-		dEvent.type = e.type;
-		dDesc.setDt(e.getDataDescription().getDt());
+    public boolean startSampling(DataStreamEvent e)
+    {
 		// Change to Volts
-		dDesc.getChannelDescription().setTuneValue(e.getDataDescription().getChannelDescription().getTuneValue()/1000f);
-		if(activeChannels == 2){
-			dDesc.setChannelPerSample(2);
+    	// At one point we were changing the tune value of the
+    	// result data description.  Tune values are now being deprecated
+
+    	if(activeChannels == 2){
 			firstIndex = (curChannel == 1)?1:0;
 			secondIndex = (curChannel == 1)?0:1;
 		}else{
-			dDesc.setChannelPerSample(1);
 			firstIndex = secondIndex = 0;
 		}
-		return super.startSampling(dEvent);
-	}
 
-	public int getPrecision()
+    	return true;
+    }
+
+	public int getQuantityPrecision(int mode)
 	{
+		if(mode != DEFAULT_OUTPUT_MODE) {
+			return DecoratedValue.UNKNOWN_PRECISION;
+		}
+		
 		// This is for the current part of the probe so...
 		int modeIndex = sampProp.getIndex();
 		if(modeIndex == 0){
@@ -82,14 +76,16 @@ public class CCRawData extends Sensor
 
 	}
 
-    public boolean dataArrived(DataStreamEvent e)
+    public int dataArrived(DataStreamEvent e, float result[],
+    		int resultOffset, int resultNextSampleOffset)
     {
 		DataStreamDescription eDesc = e.getDataDescription();
 
 		int nOffset 		= eDesc.getDataOffset();
 		int[] data = e.getIntData();
 
-		float tuneValue = dDesc.getChannelDescription().getTuneValue();
+		// Make this into volts instead of millivolts
+		float tuneValue = eDesc.getChannelDescription().getTuneValue()/1000;
 		
 		int nextSampleOff = eDesc.getNextSampleOffset();
 
@@ -97,28 +93,24 @@ public class CCRawData extends Sensor
 		int 	ndata 		= nSamples*nextSampleOff;
 
 		int 	v = 0,v1 = 0;
-		dEvent.type = e.type;
-		int j=0;
+
+		int j=resultOffset;
 		for(int i = nOffset; i < ndata; i+=nextSampleOff){
 			if(activeChannels == 1){
 				v = data[i];
-				rawIntData[j] = v;
-				rawData[j] = (float)v*tuneValue;
-				j++;
+				result[j] = (float)v*tuneValue;
 			}else{
 				v = data[i+firstIndex];
-				rawIntData[j] = v;
-				rawData[j] = (float)v*tuneValue;
-				j++;
+				result[j] = (float)v*tuneValue;
 
 				v1 = data[i+secondIndex];
-				rawIntData[j] = v1;
-				rawData[j] = (float)v1*tuneValue;
-				j++;
+				result[j+1] = (float)v1*tuneValue;
 			}
+
+			j += resultNextSampleOffset;
 		}
-		dEvent.setNumSamples(nSamples);
-		return super.dataArrived(dEvent);
+
+		return nSamples;
     }
 
 	public boolean visValueChanged(PropObject po)

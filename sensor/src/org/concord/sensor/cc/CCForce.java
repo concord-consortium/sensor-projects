@@ -1,17 +1,17 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.framework.data.*;
-import org.concord.framework.data.stream.*;
+import org.concord.framework.data.DecoratedValue;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.CalibrationDesc;
+import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.SensorEvent;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
-import org.concord.waba.extra.util.*;
-
-public class CCForce extends Sensor
+public class CCForce extends CCSensor
 	implements CCModes
 {
-	float  			[]forceData = new float[CCSensorProducer.BUF_SIZE/2];
-	int  			[]forceIntData = new int[CCSensorProducer.BUF_SIZE];
-
 	public final static String [] modeNames = {"End of Arm", "Middle of Arm"};
 	public final static String [] range1Names = {"+/- 2N", "+/- 20N"};
 	public final static String [] range2Names = {"+/- 200N"};
@@ -54,15 +54,8 @@ public class CCForce extends Sensor
 
 	    activeChannels = 1;
 		defQuantityName = "Force";
+		unit = "N";
 		
-		dDesc.setChannelPerSample(1);
-		dDesc.setNextSampleOffset(1);
-		dDesc.setDt(0.0f);
-
-		dEvent.setDataDescription(dDesc);
-		dEvent.setData(forceData);
-		dEvent.setIntData(forceIntData);
-
 		addProperty(modeProp);
 		addProperty(rangeProp);
 		addProperty(speedProp);
@@ -76,7 +69,6 @@ public class CCForce extends Sensor
 			calibrationDesc.addCalibrationParam(new CalibrationParam(4,end_x10_A));
 			calibrationDesc.addCalibrationParam(new CalibrationParam(5,end_x10_B));
 		}
-		unit = "N";
 	}
 
 	boolean zeroing = false;
@@ -110,8 +102,12 @@ public class CCForce extends Sensor
 	}
 
 
-	public int getPrecision()
+	public int getQuantityPrecision(int mode)
 	{
+		if(mode != DEFAULT_OUTPUT_MODE) {
+			return DecoratedValue.UNKNOWN_PRECISION;			
+		}
+		
 		int rangeIndex = rangeProp.getIndex();
 		int speedIndex = speedProp.getIndex();
 
@@ -201,14 +197,14 @@ public class CCForce extends Sensor
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
 
-		dEvent.type = e.type;
-		dDesc.setDt(eDesc.getDt());
+		// dEvent.type = e.type;
+		// dDesc.setDt(eDesc.getDt());
 
-		chPerSample = eDesc.getChannelPerSample();
-		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
+		chPerSample = eDesc.getChannelsPerSample();
+		// dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
 
-		dDesc.setNextSampleOffset(1);
-		dDesc.setChannelPerSample(1);
+		// dDesc.setNextSampleOffset(1);
+		// dDesc.setChannelsPerSample(1);
 
 		channelOffset = curChannel;
 		if(curChannel > activeChannels - 1) channelOffset = activeChannels - 1;
@@ -234,7 +230,7 @@ public class CCForce extends Sensor
 		if(p == null || !p.isValid()) return false;
 		curB = p.getValue();
 
-		if(!zeroing) return super.startSampling(dEvent);
+		// if(!zeroing) return super.startSampling(dEvent);
 		return true;
     }
 
@@ -242,22 +238,32 @@ public class CCForce extends Sensor
 	public final static int ZEROING_END_POINT = 10;
 	public final static int ZEROING_START_POINT = 4;
 
+	/*
+	 * This was need to keep the zeroing data from being sent out 
+	 * in the new approach this shouldn't happen
 	public boolean idle(DataStreamEvent e){
 		if(!zeroing) return super.idle(e);
 		return true;
 	}
+	*/
 
-	public boolean dataArrived(DataStreamEvent e){
-		dEvent.type = e.type;
-		DataStreamDescription eDesc = e.getDataDescription();
+	/**
+	 * If we are zeroing the force sensor then we probably need to 
+	 * return NaN instead of nothing.  This way if other sensors are being
+	 * handle the data will line up correctly.
+	 */
+	public int dataArrived(DataStreamEvent inputData, float [] result, 
+			int resultOffset, int resultNextSampleOffset)
+	{
+		DataStreamDescription eDesc = inputData.getDataDescription();
 		float v = eDesc.getChannelDescription().getTuneValue();
 		
 		int nextSampleOff = eDesc.getNextSampleOffset();
 
 		if(zeroing){
-			int ndata = e.numSamples*nextSampleOff;
+			int ndata = inputData.numSamples*nextSampleOff;
 			int dOff = eDesc.getDataOffset();
-			int data [] = e.intData;
+			int data [] = inputData.intData;
 
 			// notice there is a hack in here to skip the first point
 			// it seems to be screwed up some how
@@ -279,23 +285,24 @@ public class CCForce extends Sensor
 					break;
 				}
 			}
-			return true;
+			return 0;
 		} else{
-			dEvent.numSamples = e.numSamples;
-			dEvent.pTimes = e.pTimes;
-			dEvent.numPTimes = e.numPTimes;
-			int ndata = dEvent.numSamples*nextSampleOff;
+			int ndata = inputData.numSamples*nextSampleOff;
 			int dOff = eDesc.getDataOffset();
-			int data [] = e.intData;
-			int currPos = 0;
+			int data [] = inputData.intData;
+			int currPos = resultOffset;
 			float mult = curA*v;
 			for(int i = 0; i < ndata; i+= nextSampleOff){
-				forceIntData[currPos] = data[dOff + i+channelOffset];
-				forceData[currPos] = mult*forceIntData[currPos]+curB;
-				currPos++;
+				// this is probably not needed anymore
+				int rawData = data[dOff + i+channelOffset];
+
+				// put this data in the result now instead of our own event
+				result[currPos] = mult*rawData+curB;
+				currPos += resultNextSampleOffset;
 			}
 		}
-		return super.dataArrived(dEvent);
+		
+		return inputData.numSamples;		
 	}
 
 	public void  calibrationDone(float []row1,float []row2,float []calibrated){

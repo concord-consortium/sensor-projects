@@ -7,8 +7,8 @@
 package org.concord.sensor.cc;
 
 import org.concord.framework.text.UserMessageHandler;
-import org.concord.sensor.Sensor;
-import org.concord.sensor.Ticker;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.Ticker;
 
 /**
  * @author scott

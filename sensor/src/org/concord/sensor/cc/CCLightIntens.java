@@ -1,16 +1,15 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.waba.extra.util.*;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.CalibrationDesc;
+import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
-import org.concord.framework.data.stream.*;
-
-public class CCLightIntens extends Sensor
+public class CCLightIntens extends CCSensor
 	implements CCModes
 {
-	float  			[]lightData = new float[CCSensorProducer.BUF_SIZE/2];
-	int  			[]lightIntData = new int[CCSensorProducer.BUF_SIZE/2];
-
 	/*
 	  Lux=(input(mV)-offset(mV))/sensitivity(mV/Lux)
 
@@ -44,17 +43,9 @@ public class CCLightIntens extends Sensor
 
 	    activeChannels = 2;
 		defQuantityName = "Intensity";
-
-		dDesc.setNextSampleOffset(2);
-		dDesc.setChannelPerSample(2);
-		dDesc.setDt(0.0f);
-		dDesc.setDataOffset(0);
-
-		dEvent.setDataDescription(dDesc);
-		dEvent.setNumSamples(1);
-		dEvent.setData(lightData);
-		dEvent.setIntData(lightIntData);
-
+		unit = "lx";
+		precision = 0;
+		
 		addProperty(rangeProp);
 		addProperty(speedProp);
 
@@ -68,7 +59,6 @@ public class CCLightIntens extends Sensor
 			calibrationDesc.addCalibrationParam(new CalibrationParam(3,BLow));
 		}
 
-		unit = "lx";
 	}
 
 	public boolean visValueChanged(PropObject po)
@@ -121,60 +111,49 @@ public class CCLightIntens extends Sensor
 		return interfaceMode;
 	}
 
-	public int getPrecision()
-	{
-		return 0;
-	}
-
 	public int  getActiveCalibrationChannels(){return 1;}
 
 	public boolean startSampling(DataStreamEvent e)
 	{
 		lightMode = rangeProp.getIndex();
-
-		dEvent.type = e.type;
-		dDesc.setDt(e.getDataDescription().getDt());
-		dDesc.setChannelPerSample(e.getDataDescription().getChannelPerSample());
-		dDesc.setChannelPerSample(1);
-		dDesc.setNextSampleOffset(1);
-
-		dDesc.getChannelDescription().setTuneValue(e.getDataDescription().getChannelDescription().getTuneValue());
-	    return super.startSampling(dEvent);
+		
+		return true;
     }
 
-	public boolean dataArrived(DataStreamEvent e)
+	// Could be handled by a generic linear transform sensor
+	public int dataArrived(DataStreamEvent e, float result[],
+			int resultOffset, int resultNextSampleOffset)
 	{
 		DataStreamDescription eDesc = e.getDataDescription();
 
-		dEvent.type = e.type;
 		int[] data = e.getIntData();
 		int nOffset = eDesc.getDataOffset();
 
 		int nextSampleOff = eDesc.getNextSampleOffset();
 
-		int  	chPerSample = eDesc.getChannelPerSample();
+		int  	chPerSample = eDesc.getChannelsPerSample();
 		int ndata = e.getNumSamples()*nextSampleOff;
 
-		if(ndata < nextSampleOff) return false;
-		int dataIndex = 0;	
+		if(ndata < nextSampleOff) return -1;
+		int dataIndex = resultOffset;	
 		for(int i = 0; i < ndata; i+=nextSampleOff){
 			if(lightMode == HIGH_LIGHT_MODE){
 				int v = data[nOffset+i];
-				lightIntData[dataIndex] = v;
-				lightData[dataIndex] = AHigh*dDesc.getChannelDescription().getTuneValue()*(float)v+BHigh;
+				
+				result[dataIndex] = AHigh*eDesc.getChannelDescription().getTuneValue()*(float)v+BHigh;
 			}else{
 				int v = data[nOffset+i+1];
-				lightIntData[dataIndex] = v;
-				lightData[dataIndex] = ALow*dDesc.getChannelDescription().getTuneValue()*(float)v+BLow;
+				result[dataIndex] = ALow*eDesc.getChannelDescription().getTuneValue()*(float)v+BLow;
 			}
-			if(lightData[dataIndex] < 0f){
-				lightData[dataIndex] = 0f;
+			
+			// I don't know what this is for???
+			if(result[dataIndex] < 0f){
+				result[dataIndex] = 0f;
 			}
-			dataIndex++;
+			dataIndex += resultNextSampleOffset;
 		}
-		dEvent.setNumSamples(dataIndex);
 
-		return super.dataArrived(dEvent);
+		return e.getNumSamples();
 	}
 
 	public void  calibrationDone(float []row1,float []row2,float []calibrated)

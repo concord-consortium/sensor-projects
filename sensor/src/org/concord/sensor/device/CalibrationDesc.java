@@ -1,6 +1,6 @@
-package org.concord.sensor;
+package org.concord.sensor.device;
 
-import org.concord.waba.extra.io.*;
+import org.concord.waba.extra.io.DataStream;
 
 public class CalibrationDesc
 {

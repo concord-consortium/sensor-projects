@@ -1,4 +1,5 @@
-package org.concord.sensor;
+package org.concord.sensor.device;
+
 
 public class SensorEvent
 {

@@ -1,13 +1,14 @@
-package org.concord.sensor;
+package org.concord.sensor.device;
 
-import org.concord.waba.extra.io.*;
-import org.concord.waba.extra.util.*;
-
-import org.concord.framework.data.*;
-import org.concord.framework.data.stream.*;
+import org.concord.framework.data.DecoratedValue;
+import org.concord.framework.data.stream.DataChannelDescription;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.waba.extra.io.DataStream;
+import org.concord.waba.extra.util.PropContainer;
+import org.concord.waba.extra.util.PropObject;
 
 public abstract class Sensor extends PropContainer
-	implements DataProducer
 {
 	public final static int		CALIBRATION_SENSOR_START 	= 10000;
 	public final static int		CALIBRATION_SENSOR_END 		= 10001;
@@ -24,7 +25,6 @@ public abstract class Sensor extends PropContainer
 
 	SensorProducer producer = null;
 
-	public 		waba.util.Vector 	dataListeners = null;
 	public 		waba.util.Vector 	probeListeners = null;
 
 	String		name = null;
@@ -33,11 +33,10 @@ public abstract class Sensor extends PropContainer
 
 	public String unit = null;
 
-	public DataStreamDescription dDesc = new DataStreamDescription();
-	public DataStreamEvent	dEvent = new DataStreamEvent();
+//	public DataStreamEvent	dEvent = new DataStreamEvent();
 	public SensorEvent	pEvent = new SensorEvent();
 
-	protected InterfaceManager im;
+	protected DefaultSensorDevice im;
 
 	public	int interfaceType = -1; 
 	protected Object interfaceMode = null;
@@ -52,6 +51,9 @@ public abstract class Sensor extends PropContainer
 
 	protected int precision = DecoratedValue.UNKNOWN_PRECISION;
 
+	protected int[] outputModes = null;
+	protected static final int DEFAULT_OUTPUT_MODE = -1;
+	
 	protected Sensor(boolean init, short type, SensorProducer p)
 	{
 		super("Properties");
@@ -94,7 +96,7 @@ public abstract class Sensor extends PropContainer
 	 * This function isn't clear when the only way to add probes to an
 	 * interface is to specify their port while adding them
 	 */
-	public void setInterface(InterfaceManager im)
+	public void setInterface(DefaultSensorDevice im)
 	{
 		if(this.im != null)
 		{
@@ -116,12 +118,12 @@ public abstract class Sensor extends PropContainer
 	}
 
 
-	public InterfaceManager getInterface()
+	public DefaultSensorDevice getInterface()
 	{
 		return im;
 	}
 
-	public InterfaceManager open()
+	public DefaultSensorDevice open()
 	{
 		if(im != null) return im;
 
@@ -150,37 +152,7 @@ public abstract class Sensor extends PropContainer
 		
 		setInterface(null);
 	}
-
-	public boolean startSensor()
-	{
-		boolean synced = im.syncInterfaceWithSensor(this);
-
-		if(!synced) return false;
-
-		im.start(this);
-
-		return true;
-	}
 	
-	public void start()
-	{
-		startSensor();
-	}
-	
-	/**
-	 *  This doesn't really need to do anything if
-	 * the sensor isn't storing any cache.
-	 */
-	public void reset()
-	{
-		
-	}
-	
-	public void stop()
-	{
-		im.stop(this);
-	}
-
 	public int 	getInterfaceType(){return interfaceType;}
 	public void setInterfaceType(int interfaceType){this.interfaceType =  interfaceType;}
 	
@@ -247,82 +219,83 @@ public abstract class Sensor extends PropContainer
 		}
 	}
 	
-	public void addDataListener(DataListener l){
-		if(dataListeners == null){ dataListeners = new waba.util.Vector();	   }
-		if(dataListeners.find(l) < 0){
-			dataListeners.add(l);
+	public void setOutputModes(int [] outputModes)
+	{
+		this.outputModes = outputModes;
+	}
+		
+	/**
+	 * This description object can change if the mode of the sensor changes
+	 * currently it is up to the SensorDevice to do this updating correctly.
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public DataChannelDescription getChannelDescription(int index)
+	{
+		int mode = DEFAULT_OUTPUT_MODE;
+		if(outputModes != null) {
+			// if the index is outside the range of the array then this
+			// will throw an out of bounds exception
+			mode = outputModes[index];			
 		}
-	}
-	public void removeDataListener(DataListener l){
-		if(dataListeners == null) return;
-		int index = dataListeners.find(l);
-		if(index >= 0) dataListeners.del(index);
-		if(dataListeners.getCount() == 0) dataListeners = null;
-	}
+		
+		DataChannelDescription channelDescription = new DataChannelDescription();		
+		channelDescription.setName(getQuantityName(mode));
+		channelDescription.setPrecision(getQuantityPrecision(mode));
+		channelDescription.setUnit(new SensorUnit(getQuantityUnit(mode)));
 
-	public DataListener setModeDataListener(DataListener l, int mode){return null;}
-
-	public void notifyDataListenersEvent(DataStreamEvent e){
-		if(dataListeners == null) return;
-		for(int i = 0; i < dataListeners.getCount(); i++){
-			DataListener l = (DataListener)dataListeners.get(i);
-			l.dataStreamEvent(e);
-		}
+		return channelDescription;
 	}
-
-	public void notifyDataListenersReceived(DataStreamEvent e)
+	
+	
+	/**
+	 * This method is called before the data starts coming into the
+	 * the sensor from the interface
+	 * The description describes the data that will be coming in
+	 *  
+	 * The sensor has a chance to return false which will cancel the
+	 * start.
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public boolean startSampling(DataStreamDescription desc)
 	{
-		if(dataListeners == null) return;
-		for(int i = 0; i < dataListeners.getCount(); i++){
-			DataListener l = (DataListener)dataListeners.get(i);
-			l.dataReceived(e);
-		}
-	}
-
-	public boolean startSampling(DataStreamEvent e)
-	{
-		e.setType(DataStreamEvent.DATA_READY_TO_START);
-
-		notifyDataListenersEvent(e);
-
-		e.setType(DataStreamEvent.DATA_RECEIVED);
-
 		return true;
 	}
 
-	public boolean stopSampling(DataStreamEvent e)
+	/**
+	 * This notifies the sensor that data has stopped coming in
+	 * @return
+	 */
+	public void stopSampling()
 	{
-		e.setType(DataStreamEvent.DATA_STOPPED);
-
-		notifyDataListenersEvent(e);
-
-		e.setType(DataStreamEvent.DATA_RECEIVED);
-
-		return true;
 	}
 
-	public boolean dataArrived(DataStreamEvent e)
-	{
-		notifyDataListenersReceived(e);
-		return true;
-	}
-
-	public boolean idle(DataStreamEvent e)
-	{
-		e.setType(DataStreamEvent.DATA_COLLECTING);
-		notifyDataListenersEvent(e);
-		e.setType(DataStreamEvent.DATA_RECEIVED);
-		return true;
-	}
+	/**
+	 * Sensor implementations will override this method to handle
+	 * the data coming in from the interface, convert it, and
+	 * store it into the result array. 
+	 * 
+	 * The sensor return the max row idex it changed in the result data
+	 * 0 means no rows were changed
+	 * -1 means there was an error.
+	 * 
+	 * @param e
+	 * @return the max(changed_row_index) + 1
+	 *    0 means no rows have changed
+	 *   -1 means there was an error 
+	 */
+	public abstract int dataArrived(DataStreamEvent inputData, float [] result,
+			int resultOffset, int resultNextSampleOffset);
    	
-
+	/**
+	 * This is a method used by sensors that know about their interface
+	 * @return
+	 */
 	public abstract Object getInterfaceMode();
 
-
-    public DataStreamDescription getDataDescription()
-    {
-		return dDesc;
-    }
 
 	public void setName(String name){this.name = name;}
 	public String getName(){return name;}
@@ -337,18 +310,6 @@ public abstract class Sensor extends PropContainer
 
 	public void  calibrationDone(float []row1,float []row2,float []calibrated){}
 	
-	public String getUnit()
-	{
-		return unit;
-	}
-	public boolean setUnit(String unit)
-	{
-		this.unit = unit;
-		return true;
-	}
-
-	public int getPrecision(){return precision; }
-
 	public void writeExternal(DataStream out){
 		out.writeInt(interfaceType);
 		out.writeInt(CALIBRATION_SENSOR_START);
@@ -417,18 +378,29 @@ public abstract class Sensor extends PropContainer
 		}
 	}	
 
-	public String getQuantityUnit(int id){return null;}
+	public String getQuantityUnit(int id){
+		if(id == DEFAULT_OUTPUT_MODE) {
+			return unit;
+		}
+		
+		return null;
+	}
 
 	public int getQuantityPrecision(int id)
 	{
+		if(id == DEFAULT_OUTPUT_MODE) {
+			return precision;
+		}
+		
 		return DecoratedValue.UNKNOWN_PRECISION; 
 	}
 
 	public String getQuantityName(int id)
 	{
-		if(id == 0 && quantityNames == null){
+		if(id == DEFAULT_OUTPUT_MODE) {
 			return defQuantityName;
 		}
+
 		if(quantityNames == null){
 			return null;
 		}
@@ -437,4 +409,5 @@ public abstract class Sensor extends PropContainer
 		}
 		return null;
 	}
+
 }

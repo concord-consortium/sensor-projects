@@ -1,17 +1,15 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.waba.extra.util.*;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.CalibrationDesc;
+import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
-import org.concord.framework.data.stream.*;
-
-public class CCThermalCouple extends Sensor
+public class CCThermalCouple extends CCSensor
 	implements CCModes
 {
-
-	float  			[]tempData 		= new float[3];
-	int  			[]tempIntData 	= new int[3];
-	float  			dtChannel = 0.0f;
 	public final static int		CELSIUS_TEMP_OUT = 0;
 	public final static int		FAHRENHEIT_TEMP_OUT = 1;
 	public final static int		KELVIN_TEMP_OUT = 2;
@@ -37,16 +35,8 @@ public class CCThermalCouple extends Sensor
 
 		activeChannels = 2;
 		defQuantityName = "Temperature";
-
-		dDesc.setChannelPerSample(1);
-		dDesc.setDt(0.0f);
-		dDesc.setDataOffset(0);
-		dEvent.setDataDescription(dDesc);
-
-		dEvent.setNumSamples(1);
-		dEvent.setData(tempData);
-		dEvent.setIntData(tempIntData);
-
+		precision = -1;
+		
 		addProperty(modeProp);
 
 		if(init){
@@ -55,82 +45,64 @@ public class CCThermalCouple extends Sensor
 		}
 	}
 
-	public String getUnit()
+	public String getQuantityUnit(int mode)
 	{
+		if(mode != DEFAULT_OUTPUT_MODE) {
+			return null;
+		}
+		
 		int oMode = modeProp.getIndex();
 		
 		switch(oMode){
 		case FAHRENHEIT_TEMP_OUT:
-			unit = "F";
-			break;
+			return "F";
 		case KELVIN_TEMP_OUT:
-			unit = "K";
-			break;
-		default:
+			return "K";
 		case CELSIUS_TEMP_OUT:
-			unit = "C";
-			break;
+		default:
+			return "C";
 		}	   
 
-		return unit;
 	}
-
-	public int getPrecision(){return -1; }
 
 	public Object getInterfaceMode()
 	{
 		return interfaceMode;
 	}
 
-    public boolean startSampling(DataStreamEvent e)
-	{
-		DataStreamDescription eDesc = 
-			e.getDataDescription();
-
-		dEvent.type = e.type;
-		dDesc.setDt(eDesc.getDt());
-		dEvent.setNumSamples(1);
-		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
-				
-		//		dDesc.setIntChPerSample(2);
-
-		return super.startSampling(dEvent);
-    }
-
-	public boolean dataArrived(DataStreamEvent e)
+    // This could be handled by a generic cubic calibration sensor
+	public int dataArrived(DataStreamEvent e, float result[],
+			int resultOffset, int resultNextSampleOffset)
 	{
 		DataStreamDescription eDesc = e.getDataDescription();
 
-		dEvent.type = e.type;
 		int nOffset = eDesc.getDataOffset();
 		int nextSampleOff = eDesc.getNextSampleOffset();
 
 		int ndata = e.getNumSamples()*nextSampleOff;
-		if(ndata == 0) return false;
+		if(ndata == 0) return -1;
 		
 		int[] data = e.getIntData();
-		float tuneValue = dDesc.getChannelDescription().getTuneValue();
+		float tuneValue = eDesc.getChannelDescription().getTuneValue();
 		for(int i = 0; i < ndata; i+=nextSampleOff){
 			float mV = (float)data[nOffset+i]*tuneValue;
 			float ch2 = (float)data[nOffset+i+1]*tuneValue;
 			float lastColdJunct = (ch2 / DC) + EC;
-			tempData[0] = mV * (AC + mV * (BC + mV * CC)) + lastColdJunct;
-			tempData[0] += FC;
-			tempIntData[0] = data[nOffset+i];
-			tempIntData[1] = data[nOffset+i+1];
+			float tempData = mV * (AC + mV * (BC + mV * CC)) + lastColdJunct;
+			tempData += FC;
 			switch(outputMode){
 			case FAHRENHEIT_TEMP_OUT:
-				tempData[0] = tempData[0]*1.8f + 32f;
+				tempData = tempData*1.8f + 32f;
 				break;
 			case KELVIN_TEMP_OUT:
-				tempData[0] += 273.15f;
+				tempData += 273.15f;
 				break;
 			default:
 				break;
 			}
-			super.dataArrived(dEvent);
+			result[resultOffset + i*resultNextSampleOffset] = tempData;
 		}
-		return true;
+		return e.getNumSamples();
 	}
 
 	public void  calibrationDone(float []row1,float []row2,float []calibrated)

@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.concord.sensor;
+package org.concord.sensor.device;
 
 /**
  * @author scott
@@ -20,9 +20,9 @@ public interface Ticker
 	
 	public boolean isTicking();
 	
-	public void setInterfaceManager(InterfaceManager manager);		
+	public void setInterfaceManager(DefaultSensorDevice manager);		
 	
-	public InterfaceManager getInterfaceManager();
+	public DefaultSensorDevice getInterfaceManager();
 	
 	/**
 	 * This is need because waba can't do reflection. This will

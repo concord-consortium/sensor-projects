@@ -1,14 +1,16 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.framework.text.UserMessageHandler;
+import org.concord.sensor.device.DefaultSensorDevice;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.Ticker;
 
-import waba.sys.Vm;
 import waba.io.SerialPort;
+import waba.sys.Vm;
 
-import org.concord.framework.data.stream.*;
-import org.concord.framework.text.*;
-
-public class CCInterface2 extends InterfaceManager
+public class CCInterface2 extends DefaultSensorDevice
 	implements CCModes
 {
 	public final static int DATUM_ONE_CH_10_BIT = 0;
@@ -34,16 +36,15 @@ public class CCInterface2 extends InterfaceManager
 	
 	protected  SerialPort port;
 
-	public DataStreamEvent dEvent = new DataStreamEvent();
+	public DataStreamEvent rawDataEvent = new DataStreamEvent();
 	int 				curStepTime = 0;
-
+	
 	int bufOffset = 0;
 
 	int BUF_SIZE = CCSensorProducer.BUF_SIZE;
 
 	byte [] buf = new byte[BUF_SIZE];
-	int []valueData = new int[1 + BUF_SIZE / 2]; 
-
+	int []valueData = new int[1 + BUF_SIZE / 2]; 	
 
 	int timeWithoutData = 0;
 
@@ -54,7 +55,7 @@ public class CCInterface2 extends InterfaceManager
 	public DataStreamDescription []	dDesc;
 	int [] requestedMode;
 	int [] currentMode;
-	Sensor [] portSensors;
+	CCSensor [] portSensors;
 
 	String [] okOptions = {"Ok"};
 	String [] continueOptions = {"Continue"};
@@ -90,7 +91,7 @@ public class CCInterface2 extends InterfaceManager
 		// With version 0 only one sensor can be used  
 		// but leaving this as 2 simplifies the code
 		// the second sensor will remain null and paused at all times on version 0
-		portSensors = new Sensor [2];
+		portSensors = new CCSensor [2];
 		requestedMode = new int [] { PAUSED_MODE, PAUSED_MODE };
 		currentMode = new int [] { UNKNOWN_MODE, UNKNOWN_MODE };
 		dDesc = new DataStreamDescription [] {new DataStreamDescription(), new DataStreamDescription()};
@@ -190,7 +191,7 @@ public class CCInterface2 extends InterfaceManager
 		// We have to be careful here not to overwrite an existing port property
 		// probe.setPortProperty(new PropObject("Port", "Port", Probe.PROP_PORT, portNames));
 
-		portSensors[mode.port] = probe;
+		portSensors[mode.port] = (CCSensor)probe;
 		return updateMode(probe);
 	}
 
@@ -363,14 +364,14 @@ public class CCInterface2 extends InterfaceManager
 		valuesPerDatum = 0;
 		int chOneValues = 0;
 		chOffset=-1;
-		dDesc[0].setChannelPerSample(0);
-		dDesc[1].setChannelPerSample(0);
+		dDesc[0].setChannelsPerSample(0);
+		dDesc[1].setChannelsPerSample(0);
 
 		for(int i=0; i<4; i++)
 		{
 			if(validChannels[i]){
 				valuesPerDatum++;
-				dDesc[i/2].setChannelPerSample(dDesc[i/2].getChannelPerSample()+1);
+				dDesc[i/2].setChannelsPerSample(dDesc[i/2].getChannelsPerSample()+1);
 				if(chOffset == -1) chOffset = i;
 			}
 		}
@@ -378,7 +379,7 @@ public class CCInterface2 extends InterfaceManager
 
 		dDesc[0].setNextSampleOffset(valuesPerDatum);
 		dDesc[1].setNextSampleOffset(valuesPerDatum);
-		dDesc[1].setDataOffset(dDesc[0].getChannelPerSample());
+		dDesc[1].setDataOffset(dDesc[0].getChannelsPerSample());
 
 		// Now do we need to tweak the chPerSample and Offset
 		// if the probe only asked for channel 1 and not channel 0?
@@ -531,8 +532,8 @@ public class CCInterface2 extends InterfaceManager
 
 		setByteStreamProperties(startC);
 
-		dEvent.setIntData(valueData);
-		
+		rawDataEvent.setIntData(valueData);
+				
 		for(int i=0; i<portSensors.length; i++)
 		{
 			if(currentMode[i] != PAUSED_MODE ||
@@ -542,8 +543,9 @@ public class CCInterface2 extends InterfaceManager
 				// This isn't quite right because the dEvent might be different
 				// but lets see how the step functions work out before we design 
 				// this
-				dEvent.setDataDescription(dDesc[i]);
-				portSensors[i].startSampling(dEvent);
+				rawDataEvent.setDataDescription(dDesc[i]);
+				
+				portSensors[i].startSampling(rawDataEvent);
 			}
 		}
 
@@ -592,8 +594,9 @@ public class CCInterface2 extends InterfaceManager
 				if(portSensors[i] != null &&
 				   currentMode[i] != PAUSED_MODE)
 				{
-					dEvent.setDataDescription(dDesc[i]);
-					portSensors[i].stopSampling(dEvent);
+					rawDataEvent.setDataDescription(dDesc[i]);
+					
+					portSensors[i].stopSampling(rawDataEvent);
 				}
 
 				// We changed the mode so set the curMode 
@@ -776,7 +779,7 @@ public class CCInterface2 extends InterfaceManager
 
 		while(port != null && port.isOpen()){
 			// profiling
-			dEvent.numPTimes = 0;
+			// dEvent.numPTimes = 0;
 			//int startPTime = Vm.getTimeStamp();
 			//dEvent.pTimes[dEvent.numPTimes++] = startPTime;
 
@@ -788,8 +791,12 @@ public class CCInterface2 extends InterfaceManager
 			}
 
 			totalRead += ret;
-			ret += bufOffset;	    
+			ret += bufOffset;
 			if(ret < 32){
+				// If we've got less than this number of bytes then 
+				// we should take break and let the listeners
+				// do there work. (things like draw the graph update
+				// a table etc.)
 				bufOffset = ret;//too few?
 				break;
 			}
@@ -823,8 +830,8 @@ public class CCInterface2 extends InterfaceManager
 			}
 
 			// Round down
-			dEvent.numSamples = (curDataPos/valuesPerDatum);
-			curStepTime += dEvent.numSamples;
+			rawDataEvent.numSamples = (curDataPos/valuesPerDatum);
+			curStepTime += rawDataEvent.numSamples;
 
 			if(error == WARN_WRONG_POSITION){
 				// We could keep track of these errors and report them 
@@ -838,8 +845,15 @@ public class CCInterface2 extends InterfaceManager
 				if(portSensors[i] != null &&
 						currentMode[i] != PAUSED_MODE)
 				{
-					dEvent.setDataDescription(dDesc[i]);
-					portSensors[i].dataArrived(dEvent);
+					rawDataEvent.setDataDescription(dDesc[i]);
+					
+					// hack to get started
+					// The sensors were using multiples of 
+					// CCSensorProducer.BUF_SIZE
+					portSensors[i].dataArrived(rawDataEvent, processedData, 
+							sensorChannelIndexes[i], super.dDesc.getChannelsPerSample());
+					processedDataEvent.setNumSamples(rawDataEvent.getNumSamples());					
+					notifyDataListenersReceived(processedDataEvent);
 				}
 			}
 					
@@ -862,8 +876,7 @@ public class CCInterface2 extends InterfaceManager
 			if(portSensors[i] != null &&
 					currentMode[i] != PAUSED_MODE)
 			{
-				dEvent.setDataDescription(dDesc[i]);
-				portSensors[i].idle(dEvent);
+				rawDataEvent.setDataDescription(dDesc[i]);				
 			}
 		}
 				

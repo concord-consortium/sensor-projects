@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.concord.sensor;
+package org.concord.sensor.device;
 
 /**
  * @author scott
@@ -18,7 +18,7 @@ public class JavaTicker extends Thread
 	int millis;
 	boolean ticking = false;
 	boolean started = false;
-	InterfaceManager interfaceManager;
+	DefaultSensorDevice interfaceManager;
 		
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
@@ -49,14 +49,14 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#setInterfaceManager(org.concord.sensor.InterfaceManager)
 	 */
-	synchronized public void setInterfaceManager(InterfaceManager manager) {
+	synchronized public void setInterfaceManager(DefaultSensorDevice manager) {
 		interfaceManager = manager;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#getInterfaceManager()
 	 */
-	synchronized public InterfaceManager getInterfaceManager() {
+	synchronized public DefaultSensorDevice getInterfaceManager() {
 		return interfaceManager;
 	}
 

@@ -4,11 +4,16 @@
  */
 package org.concord.sensor.example;
 
-import org.concord.framework.data.stream.*;
+import org.concord.framework.data.stream.DataListener;
+import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
-
-import org.concord.sensor.*;
+import org.concord.sensor.SensorDevice;
 import org.concord.sensor.cc.CCSensorProducer;
+import org.concord.sensor.device.DefaultSensorDevice;
+import org.concord.sensor.device.JavaTicker;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorFactory;
+import org.concord.sensor.device.SensorProducer;
 //import org.concord.waba.extra.util.PropObject;
 
 /**
@@ -55,18 +60,20 @@ public class Test
 		PropObject channelProp = tempSensor.getProperty("Channel");
 		channelProp.setValue("1");
 */		
-		InterfaceManager interfaceManager = 
-			producers[0].createInterface(CCSensorProducer.INTERFACE_1);
+		DefaultSensorDevice interfaceManager = 
+			(DefaultSensorDevice)producers[0].createInterface(CCSensorProducer.INTERFACE_1);
 		// version info:
 		// version 2 :CCA2D2v..
 		// version 1 :CC A2D24v..
 		// we also can tell by sending a 'c' and if it responds with a 'C' 
 		// or a '?' that will tell us which one it is. 
 		
-		interfaceManager.addSensor(tempSensor);
+//		interfaceManager.addSensorConfig(tempSensor);
+		// FIXME
+		interfaceManager.addSensorConfig(null);
 		tempSensor.setInterface(interfaceManager);
 		
-		tempSensor.addDataListener(new DataListener(){
+		interfaceManager.addDataListener(new DataListener(){
 			public void dataReceived(DataStreamEvent dataEvent)
 			{
 				int numSamples = dataEvent.getNumSamples();
@@ -106,25 +113,25 @@ public class Test
 			}
 		});
 		
-		MyShutdown sh = new MyShutdown(tempSensor);
+		MyShutdown sh = new MyShutdown(interfaceManager);
         Runtime.getRuntime().addShutdownHook(sh);
 		
-		tempSensor.startSensor();
+        interfaceManager.start();
 	}
 }
 
 class MyShutdown extends Thread
 {
-	Sensor sensor;
+	SensorDevice device;
 	
-	public MyShutdown(Sensor s)
+	public MyShutdown(SensorDevice d)
 	{
-		sensor = s;
+		device = d;
 	}
 	
 	public void run()
 	{
-		sensor.stop();
+		device.stop();
 	}
 }
 

@@ -1,18 +1,19 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.*;
-import org.concord.waba.extra.util.*;
-
-import org.concord.framework.data.*;
-import org.concord.framework.data.stream.*;
+import org.concord.framework.data.DecoratedValue;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.CalibrationDesc;
+import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
 
 
 public class CCVoltCurrent extends Sensor
 	implements CCModes
 {
-	float  			[]data = new float[CCSensorProducer.BUF_SIZE/2];
-	int  			[]intData = new int[CCSensorProducer.BUF_SIZE];
 	float				energy = 0.0f;
 	public final static int		CURRENT_OUT 			= 0;
 	public final static int		VOLTAGE_OUT 			= 1;
@@ -64,15 +65,6 @@ public class CCVoltCurrent extends Sensor
 		quantityNames = modeNames;
 		defQuantityName = "Current";
 
-		dDesc.setChannelPerSample(1);
-		dDesc.setDt(0.0f);
-		dDesc.setDataOffset(0);
-		dEvent.setDataDescription(dDesc);
-
-		dEvent.setNumSamples(1);
-		dEvent.setData(data);
-		dEvent.setIntData(intData);
-
 		// addProperty(modeProp);
 		addProperty(rangeProp);
 		addProperty(speedProp);
@@ -87,45 +79,21 @@ public class CCVoltCurrent extends Sensor
 		}
 	}
 
-	DataListener voltListener = null;
-	DataListener powerListener = null;
-	DataListener energyListener = null;
-	public DataListener setModeDataListener(DataListener l, int mode)
-	{
-		DataListener old = null;
-
-		switch(mode){
-		case 1:
-			old = voltListener;
-			voltListener = l;
-			break;
-		case 2:
-			old = powerListener;
-			powerListener = l;
-			break;
-		case 3:
-			old = energyListener;
-			energyListener = l;
-			break;
-		}
-		return old;
-	}
-
 	public String getQuantityUnit(int mode)
 	{
-		String unit = null;
 		switch(mode){
-		case 1:
-			unit = "V";
-			break;
-		case 2:
-			unit = "W";
-			break;
-		case 3:
-			unit = "J";
-			break;
+			case CURRENT_OUT:
+			case DEFAULT_OUTPUT_MODE:
+				return "A";
+			case VOLTAGE_OUT:
+				return "V";
+			case POWER_OUT:
+				return "W";
+			case ENERGY_OUT:
+				return "J";
 		}
-		return unit;
+
+		return null;		
 	}
 
 	public int getQuantityPrecision(int mode)
@@ -134,70 +102,42 @@ public class CCVoltCurrent extends Sensor
 		if(speedIndex == 0){
 			// A2D 24 mode
 			switch(mode){
-			case 1:
-				// voltage mode +/- 40 microVolts
-				return -5;
-			case 2:
-				// This is tricky because it isn't a linear function
-				// for now I'll just guess
-				return -5;
-			case 3:
-				// same here just a guess
-				return -5;
+				case CURRENT_OUT:
+				case DEFAULT_OUTPUT_MODE:
+					// A2D 24 mode  +/- 4microAmps
+					return -6;
+				case VOLTAGE_OUT:
+					// voltage mode +/- 40 microVolts
+					return -5;
+				case POWER_OUT:
+					// This is tricky because it isn't a linear function
+					// for now I'll just guess
+					return -5;
+				case ENERGY_OUT:
+					// same here just a guess
+					return -5;
 			}
 		} else {
 			// A2D 10 mode 
 			switch(mode){
-			case 1:
-				// voltage mode +/- 40 microVolts
-				return -3;
-			case 2:
-				// This is tricky because it isn't a linear function
-				// for now I'll just guess
-				return -3;
-			case 3:
-				// same here just a guess
-				return -3;
+				case CURRENT_OUT:
+				case DEFAULT_OUTPUT_MODE:
+					// A2D 10 mode +/- 4 milliAmps
+					return -3;					
+				case VOLTAGE_OUT:
+					// voltage mode +/- 40 microVolts
+					return -3;
+				case POWER_OUT:
+					// This is tricky because it isn't a linear function
+					// for now I'll just guess
+					return -3;
+				case ENERGY_OUT:
+					// same here just a guess
+					return -3;
 			}
 		} 
 		
 		return DecoratedValue.UNKNOWN_PRECISION;
-	}
-
-	public int getPrecision()
-	{
-		// This is for the current part of the probe so...
-		int speedIndex = speedProp.getIndex();
-		if(speedIndex == 0){
-			// A2D 24 mode  +/- 4microAmps
-			return -6;
-		} else {
-			// A2D 10 mode +/- 4 milliAmps
-			return -3;
-		}
-	}
-
-	public String getUnit()
-	{
-		//		int outputMode = modeProp.getIndex();
-		int outputMode = CURRENT_OUT;
-
-		switch(outputMode){
-		case CURRENT_OUT:
-			unit = "A";
-			break;
-		case VOLTAGE_OUT:
-			unit = "V";
-			break;
-		case POWER_OUT:
-			unit = "W";
-			break;
-		case ENERGY_OUT:
-			unit = "J";
-			break;
-		}
-
-		return unit;
 	}
 
 	public CalibrationDesc getCalibrationDesc()
@@ -252,8 +192,7 @@ public class CCVoltCurrent extends Sensor
 	
 	public boolean startSampling(DataStreamEvent e)
 	{
-		DataStreamDescription eDesc = 
-			e.getDataDescription();
+		DataStreamDescription eDesc = e.getDataDescription();
 
 		outputMode = CURRENT_OUT;
 		int vIndex = versionProp.getIndex();
@@ -268,118 +207,72 @@ public class CCVoltCurrent extends Sensor
 		}
 
 		energy = 0.0f;
-		dEvent.type = e.type;
-		dDesc.setDt(eDesc.getDt());
-		dEvent.setNumSamples(1);
-		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
-		dDesc.setChannelPerSample(1);
 
 		// dDesc.setIntChPerSample(2);
 
-		return super.startSampling(dEvent);
+		return true;
 	}
 
-	public void notifyDataListenersEvent(DataStreamEvent e)
-	{
-		if(voltListener != null){
-			voltListener.dataStreamEvent(e);
-		}
-		if(powerListener != null){
-			powerListener.dataStreamEvent(e);
-		}
-		if(energyListener != null){
-			energyListener.dataStreamEvent(e);
-		}
-
-		super.notifyDataListenersEvent(e);
-	}
-    	
-
-    public boolean dataArrived(DataStreamEvent e)
+    public int dataArrived(DataStreamEvent e, float [] result,
+    		int resultOffset, int resultNextSampleOffset)
     {
 		DataStreamDescription eDesc = e.getDataDescription();
 
-		dEvent.type 		= e.type;
 		int nOffset 		= eDesc.getDataOffset();
 		int nextSampleOff = eDesc.getNextSampleOffset();
 		int ndata 			= e.getNumSamples()*nextSampleOff;
 
 		int[] dataEvent 	= e.getIntData();
 
-		int  	chPerSample = eDesc.getChannelPerSample();
+		int  	chPerSample = eDesc.getChannelsPerSample();
 		int	dataIndex;
 		
-		boolean ret = true;
-		if(dataListeners != null){
-			dataIndex = 0;
-			// this is current
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				intData[i] = dataEvent[nOffset+i];
-				if(chPerSample == 2){
-					intData[i+1] = dataEvent[nOffset+i+1];
+		for(int modeIndex = 0; modeIndex<outputModes.length; modeIndex++) {
+			dataIndex = resultOffset;
+			if(outputModes[modeIndex] == CURRENT_OUT) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					result[dataIndex] = 
+						(dataEvent[nOffset+i+currentOff]*eDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
+					dataIndex += resultNextSampleOffset;
 				}
-				data[dataIndex] = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
-				dataIndex++;
-			}
-			dEvent.setNumSamples(dataIndex);
-			ret = super.dataArrived(dEvent);
-		}
+			} else if(outputModes[modeIndex] == VOLTAGE_OUT) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					result[dataIndex] = (dataEvent[nOffset+i+voltOff]*eDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
+					dataIndex += resultNextSampleOffset;
+				}				
+			} else if(outputModes[modeIndex] == POWER_OUT) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					int currentInt = dataEvent[nOffset+i+currentOff];
+					int voltInt = dataEvent[nOffset+i+voltOff];
+					
+					float		amper = (currentInt*eDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
+					float		voltage = (voltInt*eDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
+					result[dataIndex] = amper*voltage;
+					if(result[dataIndex] < 0f){
+						result[dataIndex] = -result[dataIndex];
+					}
+					dataIndex += resultNextSampleOffset;
+				}				
+			} else if(outputModes[modeIndex] == ENERGY_OUT) {
+				for(int i = 0; i < ndata; i+=nextSampleOff){
+					int currentInt = dataEvent[nOffset+i+currentOff];
+					int voltInt = dataEvent[nOffset+i+voltOff];
 
-		if(voltListener != null){
-			dataIndex = 0;
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				intData[i] = dataEvent[nOffset+i];
-				if(chPerSample == 2){
-					intData[i+1] = dataEvent[nOffset+i+1];
-				}
-				data[dataIndex] = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
-				dataIndex++;
-			}
-			dEvent.setNumSamples(dataIndex);
-			voltListener.dataReceived(dEvent);
-		}
+					float		amper = (currentInt*eDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
+					float		voltage = (voltInt*eDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
 
-		if(powerListener != null){
-			dataIndex = 0;
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				intData[i] = dataEvent[nOffset+i];
-				if(chPerSample == 2){
-					intData[i+1] = dataEvent[nOffset+i+1];
-				}
-				float		amper = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
-				float		voltage = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
-				data[dataIndex] = amper*voltage;
-				if(data[dataIndex] < 0f){
-					data[dataIndex] = -data[dataIndex];
-				}
-				dataIndex++;
+					result[dataIndex] = amper*voltage;
+					if(result[dataIndex] < 0f){
+						result[dataIndex] = -result[dataIndex];
+					}
+					energy 	+= result[dataIndex]*eDesc.getDt(); 
+					result[dataIndex] 	= energy;
+					dataIndex += resultNextSampleOffset;
+				}				
 			}
-			dEvent.setNumSamples(dataIndex);
-			powerListener.dataReceived(dEvent);
 		}
-
-		if(energyListener != null){
-			dataIndex = 0;
-			for(int i = 0; i < ndata; i+=nextSampleOff){
-				intData[i] = dataEvent[nOffset+i];
-				if(chPerSample == 2){
-					intData[i+1] = dataEvent[nOffset+i+1];
-				}
-				float		amper = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
-				float		voltage = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
-				data[dataIndex] = amper*voltage;
-				if(data[dataIndex] < 0f){
-					data[dataIndex] = -data[dataIndex];
-				}
-				energy 	+= data[dataIndex]*dDesc.getDt(); 
-				data[dataIndex] 	= energy;
-				dataIndex++;
-			}
-			dEvent.setNumSamples(dataIndex);
-			energyListener.dataReceived(dEvent);
-		}
-
-		return ret;
+		
+		return e.getNumSamples();
 	}
     
 	public void  calibrationDone(float []row1,float []row2,float []calibrated){

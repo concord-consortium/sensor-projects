@@ -82,7 +82,7 @@ public class CCThermalCouple extends Sensor
 		return interfaceMode;
 	}
 
-    public boolean startSampling(DataEvent e)
+    public boolean startSampling(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
@@ -90,14 +90,14 @@ public class CCThermalCouple extends Sensor
 		dEvent.type = e.type;
 		dDesc.setDt(eDesc.getDt());
 		dEvent.setNumSamples(1);
-		dDesc.setTuneValue(eDesc.getTuneValue());
+		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
 				
 		//		dDesc.setIntChPerSample(2);
 
 		return super.startSampling(dEvent);
     }
 
-	public boolean dataArrived(DataEvent e)
+	public boolean dataArrived(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = e.getDataDescription();
 
@@ -109,7 +109,7 @@ public class CCThermalCouple extends Sensor
 		if(ndata == 0) return false;
 		
 		int[] data = e.getIntData();
-		float tuneValue = dDesc.getTuneValue();
+		float tuneValue = dDesc.getChannelDescription().getTuneValue();
 		for(int i = 0; i < ndata; i+=nextSampleOff){
 			float mV = (float)data[nOffset+i]*tuneValue;
 			float ch2 = (float)data[nOffset+i+1]*tuneValue;

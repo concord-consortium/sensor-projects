@@ -196,7 +196,7 @@ public class CCForce extends Sensor
 	int chPerSample = 2;
 	int channelOffset = 0;
 
-	public boolean startSampling(DataEvent e)
+	public boolean startSampling(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
@@ -205,7 +205,7 @@ public class CCForce extends Sensor
 		dDesc.setDt(eDesc.getDt());
 
 		chPerSample = eDesc.getChannelPerSample();
-		dDesc.setTuneValue(eDesc.getTuneValue());
+		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
 
 		dDesc.setNextSampleOffset(1);
 		dDesc.setChannelPerSample(1);
@@ -242,15 +242,15 @@ public class CCForce extends Sensor
 	public final static int ZEROING_END_POINT = 10;
 	public final static int ZEROING_START_POINT = 4;
 
-	public boolean idle(DataEvent e){
+	public boolean idle(DataStreamEvent e){
 		if(!zeroing) return super.idle(e);
 		return true;
 	}
 
-	public boolean dataArrived(DataEvent e){
+	public boolean dataArrived(DataStreamEvent e){
 		dEvent.type = e.type;
 		DataStreamDescription eDesc = e.getDataDescription();
-		float v = eDesc.getTuneValue();
+		float v = eDesc.getChannelDescription().getTuneValue();
 		
 		int nextSampleOff = eDesc.getNextSampleOffset();
 

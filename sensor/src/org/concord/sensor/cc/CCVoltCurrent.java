@@ -250,7 +250,7 @@ public class CCVoltCurrent extends Sensor
 		return CCInterface2.getMode(getInterfacePort(), intMode);
 	}
 	
-	public boolean startSampling(DataEvent e)
+	public boolean startSampling(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
@@ -271,7 +271,7 @@ public class CCVoltCurrent extends Sensor
 		dEvent.type = e.type;
 		dDesc.setDt(eDesc.getDt());
 		dEvent.setNumSamples(1);
-		dDesc.setTuneValue(eDesc.getTuneValue());
+		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
 		dDesc.setChannelPerSample(1);
 
 		// dDesc.setIntChPerSample(2);
@@ -279,7 +279,7 @@ public class CCVoltCurrent extends Sensor
 		return super.startSampling(dEvent);
 	}
 
-	public void notifyDataListenersEvent(DataEvent e)
+	public void notifyDataListenersEvent(DataStreamEvent e)
 	{
 		if(voltListener != null){
 			voltListener.dataStreamEvent(e);
@@ -295,7 +295,7 @@ public class CCVoltCurrent extends Sensor
 	}
     	
 
-    public boolean dataArrived(DataEvent e)
+    public boolean dataArrived(DataStreamEvent e)
     {
 		DataStreamDescription eDesc = e.getDataDescription();
 
@@ -318,7 +318,7 @@ public class CCVoltCurrent extends Sensor
 				if(chPerSample == 2){
 					intData[i+1] = dataEvent[nOffset+i+1];
 				}
-				data[dataIndex] = (intData[i+currentOff]*dDesc.getTuneValue() - zeroPointCurrent)/currentResolution;
+				data[dataIndex] = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
 				dataIndex++;
 			}
 			dEvent.setNumSamples(dataIndex);
@@ -332,7 +332,7 @@ public class CCVoltCurrent extends Sensor
 				if(chPerSample == 2){
 					intData[i+1] = dataEvent[nOffset+i+1];
 				}
-				data[dataIndex] = (intData[i+voltOff]*dDesc.getTuneValue() - zeroPointVoltage)/voltageResolution;
+				data[dataIndex] = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
 				dataIndex++;
 			}
 			dEvent.setNumSamples(dataIndex);
@@ -346,8 +346,8 @@ public class CCVoltCurrent extends Sensor
 				if(chPerSample == 2){
 					intData[i+1] = dataEvent[nOffset+i+1];
 				}
-				float		amper = (intData[i+currentOff]*dDesc.getTuneValue() - zeroPointCurrent)/currentResolution;
-				float		voltage = (intData[i+voltOff]*dDesc.getTuneValue() - zeroPointVoltage)/voltageResolution;
+				float		amper = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
+				float		voltage = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
 				data[dataIndex] = amper*voltage;
 				if(data[dataIndex] < 0f){
 					data[dataIndex] = -data[dataIndex];
@@ -365,8 +365,8 @@ public class CCVoltCurrent extends Sensor
 				if(chPerSample == 2){
 					intData[i+1] = dataEvent[nOffset+i+1];
 				}
-				float		amper = (intData[i+currentOff]*dDesc.getTuneValue() - zeroPointCurrent)/currentResolution;
-				float		voltage = (intData[i+voltOff]*dDesc.getTuneValue() - zeroPointVoltage)/voltageResolution;
+				float		amper = (intData[i+currentOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointCurrent)/currentResolution;
+				float		voltage = (intData[i+voltOff]*dDesc.getChannelDescription().getTuneValue() - zeroPointVoltage)/voltageResolution;
 				data[dataIndex] = amper*voltage;
 				if(data[dataIndex] < 0f){
 					data[dataIndex] = -data[dataIndex];

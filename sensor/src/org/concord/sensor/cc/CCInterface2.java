@@ -34,7 +34,7 @@ public class CCInterface2 extends InterfaceManager
 	
 	protected  SerialPort port;
 
-	public DataEvent dEvent = new DataEvent();
+	public DataStreamEvent dEvent = new DataStreamEvent();
 	int 				curStepTime = 0;
 
 	int bufOffset = 0;
@@ -387,14 +387,14 @@ public class CCInterface2 extends InterfaceManager
 		{
 		case DATUM_ONE_CH_10_BIT:
 		case DATUM_MULTI_CH_10_BIT:
-			dDesc[0].setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
-			dDesc[1].setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
+			dDesc[0].getChannelDescription().setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
+			dDesc[1].getChannelDescription().setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
 			datumSize = 2 * valuesPerDatum;
 
 			break;
 		case DATUM_DIG_COUNT:
 			dDesc[0].setDt(0.01f);
-			dDesc[0].setTuneValue(1f);
+			dDesc[0].getChannelDescription().setTuneValue(1f);
 			datumSize = 2 * valuesPerDatum;
 			readSize = 100;		   
 
@@ -402,16 +402,16 @@ public class CCInterface2 extends InterfaceManager
 		case DATUM_24_BIT:
 			dDesc[0].setDt(0.333333f);
 			dDesc[1].setDt(0.333333f);
-			dDesc[0].setTuneValue(getTuneValue(A2D_24_MODE));
-			dDesc[1].setTuneValue(getTuneValue(A2D_24_MODE));
+			dDesc[0].getChannelDescription().setTuneValue(getTuneValue(A2D_24_MODE));
+			dDesc[1].getChannelDescription().setTuneValue(getTuneValue(A2D_24_MODE));
 			datumSize = 4 * valuesPerDatum;
 
 			break;
 		case DATUM_DIG_COUNT_10_BIT:
 			dDesc[0].setDt(0.01f);
 			dDesc[1].setDt(0.01f);
-			dDesc[0].setTuneValue(1f);
-			dDesc[1].setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
+			dDesc[0].getChannelDescription().setTuneValue(1f);
+			dDesc[1].getChannelDescription().setTuneValue(getTuneValue(A2D_10_CH_0_MODE));
 			datumSize = 4 * valuesPerDatum;			
 
 			break;
@@ -559,7 +559,7 @@ public class CCInterface2 extends InterfaceManager
 	 *  All these function need to be specific to a particular
 	 *  port
 	 */
-	public boolean stopSampling(DataEvent e)
+	public boolean stopSampling(DataStreamEvent e)
 	{
 	    return true;
 	}

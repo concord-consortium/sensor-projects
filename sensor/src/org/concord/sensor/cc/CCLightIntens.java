@@ -128,7 +128,7 @@ public class CCLightIntens extends Sensor
 
 	public int  getActiveCalibrationChannels(){return 1;}
 
-	public boolean startSampling(DataEvent e)
+	public boolean startSampling(DataStreamEvent e)
 	{
 		lightMode = rangeProp.getIndex();
 
@@ -138,11 +138,11 @@ public class CCLightIntens extends Sensor
 		dDesc.setChannelPerSample(1);
 		dDesc.setNextSampleOffset(1);
 
-		dDesc.setTuneValue(e.getDataDescription().getTuneValue());
+		dDesc.getChannelDescription().setTuneValue(e.getDataDescription().getChannelDescription().getTuneValue());
 	    return super.startSampling(dEvent);
     }
 
-	public boolean dataArrived(DataEvent e)
+	public boolean dataArrived(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = e.getDataDescription();
 
@@ -161,11 +161,11 @@ public class CCLightIntens extends Sensor
 			if(lightMode == HIGH_LIGHT_MODE){
 				int v = data[nOffset+i];
 				lightIntData[dataIndex] = v;
-				lightData[dataIndex] = AHigh*dDesc.getTuneValue()*(float)v+BHigh;
+				lightData[dataIndex] = AHigh*dDesc.getChannelDescription().getTuneValue()*(float)v+BHigh;
 			}else{
 				int v = data[nOffset+i+1];
 				lightIntData[dataIndex] = v;
-				lightData[dataIndex] = ALow*dDesc.getTuneValue()*(float)v+BLow;
+				lightData[dataIndex] = ALow*dDesc.getChannelDescription().getTuneValue()*(float)v+BLow;
 			}
 			if(lightData[dataIndex] < 0f){
 				lightData[dataIndex] = 0f;

@@ -119,14 +119,14 @@ float				koeff = 2f*Maths.PI;
 	float posCalFactor = 1f;
 	float velCalFactor = 1f;
 
-    public boolean startSampling(DataEvent e)
+    public boolean startSampling(DataStreamEvent e)
 	{
 		DataStreamDescription eDesc = 
 			e.getDataDescription();
 		dEvent.type = e.type;
 		dDesc.setDt(eDesc.getDt());
 
-		dDesc.setTuneValue(eDesc.getTuneValue());
+		dDesc.getChannelDescription().setTuneValue(eDesc.getChannelDescription().getTuneValue());
 
 		dDesc.setChannelPerSample(1);
 
@@ -138,7 +138,7 @@ float				koeff = 2f*Maths.PI;
 		dEvent.setIntData(wheelIntData);
 
 		calFactor = -(koeff/(float)nTicks/dt);
-		float tuneValue = dDesc.getTuneValue();
+		float tuneValue = dDesc.getChannelDescription().getTuneValue();
 		posCalFactor = -(koeff/(float)nTicks) * tuneValue  * radius;
 		velCalFactor = -(koeff/(float)nTicks/dt) * tuneValue * radius;
 
@@ -146,7 +146,7 @@ float				koeff = 2f*Maths.PI;
 		return super.startSampling(dEvent);
 	}
 
-	public void notifyDataListenersEvent(DataEvent e)
+	public void notifyDataListenersEvent(DataStreamEvent e)
 	{
 		if(veloListener != null){
 			veloListener.dataStreamEvent(e);
@@ -158,7 +158,7 @@ float				koeff = 2f*Maths.PI;
 		super.notifyDataListenersEvent(e);
 	}
     	
-	public boolean dataArrived(DataEvent e)
+	public boolean dataArrived(DataStreamEvent e)
 	{
 		dEvent.type = e.type;
 		DataStreamDescription eDesc = e.getDataDescription();

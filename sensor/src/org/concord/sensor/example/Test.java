@@ -9,7 +9,7 @@ import org.concord.framework.text.UserMessageHandler;
 
 import org.concord.sensor.*;
 import org.concord.sensor.cc.CCSensorProducer;
-import org.concord.waba.extra.util.PropObject;
+//import org.concord.waba.extra.util.PropObject;
 
 /**
  * @author scott
@@ -67,7 +67,7 @@ public class Test
 		tempSensor.setInterface(interfaceManager);
 		
 		tempSensor.addDataListener(new DataListener(){
-			public void dataReceived(DataEvent dataEvent)
+			public void dataReceived(DataStreamEvent dataEvent)
 			{
 				int numSamples = dataEvent.getNumSamples();
 				float [] data = dataEvent.getData();
@@ -81,7 +81,7 @@ public class Test
 				}
 			}
 
-			public void dataStreamEvent(DataEvent dataEvent)
+			public void dataStreamEvent(DataStreamEvent dataEvent)
 			{				
 				String eventString;
 				int eventType = dataEvent.getType();
@@ -89,13 +89,13 @@ public class Test
 				if(eventType == 1001) return;
 				
 				switch(eventType) {
-					case DataEvent.DATA_READY_TO_START:
+					case DataStreamEvent.DATA_READY_TO_START:
 						eventString = "Ready to start";
 					break;
-					case DataEvent.DATA_STOPPED:
+					case DataStreamEvent.DATA_STOPPED:
 						eventString = "Stopped";
 					break;
-					case DataEvent.DATA_DESC_CHANGED:
+					case DataStreamEvent.DATA_DESC_CHANGED:
 						eventString = "Description changed";
 					break;
 					default:

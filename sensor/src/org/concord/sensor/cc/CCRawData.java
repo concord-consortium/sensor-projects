@@ -52,11 +52,11 @@ public class CCRawData extends Sensor
 		return "Voltage " + "Ch. " + curChannel;
 	}
 
-    public boolean startSampling(DataEvent e){
+    public boolean startSampling(DataStreamEvent e){
 		dEvent.type = e.type;
 		dDesc.setDt(e.getDataDescription().getDt());
 		// Change to Volts
-		dDesc.setTuneValue(e.getDataDescription().getTuneValue()/1000f);
+		dDesc.getChannelDescription().setTuneValue(e.getDataDescription().getChannelDescription().getTuneValue()/1000f);
 		if(activeChannels == 2){
 			dDesc.setChannelPerSample(2);
 			firstIndex = (curChannel == 1)?1:0;
@@ -82,14 +82,14 @@ public class CCRawData extends Sensor
 
 	}
 
-    public boolean dataArrived(DataEvent e)
+    public boolean dataArrived(DataStreamEvent e)
     {
 		DataStreamDescription eDesc = e.getDataDescription();
 
 		int nOffset 		= eDesc.getDataOffset();
 		int[] data = e.getIntData();
 
-		float tuneValue = dDesc.getTuneValue();
+		float tuneValue = dDesc.getChannelDescription().getTuneValue();
 		
 		int nextSampleOff = eDesc.getNextSampleOffset();
 

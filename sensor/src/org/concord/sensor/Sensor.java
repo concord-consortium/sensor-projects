@@ -34,7 +34,7 @@ public abstract class Sensor extends PropContainer
 	public String unit = null;
 
 	public DataStreamDescription dDesc = new DataStreamDescription();
-	public DataEvent	dEvent = new DataEvent();
+	public DataStreamEvent	dEvent = new DataStreamEvent();
 	public SensorEvent	pEvent = new SensorEvent();
 
 	protected InterfaceManager im;
@@ -262,7 +262,7 @@ public abstract class Sensor extends PropContainer
 
 	public DataListener setModeDataListener(DataListener l, int mode){return null;}
 
-	public void notifyDataListenersEvent(DataEvent e){
+	public void notifyDataListenersEvent(DataStreamEvent e){
 		if(dataListeners == null) return;
 		for(int i = 0; i < dataListeners.getCount(); i++){
 			DataListener l = (DataListener)dataListeners.get(i);
@@ -270,7 +270,7 @@ public abstract class Sensor extends PropContainer
 		}
 	}
 
-	public void notifyDataListenersReceived(DataEvent e)
+	public void notifyDataListenersReceived(DataStreamEvent e)
 	{
 		if(dataListeners == null) return;
 		for(int i = 0; i < dataListeners.getCount(); i++){
@@ -279,39 +279,39 @@ public abstract class Sensor extends PropContainer
 		}
 	}
 
-	public boolean startSampling(DataEvent e)
+	public boolean startSampling(DataStreamEvent e)
 	{
-		e.setType(DataEvent.DATA_READY_TO_START);
+		e.setType(DataStreamEvent.DATA_READY_TO_START);
 
 		notifyDataListenersEvent(e);
 
-		e.setType(DataEvent.DATA_RECEIVED);
+		e.setType(DataStreamEvent.DATA_RECEIVED);
 
 		return true;
 	}
 
-	public boolean stopSampling(DataEvent e)
+	public boolean stopSampling(DataStreamEvent e)
 	{
-		e.setType(DataEvent.DATA_STOPPED);
+		e.setType(DataStreamEvent.DATA_STOPPED);
 
 		notifyDataListenersEvent(e);
 
-		e.setType(DataEvent.DATA_RECEIVED);
+		e.setType(DataStreamEvent.DATA_RECEIVED);
 
 		return true;
 	}
 
-	public boolean dataArrived(DataEvent e)
+	public boolean dataArrived(DataStreamEvent e)
 	{
 		notifyDataListenersReceived(e);
 		return true;
 	}
 
-	public boolean idle(DataEvent e)
+	public boolean idle(DataStreamEvent e)
 	{
-		e.setType(DataEvent.DATA_COLLECTING);
+		e.setType(DataStreamEvent.DATA_COLLECTING);
 		notifyDataListenersEvent(e);
-		e.setType(DataEvent.DATA_RECEIVED);
+		e.setType(DataStreamEvent.DATA_RECEIVED);
 		return true;
 	}
    	

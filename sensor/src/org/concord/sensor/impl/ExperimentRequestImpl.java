@@ -4,8 +4,9 @@
  */
 package org.concord.sensor.impl;
 
-import org.concord.sensor.*;
 import org.concord.framework.data.DataDimension;
+import org.concord.sensor.ExperimentRequest;
+import org.concord.sensor.SensorRequest;
 
 /**
  * empty implementation of the ExperimentRequest

@@ -1,15 +1,14 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-02-28 21:37:49 $
- * $Author: dmarkman $
+ * $Revision: 1.3 $
+ * $Date: 2005-03-07 04:24:27 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor;
 
-import org.concord.framework.data.stream.DataConsumer;
 
 
 /**
@@ -36,18 +35,7 @@ public interface SensorDataManager
 	 * @param request
 	 * @param consumer
 	 */
-	public void prepareDataProducer(ExperimentRequest request, 
-			DataConsumer consumer);
-	
-	/**
-	 * A request is sent in allong with a data consumer.  A SensorDataProducer
-	 * is created and then passed to the consumer.  This method
-	 * does not directly return a SensorDataProducer because it might take
-	 * a while to create and initialize it.   
-	 * 
-	 * @param request
-	 */
-	public SensorDataProducer prepareDataProducer(ExperimentRequest requestconsumer);
+	public SensorDataProducer createDataProducer();
 	
 	/**
 	 * This should return a sensordataproducer for all the currently 

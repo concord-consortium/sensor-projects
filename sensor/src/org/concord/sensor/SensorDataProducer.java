@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2005-01-11 06:07:02 $
+ * $Revision: 1.4 $
+ * $Date: 2005-03-07 04:24:27 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -46,6 +46,15 @@ public interface SensorDataProducer
 	 * @return
 	 */
 	public ExperimentConfig getCurrentConfig();
+
+	/**
+	 * 
+	 * 
+	 * @param request
+	 * @param result
+	 * @return
+	 */
+	public ExperimentConfig configure(ExperimentRequest request);
 	
 	/**
 	 * This returns true if this device can detect if sensor are attached.

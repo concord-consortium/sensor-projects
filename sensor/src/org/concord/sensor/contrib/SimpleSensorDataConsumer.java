@@ -4,12 +4,11 @@
  */
 package org.concord.sensor.contrib;
 
-import org.concord.sensor.*;
-import org.concord.framework.data.DataDimension;
 import org.concord.framework.data.stream.DataListener;
-import org.concord.framework.data.stream.DataStreamEvent;
-import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.data.stream.DataProducer;
+import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.SensorDataConsumer;
+import org.concord.sensor.SensorDataProducer;
 
 /**
  * simpel implementation of the DataConsumer

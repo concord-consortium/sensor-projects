@@ -159,12 +159,11 @@ public class SensorDataProducerImpl
 	 * about their period (dT) not changing.  This needs more thought.  
 	 * 
 	 */
-	public final ExperimentConfig configure(ExperimentRequest request, 
-			ExperimentConfig result)
+	public final ExperimentConfig configure(ExperimentRequest request)
 	{
-	    experimentConfig = result;
-		DataStreamDescUtil.setupDescription(dDesc, request, result);
-		return result;		
+	    experimentConfig = device.configure(request);
+		DataStreamDescUtil.setupDescription(dDesc, request, experimentConfig);
+		return experimentConfig;		
 	}
 	
 	public final void start()

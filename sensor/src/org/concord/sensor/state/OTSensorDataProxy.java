@@ -8,7 +8,6 @@ package org.concord.sensor.state;
 
 import java.util.Vector;
 
-import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.data.stream.DataStreamDescription;
@@ -27,7 +26,7 @@ import org.concord.sensor.impl.DataStreamDescUtil;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OTSensorDataProxy extends DefaultOTObject 
-	implements DataProducer, DataConsumer 
+	implements DataProducer 
 {
 	public static interface ResourceSchema extends OTResourceSchema
 	{
@@ -70,6 +69,9 @@ public class OTSensorDataProxy extends DefaultOTObject
 		// then they will get screwed up unless we change
 		// the source.
 		dataListeners.add(listener);
+		if(producer != null) {
+		    producer.addDataListener(listener);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -112,14 +114,23 @@ public class OTSensorDataProxy extends DefaultOTObject
 		// device is recieved we should start it and pass 
 		// connect up the currently attached data listeners
 		// the datamanager should be careful so it doens't
-		// start to requests at once.  
+		// start two requests at once.  
 
 		running = true;
-		ExperimentRequest request = resources.getRequest();		
-		sensorManager.prepareDataProducer(request, this);		
-
-		// FIXME we are assuming this method will be single threaded
-		// which might not always be true
+		ExperimentRequest request = resources.getRequest();	
+		if(producer == null) {
+		    producer = sensorManager.createDataProducer();
+			for(int i=0; i<dataListeners.size(); i++) {
+				DataListener listener = (DataListener)dataListeners.get(i);
+				DataStreamEvent changeEvent = 
+					new DataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);
+				changeEvent.setDataDescription(getDataDescription());
+				listener.dataStreamEvent(changeEvent);
+				producer.addDataListener(listener);
+			}
+		}
+		producer.configure(request);
+		producer.start();
 	}
 	
 	/* (non-Javadoc)
@@ -144,44 +155,12 @@ public class OTSensorDataProxy extends DefaultOTObject
 	 */
 	public void reset() 
 	{
-		// as far as I know these devices don't need a reset
-		// so this can be ignored
+	    if(producer != null) {
+	        producer.reset();
+	    }
 	}
 	
 	public void init()
 	{
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.concord.framework.data.stream.DataConsumer#addDataProducer(org.concord.framework.data.stream.DataProducer)
-	 */
-	public void addDataProducer(DataProducer source) 
-	{
-		producer = (SensorDataProducer)source;
-		if(running) {
-			// this data producer has been already started
-			// for now lets add all of our current data listeners
-			// to this new producer and then start it.
-
-			// FIXME we should proxy the data events too 
-			// because the source of the data event should be this
-			// instead of the sensorDataProducer;
-			for(int i=0; i<dataListeners.size(); i++) {
-				DataListener listener = (DataListener)dataListeners.get(i);
-				DataStreamEvent changeEvent = 
-					new DataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);
-				changeEvent.setDataDescription(getDataDescription());
-				listener.dataStreamEvent(changeEvent);
-				producer.addDataListener(listener);
-			}
-			producer.start();
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.concord.framework.data.stream.DataConsumer#removeDataProducer(org.concord.framework.data.stream.DataProducer)
-	 */
-	public void removeDataProducer(DataProducer source) {
-		// TODO Auto-generated method stub
-	}
+	}	
 }

@@ -1,14 +1,9 @@
 package org.concord.sensor.device.impl;
 
-import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
-import org.concord.sensor.ExperimentConfig;
-import org.concord.sensor.ExperimentRequest;
-import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
-import org.concord.sensor.SensorDataConsumer;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.SensorDataProducerImpl;
@@ -76,7 +71,7 @@ public class InterfaceManager implements SensorDataManager
 	}
 		
 	/**
-	 * A request is sent in allong with a data consumer.  A SensorDataProducer
+	 * A request is sent in along with a data consumer.  A SensorDataProducer
 	 * is created and then passed to the consumer.  This method
 	 * does not directly return a SensorDataProducer because it might take
 	 * a while to create and initialize it.   
@@ -84,108 +79,7 @@ public class InterfaceManager implements SensorDataManager
 	 * @param request
 	 * @param consumer
 	 */
-	public void prepareDataProducer(ExperimentRequest request, 
-			DataConsumer consumer)
-	{
-		// Check the policy it can be one of the following:
-		// use only a specific device
-		// use only one of a collection of devices
-		// use any attached device.
-		// The policy will be determined by looking at the
-		// device list.  If it is null then any device will
-		// be used.  Otherwise the list will be traversed trying
-		// to find an available device.
-		if(deviceConfigs == null) {
-			// in this case how do we know the address strings
-			// and how do we know the set of known devices?  I guess
-			// the factory would need to tell us and we would need to create
-			// each one and see if it is attached.
-			System.err.println("Searching all possible devices isn't supported yet");
-			return;
-		}
-				
-		if(currentDevice != null) {
-			// check if it is attached.
-			// if not then it should be closed.
-			// this means we only support one device at a time
-			if(!currentDevice.isAttached()) {
-				deviceFactory.destroyDevice(currentDevice);
-				currentDevice = null;
-			}
-		}
-		
-		if(currentDevice == null) {
-			for(int i=0; i<deviceConfigs.length; i++) {
-				SensorDevice device = 
-					deviceFactory.createDevice(deviceConfigs[i]);
-				if(device.isAttached()){
-					currentDevice = device;
-					break;
-				}
-				deviceFactory.destroyDevice(device);
-			}
-		}
-		
-		if(currentDevice == null) {
-			// prompt the user to connect one of the supported devices
-			// then try again, recursively?
-			System.err.println("Couldn't find attached device");
-			
-			// for now we need to give them a default device
-			// so we can test this code
-			
-			return;
-		}
-				
-		ExperimentConfig actualConfig = currentDevice.configure(request);
-		if(actualConfig == null || !actualConfig.isValid()) {
-			// prompt the user because the attached sensors do not
-			// match the requested sensors.
-			// It is in this case that we need more error information
-			// from the device.  I suppose one solution is to get a 
-			// listing of the actual sensors and then do the comparision
-			// here in a general way.
-			// That will work if the interface can auto identify sensors
-			// if it can't then how would it know they are incorrect???
-			// I guess in case it would have to check if the returned values
-			// are valid.  Othwise it will just have to trust the student and
-			// the experiments will have to be designed (technical hints) to help
-			// the student figure out what is wrong.
-			// So we will try to tackle the general error cases here :S
-			// But there is now a way for the device to explain why the configuration
-			// is invalid.
-			System.err.println("Attached sensors don't match requested sensors");
-			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
-			if(actualConfig != null) {
-				System.err.println("  device reason: " + actualConfig.getInvalidReason());
-				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
-				System.err.println("  sensor attached: " + sensorConfigs[0].getType());
-			}
-			
-			// Maybe should be a policy decision somewhere
-			// because maybe you would want to just return the
-			// currently attached setup
-			return;
-		}
-		
-		SensorDataProducerImpl dataProducer = 
-			new SensorDataProducerImpl(currentDevice, ticker, messageHandler);
-				
-		dataProducer.configure(request, actualConfig);
-		
-		consumer.addDataProducer(dataProducer);
-	}
-	
-	/**
-	 * A request is sent in allong with a data consumer.  A SensorDataProducer
-	 * is created and then passed to the consumer.  This method
-	 * does not directly return a SensorDataProducer because it might take
-	 * a while to create and initialize it.   
-	 * 
-	 * @param request
-	 * @param consumer
-	 */
-	public SensorDataProducer prepareDataProducer(ExperimentRequest request)
+	public SensorDataProducer createDataProducer()
 	{
 		// Check the policy it can be one of the following:
 		// use only a specific device
@@ -236,46 +130,13 @@ public class InterfaceManager implements SensorDataManager
 			
 			return null;
 		}
-				
-		ExperimentConfig actualConfig = currentDevice.configure(request);
-		if(actualConfig == null || !actualConfig.isValid()) {
-			// prompt the user because the attached sensors do not
-			// match the requested sensors.
-			// It is in this case that we need more error information
-			// from the device.  I suppose one solution is to get a 
-			// listing of the actual sensors and then do the comparision
-			// here in a general way.
-			// That will work if the interface can auto identify sensors
-			// if it can't then how would it know they are incorrect???
-			// I guess in case it would have to check if the returned values
-			// are valid.  Othwise it will just have to trust the student and
-			// the experiments will have to be designed (technical hints) to help
-			// the student figure out what is wrong.
-			// So we will try to tackle the general error cases here :S
-			// But there is now a way for the device to explain why the configuration
-			// is invalid.
-			System.err.println("Attached sensors don't match requested sensors");
-			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
-			if(actualConfig != null) {
-				System.err.println("  device reason: " + actualConfig.getInvalidReason());
-				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
-				System.err.println("  sensor attached: " + sensorConfigs[0].getType());
-			}
-			
-			// Maybe should be a policy decision somewhere
-			// because maybe you would want to just return the
-			// currently attached setup
-			return null;
-		}
-		
-		SensorDataProducerImpl dataProducer = 
-			new SensorDataProducerImpl(currentDevice, ticker, messageHandler);
-				
-		dataProducer.configure(request, actualConfig);
-		
+
+		SensorDataProducer dataProducer = 
+		    new SensorDataProducerImpl(currentDevice, ticker, messageHandler);
+
 		return dataProducer;
 	}
-	
+		
 	/**
 	 * This should return a sensordataproducer for all the currently 
 	 * attached devices.  This method currently is not implemented.  When it 
@@ -321,62 +182,6 @@ public class InterfaceManager implements SensorDataManager
 		deviceFactory = factory;
 	}
 	
-	/**
-	 * This method provide quick and &quot;dirt&quot; 
-	 * way to get SensorDataProducer
-	 * 
-	 * @param deviceId device id 
-	 * @param consumer
-	 * @return newly created instance of SensorDataProducer
-	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
-	 * @see org.concord.sensor.SensorDataConsumer
-	 * @see org.concord.sensor.SensorDataProducer
-	 */
-	public static SensorDataProducer getDataProducerForDevice(int deviceId,SensorDataConsumer consumer){
-	    return getDataProducerForDevice(deviceId,null,null,consumer);
-	}
-	
-	/**
-	 * This method provide quick and &quot;dirt&quot; 
-	 * way to get SensorDataProducer
-	 * 
-	 * @param deviceId device id 
-	 * @param messenger  UserMessageHandler handler to get some messages from the sensor
-	 * @param consumer
-	 * @return newly created instance of SensorDataProducer
-	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
-	 * @see org.concord.sensor.SensorDataConsumer
-	 * @see org.concord.sensor.SensorDataProducer
-	 * @see org.concord.framework.text.UserMessageHandler
-	 */
-	public static SensorDataProducer getDataProducerForDevice(int deviceId,UserMessageHandler messenger,SensorDataConsumer consumer){
-	    return getDataProducerForDevice(deviceId,null,messenger,consumer);
-	}
-	
-	/**
-	 * This method provide quick and &quot;dirt&quot; 
-	 * way to get SensorDataProducer
-	 * 
-	 * @param deviceId device id 
-	 * @param configString 
-	 * @param messenger  UserMessageHandler handler to get some messages from the sensor
-	 * @param consumer
-	 * @return newly created instance of SensorDataProducer
-	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
-	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#configString
-	 * @see org.concord.sensor.SensorDataConsumer
-	 * @see org.concord.sensor.SensorDataProducer
-	 * @see org.concord.framework.text.UserMessageHandler
-	 */
-	public static SensorDataProducer getDataProducerForDevice(int deviceId, String configString,UserMessageHandler messenger,SensorDataConsumer consumer){
-		SensorDataManager  sdManager = new InterfaceManager(messenger);
-		DeviceConfig [] dConfigs = new DeviceConfig[1];
-		dConfigs[0] = new DeviceConfigImpl(deviceId, null);		
-		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
-		org.concord.sensor.ExperimentRequest request = new org.concord.sensor.impl.ExperimentRequestImpl();
-		sdManager.prepareDataProducer(request, consumer);
-		return consumer.getSensorDataProducer();
-	}
 	
 	public static SensorDataProducer getDataProducerForDeviceNoConsumer(int deviceId){
 	    return getDataProducerForDeviceNoConsumer(deviceId,null,null);
@@ -388,7 +193,9 @@ public class InterfaceManager implements SensorDataManager
 		dConfigs[0] = new DeviceConfigImpl(deviceId, null);		
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
 		org.concord.sensor.ExperimentRequest request = new org.concord.sensor.impl.ExperimentRequestImpl();
-		return sdManager.prepareDataProducer(request);
+		SensorDataProducer producer = sdManager.createDataProducer();
+		producer.configure(request);
+		return producer;
 	}
 	
 }

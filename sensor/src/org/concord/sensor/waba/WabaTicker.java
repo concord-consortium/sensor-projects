@@ -7,7 +7,6 @@
 package org.concord.sensor.waba;
 
 
-import org.concord.sensor.impl.SensorDataProducerImpl;
 import org.concord.sensor.impl.TickListener;
 import org.concord.sensor.impl.Ticker;
 

@@ -8,6 +8,7 @@ import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
+import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
@@ -38,19 +39,21 @@ public class SensorDataProducerImpl
 	private int totalDataRead;
 	private SensorDevice device;
 	private ExperimentConfig experimentConfig = null;
+    private float dataTimeOffset;
 	
 	public SensorDataProducerImpl(SensorDevice device, Ticker t, UserMessageHandler h)
 	{
 		this.device = device;
 		
 		ticker = t;
-		ticker.setTickListener(this);
 		
 		messageHandler = h;
 		
 		processedData = new float[DEFAULT_BUFFERED_SAMPLE_NUM];
 		processedDataEvent.setData(processedData);
 		processedDataEvent.setSource(this);
+		processedDataEvent.setDataDescription(dDesc);
+		dataTimeOffset = 0;
 	}
 
 	public void tick()
@@ -60,6 +63,8 @@ public class SensorDataProducerImpl
 	    // reset the total data read so we can track data coming from
 	    // flushes
 	    totalDataRead = 0;
+
+		dDesc.setDataOffset(0);
 
 	    // track when we are in the device read so if flush
 	    // is called outside of this we can complain
@@ -131,6 +136,7 @@ public class SensorDataProducerImpl
 		
 		processedDataEvent.setNumSamples(numSamples);
 		notifyDataListenersReceived(processedDataEvent);
+		dDesc.setDataOffset(dDesc.getDataOffset()+numSamples);
 		
 		totalDataRead += numSamples;
 		
@@ -143,26 +149,56 @@ public class SensorDataProducerImpl
 	}
 	
 	/**
-	 * This method is in a strange state right now.
+	 * This method is called by users of the sensor
+	 * device.  After the producer is created this method
+	 * is called.  In some cases it is called before every
+	 * start().
 	 * 
-	 * The device is configured by the InterfaceManager.
-	 * Then the interface manager creates the sensordataproducer
-	 * and hands that back.  For now the interface manager
-	 * will also call configure.  However perhaps this should
-	 * be done in the initialzer.  
-	 * 
-	 * It might be desirable to re-configure an existing 
-	 * SensorDataProducer.  That would justify this being a separate
-	 * method.  However users of data producers make assumptions
-	 * about their period (dT) not changing.  This needs more thought.  
-	 * 
+	 * It might take a while to return.  It might also fail
+	 * in which case it will return null, or it will return
+	 * a config for which getValid() return false.
 	 */
-	public final ExperimentConfig configure(ExperimentRequest request, 
-			ExperimentConfig result)
+	public ExperimentConfig configure(ExperimentRequest request)
 	{
-	    experimentConfig = result;
-		DataStreamDescUtil.setupDescription(dDesc, request, result);
-		return result;		
+		ExperimentConfig actualConfig = device.configure(request);
+		if(actualConfig == null || !actualConfig.isValid()) {
+			// prompt the user because the attached sensors do not
+			// match the requested sensors.
+			// It is in this case that we need more error information
+			// from the device.  I suppose one solution is to get a 
+			// listing of the actual sensors and then do the comparision
+			// here in a general way.
+			// That will work if the interface can auto identify sensors
+			// if it can't then how would it know they are incorrect???
+			// I guess in case it would have to check if the returned values
+			// are valid.  Othwise it will just have to trust the student and
+			// the experiments will have to be designed (technical hints) to help
+			// the student figure out what is wrong.
+			// So we will try to tackle the general error cases here :S
+			// But there is now a way for the device to explain why the configuration
+			// is invalid.
+			System.err.println("Attached sensors don't match requested sensors");
+			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
+			if(actualConfig != null) {
+				System.err.println("  device reason: " + actualConfig.getInvalidReason());
+				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
+				System.err.println("  sensor attached: " + sensorConfigs[0].getType());
+			}
+			
+			// Maybe should be a policy decision somewhere
+			// because maybe you would want to just return the
+			// currently attached setup
+		}
+
+	    experimentConfig = actualConfig;
+		DataStreamDescUtil.setupDescription(dDesc, request, actualConfig);
+
+		DataStreamEvent event = 
+		    new DataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED, null, dDesc);
+		event.setSource(this);
+		notifyDataListenersEvent(event);
+		
+		return actualConfig;
 	}
 	
 	public final void start()
@@ -170,6 +206,8 @@ public class SensorDataProducerImpl
 		device.start();
 		
 		timeWithoutData = 0;
+
+		ticker.setTickListener(this);
 
 		startTimer = System.currentTimeMillis();
 		int dataReadMillis = (int)(experimentConfig.getDataReadPeriod()*1000.0);
@@ -180,9 +218,13 @@ public class SensorDataProducerImpl
 	/**
 	 *  This doesn't really need to do anything if
 	 * the sensor isn't storing any cache.
+	 * however for sensors that need to put timestamps
+	 * on the data this method should be used to 
+	 * reset the timestamp
 	 */
 	public final void reset()
-	{		
+	{	
+	    dataTimeOffset = 0;
 	}
 	
 	public final void stop()
@@ -191,9 +233,14 @@ public class SensorDataProducerImpl
 
 		// just to make sure
 		// even if we are not ticking just incase
+		ticker.setTickListener(null);
 		ticker.stopTicking();
 
 		device.stop(ticking);
+
+		// FIXME we should get the time the device sends back
+		// instead of using our own time.
+		dataTimeOffset += (System.currentTimeMillis() - startTimer) / 1000f;
 	}
 
 	
@@ -258,6 +305,21 @@ public class SensorDataProducerImpl
 	public void notifyDataListenersReceived(DataStreamEvent e)
 	{
 		if(dataListeners == null) return;
+		
+		// if the data has timestamps they should be adjusted
+		// the contract for sensor devices is that time starts 
+		// at 0 when start is called, however for data producers
+		// time starts at 0 when reset is called.  The stop method
+		// is more like a pause for data producers.
+		if(dDesc.getDataType() == DataStreamDescription.DATA_SERIES){
+		    // the first channel will be time.
+		    for(int i=dDesc.getDataOffset(); 
+		    	i < e.getNumSamples(); 
+		    	i+= dDesc.getNextSampleOffset()){
+		        processedData[i] += dataTimeOffset;
+		    }
+		}
+		
 		for(int i = 0; i < dataListeners.size(); i++){
 			DataListener l = (DataListener)dataListeners.get(i);
 			l.dataReceived(e);

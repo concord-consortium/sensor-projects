@@ -6,7 +6,6 @@
  */
 package org.concord.sensor.device.impl;
 
-import org.concord.sensor.impl.SensorDataProducerImpl;
 import org.concord.sensor.impl.TickListener;
 import org.concord.sensor.impl.Ticker;
 
@@ -28,7 +27,8 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
 	 */
-	synchronized public void startTicking(int millis) {
+	synchronized public void startTicking(int millis) 
+	{
 		this.millis = millis;
 		ticking = true;
 		if(started) {
@@ -47,28 +47,39 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#isTicking()
 	 */
-	synchronized public boolean isTicking() {
+	synchronized public boolean isTicking() 
+	{
 		return ticking;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#setInterfaceManager(org.concord.sensor.InterfaceManager)
 	 */
-	synchronized public void setTickListener(TickListener tListener) {
+	synchronized public void setTickListener(TickListener tListener) 
+	{
+	    // We check if the listener is null here
+	    // We want to make sure the no one is expecting a tick
+	    // and isn't getting one, so each user of this ticker
+	    // needs to set this to null when they are done with it
+	    if(tListener != null && tickListener != null){
+	        throw new RuntimeException("Inconsitant ticker state");
+	    }
 	    tickListener = tListener;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#getInterfaceManager()
 	 */
-	synchronized public TickListener getTickListener() {
+	synchronized public TickListener getTickListener() 
+	{
 	    return tickListener;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#createNew()
 	 */
-	public Ticker createNew() {
+	public Ticker createNew() 
+	{
 		return new JavaTicker();
 	}
 	
@@ -83,8 +94,12 @@ public class JavaTicker extends Thread
 					e.printStackTrace();
 				}
 			}
-			
-			tickListener.tick();
+	
+			if(tickListener != null) {
+			    tickListener.tick();
+			} else {
+			    System.err.println("ticking a null listener");
+			}
 			
 			try {
 				// We wait so that we release the lock

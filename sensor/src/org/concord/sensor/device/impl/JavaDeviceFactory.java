@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.13 $
- * $Date: 2005-03-02 06:59:31 $
+ * $Revision: 1.14 $
+ * $Date: 2005-03-07 04:24:28 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -90,10 +90,12 @@ public class JavaDeviceFactory
 			case DATA_HARVEST_USB:
 			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
 			    break;			    
+			case PASCO_SERIAL:
+			    className = "org.concord.sensor.pasco.SW500SensorDevice";
+			    break;
 			case DATA_HARVEST_CF:
 			case IMAGIWORKS_SERIAL:
 			case IMAGIWORKS_SD:
-			case PASCO_SERIAL:
 			case COACH:
 				device = null;
 				break;

@@ -2,7 +2,6 @@ package org.concord.sensor.device;
 
 import org.concord.framework.data.DecoratedValue;
 import org.concord.framework.data.stream.DataChannelDescription;
-import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.waba.extra.io.DataStream;
 import org.concord.waba.extra.util.PropContainer;
@@ -36,7 +35,7 @@ public abstract class Sensor extends PropContainer
 //	public DataStreamEvent	dEvent = new DataStreamEvent();
 	public SensorEvent	pEvent = new SensorEvent();
 
-	protected DefaultSensorDevice im;
+	protected AbstractSensorDevice im;
 
 	public	int interfaceType = -1; 
 	protected Object interfaceMode = null;
@@ -96,7 +95,7 @@ public abstract class Sensor extends PropContainer
 	 * This function isn't clear when the only way to add probes to an
 	 * interface is to specify their port while adding them
 	 */
-	public void setInterface(DefaultSensorDevice im)
+	public void setInterface(AbstractSensorDevice im)
 	{
 		if(this.im != null)
 		{
@@ -118,12 +117,12 @@ public abstract class Sensor extends PropContainer
 	}
 
 
-	public DefaultSensorDevice getInterface()
+	public AbstractSensorDevice getInterface()
 	{
 		return im;
 	}
 
-	public DefaultSensorDevice open()
+	public AbstractSensorDevice open()
 	{
 		if(im != null) return im;
 
@@ -260,7 +259,7 @@ public abstract class Sensor extends PropContainer
 	 * @param e
 	 * @return
 	 */
-	public boolean startSampling(DataStreamDescription desc)
+	public boolean startSampling(DataStreamEvent event)
 	{
 		return true;
 	}
@@ -269,8 +268,9 @@ public abstract class Sensor extends PropContainer
 	 * This notifies the sensor that data has stopped coming in
 	 * @return
 	 */
-	public void stopSampling()
+	public boolean stopSampling(DataStreamEvent event)
 	{
+		return true;
 	}
 
 	/**

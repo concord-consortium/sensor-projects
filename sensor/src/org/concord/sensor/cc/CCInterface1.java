@@ -8,6 +8,7 @@ package org.concord.sensor.cc;
 
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.Ticker;
 
 /**
@@ -65,8 +66,8 @@ public class CCInterface1 extends CCInterface2 {
 
 	public boolean checkMode(Sensor probe, Object modeObj)
 	{
-		int mode = ((CCInterfaceMode)modeObj).mode;
-		int port = ((CCInterfaceMode)modeObj).port;
+		int mode = ((SensorDeviceMode)modeObj).getMode();
+		int port = ((SensorDeviceMode)modeObj).getPort();
 		
 		if(port != 0) {
 			return false;

@@ -20,9 +20,9 @@ public interface Ticker
 	
 	public boolean isTicking();
 	
-	public void setInterfaceManager(DefaultSensorDevice manager);		
+	public void setInterfaceManager(AbstractSensorDevice manager);		
 	
-	public DefaultSensorDevice getInterfaceManager();
+	public AbstractSensorDevice getInterfaceManager();
 	
 	/**
 	 * This is need because waba can't do reflection. This will

@@ -9,7 +9,7 @@ import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.SensorDevice;
 import org.concord.sensor.cc.CCSensorProducer;
-import org.concord.sensor.device.DefaultSensorDevice;
+import org.concord.sensor.device.AbstractSensorDevice;
 import org.concord.sensor.device.JavaTicker;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorFactory;
@@ -60,8 +60,8 @@ public class Test
 		PropObject channelProp = tempSensor.getProperty("Channel");
 		channelProp.setValue("1");
 */		
-		DefaultSensorDevice interfaceManager = 
-			(DefaultSensorDevice)producers[0].createInterface(CCSensorProducer.INTERFACE_1);
+		AbstractSensorDevice interfaceManager = 
+			(AbstractSensorDevice)producers[0].createInterface(CCSensorProducer.INTERFACE_1);
 		// version info:
 		// version 2 :CCA2D2v..
 		// version 1 :CC A2D24v..

@@ -20,14 +20,14 @@ import waba.ui.Timer;
 public class WabaTicker extends Control
 	implements Ticker
 {
-	DefaultSensorDevice interfaceManager = null;
+	AbstractSensorDevice interfaceManager = null;
 	Timer timer = null;
 	
-	public void setInterfaceManager(DefaultSensorDevice manager) {
+	public void setInterfaceManager(AbstractSensorDevice manager) {
 		interfaceManager = manager;
 	}
 
-	public DefaultSensorDevice getInterfaceManager() {
+	public AbstractSensorDevice getInterfaceManager() {
 		return interfaceManager;
 	}
 	

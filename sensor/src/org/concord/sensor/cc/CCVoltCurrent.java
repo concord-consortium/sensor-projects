@@ -6,6 +6,7 @@ import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.sensor.device.CalibrationDesc;
 import org.concord.sensor.device.CalibrationParam;
 import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.SensorProducer;
 import org.concord.waba.extra.util.PropObject;
 
@@ -187,7 +188,7 @@ public class CCVoltCurrent extends Sensor
 			intMode = A2D_10_2_CH_MODE;
 			activeChannels = 2;
 		} 
-		return CCInterface2.getMode(getInterfacePort(), intMode);
+		return new SensorDeviceMode(getInterfacePort(), intMode);
 	}
 	
 	public boolean startSampling(DataStreamEvent e)

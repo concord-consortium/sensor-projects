@@ -4,6 +4,7 @@ import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.sensor.device.CalibrationDesc;
 import org.concord.sensor.device.CalibrationParam;
+import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.SensorProducer;
 import org.concord.waba.extra.util.PropObject;
 
@@ -31,7 +32,7 @@ public class CCThermalCouple extends CCSensor
 	{
 		super(init, type, p);
 
-		interfaceMode = CCInterface2.getMode(PORT_A, A2D_24_MODE);
+		interfaceMode = new SensorDeviceMode(PORT_A, A2D_24_MODE);
 
 		activeChannels = 2;
 		defQuantityName = "Temperature";

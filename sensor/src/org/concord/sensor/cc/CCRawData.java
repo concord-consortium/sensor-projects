@@ -3,6 +3,7 @@ package org.concord.sensor.cc;
 import org.concord.framework.data.DecoratedValue;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.SensorProducer;
 import org.concord.waba.extra.util.PropObject;
 
@@ -182,7 +183,7 @@ public class CCRawData extends CCSensor
 			}
 		}
 
-		interfaceMode = CCInterface2.getMode(getInterfacePort(), intMode);
+		interfaceMode = new SensorDeviceMode(getInterfacePort(), intMode); 
 
 		return interfaceMode;
 	}

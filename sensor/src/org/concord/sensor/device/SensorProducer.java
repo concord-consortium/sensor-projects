@@ -90,7 +90,7 @@ public abstract class SensorProducer
 		return interfaceNames;
     }
 
-    public abstract DefaultSensorDevice createInterface(int id);
+    public abstract AbstractSensorDevice createInterface(int id);
     
     public void setTicker(Ticker t)
     {

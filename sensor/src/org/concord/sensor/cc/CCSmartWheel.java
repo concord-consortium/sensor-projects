@@ -6,6 +6,7 @@ import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.sensor.device.CalibrationDesc;
 import org.concord.sensor.device.CalibrationParam;
 import org.concord.sensor.device.Sensor;
+import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.SensorProducer;
 import org.concord.waba.extra.util.Maths;
 
@@ -37,7 +38,7 @@ float				koeff = 2f*Maths.PI;
 		defQuantityName = wheelModes[2];
 
 		activeChannels = 1;
-		interfaceMode = CCInterface2.getMode(PORT_A, DIG_COUNT_MODE);
+		interfaceMode = new SensorDeviceMode(PORT_A, DIG_COUNT_MODE);
 
 		//		addProperty(modeProp);
 

@@ -18,7 +18,7 @@ public class JavaTicker extends Thread
 	int millis;
 	boolean ticking = false;
 	boolean started = false;
-	DefaultSensorDevice interfaceManager;
+	AbstractSensorDevice interfaceManager;
 		
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
@@ -49,14 +49,14 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#setInterfaceManager(org.concord.sensor.InterfaceManager)
 	 */
-	synchronized public void setInterfaceManager(DefaultSensorDevice manager) {
+	synchronized public void setInterfaceManager(AbstractSensorDevice manager) {
 		interfaceManager = manager;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#getInterfaceManager()
 	 */
-	synchronized public DefaultSensorDevice getInterfaceManager() {
+	synchronized public AbstractSensorDevice getInterfaceManager() {
 		return interfaceManager;
 	}
 

@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.9 $
- * $Date: 2005-02-23 18:04:18 $
+ * $Revision: 1.10 $
+ * $Date: 2005-02-23 21:02:30 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -97,18 +97,19 @@ public class JavaDeviceFactory
 			case PASCO_SERIAL:
 			case COACH:
 				device = null;
+				break;
 				
 			// TODO: need to handle config string so
 			// the serial port can be specified
 			case CCPROBE_VERSION_0:
-				device =  new CCInterface0();
-				
+			    className = "org.concord.sensor.cc.CCInterface0";
+			    break;			    
 			case CCPROBE_VERSION_1:
-				
-				device = new CCInterface1();
-				
+				className = "org.concord.sensor.cc.CCInterface1";
+				break;
 			case CCPROBE_VERSION_2:
-				device = new CCInterface2();
+			    className = "org.concord.sensor.cc.CCinterface2";
+			    break;
 		}
 
 		if(className != null) {

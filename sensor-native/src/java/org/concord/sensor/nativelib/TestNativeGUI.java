@@ -220,7 +220,7 @@ JTextArea textArea;
     		
     		System.out.println("Data Event: " + eventString); 
     	}
-}
+    }
 }
 
 

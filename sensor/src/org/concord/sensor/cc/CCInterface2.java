@@ -4,6 +4,7 @@ import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
+import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.device.AbstractJavaSensorDevice;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorDeviceMode;
@@ -466,6 +467,11 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	protected void deviceClose()
 	{
 		
+	}
+	
+	public ExperimentConfig deviceConfig(ExperimentRequest request)
+	{
+		return null;		
 	}
 	
 	public void deviceStart()

@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2004-12-13 17:53:55 $
+ * $Revision: 1.4 $
+ * $Date: 2004-12-18 07:01:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -82,37 +82,20 @@ public interface SensorConfig
 	 * @return
 	 */
 	public int getType();
-	public void setType(int type);
 	
 	/**
-	 * This is the maximum step size between values.  This
+	 * This is the absolute value of the 
+	 * maximum step size between values.  This
 	 * is dependent on the units returned by this sensor.  There
 	 * will be implicit units for each quantity, and this step
 	 * size will be in those units.
 	 * 
 	 * When the actual config is returned this value should
-	 * be the actual step size.
+	 * be the actual step size.  This might not be available 
+	 * for a particular sensor in this case it might be -1.
 	 * @return
 	 */
 	public float getStepSize();
-	public void setStepSize(float size);
-	
-	/**
-	 * This is used by the author to set the precision as a power of
-	 * 10 that they wish to be displayed in the graph, table, or other
-	 * display of this data.  For example:
-	 * setting this to -1 will give a 0.1 precision
-	 * setting this to 0 will give integer precision.
-	 * 
-	 * Most SensorDevices can ignore this because this will be handled
-	 * automatically by the AbstractSensorDevice class. 
-	 * 
-	 * If we do split this up into two interfaces or classes this
-	 * property should only be in the interface used by authors.
-	 * @return
-	 */
-	public int getDisplayPrecsion();
-	public void setDisplayPrecision();
 	
 	/**
 	 * This is the port the sensor is or should be plugged into.
@@ -131,7 +114,6 @@ public interface SensorConfig
 	 * @return
 	 */
 	public int getPort();
-	public void setPort(int port);
 	
 	/**
 	 * This is the name of the port the sensor is plugged into.
@@ -139,7 +121,6 @@ public interface SensorConfig
 	 * @return
 	 */
 	public String getPortName();
-	public void setPortName(String name);
 	
 	/**
 	 * This is the name of sensor that is plugged in.  It should
@@ -149,7 +130,6 @@ public interface SensorConfig
 	 * @return
 	 */
 	public String getName();
-	public void setName(String name);
 	
 	/**
 	 * The unit of the sensor plugged in, or the unit
@@ -162,9 +142,7 @@ public interface SensorConfig
 	 * @return
 	 */
 	public DataDimension getUnit();
-	public void setUnit(DataDimension unit);
-	
-	
+		
 	/**
 	 * These parameters can be used to customize a sensor.  If a parameter
 	 * is device specific then the key should start with a device specific
@@ -173,5 +151,4 @@ public interface SensorConfig
 	 * @return
 	 */
 	public String getSensorParam(String key);
-	public void setSensorParam(String key, String value);	
 }

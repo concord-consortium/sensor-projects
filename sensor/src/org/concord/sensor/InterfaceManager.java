@@ -19,7 +19,7 @@ public class InterfaceManager
 		messageHandler = h;
 	}
 		
-	public void prepareDataProducer(ExperimentConfig config, 
+	public void prepareDataProducer(ExperimentRequest config, 
 			DataConsumer consumer)
 	{
 		// Check the policy it can be one of the following:

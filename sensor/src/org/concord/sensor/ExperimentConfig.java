@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2004-12-13 17:53:55 $
+ * $Revision: 1.4 $
+ * $Date: 2004-12-18 07:01:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -22,15 +22,11 @@ package org.concord.sensor;
 public interface ExperimentConfig
 {
 	public boolean isValid();
-	public void setValid(boolean valid);
 	
 	public String getInvalidReason();
-	public void setInvalidReason(String reason);
 	
 	public float getPeriod();
-	public void setPeriod(float period);
 	
-	public void setSensorConfigs(SensorConfig [] configs);
 	public SensorConfig [] getSensorConfigs();	
 	
 	/**
@@ -40,7 +36,6 @@ public interface ExperimentConfig
 	 * case the name should reflect that.
 	 * @param name
 	 */
-	public void setDeviceName(String name);
 	public String getDeviceName();
 }
 

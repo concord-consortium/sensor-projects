@@ -1,14 +1,15 @@
 package org.concord.sensor.device;
 
-import org.concord.framework.data.DataDimension;
 import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
+import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDevice;
+import org.concord.sensor.SensorRequest;
 
 import waba.sys.Vm;
 
@@ -142,7 +143,7 @@ public abstract class AbstractSensorDevice
 	
 	protected abstract void deviceClose();
 	
-	protected abstract ExperimentConfig deviceConfig(ExperimentConfig request);
+	protected abstract ExperimentConfig deviceConfig(ExperimentRequest request);
 	
 	protected abstract void deviceStart();
 	
@@ -156,7 +157,7 @@ public abstract class AbstractSensorDevice
 	 * subclasses should use deviceConfig not configure
 	 * to setup their devices.
 	 */
-	public final ExperimentConfig configure(ExperimentConfig request)
+	public final ExperimentConfig configure(ExperimentRequest request)
 	{
 		ExperimentConfig result = deviceConfig(request);
 		
@@ -164,6 +165,11 @@ public abstract class AbstractSensorDevice
 			return null;
 		}
 		
+		SensorRequest [] sensRequests =  null;
+		if(request != null) {
+			sensRequests = request.getSensorRequests();
+		}
+			
 		SensorConfig [] sensConfigs = result.getSensorConfigs();
 		dDesc.setChannelsPerSample(sensConfigs.length);
 		dDesc.setDt(result.getPeriod());
@@ -176,7 +182,11 @@ public abstract class AbstractSensorDevice
 
 			// FIXME: This precision should be taken from the 
 			// requested config.  This is the display precision
-			chDescrip.setPrecision(sensConfigs[i].getDisplayPrecsion());
+			
+			if(sensRequests != null) {
+				chDescrip.setPrecision(sensRequests[i].getDisplayPrecsion());
+			}
+			
 			chDescrip.setNumericData(true);
 		}
 		

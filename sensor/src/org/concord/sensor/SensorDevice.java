@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Revision: 1.3 $
+ * $Date: 2004-12-18 07:01:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -26,7 +26,7 @@ public interface SensorDevice
 {
 	public boolean isAttached();
 	
-	public ExperimentConfig configure(ExperimentConfig experiment);
+	public ExperimentConfig configure(ExperimentRequest experiment);
 	
 	/**
 	 * This returns the configuration attached to the interface

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xml" href="sensormap-table.xsl"?>
+<?xml-stylesheet type="text/xml" href="vernier-sensormap-table.xsl"?>
 <!-- WARNING: manually editing this file may break functionality in Logger Pro 3 -->
 <SensorMap Version="1.0">
 	<Sensor ID_Name="ACC" BaseID="27" NumAutoIDs="1" Product="ACC-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">

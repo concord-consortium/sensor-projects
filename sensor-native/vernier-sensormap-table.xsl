@@ -1,15 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE stylesheet [
-<!ENTITY copy 
-"<xsl:text disable-output-escaping='yes'>&amp;copy;</xsl:text>">
-]>
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="/">
     <html>
       <body>
-	&copy;
       <xsl:apply-templates/>
       </body>
     </html>

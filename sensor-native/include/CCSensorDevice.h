@@ -55,7 +55,8 @@ typedef struct
 	/*
 	 * The unit the data will be returned in
 	 * This must be in a specific format:
-	 * [put url for unit format here]
+	 * the strings for these units are 
+	 * next to the quantity definitions
 	 * must be NUL terminated
 	 */
 	char 			unitStr[32];
@@ -120,31 +121,31 @@ enum QuantityType
 	public static int QUANTITY_UNKNOWN=             -1;
 	
 	// Required
-	public static int QUANTITY_TEMPERATURE=			0;
-	public static int QUANTITY_TEMPERATURE_WAND=    1;
-	public static int QUANTITY_LIGHT=				2;
-	public static int QUANTITY_GAS_PRESSURE= 		3;
-	public static int QUANTITY_VOLTAGE= 			4;
-	public static int QUANTITY_FORCE=				5;
-	public static int QUANTITY_VELOCITY=			6;
-	public static int QUANTITY_RELATIVE_HUMIDITY=	7;
+	public static int QUANTITY_TEMPERATURE=			0;  // degC
+	public static int QUANTITY_TEMPERATURE_WAND=    1;  // degC
+	public static int QUANTITY_LIGHT=				2;  // lx
+	public static int QUANTITY_GAS_PRESSURE= 		3;  // Pa
+	public static int QUANTITY_VOLTAGE= 			4;  // V
+	public static int QUANTITY_FORCE=				5;  // N
+	public static int QUANTITY_VELOCITY=			6;  // m/s
+	public static int QUANTITY_RELATIVE_HUMIDITY=	7;  // pctRH
 
 	// Recommended
-	public static int QUANTITY_ACCELERATION=		8;
-	public static int QUANTITY_PULSE_RATE=			9;
+	public static int QUANTITY_ACCELERATION=		8;  // m/s^2
+	public static int QUANTITY_PULSE_RATE=			9;  // beat/s
 		
 	// not required
-	public static int QUANTITY_CURRENT=				10;
-	public static int QUANTITY_POWER=				11;
-	public static int QUANTITY_ENERGY=				12;
+	public static int QUANTITY_CURRENT=				10; // A
+	public static int QUANTITY_POWER=				11; // W
+	public static int QUANTITY_ENERGY=				12; // J
 	
-	public static int QUANTITY_DISTANCE=			13;
-	public static int QUANTITY_SOUND_INTENSITY=		14;
-	public static int QUANTITY_COMPASS= 			15;
+	public static int QUANTITY_DISTANCE=			13; // m
+	public static int QUANTITY_SOUND_INTENSITY=		14; // dB
+	public static int QUANTITY_COMPASS= 			15; // deg
 	
-	public static int QUANTITY_ANGULAR_VELOCITY=	16;
+	public static int QUANTITY_ANGULAR_VELOCITY=	16; // rad/s
 	
-	public static int QUANTITY_WIND_SPEED=			17;
+	public static int QUANTITY_WIND_SPEED=			17; // m/s
 	 *****************************************************
 	 *****************************************************/
 	

@@ -16,27 +16,15 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
          if(imagename != NULL) break;
      }
      if(imagename != NULL){
+         char *needPath = NULL;
          char *lastSlash = strrchr((const char *)imagename,'/');
-         if(lastSlash != NULL) *lastSlash = 0;
-         char *envVar = getenv("DYLD_LIBRARY_PATH");
-         char *newPath = NULL;
-         if(envVar == NULL){
-             newPath = (char *)malloc(strlen(imagename)+1);
-             strcpy(newPath,(const char *)imagename);
-             newPath[strlen((const char *)imagename)] = 0;
-         }else{
-             newPath = (char *)malloc(strlen(imagename)+strlen(envVar)+2);
-             char *toCopy = newPath;
-             strcpy(toCopy,(const char *)envVar);
-             toCopy += strlen(envVar);
-             strcpy(toCopy,":");
-             toCopy ++;
-             strcpy(toCopy,(const char *)imagename);
-             toCopy += strlen(imagename);
-             *toCopy = 0;
-         }
-         setenv("DYLD_LIBRARY_PATH",newPath,1);
-         free(newPath);
+         int length1 = (lastSlash == NULL)?strlen(imagename):(int)(lastSlash - imagename);
+         needPath = (char *)malloc(length1+1);
+         strncpy(needPath,(const char *)imagename,length1);
+         needPath[length1] = 0;
+         printf("needPath %s\n",needPath);
+         chdir(needPath);
+         free(needPath);
      }
      return JNI_VERSION_1_4;
 }

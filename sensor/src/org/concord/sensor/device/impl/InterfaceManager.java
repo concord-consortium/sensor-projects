@@ -194,7 +194,7 @@ public class InterfaceManager implements SensorDataManager
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
 		org.concord.sensor.ExperimentRequest request = new org.concord.sensor.impl.ExperimentRequestImpl();
 		SensorDataProducer producer = sdManager.createDataProducer();
-		producer.configure(request);
+		if(producer != null) producer.configure(request);
 		return producer;
 	}
 	

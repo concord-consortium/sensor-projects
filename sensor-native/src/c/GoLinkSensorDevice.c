@@ -51,6 +51,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_GASS_PRESSURE     24
 #define SENSOR_ID_DUAL_R_FORCE_10   25
 #define SENSOR_ID_DUAL_R_FORCE_50   26
+#define SENSOR_ID_SMART_LIGHT       35
 #define SENSOR_ID_GO_TEMP           60 
 #define SENSOR_ID_GO_MOTION         69 
 
@@ -324,7 +325,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_FORCE;
 				sensConfig->stepSize = 0.05;
 				break;
-				
+			case SENSOR_ID_SMART_LIGHT:
+				if(request &&
+					(request->type == QUANTITY_LIGHT)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "lx");
+				sensConfig->type = QUANTITY_LIGHT;
+				sensConfig->stepSize = 0.01;
+				break;				
 			case SENSOR_ID_GO_TEMP:
 				if(request &&
 					(request->type == QUANTITY_TEMPERATURE ||

@@ -133,64 +133,48 @@ public class TestNative
 			}
 		};
 		
-		DataConsumer consumer = new DataConsumer(){
-			/* (non-Javadoc)
-			 * @see org.concord.framework.data.stream.DataConsumer#addDataProducer(org.concord.framework.data.stream.DataProducer)
-			 */
-			public void addDataProducer(DataProducer source) {
-				dataProducer = (SensorDataProducer)source;
-				source.addDataListener(new DataListener(){
-					public void dataReceived(DataStreamEvent dataEvent)
-					{
-						int numSamples = dataEvent.getNumSamples();
-						float [] data = dataEvent.getData();
-						if(numSamples > 0) {
-							System.out.println("" + numSamples + " " +
-										data[0]);
-							System.out.flush();
-						} 
-						else {
-							System.out.println("" + numSamples);
-						}
-					}
-
-					public void dataStreamEvent(DataStreamEvent dataEvent)
-					{				
-						String eventString;
-						int eventType = dataEvent.getType();
-						
-						if(eventType == 1001) return;
-						
-						switch(eventType) {
-							case DataStreamEvent.DATA_READY_TO_START:
-								eventString = "Ready to start";
-							break;
-							case DataStreamEvent.DATA_STOPPED:
-								eventString = "Stopped";
-							break;
-							case DataStreamEvent.DATA_DESC_CHANGED:
-								eventString = "Description changed";
-							break;
-							default:
-								eventString = "Unknown event type";					
-						}
-						
-						System.out.println("Data Event: " + eventString); 
-					}
-				});
-
-				// TODO Auto-generated method stub
-
+		SensorDataProducer sDataProducer = 
+		    sdManager.createDataProducer();
+		sDataProducer.configure(request);
+		sDataProducer.addDataListener(new DataListener(){
+			public void dataReceived(DataStreamEvent dataEvent)
+			{
+				int numSamples = dataEvent.getNumSamples();
+				float [] data = dataEvent.getData();
+				if(numSamples > 0) {
+					System.out.println("" + numSamples + " " +
+								data[0]);
+					System.out.flush();
+				} 
+				else {
+					System.out.println("" + numSamples);
+				}
 			}
-			/* (non-Javadoc)
-			 * @see org.concord.framework.data.stream.DataConsumer#removeDataProducer(org.concord.framework.data.stream.DataProducer)
-			 */
-			public void removeDataProducer(DataProducer source) {
-				// TODO Auto-generated method stub
 
+			public void dataStreamEvent(DataStreamEvent dataEvent)
+			{				
+				String eventString;
+				int eventType = dataEvent.getType();
+				
+				if(eventType == 1001) return;
+				
+				switch(eventType) {
+					case DataStreamEvent.DATA_READY_TO_START:
+						eventString = "Ready to start";
+					break;
+					case DataStreamEvent.DATA_STOPPED:
+						eventString = "Stopped";
+					break;
+					case DataStreamEvent.DATA_DESC_CHANGED:
+						eventString = "Description changed";
+					break;
+					default:
+						eventString = "Unknown event type";					
+				}
+				
+				System.out.println("Data Event: " + eventString); 
 			}
-		};
-		sdManager.prepareDataProducer(request, consumer);
+		});
 		
 		dataProducer.start();
 		

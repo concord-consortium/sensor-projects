@@ -1,0 +1,17 @@
+<project name="Sensor" default="jar">
+	<import file="../ProjectSets/standard-ant-targets.xml"/>
+
+	<target name="compile" depends="init">
+		<javac destdir="lib">
+			<src location="src"/>
+			<patternset excludes="org/concord/sensor/transformers/,org/concord/sensor/meld/"/>
+			<classpath>
+		    	<pathelement location="../WabaJVM/lib/wabajvm.jar"/>
+		    	<pathelement location="../Framework/lib/framework.jar"/>
+			</classpath>
+		</javac>
+    </target>
+
+	<property name="jar-name" value="sensor"/>
+
+</project>

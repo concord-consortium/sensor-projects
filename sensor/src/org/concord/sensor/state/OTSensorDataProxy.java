@@ -18,7 +18,7 @@ import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
-import org.concord.sensor.device.impl.DataStreamDescUtil;
+import org.concord.sensor.impl.DataStreamDescUtil;
 
 /**
  * @author Informaiton Services

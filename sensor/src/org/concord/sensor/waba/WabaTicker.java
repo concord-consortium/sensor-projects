@@ -4,8 +4,12 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.concord.sensor.device.impl;
+package org.concord.sensor.waba;
 
+
+import org.concord.sensor.impl.SensorDataProducerImpl;
+import org.concord.sensor.impl.TickListener;
+import org.concord.sensor.impl.Ticker;
 
 import waba.ui.Control;
 import waba.ui.ControlEvent;
@@ -21,15 +25,15 @@ import waba.ui.Timer;
 public class WabaTicker extends Control
 	implements Ticker
 {
-	SensorDataProducerImpl interfaceManager = null;
+    TickListener tickListener;
 	Timer timer = null;
 	
-	public void setInterfaceManager(SensorDataProducerImpl manager) {
-		interfaceManager = manager;
+	public void setTickListener(TickListener tListener) {
+		tickListener = tListener;
 	}
 
-	public SensorDataProducerImpl getInterfaceManager() {
-		return interfaceManager;
+	public TickListener getTickListener() {
+	    return tickListener;
 	}
 	
 	public void startTicking(int millis)
@@ -56,7 +60,7 @@ public class WabaTicker extends Control
 	public void onEvent(Event event)
 	{
 		if (event.type==ControlEvent.TIMER){
-			interfaceManager.tick();
+			tickListener.tick();
 		}
 	}	
 }

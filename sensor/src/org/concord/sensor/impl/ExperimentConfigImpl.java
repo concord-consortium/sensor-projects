@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package org.concord.sensor.device.impl;
+package org.concord.sensor.impl;
 
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;

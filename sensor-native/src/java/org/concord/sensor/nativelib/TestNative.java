@@ -17,7 +17,7 @@ import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.DeviceConfigImpl;
+import org.concord.sensor.device.impl.DeviceConfigImpl;
 import org.concord.sensor.device.impl.InterfaceManager;
 import org.concord.sensor.device.impl.JavaDeviceFactory;
 

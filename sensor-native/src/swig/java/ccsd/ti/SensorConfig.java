@@ -43,7 +43,7 @@ public class SensorConfig implements
 	
 	public org.concord.framework.data.DataDimension getUnit()
 	{
-		return new org.concord.sensor.device.SensorUnit(getUnitStr());
+		return new org.concord.sensor.impl.SensorUnit(getUnitStr());
 	}
 
   public void setConfirmed(short confirmed) {

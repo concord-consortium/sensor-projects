@@ -3,11 +3,11 @@ package org.concord.sensor.cc;
 import org.concord.framework.data.DecoratedValue;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
-import org.concord.sensor.device.CalibrationDesc;
-import org.concord.sensor.device.CalibrationParam;
-import org.concord.sensor.device.Sensor;
-import org.concord.sensor.device.SensorDeviceMode;
-import org.concord.sensor.device.SensorProducer;
+import org.concord.sensor.waba.CalibrationDesc;
+import org.concord.sensor.waba.CalibrationParam;
+import org.concord.sensor.waba.Sensor;
+import org.concord.sensor.waba.SensorDeviceMode;
+import org.concord.sensor.waba.SensorProducer;
 import org.concord.waba.extra.util.PropObject;
 
 

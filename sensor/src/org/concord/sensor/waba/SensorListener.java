@@ -1,4 +1,5 @@
-package org.concord.sensor.device;
+package org.concord.sensor.waba;
+
 
 
 public interface SensorListener

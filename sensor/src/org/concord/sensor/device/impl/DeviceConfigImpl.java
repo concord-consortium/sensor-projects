@@ -1,13 +1,13 @@
 /*
  * Last modification information:
  * $Revision: 1.1 $
- * $Date: 2005-01-12 04:13:22 $
+ * $Date: 2005-02-23 18:04:18 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
-package org.concord.sensor.device;
+package org.concord.sensor.device.impl;
 
 import org.concord.sensor.DeviceConfig;
 

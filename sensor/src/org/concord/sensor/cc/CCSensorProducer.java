@@ -1,8 +1,8 @@
 package org.concord.sensor.cc;
 
-import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorDevice;
-import org.concord.sensor.device.SensorProducer;
+import org.concord.sensor.waba.Sensor;
+import org.concord.sensor.waba.SensorProducer;
 
 public class CCSensorProducer extends SensorProducer
 {
@@ -75,7 +75,7 @@ public class CCSensorProducer extends SensorProducer
 	public SensorDevice createInterface(int id)
 	{
 		// Make a new ticker if this one is already being used 
-		if(ticker.getInterfaceManager() != null) {
+		if(ticker.getTickListener() != null) {
 			ticker = ticker.createNew();			
 		}
 				

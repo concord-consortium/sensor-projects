@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-01 20:40:41 $
+ * $Revision: 1.2 $
+ * $Date: 2005-02-23 18:04:18 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -10,8 +10,8 @@
 package org.concord.sensor.cc;
 
 import org.concord.framework.data.stream.DataStreamEvent;
-import org.concord.sensor.device.Sensor;
-import org.concord.sensor.device.SensorProducer;
+import org.concord.sensor.waba.Sensor;
+import org.concord.sensor.waba.SensorProducer;
 
 
 /**

@@ -15,7 +15,7 @@ import org.concord.framework.data.DataDimension;
  * @author Dmitry Markman
  *
  */
-public class DefaultExperimentRequest implements ExperimentRequest 
+public class ExperimentRequestImpl implements ExperimentRequest 
 {
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentRequest#getPeriod()

@@ -11,7 +11,7 @@ import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceMap;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.SensorUnit;
+import org.concord.sensor.impl.SensorUnit;
 
 /**
  * @author scytacki

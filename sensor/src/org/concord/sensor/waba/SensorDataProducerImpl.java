@@ -1,22 +1,22 @@
-package org.concord.sensor.device.impl;
+package org.concord.sensor.waba;
 
-import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
-import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataProducer;
-import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.impl.DataStreamDescUtil;
+import org.concord.sensor.impl.TickListener;
+import org.concord.sensor.impl.Ticker;
 
 import waba.sys.Vm;
 
 public class SensorDataProducerImpl
-	implements SensorDataProducer, DeviceReader
+	implements SensorDataProducer, DeviceReader, TickListener
 {
 	public int		startTimer =  0;
 	protected Ticker ticker = null;
@@ -46,7 +46,7 @@ public class SensorDataProducerImpl
 		this.device = device;
 		
 		ticker = t;
-		ticker.setInterfaceManager(this);
+		ticker.setTickListener(this);
 		
 		messageHandler = h;
 		

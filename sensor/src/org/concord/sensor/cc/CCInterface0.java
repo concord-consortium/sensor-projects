@@ -6,8 +6,8 @@
  */
 package org.concord.sensor.cc;
 
-import org.concord.sensor.device.Sensor;
-import org.concord.sensor.device.SensorDeviceMode;
+import org.concord.sensor.waba.Sensor;
+import org.concord.sensor.waba.SensorDeviceMode;
 
 /**
  * @author scott

@@ -1,8 +1,10 @@
-package org.concord.sensor.device;
+package org.concord.sensor.waba;
 
 import org.concord.framework.data.DecoratedValue;
 import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.impl.SensorUnit;
 import org.concord.waba.extra.io.DataStream;
 import org.concord.waba.extra.util.PropContainer;
 import org.concord.waba.extra.util.PropObject;

@@ -10,6 +10,8 @@ import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.impl.SensorDataProducerImpl;
+import org.concord.sensor.impl.Ticker;
 
 /**
  * 
@@ -47,11 +49,7 @@ public class InterfaceManager implements SensorDataManager
 {
 	protected UserMessageHandler messageHandler;
 	protected Ticker ticker;
-	
-	protected 		waba.util.Vector 	dataListeners = null;
-	
-	protected waba.util.Vector sensorConfigs = new waba.util.Vector();
-	
+		
 	private boolean prepared;
 	private DeviceConfig[] deviceConfigs;
 	private static DeviceFactory deviceFactory = new JavaDeviceFactory();

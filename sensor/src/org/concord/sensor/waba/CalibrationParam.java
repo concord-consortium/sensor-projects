@@ -1,4 +1,4 @@
-package org.concord.sensor.device;
+package org.concord.sensor.waba;
 
 import org.concord.waba.extra.io.DataStream;
 

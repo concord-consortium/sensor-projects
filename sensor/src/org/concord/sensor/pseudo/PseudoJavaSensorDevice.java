@@ -8,10 +8,10 @@ import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.AbstractJavaSensorDevice;
 import org.concord.sensor.device.DeviceReader;
-import org.concord.sensor.device.SensorUnit;
-import org.concord.sensor.device.impl.ExperimentConfigImpl;
+import org.concord.sensor.device.impl.AbstractJavaSensorDevice;
+import org.concord.sensor.impl.ExperimentConfigImpl;
+import org.concord.sensor.impl.SensorUnit;
 
 /**
  * @author scott

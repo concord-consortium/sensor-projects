@@ -6,6 +6,10 @@
  */
 package org.concord.sensor.device.impl;
 
+import org.concord.sensor.impl.SensorDataProducerImpl;
+import org.concord.sensor.impl.TickListener;
+import org.concord.sensor.impl.Ticker;
+
 
 /**
  * @author scott
@@ -19,7 +23,7 @@ public class JavaTicker extends Thread
 	int millis;
 	boolean ticking = false;
 	boolean started = false;
-	SensorDataProducerImpl sensorDevice;
+	TickListener tickListener;
 		
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
@@ -50,15 +54,15 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#setInterfaceManager(org.concord.sensor.InterfaceManager)
 	 */
-	synchronized public void setInterfaceManager(SensorDataProducerImpl manager) {
-		sensorDevice = manager;
+	synchronized public void setTickListener(TickListener tListener) {
+	    tickListener = tListener;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#getInterfaceManager()
 	 */
-	synchronized public SensorDataProducerImpl getInterfaceManager() {
-		return sensorDevice;
+	synchronized public TickListener getTickListener() {
+	    return tickListener;
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +84,7 @@ public class JavaTicker extends Thread
 				}
 			}
 			
-			sensorDevice.tick();
+			tickListener.tick();
 			
 			try {
 				// We wait so that we release the lock

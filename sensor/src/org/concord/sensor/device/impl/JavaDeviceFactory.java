@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.8 $
- * $Date: 2005-02-19 13:40:31 $
+ * $Revision: 1.9 $
+ * $Date: 2005-02-23 18:04:18 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -17,6 +17,7 @@ import org.concord.sensor.cc.CCInterface1;
 import org.concord.sensor.cc.CCInterface2;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.impl.Ticker;
 import org.concord.sensor.pseudo.PseudoJavaSensorDevice;
 
 

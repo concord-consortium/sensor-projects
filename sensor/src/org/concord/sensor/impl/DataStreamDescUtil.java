@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package org.concord.sensor.device.impl;
+package org.concord.sensor.impl;
 
 import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataStreamDescription;
@@ -12,7 +12,6 @@ import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.SensorUnit;
 
 /**
  * @author scott

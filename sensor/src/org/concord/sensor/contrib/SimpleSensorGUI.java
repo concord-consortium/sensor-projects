@@ -21,10 +21,10 @@ import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.DeviceConfigImpl;
+import org.concord.sensor.device.impl.DeviceConfigImpl;
 import org.concord.sensor.device.impl.InterfaceManager;
 import org.concord.sensor.device.impl.JavaDeviceFactory;
-import org.concord.sensor.impl.DefaultExperimentRequest;
+import org.concord.sensor.impl.ExperimentRequestImpl;
 import org.concord.sensor.contrib.SimpleSensorDataConsumer;
 
 /**
@@ -91,7 +91,7 @@ SensorDataProducer   dataProducer;
 		DeviceConfig [] dConfigs = new DeviceConfig[1];
 		dConfigs[0] = new DeviceConfigImpl(JavaDeviceFactory.VERNIER_GO_LINK, null);		
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
-		ExperimentRequest request = new DefaultExperimentRequest();
+		ExperimentRequest request = new ExperimentRequestImpl();
 		SimpleSensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
 		sdManager.prepareDataProducer(request, consumer);
 		return consumer.getSensorDataProducer();

@@ -1,13 +1,13 @@
 /*
  * Last modification information:
  * $Revision: 1.1 $
- * $Date: 2004-12-01 20:40:41 $
+ * $Date: 2005-02-23 18:04:17 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
-package org.concord.sensor.device;
+package org.concord.sensor.impl;
 
 import org.concord.framework.data.DataDimension;
 

@@ -75,7 +75,7 @@ public class OTSensorRequest extends DefaultOTObject
 	 */
 	public int getDisplayPrecision() 
 	{
-		return getDisplayPrecision();
+		return resources.getDisplayPrecision();
 	}
 
 	/* (non-Javadoc)

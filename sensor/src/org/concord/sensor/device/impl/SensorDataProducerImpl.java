@@ -165,9 +165,9 @@ public class SensorDataProducerImpl
 		System.out.println("configure: ExperimentConfig:");
 		
 		SensorConfig [] sensConfigs = result.getSensorConfigs();
-		System.out.println(" numSensors" + sensConfigs.length);
+		System.out.println(" numSensors " + sensConfigs.length);
 		dDesc.setChannelsPerSample(sensConfigs.length);
-		System.out.println(" period" + result.getPeriod());
+		System.out.println(" period " + result.getPeriod());
 		dDesc.setDt(result.getPeriod());
 		dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
 		

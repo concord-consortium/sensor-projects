@@ -71,7 +71,7 @@ public class SensorDataProducerImpl
 	    if(ret < 0) {
 			stop();
 			String message = device.getErrorMessage(ret);
-			messageHandler.showOptionMessage(message, "Interface Error",
+			if(messageHandler != null) messageHandler.showOptionMessage(message, "Interface Error",
 					continueOptions, continueOptions[0]);
 			return;
 	    }
@@ -84,7 +84,7 @@ public class SensorDataProducerImpl
 			timeWithoutData++;
 			if(timeWithoutData > DATA_TIME_OUT){
 				stop();
-				messageHandler.showOptionMessage("Serial Read Error: " +
+				if(messageHandler != null) messageHandler.showOptionMessage("Serial Read Error: " +
 										 "possibly no interface " +
 										 "connected", "Interface Error",
 										 continueOptions, continueOptions[0]);					

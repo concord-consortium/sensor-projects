@@ -1,23 +1,25 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2004-12-13 17:53:55 $
+ * $Revision: 1.1 $
+ * $Date: 2004-12-24 15:34:59 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
-package org.concord.sensor.device;
+package org.concord.sensor.device.impl;
 
 import java.lang.reflect.Constructor;
 
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.DeviceFactory;
-import org.concord.sensor.SensorDevice;
+import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.cc.CCInterface0;
 import org.concord.sensor.cc.CCInterface1;
 import org.concord.sensor.cc.CCInterface2;
+import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.device.Ticker;
 
 
 /**
@@ -58,10 +60,11 @@ public class JavaDeviceFactory
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.DeviceFactory#createDevice(org.concord.sensor.DeviceConfig)
 	 */
-	public SensorDevice createDevice(DeviceConfig config, UserMessageHandler messager)
+	public SensorDataProducer createDevice(DeviceConfig config, UserMessageHandler messager)
 	{
 		int id = config.getDeviceId();
 		String className = null;
+		SensorDevice device = null;
 		
 		switch(id) {
 			case VERNIER_GO_LINK:
@@ -75,44 +78,49 @@ public class JavaDeviceFactory
 			case IMAGIWORKS_SD:
 			case PASCO_SERIAL:
 			case COACH:
-				return null;
+				device = null;
 				
 			// TODO: need to handle config string so
 			// the serial port can be specified
 			case CCPROBE_VERSION_0:
-				return new CCInterface0(ticker, messager);
+				device =  new CCInterface0();
 				
 			case CCPROBE_VERSION_1:
 				
-				return new CCInterface1(ticker, messager);
+				device = new CCInterface1();
 				
 			case CCPROBE_VERSION_2:
-				return new CCInterface2(ticker, messager);
+				device = new CCInterface2();
 		}
 
-		// if we are here we have a classname
-		try {
-			Class sensDeviceClass = 
-				getClass().getClassLoader().loadClass(className);
-			Constructor constructor = sensDeviceClass.getConstructor(
-					new Class [] {Ticker.class, UserMessageHandler.class});
-			
-			AbstractSensorDevice device = (AbstractSensorDevice)
-			constructor.newInstance(new Object [] {ticker, messager});
-			
-			device.deviceOpen(config.getConfigString());
-			
-			return device;
-		} catch (Exception e) {
-			e.printStackTrace();
-			
+		if(className != null) {
+			try {
+				Class sensDeviceClass = 
+					getClass().getClassLoader().loadClass(className);
+				Constructor constructor = sensDeviceClass.getConstructor(
+						new Class [] {Ticker.class, UserMessageHandler.class});
+				
+				device = (SensorDevice)
+				constructor.newInstance(new Object [] {ticker, messager});
+				
+				device.open(config.getConfigString());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
 		}
+		
+		if (device == null) {
+			return null;
+		}
+		
 		
 		return null;
 	}
 
-	public void destroyDevice(SensorDevice device)
+	public void destroyDevice(SensorDataProducer device)
 	{
-		((AbstractSensorDevice)device).deviceClose();
+		device.close();
 	}
 }

@@ -4,7 +4,9 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.concord.sensor.device;
+package org.concord.sensor.device.impl;
+
+import org.concord.sensor.device.Ticker;
 
 /**
  * @author scott
@@ -18,7 +20,7 @@ public class JavaTicker extends Thread
 	int millis;
 	boolean ticking = false;
 	boolean started = false;
-	AbstractSensorDevice interfaceManager;
+	SensorDataProducerImpl sensorDevice;
 		
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
@@ -49,15 +51,15 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#setInterfaceManager(org.concord.sensor.InterfaceManager)
 	 */
-	synchronized public void setInterfaceManager(AbstractSensorDevice manager) {
-		interfaceManager = manager;
+	synchronized public void setInterfaceManager(SensorDataProducerImpl manager) {
+		sensorDevice = manager;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#getInterfaceManager()
 	 */
-	synchronized public AbstractSensorDevice getInterfaceManager() {
-		return interfaceManager;
+	synchronized public SensorDataProducerImpl getInterfaceManager() {
+		return sensorDevice;
 	}
 
 	/* (non-Javadoc)
@@ -79,7 +81,7 @@ public class JavaTicker extends Thread
 				}
 			}
 			
-			interfaceManager.tick();
+			sensorDevice.tick();
 			
 			try {
 				// We wait so that we release the lock

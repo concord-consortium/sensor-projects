@@ -30,9 +30,8 @@ public class CCInterface1 extends CCInterface2 {
 	//   The  LTC2402 specs (24012f.pdf) is available from:
 	//      <http://www.linear-tech.com/prod/datasheet.html?datasheet=556>
 
-	public CCInterface1(Ticker t, UserMessageHandler messageHandler)
+	public CCInterface1()
 	{
-		super(t, messageHandler);
 	}
 
 	public boolean checkDeviceVersion()

@@ -1,4 +1,4 @@
-package org.concord.sensor.device;
+package org.concord.sensor.device.impl;
 
 import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataListener;
@@ -8,13 +8,16 @@ import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
-import org.concord.sensor.SensorDevice;
+import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorRequest;
+import org.concord.sensor.device.DeviceReader;
+import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.device.Ticker;
 
 import waba.sys.Vm;
 
-public abstract class AbstractSensorDevice
-	implements SensorDevice
+public class SensorDataProducerImpl
+	implements SensorDataProducer, DeviceReader
 {
 	public int		startTimer =  0;
 	protected Ticker ticker = null;
@@ -26,7 +29,6 @@ public abstract class AbstractSensorDevice
 	public DataStreamDescription dDesc = new DataStreamDescription();
 	public DataStreamEvent	processedDataEvent = new DataStreamEvent();
 
-	protected int [] sensorChannelIndexes;
 	protected float [] processedData;
 	private static final int DEFAULT_BUFFERED_SAMPLE_NUM = 1000;
 	private boolean prepared;
@@ -37,9 +39,12 @@ public abstract class AbstractSensorDevice
 	public final static int DATA_TIME_OUT = 40;
 	private boolean inDeviceRead;
 	private int totalDataRead;
+	private SensorDevice device;
 
-	public AbstractSensorDevice(Ticker t, UserMessageHandler h)
+	public SensorDataProducerImpl(SensorDevice device, Ticker t, UserMessageHandler h)
 	{
+		this.device = device;
+		
 		ticker = t;
 		ticker.setInterfaceManager(this);
 		
@@ -49,7 +54,7 @@ public abstract class AbstractSensorDevice
 		processedDataEvent.setData(processedData);
 	}
 
-	protected void tick()
+	public void tick()
 	{
 	    int ret;
 
@@ -60,12 +65,13 @@ public abstract class AbstractSensorDevice
 	    // track when we are in the device read so if flush
 	    // is called outside of this we can complain
 	    inDeviceRead = true;
-	    ret = deviceRead(processedData, 0, dDesc.getChannelsPerSample());
+	    ret = device.read(processedData, 0, dDesc.getChannelsPerSample(),
+	    		this);
 	    inDeviceRead = false;
 	    
 	    if(ret < 0) {
 			stop();
-			String message = getErrorMessage(ret);
+			String message = device.getErrorMessage(ret);
 			messageHandler.showOptionMessage(message, "Interface Error",
 					continueOptions, continueOptions[0]);
 			return;
@@ -115,7 +121,7 @@ public abstract class AbstractSensorDevice
 	 * far enough ahead of the serial buffer it can return from deviceRead the
 	 * data will be fully processed.
 	 */
-	protected int flushData(int numSamples)
+	public int flushData(int numSamples)
 	{
 		if(!inDeviceRead) {
 			// error we need an assert here but we are in waba land 
@@ -137,29 +143,13 @@ public abstract class AbstractSensorDevice
 		return DEFAULT_BUFFERED_SAMPLE_NUM;
 	}
 	
-	protected abstract int getRightMilliseconds();
-	
-	protected abstract void deviceOpen(String openString);
-	
-	protected abstract void deviceClose();
-	
-	protected abstract ExperimentConfig deviceConfig(ExperimentRequest request);
-	
-	protected abstract void deviceStart();
-	
-	protected abstract void deviceStop(boolean wasRunning);
-	
-	protected abstract int deviceRead(float [] values, int offset, int nextSampleOffset);
-
-	protected abstract String getErrorMessage(int error);
-	
 	/**
 	 * subclasses should use deviceConfig not configure
 	 * to setup their devices.
 	 */
 	public final ExperimentConfig configure(ExperimentRequest request)
 	{
-		ExperimentConfig result = deviceConfig(request);
+		ExperimentConfig result = device.configure(request);
 		
 		if(result == null) {
 			return null;
@@ -180,9 +170,6 @@ public abstract class AbstractSensorDevice
 			chDescrip.setName(sensConfigs[i].getName());
 			chDescrip.setUnit(sensConfigs[i].getUnit());
 
-			// FIXME: This precision should be taken from the 
-			// requested config.  This is the display precision
-			
 			if(sensRequests != null) {
 				chDescrip.setPrecision(sensRequests[i].getDisplayPrecsion());
 			}
@@ -195,12 +182,12 @@ public abstract class AbstractSensorDevice
 	
 	public final void start()
 	{
-		deviceStart();
+		device.start();
 		
 		timeWithoutData = 0;
 
 		startTimer = Vm.getTimeStamp();
-		ticker.startTicking(getRightMilliseconds());
+		ticker.startTicking(device.getRightMilliseconds());
 
 	}
 	
@@ -216,14 +203,43 @@ public abstract class AbstractSensorDevice
 	{
 		boolean ticking = ticker.isTicking();
 
-		if(ticking) {
-			ticker.stopTicking();
-		}
-		
+		// just to make sure
+		// even if we are not ticking just incase
+		ticker.stopTicking();
 
-		deviceStop(ticking);
+		device.stop(ticking);
 	}
 
+	
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.SensorDataProducer#isAttached()
+	 */
+	public boolean isAttached()
+	{
+		// TODO Auto-generated method stub
+		return device.isAttached();
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.SensorDataProducer#canDetectSensors()
+	 */
+	public boolean canDetectSensors()
+	{
+		// TODO Auto-generated method stub
+		return device.canDetectSensors();
+	}
+	
+	public ExperimentConfig getCurrentConfig()
+	{
+		return device.getCurrentConfig();
+	}
+	
+	public void close()
+	{
+		device.close();
+	}
+	
 	public final DataStreamDescription getDataDescription()
 	{
 		return dDesc;

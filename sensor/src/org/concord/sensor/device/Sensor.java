@@ -35,7 +35,7 @@ public abstract class Sensor extends PropContainer
 //	public DataStreamEvent	dEvent = new DataStreamEvent();
 	public SensorEvent	pEvent = new SensorEvent();
 
-	protected AbstractSensorDevice im;
+	protected SensorDevice im;
 
 	public	int interfaceType = -1; 
 	protected Object interfaceMode = null;
@@ -95,7 +95,7 @@ public abstract class Sensor extends PropContainer
 	 * This function isn't clear when the only way to add probes to an
 	 * interface is to specify their port while adding them
 	 */
-	public void setInterface(AbstractSensorDevice im)
+	public void setInterface(SensorDevice im)
 	{
 		if(this.im != null)
 		{
@@ -117,12 +117,12 @@ public abstract class Sensor extends PropContainer
 	}
 
 
-	public AbstractSensorDevice getInterface()
+	public SensorDevice getInterface()
 	{
 		return im;
 	}
 
-	public AbstractSensorDevice open()
+	public SensorDevice open()
 	{
 		if(im != null) return im;
 

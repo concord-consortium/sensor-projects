@@ -4,7 +4,9 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-package org.concord.sensor.device;
+package org.concord.sensor.device.impl;
+
+import org.concord.sensor.device.Ticker;
 
 import waba.ui.Control;
 import waba.ui.ControlEvent;
@@ -20,14 +22,14 @@ import waba.ui.Timer;
 public class WabaTicker extends Control
 	implements Ticker
 {
-	AbstractSensorDevice interfaceManager = null;
+	SensorDataProducerImpl interfaceManager = null;
 	Timer timer = null;
 	
-	public void setInterfaceManager(AbstractSensorDevice manager) {
+	public void setInterfaceManager(SensorDataProducerImpl manager) {
 		interfaceManager = manager;
 	}
 
-	public AbstractSensorDevice getInterfaceManager() {
+	public SensorDataProducerImpl getInterfaceManager() {
 		return interfaceManager;
 	}
 	

@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2004-12-13 17:53:55 $
+ * $Revision: 1.3 $
+ * $Date: 2004-12-24 15:34:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -9,7 +9,6 @@
 */
 package org.concord.sensor.device;
 
-import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 
 
@@ -22,16 +21,18 @@ import org.concord.sensor.ExperimentConfig;
  * @author scott<p>
  *
  */
-public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
+public abstract class AbstractJavaSensorDevice 
+	implements SensorDevice
 {
 	protected int [] requestedMode;
 	protected int [] currentMode;
 
 	protected Sensor [] portSensors;
 
-	public AbstractJavaSensorDevice(Ticker t, UserMessageHandler h)
-	{
-		super(t, h);
+	protected int [] sensorChannelIndexes;
+
+	public AbstractJavaSensorDevice()
+	{		
 	}
 	
 	public ExperimentConfig deviceConfig(ExperimentConfig experiment)
@@ -123,6 +124,11 @@ public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
 	 * 
 	 * @return
 	 */
+	
+	/* We no longer have sensor Configs
+	 * we will need to remember them ourselves.
+	 * after the deviceConfig call
+	 *
 	public boolean checkMode()
 	{		
 		// Call some global function to get the interface mode for this probe
@@ -139,6 +145,7 @@ public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
 
 		return true;
 	}
+	*/
 
 	/**
 	 * This is called to see mode the probe has is a
@@ -171,8 +178,13 @@ public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
 
 //	public abstract ExperimentConfig deviceConfigure(ExperimentConfig experiment);
 	
+	/*
+	 * FIXME after the refactoring we need to look at how the
+	 * devices are cleaned up when they aren't being used anymore
+	 *
 	public void dispose()
 	{
+		// This needs to notify its parents that it needs to stop
 		stop();
 
 		for(int i=0; i<portSensors.length; i++){
@@ -185,6 +197,7 @@ public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
 	{
 		dispose();
 	}
+	*/
 	
 	public void removeSensor(Sensor probe)
 	{

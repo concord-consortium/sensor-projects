@@ -6,6 +6,8 @@
  */
 package org.concord.sensor.device;
 
+import org.concord.sensor.device.impl.SensorDataProducerImpl;
+
 /**
  * @author scott
  *
@@ -20,9 +22,9 @@ public interface Ticker
 	
 	public boolean isTicking();
 	
-	public void setInterfaceManager(AbstractSensorDevice manager);		
+	public void setInterfaceManager(SensorDataProducerImpl manager);		
 	
-	public AbstractSensorDevice getInterfaceManager();
+	public SensorDataProducerImpl getInterfaceManager();
 	
 	/**
 	 * This is need because waba can't do reflection. This will

@@ -6,6 +6,7 @@ import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.device.AbstractJavaSensorDevice;
+import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorDeviceMode;
 import org.concord.sensor.device.Ticker;
@@ -79,9 +80,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	'x' : Toggle the test routine
 	*/
 
-	public CCInterface2(Ticker t, UserMessageHandler messageHandler){
-		super(t, messageHandler);
-
+	public CCInterface2(){
 		// With version 0 only one sensor can be used  
 		// but leaving this as 2 simplifies the code
 		// the second sensor will remain null and paused at all times on version 0
@@ -136,29 +135,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 		// TODO this device does do auto config but it isn't implemented yet
 		return null;
 	}
-	
-	
-	public void start(Sensor probe)
-	{
-		// before we are here the user should have called
-		// checkMode and then setMode with the relavent probe
-
-		// now we see if the interface already running
-		start();
-
-		// now some how we need to turn on the probe at this
-		// if it is not in paused mode.  This will tell us
-		// to start send the probe events if we aren't already.
-		// also we need to send the 
-	  
-
-	}
-
-	public void stop(Sensor probe)
-	{
-		stop();
-	}
-
+		
 	/*
 	 * I'm going to implement both of these just for
 	 * interface 2.  And then I'll refactor things
@@ -224,6 +201,9 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 		}
 	}
 
+	/* FIXME this concept probably needs to be moved to an upper interface
+	 * 
+	 *
 	public void syncWithInterface()
 	{
 		if(currentMode[0] != requestedMode[0] ||
@@ -235,6 +215,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 			}
 		}
 	}
+	*/
 
 	public char getRequestChar(int [] port)
 	{
@@ -458,39 +439,42 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.AbstractSensorDevice#openDevice(java.lang.String)
 	 */
-	protected void deviceOpen(String openString) {
+	public void open(String openString) {
 		// TODO Auto-generated method stub
 		// should get the serial port out of the string
 		// I think		
 	}
 	
-	protected void deviceClose()
+	public void close()
 	{
 		
 	}
 	
-	public ExperimentConfig deviceConfig(ExperimentRequest request)
+	public ExperimentConfig configure(ExperimentRequest request)
 	{
 		return null;		
 	}
 	
-	public void deviceStart()
+	public boolean start()
 	{
 		// If this fails from some reason we might need to 
 		// reset the curMode 
 
 		// Open the port
 		port = new SerialPort(0,9600);
-		if((port == null) || !port.isOpen()) return;
+		if((port == null) || !port.isOpen()) return false;
 		port.setFlowControl(false);
 
 		// Make sure the interface is stopped
 		// And make sure we have read all the extra characters that it printed
 		// on startup
 		if(!gotoCommandMode()) {
-			messageHandler.showOptionMessage("Error in interface start", "Interface Error", 
-					okOptions, okOptions[0]);
-		    return;
+			// FIXME we no longer have a message handler
+			// instead we need to return an error here
+			// and then return this message from get error message
+			// messageHandler.showOptionMessage("Error in interface start", "Interface Error", 
+			//		okOptions, okOptions[0]);
+		    return false;
 		}
 
 		// We are changing the mode so set the curMode 
@@ -522,6 +506,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 		int wb = port.writeBytes(curModeCharBuf, 0, 1);
 		bufOffset = 0;
 
+		return true;
 	}
 
 	/*
@@ -533,7 +518,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	    return true;
 	}
 
-	public void deviceStop(boolean wasRunning)
+	public void stop(boolean wasRunning)
 	{	
 		SerialPort local_port = null;
 
@@ -550,11 +535,9 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 			local_port.close();
 			local_port = null;
 		}
-		if(wasRunning){
-			// just to make sure
-			ticker.stopTicking();
 
-			// What is this for?
+		// What is this for?
+		if(wasRunning){
 			for(int i=0; i<portSensors.length; i++) {
 				if(portSensors[i] != null &&
 				   currentMode[i] != PAUSED_MODE)
@@ -575,7 +558,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	public static int rightMillis = 50;
 	public int getRightMilliseconds(){return rightMillis;}
 	
-	protected String getErrorMessage(int error)
+	public String getErrorMessage(int error)
 	{
 		if(error == WARN_WRONG_POSITION){
 			return "Error in byte stream";
@@ -698,8 +681,8 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	int valuesPerDatum;
 	int datumSize;
 
-	protected int deviceRead(float []processedValues, int processedValuesOffset, 
-			int nextSampleOffset)
+	public int read(float []processedValues, int processedValuesOffset, 
+			int nextSampleOffset, DeviceReader reader)
 	{		
 		int totalRead = 0;
 		int error = 0;
@@ -783,7 +766,7 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 					portSensors[i].dataArrived(rawDataEvent, processedValues, 
 							processedValuesOffset+sensorChannelIndexes[i], nextSampleOffset);
 					
-					processedValuesOffset = flushData(rawDataEvent.getNumSamples());
+					processedValuesOffset = reader.flushData(rawDataEvent.getNumSamples());
 				}
 			}
 					

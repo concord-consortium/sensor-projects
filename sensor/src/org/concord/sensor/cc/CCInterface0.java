@@ -34,9 +34,8 @@ public class CCInterface0 extends CCInterface2 {
 		VERSION_CHAR = 'i';
 	}
 
-	public CCInterface0(Ticker t, UserMessageHandler messageHandler)
+	public CCInterface0()
 	{
-		super(t, messageHandler);
 	}
 
 	public boolean checkDeviceVersion()

@@ -81,9 +81,9 @@ public class SensorFactory
 		}			
 	}
 
-	public static AbstractSensorDevice getInterface(int id)
+	public static SensorDevice getInterface(int id)
 	{
-		AbstractSensorDevice im = null;
+		SensorDevice im = null;
 
 		SensorProducer pp = null;
 		for(int i=0; i<producers.getCount(); i++){

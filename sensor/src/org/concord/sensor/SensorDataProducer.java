@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2004-12-18 07:01:31 $
+ * $Revision: 1.1 $
+ * $Date: 2004-12-24 15:34:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -21,7 +21,7 @@ import org.concord.framework.data.stream.DataProducer;
  * @author scott<p>
  *
  */
-public interface SensorDevice
+public interface SensorDataProducer
 	extends DataProducer
 {
 	public boolean isAttached();
@@ -36,4 +36,6 @@ public interface SensorDevice
 	public ExperimentConfig getCurrentConfig();
 	
 	public boolean canDetectSensors();
+	
+	public void close();
 }

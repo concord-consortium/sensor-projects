@@ -39,10 +39,10 @@ public class InterfaceManager
 			return;
 		}
 		
-		SensorDevice attachedDevice = null;
+		SensorDataProducer attachedDevice = null;
 		
 		for(int i=0; i<deviceConfigs.length; i++) {
-			SensorDevice device = 
+			SensorDataProducer device = 
 				deviceFactory.createDevice(deviceConfigs[i], messageHandler);
 			if(device.isAttached()){
 				attachedDevice = device;
@@ -84,7 +84,7 @@ public class InterfaceManager
 		consumer.addDataProducer(attachedDevice);
 	}
 	
-	public SensorDevice [] getAttachedDevices()
+	public SensorDataProducer [] getAttachedDevices()
 	{
 		return null;
 	}	

@@ -70,4 +70,10 @@
 		</copy>		
 	</target>
 	
+	<target name="javadoc">
+		<javadoc classpathref="build-classpath" 
+			packagenames="org.concord.sensor, org.concord.sensor.cc, org.concord.sensor.device"
+			sourcepath="src" destdir="doc"/>
+	</target>
+	
 </project>

@@ -2,11 +2,11 @@ package org.concord.sensor.device.impl;
 
 import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
-import org.concord.sensor.device.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 

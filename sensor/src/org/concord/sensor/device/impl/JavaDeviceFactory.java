@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2005-01-11 06:07:02 $
+ * $Revision: 1.4 $
+ * $Date: 2005-01-12 04:13:22 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -9,10 +9,10 @@
 */
 package org.concord.sensor.device.impl;
 
+import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.cc.CCInterface0;
 import org.concord.sensor.cc.CCInterface1;
 import org.concord.sensor.cc.CCInterface2;
-import org.concord.sensor.device.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 

@@ -1,13 +1,15 @@
 /*
  * Last modification information:
  * $Revision: 1.1 $
- * $Date: 2005-01-06 15:59:45 $
+ * $Date: 2005-01-12 04:13:22 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor.device;
+
+import org.concord.sensor.DeviceConfig;
 
 
 /**
@@ -19,7 +21,7 @@ package org.concord.sensor.device;
  * @author scott<p>
  *
  */
-public class DeviceConfig
+public class DeviceConfigImpl implements DeviceConfig
 {
 	/**
 	 * An id assigned by CC for this device
@@ -37,7 +39,7 @@ public class DeviceConfig
 	 */
 	protected String configString;
 
-	public DeviceConfig(int deviceId, String configString)
+	public DeviceConfigImpl(int deviceId, String configString)
 	{
 		this.deviceId = deviceId;
 		this.configString = configString;

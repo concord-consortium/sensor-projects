@@ -27,7 +27,10 @@ public class SensorSerialPortRXTX
 {
     RXTXCommDriver commDriver = null;
 	gnu.io.SerialPort port = null;
-		
+	InputStream inStream = null;
+	OutputStream outStream = null;
+    private int currentTimeout;
+	
 	public void open(String portName)
 		throws IOException
 	{
@@ -61,7 +64,8 @@ public class SensorSerialPortRXTX
 	public void close() throws IOException 
 	{
 		if(port == null) {
-			throw new RuntimeException("Port was not opened before being closed");
+		    System.err.println("Port was not opened before being closed");
+		    return;
 		}
 		port.close();
 		port = null;
@@ -137,6 +141,7 @@ public class SensorSerialPortRXTX
 	 */
 	public void enableReceiveTimeout(int time) throws IOException 
 	{
+	    currentTimeout = time;
 		try {
 			port.enableReceiveTimeout(time);
 		} catch (UnsupportedCommOperationException e) {
@@ -149,15 +154,53 @@ public class SensorSerialPortRXTX
 	 */
 	public InputStream getInputStream() throws IOException 
 	{
-		return port.getInputStream();
+	    inStream = port.getInputStream();
+		return inStream;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.dataharvest.SerialPort#getOutputStream()
 	 */
-	public OutputStream getOutputStream() throws IOException 
+	public OutputStream getOutputStream() 
+		throws IOException 
 	{
-		return port.getOutputStream();
+	    outStream = port.getOutputStream();
+		return outStream;
 	}
 
+	public int readBytes(byte [] buf, int off, int len, long timeout)
+		throws IOException
+	{	
+	    try {
+	        port.enableReceiveTimeout((int)timeout);
+	        port.enableReceiveThreshold(len);
+	        
+	        int numRead = inStream.read(buf, off, len);
+	        
+	        port.disableReceiveThreshold();
+	        port.enableReceiveTimeout(currentTimeout);
+		    return numRead;
+	    } catch (UnsupportedCommOperationException e) {
+	        System.err.println("timeout or threshold not available on this platform");
+	    }
+
+	    // Fall back to polling method. 
+	    // this method still assumes some form of timeout is supported
+	    // to handle no timeout support we'll need multiple threads.
+	    int size = 0;	    
+	    long startTime = System.currentTimeMillis();
+	    while(size != -1 && size < len &&
+	            (System.currentTimeMillis() - startTime) < timeout){
+	        int readSize = inStream.read(buf, size+off, len - size);
+	        if(readSize < 0) {	      
+	            System.err.println();
+	            System.err.println("error in readBytes: " + readSize);
+	            
+	            return readSize;
+	        }
+	        size += readSize;
+	    }
+		    
+	    return size;	
+	}	
 }

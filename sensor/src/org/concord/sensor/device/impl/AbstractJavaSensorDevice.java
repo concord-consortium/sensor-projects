@@ -19,5 +19,13 @@ public abstract class AbstractJavaSensorDevice
 	implements SensorDevice 
 {
 	protected ExperimentConfigImpl currentConfig = null;
+    protected boolean attached = false;
 
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.SensorDevice#isAttached()
+	 */
+	public boolean isAttached() 
+	{
+		return attached;
+	}
 }

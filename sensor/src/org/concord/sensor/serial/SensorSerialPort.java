@@ -41,4 +41,26 @@ public interface SensorSerialPort
 
 	public abstract InputStream getInputStream() throws IOException;
 	public abstract OutputStream getOutputStream() throws IOException;
+	
+	/**
+	 * The read method on input stream does not handle the timeout 
+	 * quite the way I want it.  It varies from implementation.  In 
+	 * some cases the threshold is set to 1 byte in some cases it is
+	 * set to len bytes.  In this method the threshold is always len
+	 * bytes.
+	 * 
+	 * The thresold is the minimum number of bytes that need to be read
+	 * before the method returns.  If this is minimum number is not read
+	 * before the timeout then the method returns the number read
+	 * at that point.   
+	 * 
+	 * @param buf
+	 * @param off
+	 * @param len
+	 * @param timeout
+	 * @return
+	 * @throws IOException
+	 */
+	public int readBytes(byte [] buf, int off, int len, long timeout)
+		throws IOException;
 }

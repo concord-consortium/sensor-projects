@@ -22,6 +22,12 @@
       <version>1.0</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>rxtx</groupId>
+      <artifactId>RXTXcomm</artifactId>
+      <version>2.1.7-pre17</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
   <build>
     <sourceModifications>

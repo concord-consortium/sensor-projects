@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.11 $
- * $Date: 2005-02-23 21:07:58 $
+ * $Revision: 1.12 $
+ * $Date: 2005-02-24 00:59:16 $
  * $Author: dmarkman $
  *
  * Licence Information
@@ -15,7 +15,6 @@ import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.Ticker;
-import org.concord.sensor.pseudo.PseudoJavaSensorDevice;
 
 
 /**
@@ -76,7 +75,7 @@ public class JavaDeviceFactory
 		
 		switch(id) {
 			case PSEUDO_DEVICE:
-				device = new PseudoJavaSensorDevice();
+				className = "org.concord.sensor.pseudo.PseudoJavaSensorDevice";
 				break;
 			case VERNIER_GO_LINK:
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";

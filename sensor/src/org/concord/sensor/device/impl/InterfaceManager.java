@@ -8,6 +8,7 @@ import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
+import org.concord.sensor.SensorDataConsumer;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.SensorDataProducerImpl;
@@ -154,7 +155,7 @@ public class InterfaceManager implements SensorDataManager
 			// But there is now a way for the device to explain why the configuration
 			// is invalid.
 			System.err.println("Attached sensors don't match requested sensors");
-			messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
+			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
 			if(actualConfig != null) {
 				System.err.println("  device reason: " + actualConfig.getInvalidReason());
 				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
@@ -219,4 +220,62 @@ public class InterfaceManager implements SensorDataManager
 	{
 		deviceFactory = factory;
 	}
+	
+	/**
+	 * This method provide quick and &quot;dirt&quot; 
+	 * way to get SensorDataProducer
+	 * 
+	 * @param deviceId device id 
+	 * @param consumer
+	 * @return newly created instance of SensorDataProducer
+	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
+	 * @see org.concord.sensor.SensorDataConsumer
+	 * @see org.concord.sensor.SensorDataProducer
+	 */
+	public static SensorDataProducer getDataProducerForDevice(int deviceId,SensorDataConsumer consumer){
+	    return getDataProducerForDevice(deviceId,null,null,consumer);
+	}
+	
+	/**
+	 * This method provide quick and &quot;dirt&quot; 
+	 * way to get SensorDataProducer
+	 * 
+	 * @param deviceId device id 
+	 * @param messenger  UserMessageHandler handler to get some messages from the sensor
+	 * @param consumer
+	 * @return newly created instance of SensorDataProducer
+	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
+	 * @see org.concord.sensor.SensorDataConsumer
+	 * @see org.concord.sensor.SensorDataProducer
+	 * @see org.concord.framework.text.UserMessageHandler
+	 */
+	public static SensorDataProducer getDataProducerForDevice(int deviceId,UserMessageHandler messenger,SensorDataConsumer consumer){
+	    return getDataProducerForDevice(deviceId,null,messenger,consumer);
+	}
+	
+	/**
+	 * This method provide quick and &quot;dirt&quot; 
+	 * way to get SensorDataProducer
+	 * 
+	 * @param deviceId device id 
+	 * @param configString 
+	 * @param messenger  UserMessageHandler handler to get some messages from the sensor
+	 * @param consumer
+	 * @return newly created instance of SensorDataProducer
+	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#deviceId
+	 * @see org.concord.sensor.device.impl.DeviceConfigImpl#configString
+	 * @see org.concord.sensor.SensorDataConsumer
+	 * @see org.concord.sensor.SensorDataProducer
+	 * @see org.concord.framework.text.UserMessageHandler
+	 */
+	public static SensorDataProducer getDataProducerForDevice(int deviceId, String configString,UserMessageHandler messenger,SensorDataConsumer consumer){
+		SensorDataManager  sdManager = new InterfaceManager(messenger);
+		DeviceConfig [] dConfigs = new DeviceConfig[1];
+		dConfigs[0] = new DeviceConfigImpl(deviceId, null);		
+		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
+		org.concord.sensor.ExperimentRequest request = new org.concord.sensor.impl.ExperimentRequestImpl();
+		sdManager.prepareDataProducer(request, consumer);
+		return consumer.getSensorDataProducer();
+	}
+	
 }

@@ -1,8 +1,8 @@
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2005-02-10 20:43:07 $
- * $Author: scytacki $
+ * $Revision: 1.5 $
+ * $Date: 2005-02-22 06:59:32 $
+ * $Author: dmarkman $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -48,7 +48,12 @@ public class NativeVernierSensorDevice
 		try {
 			if(System.getProperty("os.name").startsWith("Windows")) {
 				System.loadLibrary("GoIO_DLL");
-			} 
+			}else if(System.getProperty("os.name").startsWith("Mac")) {
+			    try{//I need try/catch block for not interrupting remaining code
+				    System.loadLibrary("SetDylibPath");
+				}catch(Throwable tt){}
+			}
+			
 			System.loadLibrary("vernier_ccsd");
 			nativeLibAvailable = true;
 //			System.loadLibrary("blah");
@@ -131,7 +136,7 @@ public class NativeVernierSensorDevice
 		requestConfig.setNumberOfSamples(request.getNumberOfSamples());
 		
 		SensorRequest [] sensorRequests = request.getSensorRequests();
-		
+
 		requestConfig.setNumSensorConfigs(sensorRequests.length);
 		requestConfig.createSensorConfigArray(sensorRequests.length);
 		numberOfChannels = sensorRequests.length;

@@ -47,7 +47,7 @@ bin nativelib nativelib/test nativelib/swig $(SWIG_OUTPUT_DIR)/ccsd/vernier $(SW
 vernier_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/vernier
 	$(SWIG) -java -Iinclude -package ccsd.vernier -outdir src/swig/java/ccsd/vernier -o src/swig/VernierSensorDevice_wrap.c src/swig/CCSensorDevice.i  
 
-bin/vernier_ccsd.dll : 	vernier_swig $(GOLINK_OBJS) nativelib/swig/VernierSensorDevice_wrap.o
+bin/vernier_ccsd.dll : 	vernier_swig $(GOLINK_OBJS) nativelib/swig/VernierSensorDevice_wrap.o bin
 	$(build-jni-dll)
 
 bin/GoLinkQuery : $(QUERY_OBJS) $(GOLINK_OBJS) bin
@@ -60,7 +60,7 @@ bin/GoLinkPrintData : $(GOLINK_OBJS) $(PRINTDATA_OBJS) bin
 ti_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/ti $(GOLINK_OBJS)
 	$(SWIG) -java -Iinclude -package ccsd.ti -outdir src/swig/java/ccsd/ti -o src/swig/TISensorDevice_wrap.c src/swig/CCSensorDevice.i  
 	
-bin/ti_ccsd.dll : 	ti_swig $(TI_OBJS) nativelib/swig/TISensorDevice_wrap.o
+bin/ti_ccsd.dll : 	ti_swig $(TI_OBJS) nativelib/swig/TISensorDevice_wrap.o bin
 	$(build-jni-dll)
 
 bin/TIQuery : $(QUERY_OBJS) $(TI_OBJS)

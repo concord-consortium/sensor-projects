@@ -27,6 +27,9 @@ import org.concord.sensor.device.impl.InterfaceManager;
 import org.concord.sensor.device.impl.JavaDeviceFactory;
 import org.concord.sensor.impl.ExperimentRequestImpl;
 import org.concord.sensor.contrib.SimpleSensorDataConsumer;
+import org.concord.datagraph.engine.DataGraphable;
+import org.concord.datagraph.ui.DataGraph;
+import org.concord.datagraph.ui.DataGraphActions;
 
 /**
  * @author Informaiton Services
@@ -40,9 +43,12 @@ public class SimpleSensorGUI extends JPanel
 {
 JTextArea            textArea;
 SensorDataProducer   dataProducer;
+DataGraph           graph;
+DataGraphable       dataGraphable = null;
     public SimpleSensorGUI(){
 	    initGUI();
 		dataProducer = initHardware();
+		initGraph();
     }
 
     public void close(){
@@ -87,18 +93,42 @@ SensorDataProducer   dataProducer;
 	}
 
 	SensorDataProducer initHardware(){
-		SensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
-		// FIXME: dima please fix this
-//		return InterfaceManager.getDataProducerForDevice(JavaDeviceFactory.VERNIER_GO_LINK,consumer);
-		return null;
+		//SensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
+		//return InterfaceManager.getDataProducerForDevice(JavaDeviceFactory.VERNIER_GO_LINK,consumer);
+		return InterfaceManager.getDataProducerForDeviceNoConsumer(JavaDeviceFactory.VERNIER_GO_LINK);
 	}
 	
+	void initGraph(){
+        graph = new DataGraph();
+		if (graph != null) {
+		    if(dataProducer != null){
+			    dataGraphable = graph.createDataGraphable(dataProducer);
+			    dataGraphable.setColor(255, 0, 0);//red
+			    dataGraphable.setConnectPoints(true);
+			    graph.addDataGraphable(dataGraphable);
+			    dataGraphable.setAutoRepaintData(true);
+			}
+			graph.setLimitsAxisWorld(0, 100, 0, 40);
+			
+			graph.getGrid().getXGrid().setIntervalFixedDisplay(1);
+			graph.getGrid().getYGrid().setIntervalFixedDisplay(1);
+
+			//This won't let the data graphable repaint itself everytime it
+			// receives data
+		}
+	    JScrollPane scrollPane = new JScrollPane(graph);
+	    scrollPane.setPreferredSize(new Dimension(300,300));
+	    add(scrollPane,BorderLayout.CENTER);
+	}
 	void initGUI(){
+
+	    setLayout(new BorderLayout());
+
 	    textArea = new JTextArea();
-	    JScrollPane scrollPane = new JScrollPane(textArea);
+	   /* JScrollPane scrollPane = new JScrollPane(textArea);
 	    scrollPane.setPreferredSize(new Dimension(300,300));
 	    setLayout(new BorderLayout());
-	    add(scrollPane,BorderLayout.CENTER);
+	    add(scrollPane,BorderLayout.CENTER);*/
 	    
 	    Box buttonBox = Box.createHorizontalBox();
 	    JButton clearB = new JButton("Clear");

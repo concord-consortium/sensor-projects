@@ -1,8 +1,8 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2005-01-06 15:59:45 $
- * $Author: scytacki $
+ * $Revision: 1.2 $
+ * $Date: 2005-02-28 21:37:49 $
+ * $Author: dmarkman $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -38,6 +38,16 @@ public interface SensorDataManager
 	 */
 	public void prepareDataProducer(ExperimentRequest request, 
 			DataConsumer consumer);
+	
+	/**
+	 * A request is sent in allong with a data consumer.  A SensorDataProducer
+	 * is created and then passed to the consumer.  This method
+	 * does not directly return a SensorDataProducer because it might take
+	 * a while to create and initialize it.   
+	 * 
+	 * @param request
+	 */
+	public SensorDataProducer prepareDataProducer(ExperimentRequest requestconsumer);
 	
 	/**
 	 * This should return a sensordataproducer for all the currently 

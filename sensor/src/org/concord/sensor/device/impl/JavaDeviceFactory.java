@@ -1,8 +1,8 @@
 /*
  * Last modification information:
- * $Revision: 1.10 $
- * $Date: 2005-02-23 21:02:30 $
- * $Author: scytacki $
+ * $Revision: 1.11 $
+ * $Date: 2005-02-23 21:07:58 $
+ * $Author: dmarkman $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -12,9 +12,6 @@ package org.concord.sensor.device.impl;
 import java.util.Hashtable;
 
 import org.concord.sensor.DeviceConfig;
-import org.concord.sensor.cc.CCInterface0;
-import org.concord.sensor.cc.CCInterface1;
-import org.concord.sensor.cc.CCInterface2;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.Ticker;

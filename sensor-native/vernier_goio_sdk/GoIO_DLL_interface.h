@@ -2,7 +2,7 @@
 #define _GOIO_DLL_INTERFACE_H_
 
 /***************************************************************************************************************************
-	GoIO_DLL_interface.h version 2.10
+	GoIO_DLL_interface.h version 2.11
 
 	This file documents the 'C' interface to GoIO_DLL.
 
@@ -73,8 +73,8 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Uninit();
 
 				If a function is not guaranteed to be present in all supported versions of GoIO_DLL, then the line
 				"Added in version 'major.minor'" will appear in the function description in this file.
-				Vernier currently only supports GoIO_DLL versions 1.60 and 2.10 . GoIO_GetVersion() is the only
-				API function present in version 2.10 that is not present in version 1.60 .
+				Vernier currently only supports GoIO_DLL versions 1.60 and 2.11 . GoIO_GetVersion() is the only
+				API function present in version 2.11 that is not present in version 1.60 .
 
 				It is our intention that all versions of GoIO_DLL created subsequent to a given version, will be
 				backwards compatible with the older version. You should be able to replace an old version of GoIO_DLL

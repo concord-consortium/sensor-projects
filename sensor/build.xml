@@ -1,14 +1,16 @@
 <project name="Sensor" default="jar">
 	<import file="../ProjectSets/standard-ant-targets.xml"/>
 
+	<path id="build-classpath">
+    	<pathelement location="../WabaJVM/lib/wabajvm.jar"/>
+    	<pathelement location="../Framework/lib/framework.jar"/>	
+	</path>
+	
 	<target name="compile" depends="init">
 		<javac destdir="lib">
 			<src location="src"/>
 			<patternset excludes="org/concord/sensor/transformers/,org/concord/sensor/meld/"/>
-			<classpath>
-		    	<pathelement location="../WabaJVM/lib/wabajvm.jar"/>
-		    	<pathelement location="../Framework/lib/framework.jar"/>
-			</classpath>
+			<classpath refid="build-classpath"/>
 		</javac>
     </target>
 

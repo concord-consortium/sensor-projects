@@ -7,14 +7,18 @@
 	This file documents the 'C' interface to GoIO_DLL.dll .
 	
 ***************************************************************************************************************************/
-#ifdef _GOIO_DLL_SRC
-#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllexport)
+
+#ifdef TARGET_OS_MAC
+	#define GOIO_DLL_INTERFACE_DECL
 #else
-#ifdef __cplusplus
-#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllimport)
-#else
-#define GOIO_DLL_INTERFACE_DECL __declspec(dllimport)
-#endif
+	#ifdef _GOIO_DLL_SRC
+	#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllexport)
+	#else
+	#ifdef __cplusplus
+	#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllimport)
+	#else
+	#define GOIO_DLL_INTERFACE_DECL __declspec(dllimport)
+	#endif
 //#define GOIO_DLL_INTERFACE_DECL
 #endif
 

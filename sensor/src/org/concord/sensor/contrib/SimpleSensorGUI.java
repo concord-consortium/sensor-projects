@@ -88,7 +88,9 @@ SensorDataProducer   dataProducer;
 
 	SensorDataProducer initHardware(){
 		SensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
-		return InterfaceManager.getDataProducerForDevice(JavaDeviceFactory.VERNIER_GO_LINK,consumer);
+		// FIXME: dima please fix this
+//		return InterfaceManager.getDataProducerForDevice(JavaDeviceFactory.VERNIER_GO_LINK,consumer);
+		return null;
 	}
 	
 	void initGUI(){

@@ -5,8 +5,8 @@
 <extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.ELF"/>
 <extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.PE"/>
 <extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.Cygwin_PE">
-<attribute key="cygpath" value="cygpath"/>
 <attribute key="addr2line" value="addr2line"/>
+<attribute key="cygpath" value="cygpath"/>
 <attribute key="c++filt" value="c++filt"/>
 </extension>
 <data>
@@ -15,9 +15,9 @@
 <custom value="false"/>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
-<pathentry kind="inc" path="" include="include" base-path="NativeSensor"/>
-<pathentry kind="inc" path="" include="include/GoIO" base-path="NativeSensor"/>
 <pathentry kind="inc" path="" include="C:/cygwin/usr/include"/>
+<pathentry kind="inc" path="" include="vernier_goio_sdk" base-path="SensorNative"/>
+<pathentry kind="inc" path="" include="include" base-path="SensorNative"/>
 <pathentry kind="mac" path="" name="__CYGWIN__" value=""/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>

@@ -1,4 +1,4 @@
-CFLAGS = -Iinclude -Iinclude/GoIO
+CFLAGS = -Iinclude -Ivernier_goio_sdk
 
 #SWIG = swig
 SWIG = /cygdrive/c/swig-1.3.21/swig
@@ -6,7 +6,7 @@ SWIG = /cygdrive/c/swig-1.3.21/swig
 QUERY_OBJS = nativelib/test/QueryDevice.o nativelib/test/CCSensorUtils.o 
 PRINTDATA_OBJS = nativelib/test/PrintData.o nativelib/test/CCSensorUtils.o 
 PSEUDO_OBJS = nativelib/PseudoSensorDevice.o
-GOLINK_OBJS = nativelib/GoLinkSensorDevice.o GoIO_DLL.lib
+GOLINK_OBJS = nativelib/GoLinkSensorDevice.o vernier_goio_sdk/GoIO_DLL.lib
 TI_OBJS = nativelib/TISensorDevice.o
 
 SWIG_OUTPUT_DIR = src/swig/java

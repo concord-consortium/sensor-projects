@@ -18,7 +18,8 @@
 typedef enum _GoDeviceType{
 	GoDeviceType_Unknown,
 	GoDeviceType_GoTemp,
-	GoDeviceType_GoLink	
+	GoDeviceType_GoLink,	
+	GoDeviceType_GoMotion,
 } GoDeviceType;
 
 
@@ -51,6 +52,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_DUAL_R_FORCE_10   25
 #define SENSOR_ID_DUAL_R_FORCE_50   26
 #define SENSOR_ID_GO_TEMP           60 
+#define SENSOR_ID_GO_MOTION         69 
 
 /*
  * This is not how this is supposed to be done
@@ -161,6 +163,12 @@ int SensDev_isAttached(
 
 	if(numDevices > 0) return 1;
 		
+	numDevices = 
+		GoIO_UpdateListOfAvailableDevices(VERNIER_DEFAULT_VENDOR_ID,
+			CYCLOPS_DEFAULT_PRODUCT_ID);
+			
+	if(numDevices > 0) return 1;
+				
 	return 0;	
 }
 
@@ -282,6 +290,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 		// however there still needs to be a mapping from
 		// the native id to the cc quantity id
 		sprintf(sensConfig->name, ddsRec.SensorLongName);
+		state->calibrationFunct = NULL;
 		switch(ddsRec.SensorNumber){
 			case SENSOR_ID_GASS_PRESSURE:
 				if(request &&
@@ -291,7 +300,6 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->unitStr, "Pa");
 				sensConfig->type = QUANTITY_GAS_PRESSURE;
 				sensConfig->stepSize = 0.01; // FIXME: this is a hack we should be able calc this
-				state->calibrationFunct = NULL;
 				break;
 			case SENSOR_ID_DUAL_R_FORCE_10:
 				if(request &&
@@ -324,6 +332,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				}
 				sprintf(sensConfig->unitStr, "degC");
 				sensConfig->type = QUANTITY_TEMPERATURE_WAND;
+				sensConfig->stepSize = 0.01;
+				break;
+			case SENSOR_ID_GO_MOTION:
+				if(request &&
+					(request->type == QUANTITY_VELOCITY)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "m");
+				sensConfig->type = QUANTITY_VELOCITY;
 				sensConfig->stepSize = 0.01;
 				break;
 				
@@ -465,12 +482,21 @@ void open_go(GO_STATE *state)
 		numDevices =
 			GoIO_UpdateListOfAvailableDevices(VERNIER_DEFAULT_VENDOR_ID,
 				USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID);
-
-		if(numDevices > 0) {
-			deviceProductId = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;
-			devType = GoDeviceType_GoTemp;
-		}
 	}	
+	
+	if(numDevices > 0) {
+		deviceProductId = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;
+		devType = GoDeviceType_GoTemp;
+	} else {
+		numDevices =
+			GoIO_UpdateListOfAvailableDevices(VERNIER_DEFAULT_VENDOR_ID,
+				CYCLOPS_DEFAULT_PRODUCT_ID);
+	}		
+	
+	if(numDevices > 0) {
+		deviceProductId = CYCLOPS_DEFAULT_PRODUCT_ID;
+		devType = GoDeviceType_GoMotion;
+	}
 	
 	if(GoIO_GetNthAvailableDeviceName(deviceName, GOIO_MAX_SIZE_DEVICE_NAME, 
 		VERNIER_DEFAULT_VENDOR_ID, deviceProductId, 0)) {

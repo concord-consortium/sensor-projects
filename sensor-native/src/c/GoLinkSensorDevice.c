@@ -265,6 +265,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 	int valid = 0;	
 		
 	printf("  attached sensor number: %d\n", (int)(ddsRec.SensorNumber));
+	state->sensorID = (int)ddsRec.SensorNumber;
 	if(request) {
 		printf("  requested sensor id: %d\n", request->type);
 		printf("  requested sensor requiredMax: %f\n", request->requiredMax);
@@ -482,22 +483,22 @@ void open_go(GO_STATE *state)
 		numDevices =
 			GoIO_UpdateListOfAvailableDevices(VERNIER_DEFAULT_VENDOR_ID,
 				USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID);
+		if(numDevices > 0) {
+			deviceProductId = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;
+			devType = GoDeviceType_GoTemp;
+		}
 	}	
 	
-	if(numDevices > 0) {
-		deviceProductId = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;
-		devType = GoDeviceType_GoTemp;
-	} else {
+	if(numDevices <= 0) {
 		numDevices =
 			GoIO_UpdateListOfAvailableDevices(VERNIER_DEFAULT_VENDOR_ID,
 				CYCLOPS_DEFAULT_PRODUCT_ID);
+		if(numDevices > 0) {
+			deviceProductId = CYCLOPS_DEFAULT_PRODUCT_ID;
+			devType = GoDeviceType_GoMotion;
+		}				
 	}		
-	
-	if(numDevices > 0) {
-		deviceProductId = CYCLOPS_DEFAULT_PRODUCT_ID;
-		devType = GoDeviceType_GoMotion;
-	}
-	
+		
 	if(GoIO_GetNthAvailableDeviceName(deviceName, GOIO_MAX_SIZE_DEVICE_NAME, 
 		VERNIER_DEFAULT_VENDOR_ID, deviceProductId, 0)) {
 		// error getting device name
@@ -520,7 +521,15 @@ void open_go(GO_STATE *state)
 	state->goHandle = goHandle;
 	state->deviceType = devType;
 	int err;
-	
+
+	err = GoIO_Sensor_DDSMem_GetSensorNumber(goHandle, &(state->sensorID), 
+		1, SKIP_TIMEOUT_MS_DEFAULT);	
+	if(err) {
+		printf("  error getting sensor id");
+	}
+	printf("  state->sensorID: %d\n", (int)state->sensorID);
+		
+		
 	int lockNum = 1;
 	int unlockAttempts = 0;
 	while(lockNum > 0 && unlockAttempts < 10){
@@ -533,12 +542,6 @@ void open_go(GO_STATE *state)
 		printf("  Cannot unlock the device. error %d\n", lockNum);
 	}
 		
-	err = GoIO_Sensor_DDSMem_GetSensorNumber(goHandle, &(state->sensorID), 
-		1, SKIP_TIMEOUT_MS_DEFAULT);
-	if(err) {
-		printf("  error getting sensor id");
-	}
-	
 	return;	
 }
 

@@ -50,6 +50,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_GASS_PRESSURE     24
 #define SENSOR_ID_DUAL_R_FORCE_10   25
 #define SENSOR_ID_DUAL_R_FORCE_50   26
+#define SENSOR_ID_GO_TEMP           60 
 
 /*
  * This is not how this is supposed to be done
@@ -81,7 +82,9 @@ SENSOR_DEVICE_HANDLE SensDev_open(char *configString)
 	printf("SensDev_open\n");
 	
 	if(GoIO_Init() != 0) {		
-		printf("  can't init go_io, You have another program using the Go device");
+		printf("  can't init go_io, You have another program using the Go device\n");
+	} else {
+		printf("  successfully called GoIO_Init\n");
 	}
 	
 	void * stateMem = (void *)malloc(sizeof(GO_STATE));
@@ -311,6 +314,17 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->unitStr, "N");
 				sensConfig->type = QUANTITY_FORCE;
 				sensConfig->stepSize = 0.05;
+				break;
+				
+			case SENSOR_ID_GO_TEMP:
+				if(request &&
+					(request->type == QUANTITY_TEMPERATURE ||
+					 request->type == QUANTITY_TEMPERATURE_WAND)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "degC");
+				sensConfig->type = QUANTITY_TEMPERATURE_WAND;
+				sensConfig->stepSize = 0.01;
 				break;
 				
 		}	

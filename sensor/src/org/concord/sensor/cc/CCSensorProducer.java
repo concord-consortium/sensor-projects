@@ -22,10 +22,13 @@ public class CCSensorProducer extends SensorProducer
 	public final static short SENSOR_VOLT_CURRENT    = 5;
 	
 	protected final static String [] myInterfaceNames =
-	{"2 Port Interface (CCA2D2 v2)", "1 Port Interface(CCA2D2 v1)"};
+	{"1 Port Interface(CCA2D2 v0)", 
+			"1 Port Interface(CCA2D2 v1)", 
+			"2 Port Interface (CCA2D2 v2)", };
 
-	public final static int INTERFACE_0 = 1;
-	public final static int INTERFACE_2 = 0;
+	public final static int INTERFACE_0 = 0;
+	public final static int INTERFACE_1 = 1;
+	public final static int INTERFACE_2 = 2;
 
 	public static int BUF_SIZE = 1000;
 
@@ -78,6 +81,8 @@ public class CCSensorProducer extends SensorProducer
 		{
 		case INTERFACE_0:
 			return new CCInterface0(ticker, messageHandler);
+		case INTERFACE_1:
+			return new CCInterface1(ticker, messageHandler);
 		case INTERFACE_2:			
 			return new CCInterface2(ticker, messageHandler);
 		}

@@ -9,6 +9,7 @@ import org.concord.framework.text.UserMessageHandler;
 
 import org.concord.sensor.*;
 import org.concord.sensor.cc.CCSensorProducer;
+import org.concord.waba.extra.util.PropObject;
 
 /**
  * @author scott
@@ -44,9 +45,18 @@ public class Test
 		// 2 port interface
 		Sensor tempSensor = 
 			producers[0].createSensor(CCSensorProducer.SENSOR_THERMAL_COUPLE);
-		
+
+/*
+  	// Uncomment this if you want to see
+	// The raw data (voltage)
+
+		Sensor tempSensor = 
+			producers[0].createSensor(CCSensorProducer.SENSOR_RAW_DATA);
+		PropObject channelProp = tempSensor.getProperty("Channel");
+		channelProp.setValue("1");
+*/		
 		InterfaceManager interfaceManager = 
-			producers[0].createInterface(CCSensorProducer.INTERFACE_2);
+			producers[0].createInterface(CCSensorProducer.INTERFACE_1);
 		// version info:
 		// version 2 :CCA2D2v..
 		// version 1 :CC A2D24v..

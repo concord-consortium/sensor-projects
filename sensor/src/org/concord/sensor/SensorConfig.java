@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2005-01-15 16:15:59 $
+ * $Revision: 1.7 $
+ * $Date: 2005-01-18 21:12:09 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -56,31 +56,30 @@ public interface SensorConfig
 	
 	// Required
 	public static int QUANTITY_TEMPERATURE=			0;
-	public static int QUANTITY_LIGHT=				1;
-	public static int QUANTITY_SOUND_INTENSITY=		2;
+	public static int QUANTITY_TEMPERATURE_WAND=    1;
+	public static int QUANTITY_LIGHT=				2;
 	public static int QUANTITY_GAS_PRESSURE= 		3;
-	public static int QUANTITY_COMPASS= 			4;
-	public static int QUANTITY_VOLTAGE= 			5;
-	public static int QUANTITY_CURRENT=				6;
-	
+	public static int QUANTITY_VOLTAGE= 			4;
+	public static int QUANTITY_FORCE=				5;
+	public static int QUANTITY_VELOCITY=			6;
+	public static int QUANTITY_RELATIVE_HUMIDITY=	7;
+
+	// Recommended
+	public static int QUANTITY_ACCELERATION=		8;
+	public static int QUANTITY_PULSE_RATE=			9;
+		
 	// not required
-	public static int QUANTITY_POWER=				7;
-	public static int QUANTITY_ENERGY=				8;
+	public static int QUANTITY_CURRENT=				10;
+	public static int QUANTITY_POWER=				11;
+	public static int QUANTITY_ENERGY=				12;
 	
-	// required
-	public static int QUANTITY_FORCE=				9;
-	public static int QUANTITY_DISTANCE=			10;
-	public static int QUANTITY_VELOCITY=			11;
+	public static int QUANTITY_DISTANCE=			13;
+	public static int QUANTITY_SOUND_INTENSITY=		14;
+	public static int QUANTITY_COMPASS= 			15;
 	
-	// not required
-	public static int QUANTITY_ANGULAR_VELOCITY=	12;
+	public static int QUANTITY_ANGULAR_VELOCITY=	16;
 	
-	// required
-	public static int QUANTITY_RELATIVE_HUMIDITY=	13;
-	public static int QUANTITY_WIND_SPEED=			14;
-	public static int QUANTITY_ACCELERATION=		15;
-	public static int QUANTITY_PULSE_RATE=			16;
-	
+	public static int QUANTITY_WIND_SPEED=			17;
 	
 	/**
 	 * If the attached sensor can be identified by the device

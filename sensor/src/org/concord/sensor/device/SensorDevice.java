@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-01-06 15:59:45 $
+ * $Revision: 1.3 $
+ * $Date: 2005-02-08 21:29:42 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -98,6 +98,11 @@ public interface SensorDevice
 	 * The number and order of the values in each sample should match the
 	 * SensorConfigs in the ExperimentConfig returned by configure. 
 	 * 
+	 * If the sensor device returned false for getExactPeriod then
+	 * an addition value should be returned before the others for each
+	 * sample.  This value is the time the sample was taken.  It should
+	 * be in seconds since the call to start().
+	 * 
 	 * After writing a sample to the values buffer the method should advance 
 	 * by nextSampleOffset.   This is sometimes referred to as a "stride".
 	 * So if the nextSampleOffset == 5 and there are 2 values in each sample
@@ -106,6 +111,9 @@ public interface SensorDevice
 	 * It should return the number of samples read.  0 means no samples were
 	 * read.  -1 means there was an error. getErrorMessage() will be called 
 	 * to find out what the error was.
+	 * 
+	 * If the numberOfSamples property in the Experiment request has already
+	 * been reached then this should return -2.    
 	 * 
 	 * @param values
 	 * @param offset
@@ -150,8 +158,10 @@ public interface SensorDevice
 	public boolean canDetectSensors();
 	
 	/**
-	 * If the device returns true for canDetectSensors() then this method might
-	 * be called to determine which sensors are attached.
+	 * This will be called to figure out the setup of the current device
+	 * If the device cannot detect sensors then it should just fill
+	 * out the ExperimentConfig with the device name, 0 for the number
+	 * of sensors, and valid should be false.
 	 * @return
 	 */
 	public ExperimentConfig getCurrentConfig();

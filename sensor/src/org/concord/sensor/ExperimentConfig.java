@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2005-01-15 16:15:59 $
+ * $Revision: 1.7 $
+ * $Date: 2005-02-08 21:29:42 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -51,6 +51,15 @@ public interface ExperimentConfig
 	 * @return
 	 */
 	public float getPeriod();
+	
+	/**
+	 * If this returns true then the period is an exact
+	 * period.  If it is false then it is an approximate
+	 * period and the real time will be in the time channel
+	 * returned by the SensorDataProducer. 
+	 * 
+	 */
+	public boolean getExactPeriod();
 	
 	/**
 	 * An array of SensorConfig, each SensorConfig contains configuration

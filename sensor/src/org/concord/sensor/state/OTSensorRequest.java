@@ -29,6 +29,14 @@ public class OTSensorRequest extends DefaultOTObject
 		public float getStepSize();
 		public void setStepSize(float stepSize);
 		
+		public final static float DEFAULT_requiredMax = Float.NaN;
+		public float getRequiredMax();
+		public void setRequiredMax(float requiredMax);
+		
+		public final static float DEFAULT_requiredMin = Float.NaN;
+		public float getRequiredMin();
+		public void setRequiredMin(float requiredMin);
+				
 		public final static int DEFAULT_displayPrecision = -2;
 		public int getDisplayPrecision();
 		public void setDisplayPrecision(int precision);
@@ -68,6 +76,22 @@ public class OTSensorRequest extends DefaultOTObject
 	public float getStepSize() 
 	{
 		return resources.getStepSize();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.SensorRequest#getRequiredMax()
+	 */
+	public float getRequiredMax() 
+	{
+		return resources.getRequiredMax();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.SensorRequest#getRequiredMin()
+	 */
+	public float getRequiredMin() 
+	{
+		return resources.getRequiredMin();
 	}
 
 	/* (non-Javadoc)

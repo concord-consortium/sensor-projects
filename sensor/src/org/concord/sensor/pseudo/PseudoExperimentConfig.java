@@ -45,6 +45,14 @@ public class PseudoExperimentConfig
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.concord.sensor.ExperimentConfig#getExactPeriod()
+	 */
+	public boolean getExactPeriod() 
+	{
+		return true;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentConfig#getSensorConfigs()
 	 */
 	public SensorConfig[] getSensorConfigs() 

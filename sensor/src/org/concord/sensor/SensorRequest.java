@@ -41,6 +41,38 @@ public interface SensorRequest
 	public float getStepSize();
 	
 	/**
+	 * This is the required maxium for this experiment.
+	 * the Units are the standard units for this type
+	 * of sensor.
+	 * This should be used to determine if the correct
+	 * sensor is attached.  Or if the device cannot auto
+	 * id its sensors, then this should be used to deduce
+	 * which sensor is attached.
+	 * 
+	 * If this returns Float.NaN then there is no required
+	 * maximum.
+	 * 
+	 * @return
+	 */
+	public float getRequiredMax();
+
+	/**
+	 * This is the required minimum for this experiment.
+	 * the Units are the standard units for this type
+	 * of sensor.
+	 * This should be used to determine if the correct
+	 * sensor is attached.  Or if the device cannot auto
+	 * id its sensors, then this should be used to deduce
+	 * which sensor is attached.
+     *
+	 * If this returns Float.NaN then there is no required
+	 * minimum.
+	 * 
+	 * @return
+	 */
+	public float getRequiredMin();
+	
+	/**
 	 * This should be ignored by sensor devices.  This value is only used
 	 * by display wigets.  
 	 * 

@@ -12,6 +12,7 @@ import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.sensor.ExperimentRequest;
@@ -84,18 +85,21 @@ public class OTSensorDataProxy extends DefaultOTObject
 	 */
 	public DataStreamDescription getDataDescription() 
 	{
-		DataStreamDescription dDesc = new DataStreamDescription();
-		
-		DataStreamDescUtil.setupDescription(dDesc, 
-				resources.getRequest(), null);
-		
-		// this should return a partially correct description
-		// before the real device is ready.  some fields
-		// will be missing or approximate: period, stepSize
-		
-		// TODO we should check if the device has been created
-		// and then return the correct description if it has
-		return dDesc;
+		if(producer == null) {
+			DataStreamDescription dDesc = new DataStreamDescription();
+			
+			DataStreamDescUtil.setupDescription(dDesc, 
+					resources.getRequest(), null);
+			
+			// this should return a partially correct description
+			// before the real device is ready.  some fields
+			// will be missing or approximate: period, stepSize
+			// series or sequence
+			
+			return dDesc;
+		} 
+			
+		return producer.getDataDescription();
 	}
 	
 	/* (non-Javadoc)
@@ -163,7 +167,12 @@ public class OTSensorDataProxy extends DefaultOTObject
 			// because the source of the data event should be this
 			// instead of the sensorDataProducer;
 			for(int i=0; i<dataListeners.size(); i++) {
-				producer.addDataListener((DataListener)dataListeners.get(i));
+				DataListener listener = (DataListener)dataListeners.get(i);
+				DataStreamEvent changeEvent = 
+					new DataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);
+				changeEvent.setDataDescription(getDataDescription());
+				listener.dataStreamEvent(changeEvent);
+				producer.addDataListener(listener);
 			}
 			producer.start();
 		}

@@ -12,6 +12,7 @@ import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
+import org.concord.sensor.device.SensorUnit;
 
 /**
  * @author scott
@@ -34,6 +35,7 @@ public class DataStreamDescUtil
 	{
 		SensorConfig [] sensConfigs = null;
 		SensorRequest [] sensRequests = request.getSensorRequests();		
+		int firstValueChannelIndex = 0;
 		
 		if(result != null) {
 			sensConfigs = result.getSensorConfigs();
@@ -43,13 +45,24 @@ public class DataStreamDescUtil
 		
 		if(result != null) {
 			dDesc.setDt(result.getPeriod());
+			if(result.getExactPeriod()) {
+				dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
+			} else {
+				dDesc.setDataType(DataStreamDescription.DATA_SERIES);
+				DataChannelDescription chDescrip = new DataChannelDescription();
+				chDescrip.setName("time");
+				chDescrip.setUnit(new SensorUnit("s"));
+				chDescrip.setPrecision(-2);
+				chDescrip.setNumericData(true);
+				dDesc.setChannelDescription(chDescrip, 0);				
+				firstValueChannelIndex = 1;
+				dDesc.setChannelsPerSample(sensRequests.length+1);
+			}
 		} else {
 			dDesc.setDt(request.getPeriod());			
 		}
 		
-		dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
-		
-		for(int i=0; i<sensRequests.length; i++) {
+		for(int i=firstValueChannelIndex; i<sensRequests.length; i++) {
 			DataChannelDescription chDescrip = new DataChannelDescription();
 			if(result != null) {
 				chDescrip.setName(sensConfigs[i].getName());
@@ -58,6 +71,7 @@ public class DataStreamDescUtil
 			
 			chDescrip.setPrecision(sensRequests[i].getDisplayPrecision());			
 			chDescrip.setNumericData(true);
+			dDesc.setChannelDescription(chDescrip, i);
 		}		
 	}
 }

@@ -22,6 +22,15 @@ public interface ExperimentRequest
 	public float getPeriod();
 	
 	/**
+	 * This is the number of samples requested.
+	 * If this will return -1 if the experiment should
+	 * run infinately.
+	 * 
+	 * @return
+	 */
+	public int getNumberOfSamples();
+	
+	/**
 	 * the sensor requests for this sensor.
 	 * @return
 	 */

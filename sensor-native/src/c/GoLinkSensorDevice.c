@@ -586,6 +586,12 @@ int SensDev_configure(SENSOR_DEVICE_HANDLE hDevice,
 	(*response)->numSensorConfigs = 1;
 	(*response)->valid = 1;
 
+	int retValue = GoIO_Sensor_SetMeasurementPeriod(state->goHandle, 
+		request->period,SKIP_TIMEOUT_MS_DEFAULT);
+	if(retValue){
+		printf("  error setting period to: %f\n", request->period);
+	}
+
 	(*response)->period = GoIO_Sensor_GetMeasurementPeriod(state->goHandle, 
 		SKIP_TIMEOUT_MS_DEFAULT);
 	printf("  goio period: %f\n", (*response)->period);

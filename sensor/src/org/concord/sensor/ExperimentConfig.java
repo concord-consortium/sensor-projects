@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Revision: 1.3 $
+ * $Date: 2004-12-13 17:53:55 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -27,8 +27,8 @@ public interface ExperimentConfig
 	public String getInvalidReason();
 	public void setInvalidReason(String reason);
 	
-	public float getRate();
-	public void setRate(float rate);
+	public float getPeriod();
+	public void setPeriod(float period);
 	
 	public void setSensorConfigs(SensorConfig [] configs);
 	public SensorConfig [] getSensorConfigs();	

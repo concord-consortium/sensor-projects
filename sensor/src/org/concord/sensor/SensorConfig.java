@@ -1,13 +1,15 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Revision: 1.3 $
+ * $Date: 2004-12-13 17:53:55 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor;
+
+import org.concord.framework.data.DataDimension;
 
 
 /**
@@ -148,6 +150,20 @@ public interface SensorConfig
 	 */
 	public String getName();
 	public void setName(String name);
+	
+	/**
+	 * The unit of the sensor plugged in, or the unit
+	 * of the requested sensor.
+	 * 
+	 * This value can probably be ignored in the request
+	 * because the unit is implicit based on the quantity
+	 * however it should be set correctly incase someone 
+	 * wants to use it.
+	 * @return
+	 */
+	public DataDimension getUnit();
+	public void setUnit(DataDimension unit);
+	
 	
 	/**
 	 * These parameters can be used to customize a sensor.  If a parameter

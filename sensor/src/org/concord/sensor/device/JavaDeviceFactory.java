@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-13 07:16:33 $
+ * $Revision: 1.2 $
+ * $Date: 2004-12-13 17:53:55 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -100,7 +100,7 @@ public class JavaDeviceFactory
 			AbstractSensorDevice device = (AbstractSensorDevice)
 			constructor.newInstance(new Object [] {ticker, messager});
 			
-			device.openDevice(config.getConfigString());
+			device.deviceOpen(config.getConfigString());
 			
 			return device;
 		} catch (Exception e) {
@@ -113,6 +113,6 @@ public class JavaDeviceFactory
 
 	public void destroyDevice(SensorDevice device)
 	{
-		((AbstractSensorDevice)device).closeDevice();
+		((AbstractSensorDevice)device).deviceClose();
 	}
 }

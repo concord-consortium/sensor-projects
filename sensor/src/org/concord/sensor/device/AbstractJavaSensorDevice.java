@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Revision: 1.2 $
+ * $Date: 2004-12-13 17:53:55 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -34,7 +34,7 @@ public abstract class AbstractJavaSensorDevice extends AbstractSensorDevice
 		super(t, h);
 	}
 	
-	public ExperimentConfig configure(ExperimentConfig experiment)
+	public ExperimentConfig deviceConfig(ExperimentConfig experiment)
 	{
 		return null;
 	}

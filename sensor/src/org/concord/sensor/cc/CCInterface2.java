@@ -137,16 +137,6 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.device.AbstractSensorDevice#configure(org.concord.sensor.ExperimentConfig)
-	 */
-	public ExperimentConfig configure(ExperimentConfig experiment)
-	{
-		// TODO this is how we get setup, I think we are already doing this
-		// in some other way
-		return null;
-	}
-	
 	public void start(Sensor probe)
 	{
 		// before we are here the user should have called
@@ -467,13 +457,13 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.AbstractSensorDevice#openDevice(java.lang.String)
 	 */
-	protected void openDevice(String openString) {
+	protected void deviceOpen(String openString) {
 		// TODO Auto-generated method stub
 		// should get the serial port out of the string
 		// I think		
 	}
 	
-	protected void closeDevice()
+	protected void deviceClose()
 	{
 		
 	}

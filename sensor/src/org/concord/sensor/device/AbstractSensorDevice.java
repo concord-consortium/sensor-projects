@@ -1,9 +1,13 @@
 package org.concord.sensor.device;
 
+import org.concord.framework.data.DataDimension;
+import org.concord.framework.data.stream.DataChannelDescription;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.sensor.ExperimentConfig;
+import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDevice;
 
 import waba.sys.Vm;
@@ -134,9 +138,11 @@ public abstract class AbstractSensorDevice
 	
 	protected abstract int getRightMilliseconds();
 	
-	protected abstract void openDevice(String openString);
+	protected abstract void deviceOpen(String openString);
 	
-	protected abstract void closeDevice();
+	protected abstract void deviceClose();
+	
+	protected abstract ExperimentConfig deviceConfig(ExperimentConfig request);
 	
 	protected abstract void deviceStart();
 	
@@ -146,7 +152,38 @@ public abstract class AbstractSensorDevice
 
 	protected abstract String getErrorMessage(int error);
 	
-	public void start()
+	/**
+	 * subclasses should use deviceConfig not configure
+	 * to setup their devices.
+	 */
+	public final ExperimentConfig configure(ExperimentConfig request)
+	{
+		ExperimentConfig result = deviceConfig(request);
+		
+		if(result == null) {
+			return null;
+		}
+		
+		SensorConfig [] sensConfigs = result.getSensorConfigs();
+		dDesc.setChannelsPerSample(sensConfigs.length);
+		dDesc.setDt(result.getPeriod());
+		dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
+		
+		for(int i=0; i<sensConfigs.length; i++) {
+			DataChannelDescription chDescrip = new DataChannelDescription();
+			chDescrip.setName(sensConfigs[i].getName());
+			chDescrip.setUnit(sensConfigs[i].getUnit());
+
+			// FIXME: This precision should be taken from the 
+			// requested config.  This is the display precision
+			chDescrip.setPrecision(sensConfigs[i].getDisplayPrecsion());
+			chDescrip.setNumericData(true);
+		}
+		
+		return result;
+	}
+	
+	public final void start()
 	{
 		deviceStart();
 		
@@ -161,11 +198,11 @@ public abstract class AbstractSensorDevice
 	 *  This doesn't really need to do anything if
 	 * the sensor isn't storing any cache.
 	 */
-	public void reset()
+	public final void reset()
 	{		
 	}
 	
-	public void stop()
+	public final void stop()
 	{
 		boolean ticking = ticker.isTicking();
 
@@ -177,7 +214,7 @@ public abstract class AbstractSensorDevice
 		deviceStop(ticking);
 	}
 
-	public DataStreamDescription getDataDescription()
+	public final DataStreamDescription getDataDescription()
 	{
 		return dDesc;
 	}

@@ -6,13 +6,17 @@
  */
 package org.concord.sensor.device;
 
+import org.concord.sensor.device.impl.ExperimentConfigImpl;
+
 /**
  * @author scott
  *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class AbstractJavaSensorDevice implements SensorDevice 
+public abstract class AbstractJavaSensorDevice 
+	implements SensorDevice 
 {
+	protected ExperimentConfigImpl currentConfig = null;
 
 }

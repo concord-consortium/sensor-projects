@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2005-02-19 13:40:31 $
+ * $Revision: 1.2 $
+ * $Date: 2005-02-23 12:41:49 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -22,7 +22,7 @@ import org.concord.sensor.ExperimentConfig;
  *
  */
 public abstract class AbstractJavaSensorDeviceTmp 
-	implements SensorDevice
+	extends AbstractJavaSensorDevice
 {
 	protected int [] requestedMode;
 	protected int [] currentMode;
@@ -148,13 +148,6 @@ public abstract class AbstractJavaSensorDeviceTmp
 	*/
 
 	/**
-	 * This is called to see mode the probe has is a
-	 * valid mode for the interface
-	 */
-	protected abstract boolean checkMode(Sensor probe, Object mode);
-
-
-	/**
 	 * This should return the dt of this interface given the current
 	 * mode that it is in.
 	 * @return
@@ -197,60 +190,5 @@ public abstract class AbstractJavaSensorDeviceTmp
 	{
 		dispose();
 	}
-	*/
-	
-	public void removeSensor(Sensor probe)
-	{
-		for(int i=0; i<portSensors.length; i++) {
-			if(portSensors[i] == probe){
-				// notify the probe
-				// stop it if it is started
-				portSensors[i] = null;
-			}
-		}
-
-		return;
-	}
-
-	/**
-	 * this is unnecessary I think 
-	 * this is called to setup the interface so it is ready
-	 * to read from this probe.
-	 * This will set the requested mode of the interface to 
-	 * match.  Then when start is called the requested mode
-	 * will be sent to the interface
-	 */
-	public boolean updateMode(Sensor p)
-	{
-		// Call some global function to get the interface mode for this probe
-		// it needs to be based on the probes properties
-		// But we need to watch out for stuff that currently gets set by this function
-		SensorDeviceMode mode = (SensorDeviceMode)p.getInterfaceMode();
-
-		int port = mode.getPort();
-		
-		// check if it is valid
-		if(!checkMode(p, mode)) return false;
-
-		requestedMode[port] = mode.getMode();
-
-		return true;
-	}
-
-	public boolean addSensor(Sensor probe)
-	{
-		SensorDeviceMode mode = (SensorDeviceMode)probe.getInterfaceMode();
-		if(portSensors[mode.getPort()] != null &&
-		   portSensors[mode.getPort()] != probe)
-		{
-			// there is a probe already assigned to that port
-			return false;
-		}
-
-		// We have to be careful here not to overwrite an existing port property
-		// probe.setPortProperty(new PropObject("Port", "Port", Probe.PROP_PORT, portNames));
-
-		portSensors[mode.getPort()] = probe;
-		return updateMode(probe);
-	}	
+	*/	
 }

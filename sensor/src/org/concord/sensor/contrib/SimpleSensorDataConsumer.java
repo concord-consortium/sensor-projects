@@ -17,7 +17,7 @@ import org.concord.framework.data.stream.DataProducer;
  * @author Dmitry Markman
  *
  */
-public class SimpleSensorDataConsumer implements DataConsumer 
+public class SimpleSensorDataConsumer implements SensorDataConsumer 
 {
 protected SensorDataProducer  sensorDataProducer;
 protected DataListener        dataListener;

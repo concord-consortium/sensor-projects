@@ -20,6 +20,7 @@ import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
+import org.concord.sensor.SensorDataConsumer;
 import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.impl.DeviceConfigImpl;
 import org.concord.sensor.device.impl.InterfaceManager;
@@ -86,15 +87,8 @@ SensorDataProducer   dataProducer;
 	}
 
 	SensorDataProducer initHardware(){
-		UserMessageHandler messenger = new UserMessageHandlerImpl();
-		SensorDataManager  sdManager = new InterfaceManager(messenger);
-		DeviceConfig [] dConfigs = new DeviceConfig[1];
-		dConfigs[0] = new DeviceConfigImpl(JavaDeviceFactory.VERNIER_GO_LINK, null);		
-		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
-		ExperimentRequest request = new ExperimentRequestImpl();
-		SimpleSensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
-		sdManager.prepareDataProducer(request, consumer);
-		return consumer.getSensorDataProducer();
+		SensorDataConsumer consumer = new SimpleGUIDataConsumer(textArea);
+		return InterfaceManager.getDataProducerForDevice(JavaDeviceFactory.VERNIER_GO_LINK,consumer);
 	}
 	
 	void initGUI(){

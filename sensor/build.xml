@@ -4,13 +4,17 @@
 	<!-- remember that properties are overridden when they are 
 		passed in on the command line, or when this ant file is 
 		called from another ant file with the property already set -->
-	<property name="jar-classpath-prefix" value="../../"/>
+	<!-- <property name="jar-classpath-prefix" value="../../"/> -->
 	
 	<property name="main-class" value="org.concord.sensor.example.Test"/>
 	
 	<path id="build-classpath">
+		<path refid="run-classpath"/>
+	</path>
+	
+	<path id="run-classpath">
     	<pathelement location="../WabaJVM/lib/wabajvm.jar"/>
-    	<pathelement location="../Framework/lib/framework.jar"/>	
+    	<pathelement location="../Framework/lib/framework.jar"/>		
 	</path>
 	
 	<target name="compile" depends="init">

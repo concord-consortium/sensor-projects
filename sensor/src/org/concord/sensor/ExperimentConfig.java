@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2005-01-06 15:59:45 $
+ * $Revision: 1.6 $
+ * $Date: 2005-01-15 16:15:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -26,6 +26,11 @@ public interface ExperimentConfig
 	/**
 	 * If the set of sensors attached does not match the requested sensors then
 	 * this should be false.
+	 * If at least one the requested sensors does not have an auto id,
+	 * then this should be true.  In this case isConfirmed should be
+	 * false for that sensor.
+	 * If the device cannot auto id sensors then this should always be
+	 * true.    
 	 * @return
 	 */
 	public boolean isValid();

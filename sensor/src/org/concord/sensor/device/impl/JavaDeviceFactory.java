@@ -1,13 +1,15 @@
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2005-01-12 04:13:22 $
+ * $Revision: 1.5 $
+ * $Date: 2005-01-15 16:15:59 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor.device.impl;
+
+import java.util.Hashtable;
 
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.cc.CCInterface0;
@@ -44,6 +46,9 @@ public class JavaDeviceFactory
 	
 	Ticker ticker = null;
 		
+	Hashtable deviceTable = new Hashtable();
+	Hashtable configTable = new Hashtable();
+	
 	/**
 	 * 
 	 */
@@ -58,6 +63,14 @@ public class JavaDeviceFactory
 	public SensorDevice createDevice(DeviceConfig config)
 	{
 		int id = config.getDeviceId();
+		String configStr = config.getConfigString();
+		String deviceConfigId = "" + id + ":" + configStr;
+		SensorDevice existingDevice = 
+			(SensorDevice)deviceTable.get(deviceConfigId);
+		if(existingDevice != null) {
+			return existingDevice;
+		}
+		
 		String className = null;
 		SensorDevice device = null;
 		
@@ -102,12 +115,19 @@ public class JavaDeviceFactory
 				
 			}
 		}
-		
+
+		deviceTable.put(deviceConfigId, device);
+		configTable.put(device, deviceConfigId);
 		return device;		
 	}
 
 	public void destroyDevice(SensorDevice device)
 	{
 		device.close();
+		
+		String configStr = (String)configTable.get(device);		
+		deviceTable.remove(configStr);
+		configTable.remove(device);
+		
 	}
 }

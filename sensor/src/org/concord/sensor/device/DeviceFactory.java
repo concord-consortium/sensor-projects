@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-01-12 04:13:22 $
+ * $Revision: 1.3 $
+ * $Date: 2005-01-15 16:15:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -24,6 +24,8 @@ import org.concord.sensor.DeviceConfig;
 public interface DeviceFactory
 {
 	// This should open the device before returning it.
+	// it should also track this device, so it won't
+	// be opened twice
 	SensorDevice createDevice(DeviceConfig config);
 	
 	// This should close and clean up the device.

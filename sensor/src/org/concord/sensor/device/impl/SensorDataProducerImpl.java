@@ -51,6 +51,7 @@ public class SensorDataProducerImpl
 		
 		processedData = new float[DEFAULT_BUFFERED_SAMPLE_NUM];
 		processedDataEvent.setData(processedData);
+		processedDataEvent.setSource(this);
 	}
 
 	public void tick()

@@ -10,6 +10,7 @@ import org.concord.framework.otrunk.OTID;
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectList;
 import org.concord.framework.otrunk.OTResourceSchema;
+import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.impl.InterfaceManager;
 
@@ -30,10 +31,9 @@ public class OTInterfaceManager extends InterfaceManager
 	/**
 	 * @param h
 	 */
-	public OTInterfaceManager(ResourceSchema resources) {
-		// FIXME we need a message hander to pass to this
-		// interface manager
-		super(new PrintUserMessageHandler());
+	public OTInterfaceManager(ResourceSchema resources, 
+			UserMessageHandler messageHandler) {
+		super(messageHandler);
 		
 		this.resources = resources;
 	}

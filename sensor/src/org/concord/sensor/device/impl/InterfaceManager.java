@@ -5,6 +5,7 @@ import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
+import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.device.DeviceFactory;
@@ -55,7 +56,7 @@ public class InterfaceManager implements SensorDataManager
 	private DeviceConfig[] deviceConfigs;
 	private static DeviceFactory deviceFactory = new JavaDeviceFactory();
 		
-	
+	protected SensorDevice currentDevice = null; 
 	
 	/**
 	 * The UserMessageHandler is used by the SensorDataProducer
@@ -103,27 +104,37 @@ public class InterfaceManager implements SensorDataManager
 			System.err.println("Searching all possible devices isn't supported yet");
 			return;
 		}
-		
-		SensorDevice attachedDevice = null;
-		
-		for(int i=0; i<deviceConfigs.length; i++) {
-			SensorDevice device = 
-				deviceFactory.createDevice(deviceConfigs[i]);
-			if(device.isAttached()){
-				attachedDevice = device;
-				break;
+				
+		if(currentDevice != null) {
+			// check if it is attached.
+			// if not then it should be closed.
+			// this means we only support one device at a time
+			if(!currentDevice.isAttached()) {
+				deviceFactory.destroyDevice(currentDevice);
+				currentDevice = null;
 			}
-			deviceFactory.destroyDevice(device);
 		}
 		
-		if(attachedDevice == null) {
+		if(currentDevice == null) {
+			for(int i=0; i<deviceConfigs.length; i++) {
+				SensorDevice device = 
+					deviceFactory.createDevice(deviceConfigs[i]);
+				if(device.isAttached()){
+					currentDevice = device;
+					break;
+				}
+				deviceFactory.destroyDevice(device);
+			}
+		}
+		
+		if(currentDevice == null) {
 			// prompt the user to connect one of the supported devices
 			// then try again, recursively?
 			System.err.println("Couldn't find attached device");
 			return;
 		}
-		
-		ExperimentConfig actualConfig = attachedDevice.configure(request);
+				
+		ExperimentConfig actualConfig = currentDevice.configure(request);
 		if(actualConfig == null || !actualConfig.isValid()) {
 			// prompt the user because the attached sensors do not
 			// match the requested sensors.
@@ -141,13 +152,21 @@ public class InterfaceManager implements SensorDataManager
 			// But there is now a way for the device to explain why the configuration
 			// is invalid.
 			System.err.println("Attached sensors don't match requested sensors");
+			messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
 			if(actualConfig != null) {
 				System.err.println("  device reason: " + actualConfig.getInvalidReason());
+				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
+				System.err.println("  sensor attached: " + sensorConfigs[0].getType());
 			}
+			
+			// Maybe should be a policy decision somewhere
+			// because maybe you would want to just return the
+			// currently attached setup
+			return;
 		}
 		
 		SensorDataProducerImpl dataProducer = 
-			new SensorDataProducerImpl(attachedDevice, ticker, messageHandler);
+			new SensorDataProducerImpl(currentDevice, ticker, messageHandler);
 				
 		dataProducer.configure(request, actualConfig);
 		

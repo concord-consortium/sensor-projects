@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2005-01-06 15:59:45 $
+ * $Revision: 1.6 $
+ * $Date: 2005-01-15 16:15:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -82,6 +82,16 @@ public interface SensorConfig
 	public static int QUANTITY_PULSE_RATE=			16;
 	
 	
+	/**
+	 * If the attached sensor can be identified by the device
+	 * and it matches the requested sensors this should return
+	 * true.
+	 * If the device does not support auto id then this should
+	 * always return true.
+	 * @return
+	 */
+	public boolean isConfirmed();
+		
 	/**
 	 * This is the type of quantity one of the types above.
 	 * @return

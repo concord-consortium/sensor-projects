@@ -46,9 +46,18 @@ public class TestNative
 			/* (non-Javadoc)
 			 * @see org.concord.sensor.ExperimentRequest#getPeriod()
 			 */
-			public float getPeriod() {
-				// TODO Auto-generated method stub
+			public float getPeriod() 
+			{
+
 				return 0;
+			}
+			
+			/* (non-Javadoc)
+			 * @see org.concord.sensor.ExperimentRequest#getNumberOfSamples()
+			 */
+			public int getNumberOfSamples() 
+			{
+				return -1;
 			}
 			
 			/* (non-Javadoc)
@@ -65,6 +74,23 @@ public class TestNative
 						// TODO Auto-generated method stub
 						return -2;
 					}
+					
+					/* (non-Javadoc)
+					 * @see org.concord.sensor.SensorRequest#getRequiredMax()
+					 */
+					public float getRequiredMax() 
+					{
+						return Float.NaN;
+					}
+					
+					/* (non-Javadoc)
+					 * @see org.concord.sensor.SensorRequest#getRequiredMin()
+					 */
+					public float getRequiredMin() 
+					{
+						return Float.NaN;
+					}
+					
 					/* (non-Javadoc)
 					 * @see org.concord.sensor.SensorRequest#getPort()
 					 */

@@ -41,6 +41,11 @@ public class ExperimentConfig implements
 		return getValid() == 1;
 	}
 	
+	public boolean getExactPeriod()
+	{
+		return getExactPeriodUChar() == 1;
+	}
+	
 	public org.concord.sensor.SensorConfig [] getSensorConfigs()
 	{
 		int num = getNumSensorConfigs();
@@ -74,6 +79,22 @@ public class ExperimentConfig implements
 
   public float getPeriod() {
     return NativeBridgeJNI.get_ExperimentConfig_period(swigCPtr);
+  }
+
+  public void setExactPeriodUChar(short exactPeriod) {
+    NativeBridgeJNI.set_ExperimentConfig_exactPeriodUChar(swigCPtr, exactPeriod);
+  }
+
+  public short getExactPeriodUChar() {
+    return NativeBridgeJNI.get_ExperimentConfig_exactPeriodUChar(swigCPtr);
+  }
+
+  public void setNumberOfSamples(int numberOfSamples) {
+    NativeBridgeJNI.set_ExperimentConfig_numberOfSamples(swigCPtr, numberOfSamples);
+  }
+
+  public int getNumberOfSamples() {
+    return NativeBridgeJNI.get_ExperimentConfig_numberOfSamples(swigCPtr);
   }
 
   public void setDataReadPeriod(float dataReadPeriod) {

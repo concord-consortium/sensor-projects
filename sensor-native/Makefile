@@ -57,7 +57,7 @@ bin/GoLinkPrintData : $(GOLINK_OBJS) $(PRINTDATA_OBJS) bin
 	$(build-static-executable)
 
 ######## TI targets ############
-ti_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/ti $(GOLINK_OBJS)
+ti_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/ti
 	$(SWIG) -java -Iinclude -package ccsd.ti -outdir src/swig/java/ccsd/ti -o src/swig/TISensorDevice_wrap.c src/swig/CCSensorDevice.i  
 	
 bin/ti_ccsd.dll : 	ti_swig $(TI_OBJS) nativelib/swig/TISensorDevice_wrap.o bin

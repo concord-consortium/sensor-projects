@@ -43,8 +43,8 @@ public class NativeBridge implements NativeBridgeConstants {
     return NativeBridgeJNI.SensDev_stop(SWIGTYPE_p_void.getCPtr(hDevice));
   }
 
-  public static int SensDev_read(SWIGTYPE_p_void hDevice, SWIGTYPE_p_float samples, int length) {
-    return NativeBridgeJNI.SensDev_read(SWIGTYPE_p_void.getCPtr(hDevice), SWIGTYPE_p_float.getCPtr(samples), length);
+  public static int SensDev_read(SWIGTYPE_p_void hDevice, SWIGTYPE_p_float samples, SWIGTYPE_p_float timestamps, int length) {
+    return NativeBridgeJNI.SensDev_read(SWIGTYPE_p_void.getCPtr(hDevice), SWIGTYPE_p_float.getCPtr(samples), SWIGTYPE_p_float.getCPtr(timestamps), length);
   }
 
   public static ExperimentConfig getCurrentConfigHelper(SWIGTYPE_p_void hDevice) {

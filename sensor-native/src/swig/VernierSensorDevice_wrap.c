@@ -333,6 +333,62 @@ JNIEXPORT jfloat JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1st
 }
 
 
+JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1requiredMax(JNIEnv *jenv, jclass jcls, jlong jarg1, jfloat jarg2) {
+    SensorConfig *arg1 = (SensorConfig *) 0 ;
+    float arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(SensorConfig **)&jarg1; 
+    arg2 = (float)jarg2; 
+    if (arg1) (arg1)->requiredMax = arg2;
+    
+}
+
+
+JNIEXPORT jfloat JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1requiredMax(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jfloat jresult = 0 ;
+    SensorConfig *arg1 = (SensorConfig *) 0 ;
+    float result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(SensorConfig **)&jarg1; 
+    result = (float) ((arg1)->requiredMax);
+    
+    jresult = (jfloat)result; 
+    return jresult;
+}
+
+
+JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1requiredMin(JNIEnv *jenv, jclass jcls, jlong jarg1, jfloat jarg2) {
+    SensorConfig *arg1 = (SensorConfig *) 0 ;
+    float arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(SensorConfig **)&jarg1; 
+    arg2 = (float)jarg2; 
+    if (arg1) (arg1)->requiredMin = arg2;
+    
+}
+
+
+JNIEXPORT jfloat JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1requiredMin(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jfloat jresult = 0 ;
+    SensorConfig *arg1 = (SensorConfig *) 0 ;
+    float result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(SensorConfig **)&jarg1; 
+    result = (float) ((arg1)->requiredMin);
+    
+    jresult = (jfloat)result; 
+    return jresult;
+}
+
+
 JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1port(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2) {
     SensorConfig *arg1 = (SensorConfig *) 0 ;
     int arg2 ;
@@ -693,6 +749,62 @@ JNIEXPORT jfloat JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1ExperimentConfig
     result = (float) ((arg1)->period);
     
     jresult = (jfloat)result; 
+    return jresult;
+}
+
+
+JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1ExperimentConfig_1exactPeriodUChar(JNIEnv *jenv, jclass jcls, jlong jarg1, jshort jarg2) {
+    ExperimentConfig *arg1 = (ExperimentConfig *) 0 ;
+    unsigned char arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(ExperimentConfig **)&jarg1; 
+    arg2 = (unsigned char)jarg2; 
+    if (arg1) (arg1)->exactPeriod = arg2;
+    
+}
+
+
+JNIEXPORT jshort JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1ExperimentConfig_1exactPeriodUChar(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jshort jresult = 0 ;
+    ExperimentConfig *arg1 = (ExperimentConfig *) 0 ;
+    unsigned char result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(ExperimentConfig **)&jarg1; 
+    result = (unsigned char) ((arg1)->exactPeriod);
+    
+    jresult = (jshort)result; 
+    return jresult;
+}
+
+
+JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1ExperimentConfig_1numberOfSamples(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2) {
+    ExperimentConfig *arg1 = (ExperimentConfig *) 0 ;
+    long arg2 ;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(ExperimentConfig **)&jarg1; 
+    arg2 = (long)jarg2; 
+    if (arg1) (arg1)->numberOfSamples = arg2;
+    
+}
+
+
+JNIEXPORT jint JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1ExperimentConfig_1numberOfSamples(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jint jresult = 0 ;
+    ExperimentConfig *arg1 = (ExperimentConfig *) 0 ;
+    long result;
+    
+    (void)jenv;
+    (void)jcls;
+    arg1 = *(ExperimentConfig **)&jarg1; 
+    result = (long) ((arg1)->numberOfSamples);
+    
+    jresult = (jint)result; 
     return jresult;
 }
 
@@ -1274,19 +1386,21 @@ JNIEXPORT jint JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensDev_1stop(JNIEnv *j
 }
 
 
-JNIEXPORT jint JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensDev_1read(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2, jint jarg3) {
+JNIEXPORT jint JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensDev_1read(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2, jlong jarg3, jint jarg4) {
     jint jresult = 0 ;
     SENSOR_DEVICE_HANDLE arg1 = (SENSOR_DEVICE_HANDLE) 0 ;
     float *arg2 = (float *) 0 ;
-    int arg3 ;
+    float *arg3 = (float *) 0 ;
+    int arg4 ;
     int result;
     
     (void)jenv;
     (void)jcls;
     arg1 = *(SENSOR_DEVICE_HANDLE *)&jarg1; 
     arg2 = *(float **)&jarg2; 
-    arg3 = (int)jarg3; 
-    result = (int)SensDev_read(arg1,arg2,arg3);
+    arg3 = *(float **)&jarg3; 
+    arg4 = (int)jarg4; 
+    result = (int)SensDev_read(arg1,arg2,arg3,arg4);
     
     jresult = (jint)result; 
     return jresult;

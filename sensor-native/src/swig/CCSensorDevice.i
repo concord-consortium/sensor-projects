@@ -27,6 +27,11 @@
 		return getValid() == 1;
 	}
 	
+	public boolean getExactPeriod()
+	{
+		return getExactPeriodUChar() == 1;
+	}
+	
 	public org.concord.sensor.SensorConfig [] getSensorConfigs()
 	{
 		int num = getNumSensorConfigs();
@@ -54,6 +59,8 @@
 %typemap(javainterfaces) SensorConfig %{
 	org.concord.sensor.SensorConfig
 %}
+
+%rename(exactPeriodUChar) exactPeriod;
 
 %include "CCSensorDevice.h"
 

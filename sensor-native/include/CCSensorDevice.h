@@ -6,16 +6,34 @@ typedef struct
 
 typedef struct
 {
-	// 1 means this sensor has been confirmed to match the requested
-	// sensor.  This is usually done by reading an id from the sensor
-	// if the sensor can't be confirmed then this should be 0
-	// devices that don't support reading ids from sensors
-	// should always return 0
+	/**
+	 *  1 means this sensor has been confirmed to match the requested
+	 * sensor.  This is usually done by reading an id from the sensor
+	 * if the sensor can't be confirmed then this should be 0
+	 * devices that don't support reading ids from sensors
+	 * should always return 0
+	 */
 	unsigned char confirmed;
 	
-	int 			type; // The type of sensor or quantity requested
-	float 			stepSize; // The actual or maximum step size between values
-							  // This is in the standard units for this type
+	/**
+	 * The type of sensor or quantity requested
+	 */ 
+	int 			type; 
+	
+	/*
+	 *  The actual or maximum step size between values
+	 * This is in the standard units for this type
+	 */
+	float 			stepSize; 
+	
+	/**
+	 * The requiredMax and requiredMin are passed in by the author to 
+	 * indicate the range of the sensor they require.  These values will
+	 * be in the standard units for this sensor type
+	 */
+	float           requiredMax;
+	float           requiredMin;
+	
 	/**
 	 * This is the port the sensor is or should be plugged into.
 	 * This value ranges from 0 on up.  This value might be ignored
@@ -86,6 +104,28 @@ typedef struct
 	 */
 	float			period;
 
+
+	/*
+	 * This is only a reponse value.  It has no meaning
+	 * in a request.
+	 * 
+	 * The returned data will have the exact period
+	 * returned in the period field if this is 1
+	 * Otherwise the data will have an approxite period
+	 * and there time stamp array of the read method 
+	 * will be used. 
+	 */  
+	unsigned char   exactPeriod;
+
+	/**
+	 * The requested number of samples to be collector
+	 * if this is -1 then it should collect until stop is 
+	 * called.
+	 * Even if this is set the data should be in real time or 
+	 * close to real time.
+	 */
+	long            numberOfSamples;
+	
 	/*
 	 * The requested data read period.  This is the time
 	 * between calls to SensDev_read()
@@ -269,5 +309,7 @@ int SensDev_stop(
 int SensDev_read(
 	SENSOR_DEVICE_HANDLE hDevice,// [in] handle to open device
 	float * samples,             // [out] buffer to hold samples read in
+	float * timestamps,          // [out] buffer to hold time stamps of samples 
+	                             //   only used if exactPeriod is false 
 	int length                   // [in] this is the size of the passed in buffer	
 	);		

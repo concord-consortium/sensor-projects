@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <strings.h>
+#include <math.h>
 
 #define _MAX_PATH 256
 
@@ -207,6 +208,7 @@ int SensDev_getCurrentConfig(
 	printf("sensor measurement period: %f\n", period);
 		
 	expConfig->period = period;
+	expConfig->exactPeriod = 1;
 	expConfig->dataReadPeriod = 0.1;
 	
 	switch(state->deviceType){
@@ -254,6 +256,8 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 	printf("  attached sensor number: %d\n", (int)(ddsRec.SensorNumber));
 	if(request) {
 		printf("  requested sensor id: %d\n", request->type);
+		printf("  requested sensor requiredMax: %f\n", request->requiredMax);
+		printf("  requested sensor requiredMax isnan: %d\n", isnan(request->requiredMax));
 	}
 	printf("  sensor long name: %s\n", ddsRec.SensorLongName);
 	printf("  sensor short name: %s\n", ddsRec.SensorShortName);
@@ -287,18 +291,26 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				state->calibrationFunct = NULL;
 				break;
 			case SENSOR_ID_DUAL_R_FORCE_10:
-			case SENSOR_ID_DUAL_R_FORCE_50:
 				if(request &&
-					request->type == QUANTITY_FORCE) {
+					request->type == QUANTITY_FORCE &&
+					(isnan(request->requiredMax) ||
+					  request->requiredMax <= 10.0)) {
 					valid = 1;
 				}
 				sprintf(sensConfig->unitStr, "N");
 				sensConfig->type = QUANTITY_FORCE;
-				if(ddsRec.SensorNumber == SENSOR_ID_DUAL_R_FORCE_10){
-					sensConfig->stepSize = 0.01;
-				} else {
-					sensConfig->stepSize = 0.05;
+				sensConfig->stepSize = 0.01;
+				break;
+			
+			case SENSOR_ID_DUAL_R_FORCE_50:
+				if(request &&
+					request->type == QUANTITY_FORCE &&
+					request->stepSize >= 0.05) {
+					valid = 1;
 				}
+				sprintf(sensConfig->unitStr, "N");
+				sensConfig->type = QUANTITY_FORCE;
+				sensConfig->stepSize = 0.05;
 				break;
 				
 		}	
@@ -522,6 +534,7 @@ int SensDev_configure(SENSOR_DEVICE_HANDLE hDevice,
 		SKIP_TIMEOUT_MS_DEFAULT);
 	printf("  goio period: %f\n", (*response)->period);
 
+	(*response)->exactPeriod = 1;
 
 	(*response)->dataReadPeriod = 0.1;
 				
@@ -592,7 +605,8 @@ int SensDev_stop(SENSOR_DEVICE_HANDLE hDevice)
 	return 0;
 }
 
-int SensDev_read(SENSOR_DEVICE_HANDLE hDevice, float *buffer, int size)
+int SensDev_read(SENSOR_DEVICE_HANDLE hDevice, 
+	float *buffer, float *timestamps, int size)
 {
 	GO_STATE *state = (GO_STATE *)hDevice; 
 	

@@ -70,6 +70,22 @@ public class SensorConfig implements
     return NativeBridgeJNI.get_SensorConfig_stepSize(swigCPtr);
   }
 
+  public void setRequiredMax(float requiredMax) {
+    NativeBridgeJNI.set_SensorConfig_requiredMax(swigCPtr, requiredMax);
+  }
+
+  public float getRequiredMax() {
+    return NativeBridgeJNI.get_SensorConfig_requiredMax(swigCPtr);
+  }
+
+  public void setRequiredMin(float requiredMin) {
+    NativeBridgeJNI.set_SensorConfig_requiredMin(swigCPtr, requiredMin);
+  }
+
+  public float getRequiredMin() {
+    return NativeBridgeJNI.get_SensorConfig_requiredMin(swigCPtr);
+  }
+
   public void setPort(int port) {
     NativeBridgeJNI.set_SensorConfig_port(swigCPtr, port);
   }

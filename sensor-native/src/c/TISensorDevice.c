@@ -12,7 +12,9 @@ SENSOR_DEVICE_HANDLE SensDev_open(char *configString)
 	// This method treats a return value of NULL 
 	// as an error condition.  So we are just 
 	// returning a fake handle here. 
-	return (SENSOR_DEVICE_HANDLE)1;
+	int * timeStampHandle = (int *)malloc(sizeof(int));
+	*timeStampHandle = 0;
+	return (SENSOR_DEVICE_HANDLE)timeStampHandle;
 }
 
 /*
@@ -61,6 +63,7 @@ int SensDev_configure(
 	(*response)->valid = 1;
 	
 	(*response)->period = request->period;
+	(*response)->exactPeriod = 0;
 
 	(*response)->invalidReason = NULL;
 
@@ -152,11 +155,16 @@ int SensDev_stop(
 int SensDev_read(
 	SENSOR_DEVICE_HANDLE hDevice,// [in] handle to open device
 	float * samples,             // [out] buffer to hold samples read in
+	float * timestamps,          // [out] buffer to hold timestamps
 	int length                   // [in] this is the size of the passed in buffer	
 	)
 {
 	// just return a constant value for now
+	
+	int * timestep = (int *)hDevice;
+	timestamps[0] = *timestep * 0.11;
 	samples[0] = 10;
+	*timestep = *timestep + 1;
 	return 1;
 }
 

@@ -22,6 +22,10 @@ class NativeBridgeJNI {
   public final static native int get_SensorConfig_type(long jarg1);
   public final static native void set_SensorConfig_stepSize(long jarg1, float jarg2);
   public final static native float get_SensorConfig_stepSize(long jarg1);
+  public final static native void set_SensorConfig_requiredMax(long jarg1, float jarg2);
+  public final static native float get_SensorConfig_requiredMax(long jarg1);
+  public final static native void set_SensorConfig_requiredMin(long jarg1, float jarg2);
+  public final static native float get_SensorConfig_requiredMin(long jarg1);
   public final static native void set_SensorConfig_port(long jarg1, int jarg2);
   public final static native int get_SensorConfig_port(long jarg1);
   public final static native void set_SensorConfig_portName(long jarg1, String jarg2);
@@ -43,6 +47,10 @@ class NativeBridgeJNI {
   public final static native String get_ExperimentConfig_invalidReason(long jarg1);
   public final static native void set_ExperimentConfig_period(long jarg1, float jarg2);
   public final static native float get_ExperimentConfig_period(long jarg1);
+  public final static native void set_ExperimentConfig_exactPeriodUChar(long jarg1, short jarg2);
+  public final static native short get_ExperimentConfig_exactPeriodUChar(long jarg1);
+  public final static native void set_ExperimentConfig_numberOfSamples(long jarg1, int jarg2);
+  public final static native int get_ExperimentConfig_numberOfSamples(long jarg1);
   public final static native void set_ExperimentConfig_dataReadPeriod(long jarg1, float jarg2);
   public final static native float get_ExperimentConfig_dataReadPeriod(long jarg1);
   public final static native void set_ExperimentConfig_deviceName(long jarg1, String jarg2);
@@ -83,7 +91,7 @@ class NativeBridgeJNI {
   public final static native int SensDev_getCurrentConfig(long jarg1, long jarg2);
   public final static native int SensDev_start(long jarg1);
   public final static native int SensDev_stop(long jarg1);
-  public final static native int SensDev_read(long jarg1, long jarg2, int jarg3);
+  public final static native int SensDev_read(long jarg1, long jarg2, long jarg3, int jarg4);
   public final static native long getCurrentConfigHelper(long jarg1);
   public final static native long configureHelper(long jarg1, long jarg2);
   public final static native long new_floatArray(int jarg1);

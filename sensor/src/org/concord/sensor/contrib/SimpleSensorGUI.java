@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package org.concord.sensor.nativelib;
+package org.concord.sensor.contrib;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,11 +35,11 @@ import org.concord.sensor.contrib.SimpleSensorDataConsumer;
  * gcc  -o libSetDylibPath.jnilib  SetDylibPath.c   "-arch" "ppc" "-bundle"  build string 
  * install path in the libvernier_ccsd.jnilib should be./libGoIO.dylib
  */
-public class TestNativeGUI extends JPanel
+public class SimpleSensorGUI extends JPanel
 {
 JTextArea            textArea;
 SensorDataProducer   dataProducer;
-    public TestNativeGUI(){
+    public SimpleSensorGUI(){
 	    initGUI();
 		dataProducer = initHardware();
     }
@@ -51,7 +51,7 @@ SensorDataProducer   dataProducer;
 
 	public static void main(String[] args) 
 	{
-	    final TestNativeGUI sensorComponent = new TestNativeGUI();
+	    final SimpleSensorGUI sensorComponent = new SimpleSensorGUI();
         try{
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){
                 public void run(){

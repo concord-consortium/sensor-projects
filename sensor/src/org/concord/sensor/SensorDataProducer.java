@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-01-06 15:59:44 $
+ * $Revision: 1.3 $
+ * $Date: 2005-01-11 06:07:02 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -35,13 +35,6 @@ public interface SensorDataProducer
 	 * @return
 	 */
 	public boolean isAttached();
-	
-	/**
-	 * Configure the sensor device.  This is called by the InterfaceManager
-	 * It must be done after the underlying device is opened, and
-	 * before start is called.
-	 */
-	public ExperimentConfig configure(ExperimentRequest experiment);
 	
 	/**
 	 * This returns the configuration attached to the interface

@@ -143,24 +143,31 @@ public class SensorDataProducerImpl
 	}
 	
 	/**
-	 * subclasses should use deviceConfig not configure
-	 * to setup their devices.
+	 * This method is in a strange state right now.
+	 * 
+	 * The device is configured by the InterfaceManager.
+	 * Then the interface manager creates the sensordataproducer
+	 * and hands that back.  For now the interface manager
+	 * will also call configure.  However perhaps this should
+	 * be done in the initialzer.  
+	 * 
+	 * It might be desirable to re-configure an existing 
+	 * SensorDataProducer.  That would justify this being a separate
+	 * method.  However users of data producers make assumptions
+	 * about their period (dT) not changing.  This needs more thought.  
+	 * 
 	 */
-	public final ExperimentConfig configure(ExperimentRequest request)
-	{
-		ExperimentConfig result = device.configure(request);
-		
-		if(result == null) {
-			return null;
-		}
-		
-		SensorRequest [] sensRequests =  null;
-		if(request != null) {
-			sensRequests = request.getSensorRequests();
-		}
+	public final ExperimentConfig configure(ExperimentRequest request, 
+			ExperimentConfig result)
+	{		
+		SensorRequest [] sensRequests = request.getSensorRequests();
 			
+		System.out.println("configure: ExperimentConfig:");
+		
 		SensorConfig [] sensConfigs = result.getSensorConfigs();
+		System.out.println(" numSensors" + sensConfigs.length);
 		dDesc.setChannelsPerSample(sensConfigs.length);
+		System.out.println(" period" + result.getPeriod());
 		dDesc.setDt(result.getPeriod());
 		dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
 		

@@ -53,7 +53,7 @@ public class InterfaceManager implements SensorDataManager
 	
 	private boolean prepared;
 	private DeviceConfig[] deviceConfigs;
-	private static DeviceFactory deviceFactory;
+	private static DeviceFactory deviceFactory = new JavaDeviceFactory();
 		
 	
 	
@@ -69,10 +69,10 @@ public class InterfaceManager implements SensorDataManager
 	 * 
 	 * @param h
 	 */
-	public InterfaceManager(UserMessageHandler h, Ticker t)
+	public InterfaceManager(UserMessageHandler h)
 	{
 		messageHandler = h;
-		ticker = t;
+		ticker = new JavaTicker();
 	}
 		
 	/**
@@ -146,9 +146,10 @@ public class InterfaceManager implements SensorDataManager
 			}
 		}
 		
-		SensorDataProducer dataProducer = 
+		SensorDataProducerImpl dataProducer = 
 			new SensorDataProducerImpl(attachedDevice, ticker, messageHandler);
 				
+		dataProducer.configure(request, actualConfig);
 		
 		consumer.addDataProducer(dataProducer);
 	}

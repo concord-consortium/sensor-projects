@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-01-06 15:59:45 $
+ * $Revision: 1.3 $
+ * $Date: 2005-01-11 06:07:02 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -63,7 +63,7 @@ public class JavaDeviceFactory
 		
 		switch(id) {
 			case VERNIER_GO_LINK:
-				className = "org.concord.sensor.nativelib.NativeSensorDevice";
+				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
 				break;
 			case TI_CONNECT:
 			case FOURIER:

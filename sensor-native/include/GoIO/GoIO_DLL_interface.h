@@ -9,16 +9,17 @@
 ***************************************************************************************************************************/
 
 #ifdef TARGET_OS_MAC
-	#define GOIO_DLL_INTERFACE_DECL
+  #define GOIO_DLL_INTERFACE_DECL
 #else
-	#ifdef _GOIO_DLL_SRC
-	#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllexport)
-	#else
-	#ifdef __cplusplus
+  #ifdef _GOIO_DLL_SRC
+     define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllexport)
+  #else
+     #ifdef __cplusplus
 	#define GOIO_DLL_INTERFACE_DECL extern "C" _declspec(dllimport)
-	#else
-	#define GOIO_DLL_INTERFACE_DECL __declspec(dllimport)
-	#endif
+     #else
+        #define GOIO_DLL_INTERFACE_DECL __declspec(dllimport)
+     #endif
+  #endif
 //#define GOIO_DLL_INTERFACE_DECL
 #endif
 

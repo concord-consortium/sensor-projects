@@ -171,19 +171,23 @@ public class SensorSerialPortRXTX
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws IOException
 	{	
-	    try {
-	        port.enableReceiveTimeout((int)timeout);
-	        port.enableReceiveThreshold(len);
-	        
-	        int numRead = inStream.read(buf, off, len);
-	        
-	        port.disableReceiveThreshold();
-	        port.enableReceiveTimeout(currentTimeout);
-		    return numRead;
-	    } catch (UnsupportedCommOperationException e) {
-	        System.err.println("timeout or threshold not available on this platform");
-	    }
-
+		// at least one of the receive time and theshold
+		// don't work on windows.
+		if(!System.getProperty("os.name").startsWith("Windows")){
+			try {
+				port.enableReceiveTimeout((int)timeout);
+				port.enableReceiveThreshold(len);
+				
+				int numRead = inStream.read(buf, off, len);
+				
+				port.disableReceiveThreshold();
+				port.enableReceiveTimeout(currentTimeout);
+				return numRead;
+			} catch (UnsupportedCommOperationException e) {
+				System.err.println("timeout or threshold not available on this platform");
+			}
+		}
+		
 	    // Fall back to polling method. 
 	    // this method still assumes some form of timeout is supported
 	    // to handle no timeout support we'll need multiple threads.

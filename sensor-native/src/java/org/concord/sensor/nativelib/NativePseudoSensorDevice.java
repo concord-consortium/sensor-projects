@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2005-01-19 05:26:10 $
+ * $Revision: 1.2 $
+ * $Date: 2005-01-31 17:40:13 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -35,7 +35,7 @@ public class NativePseudoSensorDevice
 	SWIGTYPE_p_void deviceHandle = null;
 	SWIGTYPE_p_float readBuffer = null;
 	private boolean open;
-	
+	private boolean nativeLibAvailable = false;
 	
 	/**
 	 * 
@@ -45,6 +45,7 @@ public class NativePseudoSensorDevice
 		try {
 			System.loadLibrary("GoIO_DLL");
 			System.loadLibrary("vernier_ccsd");
+			nativeLibAvailable = true;
 //			System.loadLibrary("blah");
 		} catch (Throwable thr) {
 			thr.printStackTrace();
@@ -53,6 +54,11 @@ public class NativePseudoSensorDevice
 	
 	public synchronized void open(String config)
 	{
+		if(!nativeLibAvailable) {
+			open = false;
+			return;
+		}
+		
 		open = true;
 		deviceHandle = NativeBridge.SensDev_open(config);
 		if(readBuffer == null) {

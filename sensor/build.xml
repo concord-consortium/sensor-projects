@@ -1,6 +1,13 @@
 <project name="Sensor" default="jar">
 	<import file="../ProjectSets/standard-ant-targets.xml"/>
 
+	<!-- remember that properties are overridden when they are 
+		passed in on the command line, or when this ant file is 
+		called from another ant file with the property already set -->
+	<property name="jar-classpath-prefix" value="../../"/>
+	
+	<property name="main-class" value="org.concord.sensor.example.Test"/>
+	
 	<path id="build-classpath">
     	<pathelement location="../WabaJVM/lib/wabajvm.jar"/>
     	<pathelement location="../Framework/lib/framework.jar"/>	
@@ -16,4 +23,43 @@
 
 	<property name="jar-name" value="sensor"/>
 
+	<!-- if we did a CVS export first then the excludes
+	   would not be needed because the lib and dist folders won't
+	   be in CVS -->
+	<patternset id="all-project-files">
+		<include name="ProjectSets/"/>
+		<exclude name="ProjectSets/lib/"/>
+		<include name="Sensor/"/>
+		<exclude name="Sensor/lib/"/>
+		<exclude name="Sensor/dist/"/>
+		<include name="WabaJVM/"/>
+		<exclude name="WabaJVM/lib/"/>
+		<include name="AppleStub/"/>
+		<exclude name="AppleStub/lib/"/>
+		<include name="Framework/"/>				
+		<exclude name="Framework/lib/"/>				
+		<include name="thirdparty/RXTXcomm-2.1.7.jar"/>
+		<include name="thirdparty/comm.jar"/>
+	</patternset>			
+				
+	<target name="source-distribution-zip"
+		description="make source distribution zip">
+		<mkdir dir="dist"/>
+		<zip file="dist/${jar-name}-source.zip">
+			<zipfileset prefix="${jar-name}-src" dir="..">
+				<patternset refid="all-project-files"/>
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="source-distribution-copy"
+		description="make source distribution dir">
+		<mkdir dir="dist"/>
+		<copy todir="dist/${jar-name}-src">
+			<fileset dir="..">
+				<patternset refid="all-project-files"/>
+			</fileset>
+		</copy>
+	</target>
+	
 </project>

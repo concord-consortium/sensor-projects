@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2005-01-15 16:15:59 $
+ * $Revision: 1.6 $
+ * $Date: 2005-01-19 05:34:34 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -79,6 +79,8 @@ public class JavaDeviceFactory
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
 				break;
 			case TI_CONNECT:
+				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
+				break;				
 			case FOURIER:
 			case DATA_HARVEST_USB:
 			case DATA_HARVEST_CF:

@@ -23,16 +23,5 @@
       <type>jar</type>
     </dependency>
   </dependencies>
-  <build>
-    <sourceModifications>
-      <sourceModification>
-        <className>fakeClass</className>
-        <excludes>
-          <exclude>org/concord/sensor/meld/**</exclude>
-          <exclude>org/concord/sensor/transformers/**</exclude>
-        </excludes>
-      </sourceModification>
-    </sourceModifications>
-  </build>
 </project>
 

@@ -1,6 +1,7 @@
 package org.concord.sensor.device;
 
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.sensor.device.impl.Ticker;
 import org.concord.waba.extra.io.DataStream;
 
 import waba.sys.Vm;

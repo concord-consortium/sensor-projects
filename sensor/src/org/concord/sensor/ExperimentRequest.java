@@ -7,14 +7,23 @@
 package org.concord.sensor;
 
 /**
- * @author Informaiton Services
+ * An object implementing this interface is passed to the SensorDevice
+ * The SensorDevice uses this request to figure out how to configure
+ * the device and sensors.
+ * 
+ * @author Scott Cytacki
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public interface ExperimentRequest 
 {
+	/**
+	 * The length of time between measurements in seconds
+	 */ 
 	public float getPeriod();
 	
+	/**
+	 * the sensor requests for this sensor.
+	 * @return
+	 */
 	public SensorRequest [] getSensorRequests();		
 }

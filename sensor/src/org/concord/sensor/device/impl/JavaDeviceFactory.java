@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-24 15:34:59 $
+ * $Revision: 1.2 $
+ * $Date: 2005-01-06 15:59:45 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -9,17 +9,12 @@
 */
 package org.concord.sensor.device.impl;
 
-import java.lang.reflect.Constructor;
-
-import org.concord.framework.text.UserMessageHandler;
-import org.concord.sensor.DeviceConfig;
-import org.concord.sensor.DeviceFactory;
-import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.cc.CCInterface0;
 import org.concord.sensor.cc.CCInterface1;
 import org.concord.sensor.cc.CCInterface2;
+import org.concord.sensor.device.DeviceConfig;
+import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
-import org.concord.sensor.device.Ticker;
 
 
 /**
@@ -60,7 +55,7 @@ public class JavaDeviceFactory
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.DeviceFactory#createDevice(org.concord.sensor.DeviceConfig)
 	 */
-	public SensorDataProducer createDevice(DeviceConfig config, UserMessageHandler messager)
+	public SensorDevice createDevice(DeviceConfig config)
 	{
 		int id = config.getDeviceId();
 		String className = null;
@@ -97,11 +92,8 @@ public class JavaDeviceFactory
 			try {
 				Class sensDeviceClass = 
 					getClass().getClassLoader().loadClass(className);
-				Constructor constructor = sensDeviceClass.getConstructor(
-						new Class [] {Ticker.class, UserMessageHandler.class});
 				
-				device = (SensorDevice)
-				constructor.newInstance(new Object [] {ticker, messager});
+				device = (SensorDevice) sensDeviceClass.newInstance();
 				
 				device.open(config.getConfigString());
 				
@@ -111,15 +103,10 @@ public class JavaDeviceFactory
 			}
 		}
 		
-		if (device == null) {
-			return null;
-		}
-		
-		
-		return null;
+		return device;		
 	}
 
-	public void destroyDevice(SensorDataProducer device)
+	public void destroyDevice(SensorDevice device)
 	{
 		device.close();
 	}

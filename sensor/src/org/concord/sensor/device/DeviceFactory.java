@@ -1,15 +1,13 @@
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2004-12-24 15:34:59 $
+ * $Revision: 1.1 $
+ * $Date: 2005-01-06 15:59:45 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
-package org.concord.sensor;
-
-import org.concord.framework.text.UserMessageHandler;
+package org.concord.sensor.device;
 
 
 /**
@@ -24,8 +22,8 @@ import org.concord.framework.text.UserMessageHandler;
 public interface DeviceFactory
 {
 	// This should open the device before returning it.
-	SensorDataProducer createDevice(DeviceConfig config, UserMessageHandler messager);
+	SensorDevice createDevice(DeviceConfig config);
 	
 	// This should close and clean up the device.
-	void destroyDevice(SensorDataProducer device);
+	void destroyDevice(SensorDevice device);
 }

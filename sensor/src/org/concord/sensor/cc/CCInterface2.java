@@ -9,7 +9,7 @@ import org.concord.sensor.device.AbstractJavaSensorDevice;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.Sensor;
 import org.concord.sensor.device.SensorDeviceMode;
-import org.concord.sensor.device.Ticker;
+import org.concord.sensor.device.impl.Ticker;
 
 import waba.io.SerialPort;
 import waba.sys.Vm;

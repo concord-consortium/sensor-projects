@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-24 15:34:59 $
+ * $Revision: 1.2 $
+ * $Date: 2005-01-06 15:59:44 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -13,8 +13,13 @@ import org.concord.framework.data.stream.DataProducer;
 
 
 /**
- * SensorDevice
- * Class name and description
+ * SensorDataProducer
+ * 
+ * This is a special data producer that represents a sensor device.
+ * It can be configured with ExperimentRequests and it can be asked for the
+ * current configuration.
+ * 
+ * Generally the SensorDataManager is used to create these data producers.
  *
  * Date created: Nov 30, 2004
  *
@@ -24,18 +29,42 @@ import org.concord.framework.data.stream.DataProducer;
 public interface SensorDataProducer
 	extends DataProducer
 {
+	/**
+	 * This determines if the deivice is attached.  This is 
+	 * generally called by the InterfaceManager
+	 * @return
+	 */
 	public boolean isAttached();
 	
+	/**
+	 * Configure the sensor device.  This is called by the InterfaceManager
+	 * It must be done after the underlying device is opened, and
+	 * before start is called.
+	 */
 	public ExperimentConfig configure(ExperimentRequest experiment);
 	
 	/**
 	 * This returns the configuration attached to the interface
-	 * right now.  (if it is available)
+	 * right now.  (if it is available).  If canDetectSensors() returns
+	 * true then this method should return the most acurrate list of 
+	 * sensors.  If canDetectSensors is false then this will probably
+	 * return the configuration most recently set on the device with the
+	 * configure method.
 	 * @return
 	 */
 	public ExperimentConfig getCurrentConfig();
 	
+	/**
+	 * This returns true if this device can detect if sensor are attached.
+	 * 
+	 * @return
+	 */
 	public boolean canDetectSensors();
 	
+	/**
+	 * Close the underlying device.  This is generally handled by the
+	 * InterfaceManager.
+	 *
+	 */
 	public void close();
 }

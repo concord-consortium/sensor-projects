@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2004-12-18 07:01:31 $
+ * $Revision: 1.5 $
+ * $Date: 2005-01-06 15:59:45 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -14,6 +14,11 @@ import org.concord.framework.data.DataDimension;
 
 /**
  * SensorConfiguration
+ * 
+ * This is a configuration of a a sensor attached to a sensor device.
+ * The configuration is probably the result of sending a SensorRequest to
+ * the sensor device.
+ * 
  * Class name and description
  *
  * Date created: Nov 12, 2004

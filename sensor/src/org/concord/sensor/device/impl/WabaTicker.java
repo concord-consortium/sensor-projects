@@ -6,7 +6,6 @@
  */
 package org.concord.sensor.device.impl;
 
-import org.concord.sensor.device.Ticker;
 
 import waba.ui.Control;
 import waba.ui.ControlEvent;

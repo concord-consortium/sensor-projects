@@ -9,16 +9,20 @@ package org.concord.sensor;
 import org.concord.framework.data.DataDimension;
 
 /**
- * @author Informaiton Services
+ * This is sent to a SensorDataProducer and then to a SensorDevice
+ * to request a particular sensor.  The ExperimentRequest contains 
+ * a collection of these SensorRequests.
+ * 
+ * @author Scott Cytacki
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
  */
 public interface SensorRequest 
 {
 	/**
-	 * This is the type of quantity one of the types above.
-	 * @return
+	 * This is the type of quantity.  The types are defined in the 
+	 * @see org.concord.sensor.SensorConfig.
+	 * @return type of quantity
 	 */
 	public int getType();
 	
@@ -26,29 +30,29 @@ public interface SensorRequest
 	 * This is the maximum step size between values.  This
 	 * is dependent on the units returned by this sensor.  There
 	 * will be implicit units for each quantity, and this step
-	 * size will be in those units.
+	 * size will be in those units.  The implict unit will also
+	 * be available by getUnit(), however that can be ignored because
+	 * the units will always be the same for each quantity.  These
+	 * implicity units can be found here 
+	 * FIXME add url to implicit unit mapping.
 	 * 
-	 * When the actual config is returned this value should
-	 * be the actual step size.
 	 * @return
 	 */
 	public float getStepSize();
 	
 	/**
+	 * This should be ignored by sensor devices.  This value is only used
+	 * by display wigets.  
+	 * 
 	 * This is used by the author to set the precision as a power of
 	 * 10 that they wish to be displayed in the graph, table, or other
 	 * display of this data.  For example:
 	 * setting this to -1 will give a 0.1 precision
 	 * setting this to 0 will give integer precision.
 	 * 
-	 * Most SensorDevices can ignore this because this will be handled
-	 * automatically by the AbstractSensorDevice class. 
-	 * 
-	 * If we do split this up into two interfaces or classes this
-	 * property should only be in the interface used by authors.
-	 * @return
+	 * @return display precision as a power of 10
 	 */
-	public int getDisplayPrecsion();
+	public int getDisplayPrecision();
 	
 	/**
 	 * This is the port the sensor is or should be plugged into.
@@ -61,21 +65,20 @@ public interface SensorRequest
 	 * 
 	 * The ports in a experiment should be continuous starting at 0. 
 	 * The SensorDevice implementation should assign these ports to the 
-	 * first available physical port that has the correct type.  Ports
-	 * types could be analog, digital or some other special type.
+	 * first available physical port that can handle this type of of
+	 * sensor. 
 	 *        
 	 * @return
 	 */
 	public int getPort();
 	
 	/**
-	 * The unit of the sensor plugged in, or the unit
-	 * of the requested sensor.
+	 * The unit of the requested sensor.
 	 * 
-	 * This value can probably be ignored in the request
-	 * because the unit is implicit based on the quantity
-	 * however it should be set correctly incase someone 
-	 * wants to use it.
+	 * This will be set to the implicit unit of this type
+	 * of sensor.  Most implementations will probably ignore this
+	 * and just hard code the implicit units in the implementation.
+	 * 
 	 * @return
 	 */
 	public DataDimension getUnit();

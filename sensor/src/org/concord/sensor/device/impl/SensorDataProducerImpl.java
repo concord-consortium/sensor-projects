@@ -12,7 +12,6 @@ import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
-import org.concord.sensor.device.Ticker;
 
 import waba.sys.Vm;
 
@@ -171,7 +170,7 @@ public class SensorDataProducerImpl
 			chDescrip.setUnit(sensConfigs[i].getUnit());
 
 			if(sensRequests != null) {
-				chDescrip.setPrecision(sensRequests[i].getDisplayPrecsion());
+				chDescrip.setPrecision(sensRequests[i].getDisplayPrecision());
 			}
 			
 			chDescrip.setNumericData(true);

@@ -160,31 +160,9 @@ public class SensorDataProducerImpl
 	 */
 	public final ExperimentConfig configure(ExperimentRequest request, 
 			ExperimentConfig result)
-	{		
-		SensorRequest [] sensRequests = request.getSensorRequests();
-			
-		System.out.println("configure: ExperimentConfig:");
-		
-		SensorConfig [] sensConfigs = result.getSensorConfigs();
-		System.out.println(" numSensors " + sensConfigs.length);
-		dDesc.setChannelsPerSample(sensConfigs.length);
-		System.out.println(" period " + result.getPeriod());
-		dDesc.setDt(result.getPeriod());
-		dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
-		
-		for(int i=0; i<sensConfigs.length; i++) {
-			DataChannelDescription chDescrip = new DataChannelDescription();
-			chDescrip.setName(sensConfigs[i].getName());
-			chDescrip.setUnit(sensConfigs[i].getUnit());
-
-			if(sensRequests != null) {
-				chDescrip.setPrecision(sensRequests[i].getDisplayPrecision());
-			}
-			
-			chDescrip.setNumericData(true);
-		}
-		
-		return result;
+	{
+		DataStreamDescUtil.setupDescription(dDesc, request, result);
+		return result;		
 	}
 	
 	public final void start()

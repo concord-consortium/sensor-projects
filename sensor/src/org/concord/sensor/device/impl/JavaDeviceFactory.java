@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2005-01-19 05:34:34 $
+ * $Revision: 1.7 $
+ * $Date: 2005-01-27 16:55:36 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -17,6 +17,7 @@ import org.concord.sensor.cc.CCInterface1;
 import org.concord.sensor.cc.CCInterface2;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.pseudo.PseudoJavaSensorDevice;
 
 
 /**
@@ -31,6 +32,7 @@ import org.concord.sensor.device.SensorDevice;
 public class JavaDeviceFactory
 	implements DeviceFactory
 {
+	public final static int PSEUDO_DEVICE = 0;
 	public final static int VERNIER_GO_LINK = 10;
 	public final static int TI_CONNECT = 20;
 	public final static int FOURIER = 30;
@@ -75,6 +77,9 @@ public class JavaDeviceFactory
 		SensorDevice device = null;
 		
 		switch(id) {
+			case PSEUDO_DEVICE:
+				device = new PseudoJavaSensorDevice();
+				break;
 			case VERNIER_GO_LINK:
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
 				break;

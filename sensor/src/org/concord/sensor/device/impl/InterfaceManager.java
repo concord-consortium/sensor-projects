@@ -131,6 +131,10 @@ public class InterfaceManager implements SensorDataManager
 			// prompt the user to connect one of the supported devices
 			// then try again, recursively?
 			System.err.println("Couldn't find attached device");
+			
+			// for now we need to give them a default device
+			// so we can test this code
+			
 			return;
 		}
 				

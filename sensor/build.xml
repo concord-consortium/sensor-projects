@@ -49,6 +49,9 @@
 			<zipfileset prefix="${jar-name}-src" dir="..">
 				<patternset refid="all-project-files"/>
 			</zipfileset>
+			<zipfileset prefix="${jar-name}-src" dir="doc">
+				<include name="dist-README.txt"/>
+			</zipfileset>
 		</zip>
 	</target>
 
@@ -59,7 +62,8 @@
 			<fileset dir="..">
 				<patternset refid="all-project-files"/>
 			</fileset>
-		</copy>
+			<fileset dir="doc" includes="dist-README.txt"/>
+		</copy>		
 	</target>
 	
 </project>

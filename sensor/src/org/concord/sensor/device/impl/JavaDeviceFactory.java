@@ -1,8 +1,8 @@
 /*
  * Last modification information:
- * $Revision: 1.12 $
- * $Date: 2005-02-24 00:59:16 $
- * $Author: dmarkman $
+ * $Revision: 1.13 $
+ * $Date: 2005-03-02 06:59:31 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -13,6 +13,7 @@ import java.util.Hashtable;
 
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
+import org.concord.sensor.device.DeviceIdAware;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.Ticker;
 
@@ -87,6 +88,8 @@ public class JavaDeviceFactory
 			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
 			    break;
 			case DATA_HARVEST_USB:
+			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
+			    break;			    
 			case DATA_HARVEST_CF:
 			case IMAGIWORKS_SERIAL:
 			case IMAGIWORKS_SD:
@@ -115,6 +118,9 @@ public class JavaDeviceFactory
 				
 				device = (SensorDevice) sensDeviceClass.newInstance();
 				
+				if(device instanceof DeviceIdAware) {
+				    ((DeviceIdAware)device).setDeviceId(id);
+				}
 				device.open(config.getConfigString());
 				
 			} catch (Exception e) {

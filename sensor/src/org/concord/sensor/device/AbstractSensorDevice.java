@@ -39,6 +39,9 @@ public abstract class AbstractSensorDevice
 		ticker.setInterfaceManager(this);
 		
 		messageHandler = h;
+		
+		processedData = new float[DEFAULT_BUFFERED_SAMPLE_NUM];
+		processedDataEvent.setData(processedData);
 	}
 
 	protected void tick()
@@ -63,8 +66,11 @@ public abstract class AbstractSensorDevice
 			return;
 	    }
 	    
+	    totalDataRead += ret;
 	    if(totalDataRead == 0) {
-			// we didn't get any data.  hmm..
+			// we didn't get any data. 
+	    	// keep track of this so we can report there is
+	    	// is a problem.  If this persists too long
 			timeWithoutData++;
 			if(timeWithoutData > DATA_TIME_OUT){
 				stop();
@@ -127,6 +133,10 @@ public abstract class AbstractSensorDevice
 	}
 	
 	protected abstract int getRightMilliseconds();
+	
+	protected abstract void openDevice(String openString);
+	
+	protected abstract void closeDevice();
 	
 	protected abstract void deviceStart();
 	

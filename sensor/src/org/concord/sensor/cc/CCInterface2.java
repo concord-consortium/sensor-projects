@@ -464,6 +464,20 @@ public class CCInterface2 extends AbstractJavaSensorDevice
 		}		   
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.AbstractSensorDevice#openDevice(java.lang.String)
+	 */
+	protected void openDevice(String openString) {
+		// TODO Auto-generated method stub
+		// should get the serial port out of the string
+		// I think		
+	}
+	
+	protected void closeDevice()
+	{
+		
+	}
+	
 	public void deviceStart()
 	{
 		// If this fails from some reason we might need to 

@@ -1,13 +1,15 @@
 /*
  * Last modification information:
  * $Revision: 1.1 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Date: 2004-12-13 07:16:33 $
  * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor.device;
+
+import java.lang.reflect.Constructor;
 
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
@@ -19,7 +21,7 @@ import org.concord.sensor.cc.CCInterface2;
 
 
 /**
- * DefaultDeviceFactory
+ * JavaDeviceFactory
  * Class name and description
  *
  * Date created: Dec 1, 2004
@@ -27,7 +29,7 @@ import org.concord.sensor.cc.CCInterface2;
  * @author scott<p>
  *
  */
-public class DefaultDeviceFactory
+public class JavaDeviceFactory
 	implements DeviceFactory
 {
 	public final static int VERNIER_GO_LINK = 10;
@@ -44,25 +46,27 @@ public class DefaultDeviceFactory
 	public final static int COACH = 80;
 	
 	Ticker ticker = null;
-	UserMessageHandler messager = null;
-	
+		
 	/**
 	 * 
 	 */
-	public DefaultDeviceFactory(Ticker ticker, UserMessageHandler messager)
+	public JavaDeviceFactory()
 	{
-		this.ticker = ticker;
-		this.messager = messager;
+		ticker = new JavaTicker();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.DeviceFactory#createDevice(org.concord.sensor.DeviceConfig)
 	 */
-	public SensorDevice createDevice(DeviceConfig config)
+	public SensorDevice createDevice(DeviceConfig config, UserMessageHandler messager)
 	{
 		int id = config.getDeviceId();
+		String className = null;
+		
 		switch(id) {
 			case VERNIER_GO_LINK:
+				className = "org.concord.sensor.nativelib.NativeSensorDevice";
+				break;
 			case TI_CONNECT:
 			case FOURIER:
 			case DATA_HARVEST_USB:
@@ -86,7 +90,29 @@ public class DefaultDeviceFactory
 				return new CCInterface2(ticker, messager);
 		}
 
+		// if we are here we have a classname
+		try {
+			Class sensDeviceClass = 
+				getClass().getClassLoader().loadClass(className);
+			Constructor constructor = sensDeviceClass.getConstructor(
+					new Class [] {Ticker.class, UserMessageHandler.class});
+			
+			AbstractSensorDevice device = (AbstractSensorDevice)
+			constructor.newInstance(new Object [] {ticker, messager});
+			
+			device.openDevice(config.getConfigString());
+			
+			return device;
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
 		return null;
 	}
 
+	public void destroyDevice(SensorDevice device)
+	{
+		((AbstractSensorDevice)device).closeDevice();
+	}
 }

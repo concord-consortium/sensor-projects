@@ -1,7 +1,7 @@
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2004-12-10 07:22:02 $
+ * $Revision: 1.2 $
+ * $Date: 2004-12-13 07:16:33 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -37,6 +37,12 @@ public class DeviceConfig
 	 */
 	protected String configString;
 
+	public DeviceConfig(int deviceId, String configString)
+	{
+		this.deviceId = deviceId;
+		this.configString = configString;
+	}
+	
 	public void setDeviceId(int id)
 	{
 		deviceId = id;

@@ -42,11 +42,13 @@ public class InterfaceManager
 		SensorDevice attachedDevice = null;
 		
 		for(int i=0; i<deviceConfigs.length; i++) {
-			SensorDevice device = deviceFactory.createDevice(deviceConfigs[i]);
+			SensorDevice device = 
+				deviceFactory.createDevice(deviceConfigs[i], messageHandler);
 			if(device.isAttached()){
 				attachedDevice = device;
 				break;
 			}
+			deviceFactory.destroyDevice(device);
 		}
 		
 		if(attachedDevice == null) {

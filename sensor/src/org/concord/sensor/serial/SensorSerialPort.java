@@ -26,6 +26,8 @@ public interface SensorSerialPort
 	public abstract void close()
 		throws IOException;
 	
+	public boolean isOpen();
+	
 	public abstract void setSerialPortParams( int b, int d, int s, int p )
 		throws IOException;
 	public abstract int getBaudRate();

@@ -37,6 +37,12 @@ public class SensorSerialPortRXTX
 		if(commDriver == null) {
 			commDriver = new RXTXCommDriver();
 			commDriver.initialize();
+
+			Enumeration ports = CommPortIdentifier.getPortIdentifiers();
+			while(ports.hasMoreElements()) {
+				CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
+				System.out.println("RXTX: found port: " + portID.getName());
+			}
 		}
 		
 		if(port != null) {
@@ -44,12 +50,7 @@ public class SensorSerialPortRXTX
 			throw new RuntimeException("The port was not closed before being opened");
 		}
 		
-		Enumeration ports = CommPortIdentifier.getPortIdentifiers();
-		while(ports.hasMoreElements()) {
-			CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
-			System.out.println("found port: " + portID.getName());
-		}
-		
+		System.out.println("RXTX: opening port: " + portName);
 		port = (gnu.io.SerialPort) commDriver.getCommPort(portName, 
 				CommPortIdentifier.PORT_SERIAL);
 		
@@ -64,12 +65,17 @@ public class SensorSerialPortRXTX
 	public void close() throws IOException 
 	{
 		if(port == null) {
-		    System.err.println("Port was not opened before being closed");
 		    return;
 		}
 		port.close();
 		port = null;
 	}
+	
+	public boolean isOpen()
+	{
+	    return port != null;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.dataharvest.SerialPort#setSerialPortParams(int, int, int, int)
 	 */

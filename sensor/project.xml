@@ -13,7 +13,7 @@
     <dependency>
       <groupId>framework</groupId>
       <artifactId>framework</artifactId>
-      <version>1.0</version>
+      <version>SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>

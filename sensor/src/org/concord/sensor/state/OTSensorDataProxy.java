@@ -11,7 +11,6 @@ import java.util.Vector;
 import org.concord.framework.data.stream.DataConsumer;
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataProducer;
-import org.concord.framework.data.stream.DataProducerProxy;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;

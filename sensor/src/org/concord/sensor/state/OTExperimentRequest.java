@@ -24,9 +24,9 @@ public class OTExperimentRequest extends DefaultOTObject implements
 		public float getPeriod();
 		public void setPeriod(float period);
 		
-		public final static int DEFAULT_numberOfSamples = -1;
-		public int getNumberOfSamples();
-		public void setNumberOfSamples(int numberOfSamples);
+		public final static float DEFAULT_recordingTime = -1;
+		public float getRecordingTime();
+		public void setRecordingTime(float recordingTime);
 		
 		OTObjectList getSensorRequests();		
 	};
@@ -49,8 +49,14 @@ public class OTExperimentRequest extends DefaultOTObject implements
 	 * @see org.concord.sensor.ExperimentRequest#getNumberOfSamples()
 	 */
 	public int getNumberOfSamples() 
-	{
-		return resources.getNumberOfSamples();
+	{	 
+	    float recordingTime = resources.getRecordingTime();
+	    float period = resources.getPeriod();
+	    if(Float.isNaN(recordingTime) ||
+	            Float.isNaN(period)) {
+	        return -1;
+	    }
+		return (int)(recordingTime/period);
 	}
 
 	/* (non-Javadoc)

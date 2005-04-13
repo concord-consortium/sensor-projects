@@ -71,10 +71,6 @@ public class InterfaceManager implements SensorDataManager
 	}
 		
 	/**
-	 * A request is sent in along with a data consumer.  A SensorDataProducer
-	 * is created and then passed to the consumer.  This method
-	 * does not directly return a SensorDataProducer because it might take
-	 * a while to create and initialize it.   
 	 * 
 	 * @param request
 	 * @param consumer

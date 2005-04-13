@@ -18,10 +18,9 @@ import org.concord.sensor.impl.SensorUnit;
  *
  */
 public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice 
-{
+{   
+    PseudoSensorConfig [] sensConfigs; 
 	float time = 0;
-	float sinOffset = 10;
-	float sinMagnitude = 5;
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#open(java.lang.String)
@@ -54,7 +53,7 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 		currentConfig.setDataReadPeriod(0.1f);
 		
 		SensorRequest [] sensRequests = request.getSensorRequests();
-		SensorConfig [] sensConfigs = new SensorConfig [sensRequests.length]; 
+		sensConfigs = new PseudoSensorConfig [sensRequests.length]; 
 		for(int i =0; i<sensRequests.length; i++) {
 			PseudoSensorConfig sensConfig = new PseudoSensorConfig();
 			sensConfigs[i] = sensConfig;
@@ -65,8 +64,8 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 			float max = sensRequests[i].getRequiredMax();
 			float min = sensRequests[i].getRequiredMin();
 			if(!Float.isNaN(max) && !Float.isNaN(min)){
-			    sinOffset = (max + min) / 2;
-			    sinMagnitude = (max - min) / 2;
+			    sensConfig.setSinOffset((max + min) / 2);
+			    sensConfig.setSinMagnitude((max - min) / 2);
 			}
 		}
 		currentConfig.setSensorConfigs(sensConfigs);
@@ -94,8 +93,12 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 		// was X but we are only return a single value every time, so if the 
 		// read takes longer than X then we will be behind.  But for testing
 		// purposes this should be ok
-		values[offset] = (float)(sinOffset + sinMagnitude*Math.sin(time));
-		time += 0.1;
+	    for(int i=0; i<sensConfigs.length; i++) {
+	        float sinOffset = sensConfigs[i].getSinOffset();
+	        float sinMagnitude = sensConfigs[i].getSinMagnitude();
+	        values[offset++] = (float)(sinOffset + sinMagnitude*Math.sin(time));
+	    }
+	    time += 0.1;
 		return 1;		
 	}
 

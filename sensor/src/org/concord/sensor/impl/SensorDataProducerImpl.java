@@ -203,6 +203,12 @@ public class SensorDataProducerImpl
 	
 	public final void start()
 	{
+	    if(ticker.isTicking()) {
+	        // this is an error some other object is using
+	        // this ticker, or we are trying to start it twice
+	        throw new RuntimeException("Trying to start device twice");
+	    }
+	    
 		device.start();
 		
 		timeWithoutData = 0;
@@ -211,6 +217,14 @@ public class SensorDataProducerImpl
 
 		startTimer = System.currentTimeMillis();
 		int dataReadMillis = (int)(experimentConfig.getDataReadPeriod()*1000.0);
+		// Check if the data read millis is way below the experiment period
+		// if it is then tick code will time out incorrectly.  So 
+		// we try to correct it so that the read time is no less than
+		// 1/5th of the period.
+		int autoDataReadMillis = (int)(experimentConfig.getPeriod()*1000/5);
+		if(dataReadMillis < autoDataReadMillis){
+		    dataReadMillis = autoDataReadMillis;
+		}
 		ticker.startTicking(dataReadMillis);
 
 	}

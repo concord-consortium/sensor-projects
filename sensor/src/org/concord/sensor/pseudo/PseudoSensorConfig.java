@@ -23,6 +23,8 @@ public class PseudoSensorConfig
 	int port = -1;
 	String name = null;
 	private DataDimension unit;
+    private float sinOffset = 5;
+    private float sinMagnitude = 10;
 	
 	
 	/* (non-Javadoc)
@@ -112,4 +114,29 @@ public class PseudoSensorConfig
 		return null;
 	}
 
+    /**
+     * @param f
+     */
+    public void setSinOffset(float f)
+    {
+        sinOffset = f;        
+    }
+
+    public float getSinOffset()
+    {
+        return sinOffset;
+    }
+    
+    /**
+     * @param f
+     */
+    public void setSinMagnitude(float f)
+    {
+        sinMagnitude = f;        
+    }
+
+    public float getSinMagnitude()
+    {
+        return sinMagnitude;
+    }
 }

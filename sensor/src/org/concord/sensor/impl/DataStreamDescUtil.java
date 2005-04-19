@@ -61,7 +61,7 @@ public class DataStreamDescUtil
 			dDesc.setDt(request.getPeriod());			
 		}
 		
-		for(int i=firstValueChannelIndex; i<sensRequests.length; i++) {
+		for(int i=0; i<sensRequests.length; i++) {
 			DataChannelDescription chDescrip = new DataChannelDescription();
 			if(result != null) {
 				chDescrip.setName(sensConfigs[i].getName());
@@ -70,7 +70,7 @@ public class DataStreamDescUtil
 			
 			chDescrip.setPrecision(sensRequests[i].getDisplayPrecision());			
 			chDescrip.setNumericData(true);
-			dDesc.setChannelDescription(chDescrip, i);
+			dDesc.setChannelDescription(chDescrip, i+firstValueChannelIndex);
 		}		
 	}
 }

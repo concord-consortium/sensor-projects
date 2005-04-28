@@ -350,11 +350,11 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				break;
 			case SENSOR_ID_GO_MOTION:
 				if(request &&
-					(request->type == QUANTITY_VELOCITY)){
+					(request->type == QUANTITY_DISTANCE)){
 					 valid = 1;
 				}
 				sprintf(sensConfig->unitStr, "m");
-				sensConfig->type = QUANTITY_VELOCITY;
+				sensConfig->type = QUANTITY_DISTANCE;
 				sensConfig->stepSize = 0.01;
 				break;
 				

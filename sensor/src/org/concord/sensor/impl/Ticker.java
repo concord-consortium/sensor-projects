@@ -16,13 +16,27 @@ package org.concord.sensor.impl;
  */
 public interface Ticker 
 {
-	public void startTicking(int millis);
+    /**
+     * If the passed in listener is not equal to the current 
+     * listener then the current listener is notified of this
+     * start event
+     * 
+     * @param millis
+     * @param listener
+     */
+	public void startTicking(int millis, TickListener listener);
 	
-	public void stopTicking();
+    /**
+     * If the passed in listener is not equal to the current 
+     * listener then the current listener is notified of this
+     * stop event
+     * 
+     * @param millis
+     * @param listener
+     */
+	public void stopTicking(TickListener listener);
 	
 	public boolean isTicking();
-	
-	public void setTickListener(TickListener tListener);		
 	
 	public TickListener getTickListener();
 	

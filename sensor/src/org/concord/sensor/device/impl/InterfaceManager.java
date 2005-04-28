@@ -98,6 +98,10 @@ public class InterfaceManager implements SensorDataManager
 			// check if it is attached.
 			// if not then it should be closed.
 			// this means we only support one device at a time
+		    if(ticker.isTicking()) {
+		        ticker.stopTicking(null);
+		    }
+		    
 			if(!currentDevice.isAttached()) {
 				deviceFactory.destroyDevice(currentDevice);
 				currentDevice = null;
@@ -127,6 +131,14 @@ public class InterfaceManager implements SensorDataManager
 			return null;
 		}
 
+		if(ticker.isTicking()) {
+		    // we need to stop this ticker from running
+		    // it was probably running from being added to another
+		    // dataProducer.  It would be better if we had an instance
+		    // of this dataProducer so we could stop it directly.
+		    ticker.stopTicking(null);
+		}
+		
 		SensorDataProducer dataProducer = 
 		    new SensorDataProducerImpl(currentDevice, ticker, messageHandler);
 

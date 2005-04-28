@@ -14,6 +14,7 @@ import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
+import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
@@ -129,7 +130,11 @@ public class OTSensorDataProxy extends DefaultOTObject
 				producer.addDataListener(listener);
 			}
 		}
-		producer.configure(request);
+		ExperimentConfig config = producer.configure(request);
+		if(!config.isValid()) {
+		    return;
+		}
+		
 		producer.start();
 	}
 	

@@ -15,4 +15,6 @@ package org.concord.sensor.impl;
 public interface TickListener
 {
     public void tick();
+    
+    public void tickStopped();
 }

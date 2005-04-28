@@ -47,6 +47,7 @@ public class SensorDataProducerImpl
 		
 		ticker = t;
 		
+		
 		messageHandler = h;
 		
 		processedData = new float[DEFAULT_BUFFERED_SAMPLE_NUM];
@@ -60,6 +61,11 @@ public class SensorDataProducerImpl
 	{
 	    int ret;
 
+	    /*
+		if(messageHandler != null) messageHandler.showOptionMessage(null, "Message test",			
+				continueOptions, continueOptions[0]);
+	    */
+	    
 	    // reset the total data read so we can track data coming from
 	    // flushes
 	    totalDataRead = 0;
@@ -76,6 +82,9 @@ public class SensorDataProducerImpl
 	    if(ret < 0) {
 			stop();
 			String message = device.getErrorMessage(ret);
+			if(message == null) {
+			    message = "Error reading information from device";
+			}
 			if(messageHandler != null) messageHandler.showOptionMessage(message, "Interface Error",
 					continueOptions, continueOptions[0]);
 			return;
@@ -106,6 +115,11 @@ public class SensorDataProducerImpl
 			processedDataEvent.setNumSamples(ret);
 			notifyDataListenersReceived(processedDataEvent);				
 		} 	
+	}
+	
+	public void tickStopped()
+	{
+	    deviceStop(false);
 	}
 	
 	/*
@@ -160,6 +174,10 @@ public class SensorDataProducerImpl
 	 */
 	public ExperimentConfig configure(ExperimentRequest request)
 	{
+	    if(ticker.isTicking()) {
+	        ticker.stopTicking(this);
+	    }
+	    
 		ExperimentConfig actualConfig = device.configure(request);
 		if(actualConfig == null || !actualConfig.isValid()) {
 			// prompt the user because the attached sensors do not
@@ -203,17 +221,23 @@ public class SensorDataProducerImpl
 	
 	public final void start()
 	{
+	    if(ticker == null) {
+	        throw new RuntimeException("Null ticker object in start");
+	    }
+	    
 	    if(ticker.isTicking()) {
 	        // this is an error some other object is using
 	        // this ticker, or we are trying to start it twice
 	        throw new RuntimeException("Trying to start device twice");
 	    }
 	    
+	    if(device == null) {
+	        throw new RuntimeException("Null device in start");
+	    }
+	    
 		device.start();
 		
 		timeWithoutData = 0;
-
-		ticker.setTickListener(this);
 
 		startTimer = System.currentTimeMillis();
 		int dataReadMillis = (int)(experimentConfig.getDataReadPeriod()*1000.0);
@@ -225,7 +249,7 @@ public class SensorDataProducerImpl
 		if(dataReadMillis < autoDataReadMillis){
 		    dataReadMillis = autoDataReadMillis;
 		}
-		ticker.startTicking(dataReadMillis);
+		ticker.startTicking(dataReadMillis, this);
 
 	}
 	
@@ -247,23 +271,32 @@ public class SensorDataProducerImpl
 
 		// just to make sure
 		// even if we are not ticking just incase
-		ticker.setTickListener(null);
-		ticker.stopTicking();
+		ticker.stopTicking(this);
 
+		deviceStop(ticking);
+	}
+
+	
+	protected void deviceStop(boolean ticking)
+	{
 		device.stop(ticking);
 
 		// FIXME we should get the time the device sends back
 		// instead of using our own time.
-		dataTimeOffset += (System.currentTimeMillis() - startTimer) / 1000f;
+		dataTimeOffset += (System.currentTimeMillis() - startTimer) / 1000f;	    
 	}
-
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorDataProducer#isAttached()
 	 */
 	public boolean isAttached()
 	{
-		// TODO Auto-generated method stub
+	    if(ticker != null && ticker.isTicking()) {
+	        // this will have the ticker send a tickStopped event 
+	        // which should cause us to stop the device
+	        ticker.stopTicking(null);
+	    }
+	    
 		return device.isAttached();
 	}
 	

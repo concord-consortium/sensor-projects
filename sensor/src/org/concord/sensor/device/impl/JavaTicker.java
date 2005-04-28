@@ -27,7 +27,7 @@ public class JavaTicker extends Thread
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.Ticker#start(int)
 	 */
-	synchronized public void startTicking(int millis) 
+	synchronized public void startTicking(int millis, TickListener listener) 
 	{
 		this.millis = millis;
 		ticking = true;
@@ -37,11 +37,30 @@ public class JavaTicker extends Thread
 			started = true;
 			start();
 		}
+
+		if(listener == null) {
+		    throw new RuntimeException("Started ticker with null listener");
+		}
+		
+	    // We check if the listener is null here
+	    // We want to make sure the no one is expecting a tick
+	    // and isn't getting one, so each user of this ticker
+	    // needs to set this to null when they are done with it
+	    if(tickListener != null){
+	        throw new RuntimeException("Inconsitant ticker state");
+	    }
+	    tickListener = listener;
 	}
 
-	synchronized public void stopTicking() 
+	synchronized public void stopTicking(TickListener listener) 
 	{
 		ticking = false;
+		
+		if(listener != tickListener && tickListener != null) {
+		    tickListener.tickStopped();
+		}
+		
+		tickListener = null;
 	}
 	
 	/* (non-Javadoc)
@@ -83,30 +102,33 @@ public class JavaTicker extends Thread
 		return new JavaTicker();
 	}
 	
-	synchronized public void run()
+	public void run()
 	{
 		while(true) {
-			if(!ticking) {
-				try {
-					wait();
-				} 
-				catch(InterruptedException e) {					
-					e.printStackTrace();
-				}
-			}
-	
-			if(tickListener != null) {
-			    tickListener.tick();
-			} else {
-			    System.err.println("ticking a null listener");
-			}
-			
-			try {
-				// We wait so that we release the lock
-				wait(millis);										
-			}
-			catch(InterruptedException e) {				
-			}
+		    synchronized(this) {
+		        if(!ticking) {
+		            try {
+		                wait();
+		            } 
+		            catch(InterruptedException e) {					
+		                e.printStackTrace();
+		            }
+		        }
+		        
+		        if(tickListener != null) {
+		            tickListener.tick();
+		        } else {
+		            System.err.println("ticking a null listener");
+		        }
+		        
+		        try {
+		            // We wait so that we release the lock
+		            wait(millis);										
+		        }
+		        catch(InterruptedException e) {				
+		            e.printStackTrace();
+		        }
+		    }
 		}
 	}
 }

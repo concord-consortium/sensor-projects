@@ -16,8 +16,8 @@
       <version>SNAPSHOT</version>
       <type>jar</type>
         <properties>
-          <cc.proj>Security</cc.proj>
-          <cc.path>Security/lib</cc.path>
+          <cc.proj>Framework</cc.proj>
+          <cc.path>Framework/lib</cc.path>
           <eclipse.dependency>true</eclipse.dependency>
       </properties>
     </dependency>

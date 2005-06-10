@@ -24,7 +24,7 @@
     <dependency>
       <groupId>thirdparty</groupId>
       <artifactId>RXTXcomm</artifactId>
-      <version>2.1.7-pre17</version>
+      <version>cc-1.0-2.1.7-pre17</version>
       <type>jar</type>
     </dependency>
   </dependencies>

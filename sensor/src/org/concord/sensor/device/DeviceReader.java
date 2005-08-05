@@ -1,7 +1,6 @@
-
 /*
  *  Copyright (C) 2004  The Concord Consortium, Inc.,
- *  10 Concord Crossing, Concord, MA 01741
+ *  10 Concord Crossing, Concord, MA 01742
  *
  *  Web Site: http://www.concord.org
  *  Email: info@concord.org
@@ -20,12 +19,12 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- */
+ * END LICENSE */
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2005-05-31 20:11:08 $
+ * $Revision: 1.3 $
+ * $Date: 2005-08-05 18:26:08 $
  * $Author: maven $
  *
  * Licence Information

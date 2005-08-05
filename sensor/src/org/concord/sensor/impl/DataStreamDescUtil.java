@@ -68,15 +68,16 @@ public class DataStreamDescUtil
 		
 		if(result != null) {
 			dDesc.setDt(result.getPeriod());
+            DataChannelDescription chDescrip = new DataChannelDescription();
+            chDescrip.setName("time");
+            chDescrip.setUnit(new SensorUnit("s"));
+            chDescrip.setPrecision(-2);
+            chDescrip.setNumericData(true);
 			if(result.getExactPeriod()) {
 				dDesc.setDataType(DataStreamDescription.DATA_SEQUENCE);
+                dDesc.setDtChannelDescription(chDescrip);
 			} else {
 				dDesc.setDataType(DataStreamDescription.DATA_SERIES);
-				DataChannelDescription chDescrip = new DataChannelDescription();
-				chDescrip.setName("time");
-				chDescrip.setUnit(new SensorUnit("s"));
-				chDescrip.setPrecision(-2);
-				chDescrip.setNumericData(true);
 				dDesc.setChannelDescription(chDescrip, 0);				
 				firstValueChannelIndex = 1;
 				dDesc.setChannelsPerSample(sensRequests.length+1);

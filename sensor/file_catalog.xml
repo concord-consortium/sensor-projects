@@ -40,11 +40,18 @@
         <md5sum>5c3af6c50d13aa0d872df65c4f92e062</md5sum>
     </file>
     <file>
+        <name>file_catalog.xml</name>
+        <rev>1.2</rev>
+        <modtime>1129147203000</modtime>
+        <size>14351</size>
+        <md5sum>c939373110bc432855327febdfd6fc6f</md5sum>
+    </file>
+    <file>
         <name>project.xml</name>
-        <rev>1.7</rev>
-        <modtime>1118426838000</modtime>
-        <size>1292</size>
-        <md5sum>d96037006a31952a5494ed55f1fe330d</md5sum>
+        <rev>1.8</rev>
+        <modtime>1129147211000</modtime>
+        <size>1428</size>
+        <md5sum>d9623814a44772fb5f2e1d5032bd8b5d</md5sum>
     </file>
     <file>
         <name>bin/librxtxSerial.jnilib</name>

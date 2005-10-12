@@ -7,7 +7,7 @@
     <artifactId>sensornative</artifactId>
     <name>SensorNative</name>
     <groupId>${pom.artifactId}</groupId>
-    <currentVersion>1.1</currentVersion>
+    <currentVersion>1.3</currentVersion>
     <repository />
     <dependencies>
         <dependency>

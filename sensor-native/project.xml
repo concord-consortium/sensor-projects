@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <!-- Inherit main project xml file -->
-  <extend>../Builds/project.xml</extend>
-  <!-- Project specific parameters -->
-  <pomVersion>3</pomVersion>
-  <artifactId>sensornative</artifactId>
-  <name>SensorNative</name>
-  <groupId>${pom.artifactId}</groupId>
-  <currentVersion>1.0</currentVersion>
-  <repository />
-  <dependencies>
-    <dependency>
-      <groupId>framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>SNAPSHOT</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>sensor</groupId>
-      <artifactId>sensor</artifactId>
-      <version>SNAPSHOT</version>
-      <type>jar</type>
-    </dependency>
-  </dependencies>
+    <!-- Inherit main project xml file -->
+    <extend>../Builds/project.xml</extend>
+    <!-- Project specific parameters -->
+    <pomVersion>3</pomVersion>
+    <artifactId>sensornative</artifactId>
+    <name>SensorNative</name>
+    <groupId>${pom.artifactId}</groupId>
+    <currentVersion>1.3</currentVersion>
+    <repository />
+    <dependencies>
+        <dependency>
+            <groupId>framework</groupId>
+            <artifactId>framework</artifactId>
+            <version>1.4</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>sensor</groupId>
+            <artifactId>sensor</artifactId>
+            <version>1.1</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
 

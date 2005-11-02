@@ -87,7 +87,7 @@ public class DataStreamDescUtil
 		
 		for(int i=0; i<sensRequests.length; i++) {
 			DataChannelDescription chDescrip = new DataChannelDescription();
-			if(result != null) {
+			if(result != null && sensConfigs != null) {
 				chDescrip.setName(sensConfigs[i].getName());
 			}
 			chDescrip.setUnit(sensRequests[i].getUnit());

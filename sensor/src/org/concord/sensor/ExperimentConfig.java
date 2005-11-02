@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.10 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.11 $
+ * $Date: 2005-11-02 04:48:52 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -87,7 +87,7 @@ public interface ExperimentConfig
 	/**
 	 * This is the time between read calls that the device
 	 * prefers.  The units are seconds per read.  It can't be
-	 * guarunteed but the call will do its best to call 
+	 * guarunteed but the caller will do its best to call 
 	 * read at these times. Implementors should return 
 	 * smallest reasonable value.  Most likely the data will be displayed
 	 * in realtime, so a faster response time is better.

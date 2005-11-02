@@ -1,6 +1,7 @@
+
 /*
  *  Copyright (C) 2004  The Concord Consortium, Inc.,
- *  10 Concord Crossing, Concord, MA 01742
+ *  10 Concord Crossing, Concord, MA 01741
  *
  *  Web Site: http://www.concord.org
  *  Email: info@concord.org
@@ -19,7 +20,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * END LICENSE */
+ */
 
 /*
  * Created on Jan 25, 2005
@@ -32,7 +33,7 @@ import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceReader;
-import org.concord.sensor.device.impl.AbstractJavaSensorDevice;
+import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.impl.SensorUnit;
 
@@ -40,10 +41,12 @@ import org.concord.sensor.impl.SensorUnit;
  * @author scott
  *
  */
-public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice 
+public abstract class AbstractPseudoSensorDevice extends AbstractSensorDevice 
 {   
     PseudoSensorConfig [] sensConfigs; 
 	float time = 0;
+	
+	protected abstract boolean isValidFloat(float val);
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#open(java.lang.String)
@@ -86,7 +89,7 @@ public class PseudoJavaSensorDevice extends AbstractJavaSensorDevice
 			sensConfig.setUnit(sensRequests[i].getUnit());
 			float max = sensRequests[i].getRequiredMax();
 			float min = sensRequests[i].getRequiredMin();
-			if(!Float.isNaN(max) && !Float.isNaN(min)){
+			if(isValidFloat(max) && isValidFloat(min)){
 			    sensConfig.setSinOffset((max + min) / 2);
 			    sensConfig.setSinMagnitude((max - min) / 2);
 			}

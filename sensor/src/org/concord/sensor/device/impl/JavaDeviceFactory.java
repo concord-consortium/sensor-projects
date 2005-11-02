@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.16 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.17 $
+ * $Date: 2005-11-02 04:48:53 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -51,22 +51,8 @@ import org.concord.sensor.impl.Ticker;
  *
  */
 public class JavaDeviceFactory
-	implements DeviceFactory
-{
-	public final static int PSEUDO_DEVICE = 0;
-	public final static int VERNIER_GO_LINK = 10;
-	public final static int TI_CONNECT = 20;
-	public final static int FOURIER = 30;
-	public final static int DATA_HARVEST_USB = 40;
-	public final static int DATA_HARVEST_CF = 45;
-	public final static int IMAGIWORKS_SERIAL = 50;
-	public final static int IMAGIWORKS_SD = 55;
-	public final static int PASCO_SERIAL = 60;
-	public final static int CCPROBE_VERSION_0 = 70;
-	public final static int CCPROBE_VERSION_1 = 71;
-	public final static int CCPROBE_VERSION_2 = 72;
-	public final static int COACH = 80;
-	
+	implements DeviceFactory, DeviceID
+{	
 	Ticker ticker = null;
 		
 	Hashtable deviceTable = new Hashtable();
@@ -99,7 +85,7 @@ public class JavaDeviceFactory
 		
 		switch(id) {
 			case PSEUDO_DEVICE:
-				className = "org.concord.sensor.pseudo.PseudoJavaSensorDevice";
+				className = "org.concord.sensor.pseudo.JavaPseudoSensorDevice";
 				break;
 			case VERNIER_GO_LINK:
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";

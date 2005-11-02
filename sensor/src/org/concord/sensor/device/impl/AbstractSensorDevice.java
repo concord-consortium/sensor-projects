@@ -1,6 +1,7 @@
+
 /*
  *  Copyright (C) 2004  The Concord Consortium, Inc.,
- *  10 Concord Crossing, Concord, MA 01742
+ *  10 Concord Crossing, Concord, MA 01741
  *
  *  Web Site: http://www.concord.org
  *  Email: info@concord.org
@@ -19,7 +20,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * END LICENSE */
+ */
 
 /*
  * Created on Feb 15, 2005
@@ -38,11 +39,13 @@ import org.concord.sensor.impl.ExperimentConfigImpl;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class AbstractJavaSensorDevice 
+public abstract class AbstractSensorDevice 
 	implements SensorDevice 
 {
 	protected ExperimentConfigImpl currentConfig = null;
     protected boolean attached = false;
+
+    protected String portName;
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#isAttached()

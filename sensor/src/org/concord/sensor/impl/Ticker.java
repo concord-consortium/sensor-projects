@@ -70,4 +70,12 @@ public interface Ticker
 	 * @return
 	 */
 	public Ticker createNew();
+	
+	/**
+	 * This is needed in a few places
+	 * and putting it here allows us to abstract the java waba 
+	 * differences
+	 * @return
+	 */
+	public int currentTimeMillis();
 }

@@ -35,6 +35,9 @@ import org.concord.sensor.SensorDataProducer;
 
 /**
  * simpel implementation of the DataConsumer
+ * This class should be moved to the Data package
+ * actually I think this class or a similar one is
+ * already in the data pacakge
  * 
  * @author Dmitry Markman
  *

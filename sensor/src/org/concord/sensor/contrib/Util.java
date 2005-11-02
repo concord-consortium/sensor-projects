@@ -31,6 +31,8 @@ package org.concord.sensor.contrib;
 import org.concord.framework.data.DataDimension;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.impl.ExperimentConfigImpl;
+import org.concord.sensor.impl.ExperimentRequestImpl;
+import org.concord.sensor.impl.SensorRequestImpl;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
 
@@ -42,6 +44,7 @@ import org.concord.sensor.SensorRequest;
  */
  
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.DeviceConfig;
@@ -59,10 +62,21 @@ public class Util
 		DeviceConfig [] dConfigs = new DeviceConfig[1];
 		dConfigs[0] = new DeviceConfigImpl(deviceId, null);		
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
-		org.concord.sensor.ExperimentRequest request = new DefaultExperimentRequest(sensorType);
+		
+		ExperimentRequestImpl expRequest = new ExperimentRequestImpl();
+        SensorRequestImpl sensRequest = new SensorRequestImpl();
+        sensRequest.setType(sensorType);
+        sensRequest.setRequiredMax(Float.NaN);
+        sensRequest.setRequiredMin(Float.NaN);
+
+        SensorRequest [] sensorRequests = new SensorRequest[1];
+	    sensorRequests[0] = sensRequest;
+	    expRequest.setSensorRequests(sensorRequests);	    
+	    expRequest.setPeriod(0.1f);
+		
 		SensorDataProducer producer = sdManager.createDataProducer();
 		if(producer != null){
-		    org.concord.sensor.ExperimentConfig ec = producer.configure(request);
+		    ExperimentConfig ec = producer.configure(expRequest);
 	    }
 		return producer;
 	}

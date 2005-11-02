@@ -150,4 +150,10 @@ public class OTSensorRequest extends DefaultOTObject
 		OTResourceMap map = resources.getParamMap();
 		return (String)map.get(key);		
 	}
+	
+	public String [] getSensorParamKeys()
+	{
+		OTResourceMap map = resources.getParamMap();
+		return map.getKeys();
+	}
 }

@@ -41,13 +41,21 @@ import org.concord.sensor.SensorRequest;
  */
 public class ExperimentRequestImpl implements ExperimentRequest 
 {
+	protected float period = 0;
+	protected int numberOfSamples = -1;
+	protected SensorRequest[] sensorRequests = null;
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentRequest#getPeriod()
 	 */
 	public float getPeriod() 
 	{
-
-		return 0;
+		return period;
+	}
+	
+	public void setPeriod(float period)
+	{
+		this.period = period;
 	}
 	
 	/* (non-Javadoc)
@@ -55,7 +63,12 @@ public class ExperimentRequestImpl implements ExperimentRequest
 	 */
 	public int getNumberOfSamples() 
 	{
-		return -1;
+		return numberOfSamples;
+	}
+
+	public void setNumberOfSamples(int numberOfSamples)
+	{
+		this.numberOfSamples = numberOfSamples;
 	}
 	
 	/* (non-Javadoc)
@@ -63,70 +76,11 @@ public class ExperimentRequestImpl implements ExperimentRequest
 	 */
 	public SensorRequest[] getSensorRequests() {
 		// TODO Auto-generated method stub
-		SensorRequest [] sensors = new SensorRequest[1];
-		sensors[0] = new SensorRequest(){
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getDisplayPrecision()
-			 */
-			public int getDisplayPrecision() {
-				// TODO Auto-generated method stub
-				return -2;
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getRequiredMax()
-			 */
-			public float getRequiredMax() 
-			{
-				return Float.NaN;
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getRequiredMin()
-			 */
-			public float getRequiredMin() 
-			{
-				return Float.NaN;
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getPort()
-			 */
-			public int getPort() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getSensorParam(java.lang.String)
-			 */
-			public String getSensorParam(String key) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getStepSize()
-			 */
-			public float getStepSize() {
-				// TODO Auto-generated method stub
-				return 0.1f;
-			}
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getType()
-			 */
-			public int getType() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			/* (non-Javadoc)
-			 * @see org.concord.sensor.SensorRequest#getUnit()
-			 */
-			public DataDimension getUnit() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-		return sensors;
+		return sensorRequests;
+	}	
+	
+	public void setSensorRequests(SensorRequest[] sensorRequests)
+	{
+		this.sensorRequests = sensorRequests;
 	}
 }

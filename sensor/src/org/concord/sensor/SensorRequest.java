@@ -146,4 +146,12 @@ public interface SensorRequest
 	 * @return
 	 */
 	public String getSensorParam(String key);
+	
+	/**
+	 * This is the list of params that have been set.  This is 
+	 * necessary in order to serialize instances of this interface
+	 * 
+	 * @return
+	 */
+	public String [] getSensorParamKeys();
 }

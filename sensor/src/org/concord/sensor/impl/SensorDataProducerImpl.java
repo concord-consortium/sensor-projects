@@ -23,9 +23,6 @@
 
 package org.concord.sensor.impl;
 
-import java.util.Vector;
-
-import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
@@ -37,22 +34,18 @@ import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
 
 
-public class SensorDataProducerImpl
+public abstract class SensorDataProducerImpl
 	implements SensorDataProducer, DeviceReader, TickListener
 {
-	public long		startTimer =  0;
+	public int		startTimer =  0;
 	protected Ticker ticker = null;
 	protected UserMessageHandler messageHandler;
-	protected Vector dataListeners = null;
-	
-	protected Vector sensorConfigs = new Vector();
 	
 	public DataStreamDescription dDesc = new DataStreamDescription();
 	public DataStreamEvent	processedDataEvent = new DataStreamEvent();
 
 	protected float [] processedData;
 	private static final int DEFAULT_BUFFERED_SAMPLE_NUM = 1000;
-	private boolean prepared;
 	
 	int timeWithoutData = 0;
 	protected String [] okOptions = {"Ok"};
@@ -62,7 +55,8 @@ public class SensorDataProducerImpl
 	private int totalDataRead;
 	private SensorDevice device;
 	private ExperimentConfig experimentConfig = null;
-    private float dataTimeOffset;
+    protected float dataTimeOffset;
+    
 	
 	public SensorDataProducerImpl(SensorDevice device, Ticker t, UserMessageHandler h)
 	{
@@ -165,10 +159,15 @@ public class SensorDataProducerImpl
 	public int flushData(int numSamples)
 	{
 		if(!inDeviceRead) {
+			// flush should only be called inside of a device read
+
 			// error we need an assert here but we are in waba land 
-			// so no exceptions or asserts for now we'll print 
-			// but later we can force a null pointer exception
-			System.err.println("calling flush outside of deviceRead");
+			// so no exceptions or asserts instead we force
+			// a null pointer exception.  Superwaba supports
+			// some exceptions now so we should refactor this 
+			// to use exceptions
+			Object test = null;
+			test.equals(test);
 		}
 		
 		processedDataEvent.setNumSamples(numSamples);
@@ -218,12 +217,11 @@ public class SensorDataProducerImpl
 			// So we will try to tackle the general error cases here :S
 			// But there is now a way for the device to explain why the configuration
 			// is invalid.
-			System.err.println("Attached sensors don't match requested sensors");
 			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
 			if(actualConfig != null) {
-				System.err.println("  device reason: " + actualConfig.getInvalidReason());
+				// System.err.println("  device reason: " + actualConfig.getInvalidReason());
 				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
-				System.err.println("  sensor attached: " + sensorConfigs[0].getType());
+				// System.err.println("  sensor attached: " + sensorConfigs[0].getType());
 			}
 			
 			// Maybe should be a policy decision somewhere
@@ -258,11 +256,23 @@ public class SensorDataProducerImpl
 	        throw new RuntimeException("Null device in start");
 	    }
 	    
-		device.start();
+		if(!device.start()) {
+			// cannot start device
+			if(messageHandler != null) {
+				String devMessage = device.getErrorMessage(0);
+				if(devMessage == null) {
+					devMessage = "null";
+				}
+				
+				messageHandler.showMessage("Can't start device: " + devMessage,
+						"Device Start Error");
+			}
+			return;
+		}
 		
 		timeWithoutData = 0;
 
-		startTimer = System.currentTimeMillis();
+		startTimer = ticker.currentTimeMillis();
 		int dataReadMillis = (int)(experimentConfig.getDataReadPeriod()*1000.0);
 		// Check if the data read millis is way below the experiment period
 		// if it is then tick code will time out incorrectly.  So 
@@ -306,7 +316,7 @@ public class SensorDataProducerImpl
 
 		// FIXME we should get the time the device sends back
 		// instead of using our own time.
-		dataTimeOffset += (System.currentTimeMillis() - startTimer) / 1000f;	    
+		dataTimeOffset += (ticker.currentTimeMillis() - startTimer) / 1000f;	    
 	}
 	
 	/* (non-Javadoc)
@@ -348,51 +358,7 @@ public class SensorDataProducerImpl
 		return dDesc;
 	}
 		
-	public void addDataListener(DataListener l){
-		if(dataListeners == null){ 
-		    dataListeners = new Vector();	   
-		}
-		if(!dataListeners.contains(l)){
-			dataListeners.add(l);
-		}
-	}
+	public abstract void notifyDataListenersEvent(DataStreamEvent e);
 	
-	public void removeDataListener(DataListener l){
-		if(dataListeners == null) return;
-		int index = dataListeners.indexOf(l);
-		if(index >= 0) dataListeners.remove(index);
-		if(dataListeners.size() == 0) dataListeners = null;
-	}
-
-	public void notifyDataListenersEvent(DataStreamEvent e){
-		if(dataListeners == null) return;
-		for(int i = 0; i < dataListeners.size(); i++){
-			DataListener l = (DataListener)dataListeners.get(i);
-			l.dataStreamEvent(e);
-		}
-	}
-
-	public void notifyDataListenersReceived(DataStreamEvent e)
-	{
-		if(dataListeners == null) return;
-		
-		// if the data has timestamps they should be adjusted
-		// the contract for sensor devices is that time starts 
-		// at 0 when start is called, however for data producers
-		// time starts at 0 when reset is called.  The stop method
-		// is more like a pause for data producers.
-		if(dDesc.getDataType() == DataStreamDescription.DATA_SERIES){
-		    // the first channel will be time.
-		    for(int i=dDesc.getDataOffset(); 
-		    	i < e.getNumSamples(); 
-		    	i+= dDesc.getNextSampleOffset()){
-		        processedData[i] += dataTimeOffset;
-		    }
-		}
-		
-		for(int i = 0; i < dataListeners.size(); i++){
-			DataListener l = (DataListener)dataListeners.get(i);
-			l.dataReceived(e);
-		}
-	}
+	public abstract void notifyDataListenersReceived(DataStreamEvent e);
 }

@@ -48,8 +48,8 @@ public abstract class SensorDataProducerImpl
 	private static final int DEFAULT_BUFFERED_SAMPLE_NUM = 1000;
 	
 	int timeWithoutData = 0;
-	protected String [] okOptions = {"Ok"};
-	protected String [] continueOptions = {"Continue"};	
+	protected String [] okOptions;
+	protected String [] continueOptions;	
 	public final static int DATA_TIME_OUT = 40;
 	private boolean inDeviceRead;
 	private int totalDataRead;
@@ -61,6 +61,8 @@ public abstract class SensorDataProducerImpl
 	public SensorDataProducerImpl(SensorDevice device, Ticker t, UserMessageHandler h)
 	{
 		this.device = device;
+		continueOptions = new String [] {"Continue"};
+		okOptions = new String [] {"Ok"};
 		
 		ticker = t;
 		
@@ -92,18 +94,21 @@ public abstract class SensorDataProducerImpl
 	    // track when we are in the device read so if flush
 	    // is called outside of this we can complain
 	    inDeviceRead = true;
-	    ret = device.read(processedData, 0, dDesc.getChannelsPerSample(),
-	    		this);
+	    ret = device.read(processedData, 0, 
+	    			dDesc.getChannelsPerSample(), this);
 	    inDeviceRead = false;
 	    
 	    if(ret < 0) {
 			stop();
-			String message = device.getErrorMessage(ret);
-			if(message == null) {
-			    message = "Error reading information from device";
+			String devError = device.getErrorMessage(ret);
+			if(devError == null) {
+				devError = "unknown";
 			}
-			if(messageHandler != null) messageHandler.showOptionMessage(message, "Interface Error",
-					continueOptions, continueOptions[0]);
+			String message = "Data Read Error: " + devError;
+			if(messageHandler != null) {
+				messageHandler.showOptionMessage(message, "Interface Error",
+						continueOptions, continueOptions[0]);
+			}
 			return;
 	    }
 	    
@@ -115,10 +120,12 @@ public abstract class SensorDataProducerImpl
 			timeWithoutData++;
 			if(timeWithoutData > DATA_TIME_OUT){
 				stop();
-				if(messageHandler != null) messageHandler.showOptionMessage("Serial Read Error: " +
-										 "possibly no interface " +
-										 "connected", "Interface Error",
-										 continueOptions, continueOptions[0]);					
+				if(messageHandler != null) {
+					messageHandler.showOptionMessage("Data Read Error: " +
+							 "possibly no interface " +
+							 "connected", "Interface Error",
+							 continueOptions, continueOptions[0]);					
+				}
 			}
 			return;
 	    }
@@ -217,13 +224,33 @@ public abstract class SensorDataProducerImpl
 			// So we will try to tackle the general error cases here :S
 			// But there is now a way for the device to explain why the configuration
 			// is invalid.
-			if(messageHandler != null) messageHandler.showMessage("Attached sensors don't match requested sensors", "Alert");
-			if(actualConfig != null) {
+			if(actualConfig == null) {
+				// we don't have any config.  this should mean there was
+				// a more serious error talking to the device.  Either it
+				// isn't there, our communiction channel is messed up, or
+				// the device is messed up.
+				if(messageHandler != null) {
+					// get the error message from the device
+					String devErrStr = device.getErrorMessage(0);
+					if(devErrStr == null) {
+						devErrStr = "unknown";
+					}
+					
+					messageHandler.showMessage("Device error: " + devErrStr, "Alert");
+				}
+			} else {
+				// we have a valid config so that should mean the device
+				// can detect the sensors, but the ones it found didn't 
+				// match the request so it set the config to invalid
+				if(messageHandler != null) {
+					messageHandler.showMessage("Wrong sensors attached", "Alert");
+				}				
+
 				// System.err.println("  device reason: " + actualConfig.getInvalidReason());
 				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
 				// System.err.println("  sensor attached: " + sensorConfigs[0].getType());
 			}
-			
+						
 			// Maybe should be a policy decision somewhere
 			// because maybe you would want to just return the
 			// currently attached setup
@@ -261,7 +288,7 @@ public abstract class SensorDataProducerImpl
 			if(messageHandler != null) {
 				String devMessage = device.getErrorMessage(0);
 				if(devMessage == null) {
-					devMessage = "null";
+					devMessage = "unknown";
 				}
 				
 				messageHandler.showMessage("Can't start device: " + devMessage,
@@ -333,6 +360,14 @@ public abstract class SensorDataProducerImpl
 		return device.isAttached();
 	}
 	
+	public boolean isRunning()
+	{
+		if(ticker == null) {
+			return false;
+		}
+		
+		return ticker.isTicking();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorDataProducer#canDetectSensors()

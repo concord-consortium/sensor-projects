@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.7 $
+ * $Date: 2005-11-15 16:07:04 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -58,6 +58,16 @@ public interface SensorDataProducer
 	 * @return
 	 */
 	public boolean isAttached();
+		
+	/**
+	 * This returns true if the device is actually running.  
+	 * Most like it would have thrown an exception while it was starting.
+	 * but in some case it might not.  So it is useful to check this after
+	 * calling start() to make sure it really started.
+	 * 
+	 * @return
+	 */
+	public boolean isRunning();
 	
 	/**
 	 * This returns the configuration attached to the interface

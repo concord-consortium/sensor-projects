@@ -151,6 +151,12 @@ public class TestNative
 						// TODO Auto-generated method stub
 						return null;
 					}
+                    
+                    public String[] getSensorParamKeys()
+                    {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
 				};
 				return null;
 			}

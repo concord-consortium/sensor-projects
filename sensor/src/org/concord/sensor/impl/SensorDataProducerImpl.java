@@ -50,7 +50,7 @@ public abstract class SensorDataProducerImpl
 	int timeWithoutData = 0;
 	protected String [] okOptions;
 	protected String [] continueOptions;	
-	public final static int DATA_TIME_OUT = 40;
+	public final static int DATA_TIME_OUT = 20;
 	private boolean inDeviceRead;
 	private int totalDataRead;
 	private SensorDevice device;

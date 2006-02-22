@@ -104,6 +104,9 @@ public class OTSensorDataProxy extends DefaultOTObject
 	public void removeDataListener(DataListener listener) 
 	{
 		dataListeners.remove(listener);
+        if(producer != null) {
+            producer.removeDataListener(listener);
+        }
 	}
 	
 	/* (non-Javadoc)

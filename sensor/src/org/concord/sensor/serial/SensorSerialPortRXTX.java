@@ -80,6 +80,13 @@ public class SensorSerialPortRXTX
 		if(port == null) {
 			throw new IOException("can't open serial port");
 		}
+        
+        // We'll have to test if this is ok
+        // we are changing some params of the port after
+        // we open so we might need to reset these
+        // streams
+        inStream = port.getInputStream();
+        outStream = port.getOutputStream();
 	}
 	
 	/* (non-Javadoc)
@@ -178,25 +185,6 @@ public class SensorSerialPortRXTX
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.dataharvest.SerialPort#getInputStream()
-	 */
-	public InputStream getInputStream() throws IOException 
-	{
-	    inStream = port.getInputStream();
-		return inStream;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.dataharvest.SerialPort#getOutputStream()
-	 */
-	public OutputStream getOutputStream() 
-		throws IOException 
-	{
-	    outStream = port.getOutputStream();
-		return outStream;
-	}
-
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws IOException
 	{	
@@ -236,4 +224,19 @@ public class SensorSerialPortRXTX
 		    
 	    return size;	
 	}	
+    
+    public void write(byte[] buffer) throws IOException
+    {
+        outStream.write(buffer);        
+    }
+    
+    public void write(byte[] buffer, int start, int length) throws IOException
+    {
+        outStream.write(buffer, start, length);        
+    }
+    
+    public void write(int value) throws IOException
+    {
+        outStream.write(value);
+    }
 }

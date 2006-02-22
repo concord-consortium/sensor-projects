@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.17 $
- * $Date: 2005-11-02 04:48:53 $
+ * $Revision: 1.18 $
+ * $Date: 2006-02-22 21:38:13 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -37,6 +37,7 @@ import java.util.Hashtable;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.DeviceIdAware;
+import org.concord.sensor.device.DeviceServiceProviderAware;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.Ticker;
 
@@ -132,7 +133,12 @@ public class JavaDeviceFactory
 				if(device instanceof DeviceIdAware) {
 				    ((DeviceIdAware)device).setDeviceId(id);
 				}
-				device.open(config.getConfigString());
+                
+                if(device instanceof DeviceServiceProviderAware) {
+                    ((DeviceServiceProviderAware)device).
+                        setDeviceServiceProvider(null);
+                }
+ 				device.open(config.getConfigString());
 				
 			} catch (Exception e) {
 				e.printStackTrace();

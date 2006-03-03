@@ -54,6 +54,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SMART_LIGHT_1     34
 #define SENSOR_ID_SMART_LIGHT_2     35
 #define SENSOR_ID_SMART_LIGHT_3     36
+#define SENSOR_ID_SMART_HUMIDITY    47
 #define SENSOR_ID_GO_TEMP           60 
 #define SENSOR_ID_GO_MOTION         69 
 
@@ -357,7 +358,19 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_DISTANCE;
 				sensConfig->stepSize = 0.01;
 				break;
-				
+			case SENSOR_ID_SMART_HUMIDITY:
+			 	if(requrest &&
+			 		(request->type == QUANTITY_RELATIVE_HUMIDITY)){
+			 			valid = 1;
+			 	}
+			 	sprintf(sensConfig->unitStr, "%RH");
+			 	sensConfig->type = QUANTITY_RELATIVE_HUMIDITY;
+			 	sensConfig->stepSize = 0.1;
+			 	break;
+			default:
+				valid = 0;
+				sensConfig->type = QUANTITY_UNKNOWN;
+				break;				
 		}	
 				
 	} else if(ddsRec.SensorNumber != 0) {

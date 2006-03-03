@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.7 $
+ * $Date: 2006-03-03 23:15:11 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -52,6 +52,11 @@ public interface SensorDevice
 	 * The passed in string can contain whatever configuration information
 	 * this device needs.  For a serial port device it probably needs to 
 	 * contain the port name.  For a usb device this might not be necessary.
+     * 
+     * For the serial devices a speical string _auto_ is supported.  This will
+     * cycle through the avaiable serial ports and try each one.  This testing
+     * might not happen until isAttached is called.
+     * 
 	 * @param openString
 	 */
 	public void open(String openString);

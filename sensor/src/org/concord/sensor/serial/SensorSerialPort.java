@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.concord.sensor.impl.Vector;
+
 /**
  * @author scytacki
  *
@@ -43,6 +45,20 @@ public interface SensorSerialPort
 	public static final int  FLOWCONTROL_XONXOFF_IN =4;
 	public static final int  FLOWCONTROL_XONXOFF_OUT=8;
 
+    /**
+     * This method should return a vector of the names of ports
+     * that can be passed to open.  This list should be as complete
+     * as possible.  But in some cases implementations cannot know 
+     * the names of their ports so the list could be empty.  
+     * 
+     * If the name of the port doesn't matter like in the current
+     * implementation of the ftdi port, then this should return
+     * vector of size one.  With a dummy portname in it.
+     * 
+     * @return
+     */
+    public Vector getAvailablePorts();        
+    
 	public abstract void open(String portName)
 		throws IOException;
 	

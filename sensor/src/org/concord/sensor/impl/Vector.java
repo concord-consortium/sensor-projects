@@ -294,11 +294,6 @@ public final class Vector
    {
       insert(index,obj);
    }
-   /** same of add(Object) */
-   public void addElement(Object obj)
-   {
-      add(obj);
-   }
    /** same of del(Object) */
    public boolean removeElement(Object obj)
    {

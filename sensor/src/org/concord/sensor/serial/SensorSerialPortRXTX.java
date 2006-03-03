@@ -38,6 +38,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 
+import org.concord.sensor.impl.Vector;
+
 
 /**
  * @author Informaiton Services
@@ -54,6 +56,25 @@ public class SensorSerialPortRXTX
 	OutputStream outStream = null;
     private int currentTimeout;
 	
+    public Vector getAvailablePorts()
+    {
+        Vector availablePorts = new Vector();
+        
+        if(commDriver == null) {
+            commDriver = new RXTXCommDriver();
+            commDriver.initialize();
+        }
+        
+        Enumeration ports = CommPortIdentifier.getPortIdentifiers();
+        while(ports.hasMoreElements()) {
+            CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
+            System.out.println("RXTX: found port: " + portID.getName());
+            availablePorts.add(portID.getName());
+        }
+        
+        return availablePorts;
+    }
+    
 	public void open(String portName)
 		throws IOException
 	{

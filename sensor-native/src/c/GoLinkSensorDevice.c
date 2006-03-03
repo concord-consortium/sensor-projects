@@ -359,7 +359,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->stepSize = 0.01;
 				break;
 			case SENSOR_ID_SMART_HUMIDITY:
-			 	if(requrest &&
+			 	if(request &&
 			 		(request->type == QUANTITY_RELATIVE_HUMIDITY)){
 			 			valid = 1;
 			 	}

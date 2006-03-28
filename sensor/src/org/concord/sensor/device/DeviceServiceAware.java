@@ -23,16 +23,16 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-02-22 21:41:10 $
- * $Author: maven $
+ * $Revision: 1.1 $
+ * $Date: 2006-03-28 23:03:40 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor.device;
 
-public interface DeviceServiceProviderAware
+public interface DeviceServiceAware
 {
-    public void setDeviceServiceProvider(DeviceServiceProvider provider);
+    public void setDeviceService(DeviceService provider);
 }

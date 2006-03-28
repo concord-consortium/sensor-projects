@@ -27,10 +27,6 @@
  */
 package org.concord.sensor.serial;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.concord.sensor.impl.Vector;
 
 /**
@@ -60,15 +56,16 @@ public interface SensorSerialPort
     public Vector getAvailablePorts();        
     
 	public abstract void open(String portName)
-		throws IOException;
+		throws SerialException;
 	
 	public abstract void close()
-		throws IOException;
+		throws SerialException;
 	
 	public boolean isOpen();
 	
-	public abstract void setSerialPortParams( int b, int d, int s, int p )
-		throws IOException;
+	public abstract void setSerialPortParams( int baud, int data, 
+            int stop, int parity )
+		throws SerialException;
     
 	public abstract int getBaudRate();
 	public abstract int getDataBits();
@@ -76,12 +73,12 @@ public interface SensorSerialPort
 	public abstract int getParity();
 	
     public abstract void setFlowControlMode( int flowcontrol )
-		throws IOException;
+		throws SerialException;
 
 	public abstract void disableReceiveTimeout();
 	
     public abstract void enableReceiveTimeout( int time )
-		throws IOException;
+		throws SerialException;
 
 	/**
 	 * The read method on input stream does not handle the timeout 
@@ -100,17 +97,17 @@ public interface SensorSerialPort
 	 * @param len
 	 * @param timeout
 	 * @return
-	 * @throws IOException
+	 * @throws SerialException
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)
-		throws IOException;
+		throws SerialException;
     
     public void write(int value)
-        throws IOException;
+        throws SerialException;
     
     public void write(byte [] buffer)
-        throws IOException;
+        throws SerialException;
     
     public void write(byte [] buffer, int start, int length)
-        throws IOException;
+        throws SerialException;
 }

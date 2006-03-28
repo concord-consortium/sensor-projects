@@ -56,6 +56,12 @@ public class SensorSerialPortRXTX
 	OutputStream outStream = null;
     private int currentTimeout;
 	
+    int baud;
+    int dataBits;
+    int stopBits;
+    int parity;
+    int flowcontrol;
+    
     public Vector getAvailablePorts()
     {
         Vector availablePorts = new Vector();
@@ -76,7 +82,7 @@ public class SensorSerialPortRXTX
     }
     
 	public void open(String portName)
-		throws IOException
+		throws SerialException
 	{
 		if(commDriver == null) {
 			commDriver = new RXTXCommDriver();
@@ -99,21 +105,33 @@ public class SensorSerialPortRXTX
 				CommPortIdentifier.PORT_SERIAL);
 		
 		if(port == null) {
-			throw new IOException("can't open serial port");
+			throw new SerialException("can't open serial port");
 		}
         
         // We'll have to test if this is ok
         // we are changing some params of the port after
         // we open so we might need to reset these
         // streams
-        inStream = port.getInputStream();
-        outStream = port.getOutputStream();
+        try {
+            inStream = port.getInputStream();
+            outStream = port.getOutputStream();
+        } catch (IOException e){
+            throw new SerialException("can't open streams", e);
+        }
+        
+        try {
+            port.setSerialPortParams(baud, dataBits, stopBits, parity);
+            port.setFlowControlMode(flowcontrol);
+        } catch (UnsupportedCommOperationException e) {
+            throw new SerialException("UnsupportedCommOperation");
+        }        
+        
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.dataharvest.DHSerialPort#close()
 	 */
-	public void close() throws IOException 
+	public void close() throws SerialException 
 	{
 		if(port == null) {
 		    return;
@@ -131,13 +149,12 @@ public class SensorSerialPortRXTX
 	 * @see org.concord.sensor.dataharvest.SerialPort#setSerialPortParams(int, int, int, int)
 	 */
 	public void setSerialPortParams(int b, int d, int s, int p)
-			throws IOException 
+			throws SerialException 
 	{
-		try {
-			port.setSerialPortParams(b, d, s, p);
-		} catch (UnsupportedCommOperationException e) {
-			throw new IOException("UnsupportedCommOperation");
-		}
+        baud = b;
+        dataBits = d;
+        stopBits = s;
+        parity = p;
 	}
 
 	/* (non-Javadoc)
@@ -145,7 +162,7 @@ public class SensorSerialPortRXTX
 	 */
 	public int getBaudRate() 
 	{
-		return port.getBaudRate();
+        return port.getBaudRate();
 	}
 
 	/* (non-Javadoc)
@@ -176,13 +193,9 @@ public class SensorSerialPortRXTX
 	 * @see org.concord.sensor.dataharvest.SerialPort#setFlowControlMode(int)
 	 */
 	public void setFlowControlMode(int flowcontrol) 
-		throws IOException 
+		throws SerialException 
 	{
-		try {
-			port.setFlowControlMode(flowcontrol);
-		} catch (UnsupportedCommOperationException e) {
-			throw new IOException("UnsupportedCommOperation");
-		}
+        this.flowcontrol = flowcontrol;
 	}
 
 	/* (non-Javadoc)
@@ -196,18 +209,18 @@ public class SensorSerialPortRXTX
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.dataharvest.SerialPort#enableReceiveTimeout(int)
 	 */
-	public void enableReceiveTimeout(int time) throws IOException 
+	public void enableReceiveTimeout(int time) throws SerialException 
 	{
 	    currentTimeout = time;
 		try {
 			port.enableReceiveTimeout(time);
 		} catch (UnsupportedCommOperationException e) {
-			throw new IOException("UnsupportedCommOperation");
+			throw new SerialException("UnsupportedCommOperation");
 		}
 	}
 
 	public int readBytes(byte [] buf, int off, int len, long timeout)
-		throws IOException
+		throws SerialException
 	{	
 		// at least one of the receive time and theshold
 		// don't work on windows.
@@ -223,41 +236,62 @@ public class SensorSerialPortRXTX
 				return numRead;
 			} catch (UnsupportedCommOperationException e) {
 				System.err.println("timeout or threshold not available on this platform");
-			}
+			} catch (IOException e) {
+			    throw new SerialException("threshold read error", e);
+            }
 		}
 		
 	    // Fall back to polling method. 
 	    // this method still assumes some form of timeout is supported
 	    // to handle no timeout support we'll need multiple threads.
-	    int size = 0;	    
-	    long startTime = System.currentTimeMillis();
-	    while(size != -1 && size < len &&
-	            (System.currentTimeMillis() - startTime) < timeout){
-	        int readSize = inStream.read(buf, size+off, len - size);
-	        if(readSize < 0) {	      
-	            System.err.println();
-	            System.err.println("error in readBytes: " + readSize);
-	            
-	            return readSize;
-	        }
-	        size += readSize;
-	    }
+		try {
+		    int size = 0;	    
+		    long startTime = System.currentTimeMillis();
+		    while(size != -1 && size < len &&
+		            (System.currentTimeMillis() - startTime) < timeout){
+		        int readSize = inStream.read(buf, size+off, len - size);
+		        if(readSize < 0) {	      
+		            System.err.println();
+		            System.err.println("error in readBytes: " + readSize);
+		            
+		            return readSize;
+		        }
+		        size += readSize;
+		    }
 		    
-	    return size;	
+		    return size;	
+        } catch (IOException e) {
+            throw new SerialException("polling read error", e);            
+        }
 	}	
     
-    public void write(byte[] buffer) throws IOException
+    public void write(byte[] buffer) 
+    throws SerialException
     {
-        outStream.write(buffer);        
+        try {
+            outStream.write(buffer);
+        }   catch (IOException e) {
+            throw new SerialException("write error", e); 
+        }
     }
     
-    public void write(byte[] buffer, int start, int length) throws IOException
+    public void write(byte[] buffer, int start, int length) 
+    throws SerialException
     {
-        outStream.write(buffer, start, length);        
+        try {
+            outStream.write(buffer, start, length);        
+        }   catch (IOException e) {
+            throw new SerialException("write error", e); 
+        }
     }
     
-    public void write(int value) throws IOException
+    public void write(int value) 
+    throws SerialException
     {
-        outStream.write(value);
+        try {
+            outStream.write(value);
+        }   catch (IOException e) {
+            throw new SerialException("write error", e); 
+        }
     }
 }

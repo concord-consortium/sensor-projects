@@ -32,6 +32,8 @@ public interface DeviceID
 	public final static int FOURIER = 30;
 	public final static int DATA_HARVEST_USB = 40;
 	public final static int DATA_HARVEST_CF = 45;
+    public final static int DATA_HARVEST_ADVANCED = 41;
+    public final static int DATA_HARVEST_QADVANCED = 42;
 	public final static int IMAGIWORKS_SERIAL = 50;
 	public final static int IMAGIWORKS_SD = 55;
 	public final static int PASCO_SERIAL = 60;

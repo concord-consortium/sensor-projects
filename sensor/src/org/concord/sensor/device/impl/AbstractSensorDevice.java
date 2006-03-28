@@ -29,6 +29,8 @@
  */
 package org.concord.sensor.device.impl;
 
+import org.concord.sensor.device.DeviceService;
+import org.concord.sensor.device.DeviceServiceAware;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 
@@ -39,13 +41,15 @@ import org.concord.sensor.impl.ExperimentConfigImpl;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class AbstractSensorDevice 
-	implements SensorDevice 
+	implements SensorDevice, DeviceServiceAware
 {
 	protected ExperimentConfigImpl currentConfig = null;
     protected boolean attached = false;
 
     protected String portName;
 
+    protected DeviceService devService;
+    
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#isAttached()
 	 */
@@ -53,4 +57,10 @@ public abstract class AbstractSensorDevice
 	{
 		return attached;
 	}
+    
+    public void setDeviceService(DeviceService provider)
+    {
+        this.devService = provider;
+    }
+   
 }

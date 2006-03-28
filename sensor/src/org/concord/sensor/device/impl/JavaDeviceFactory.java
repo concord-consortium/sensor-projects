@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.18 $
- * $Date: 2006-02-22 21:38:13 $
+ * $Revision: 1.19 $
+ * $Date: 2006-03-28 23:03:40 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -37,9 +37,11 @@ import java.util.Hashtable;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.DeviceIdAware;
-import org.concord.sensor.device.DeviceServiceProviderAware;
+import org.concord.sensor.device.DeviceService;
+import org.concord.sensor.device.DeviceServiceAware;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.Ticker;
+import org.concord.sensor.serial.SensorSerialPort;
 
 
 /**
@@ -52,7 +54,7 @@ import org.concord.sensor.impl.Ticker;
  *
  */
 public class JavaDeviceFactory
-	implements DeviceFactory, DeviceID
+	implements DeviceFactory, DeviceID, DeviceService
 {	
 	Ticker ticker = null;
 		
@@ -95,9 +97,9 @@ public class JavaDeviceFactory
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
 				break;				
 			case FOURIER:
-			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
-			    break;
 			case DATA_HARVEST_USB:
+            case DATA_HARVEST_ADVANCED:
+            case DATA_HARVEST_QADVANCED:
 			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
 			    break;			    
 			case PASCO_SERIAL:
@@ -134,9 +136,9 @@ public class JavaDeviceFactory
 				    ((DeviceIdAware)device).setDeviceId(id);
 				}
                 
-                if(device instanceof DeviceServiceProviderAware) {
-                    ((DeviceServiceProviderAware)device).
-                        setDeviceServiceProvider(null);
+                if(device instanceof DeviceServiceAware) {
+                    ((DeviceServiceAware)device).
+                        setDeviceService(this);
                 }
  				device.open(config.getConfigString());
 				
@@ -160,4 +162,71 @@ public class JavaDeviceFactory
 		configTable.remove(device);
 		
 	}
+    
+    public int getOSType()
+    {
+        String osName = System.getProperty("os.name");
+        if(osName.startsWith("Windows")){
+            return OS_WINDOWS;
+        }
+        if(osName.startsWith("Linux")){
+            return OS_LINUX;
+        }
+        if(osName.startsWith("Mac OS X")){
+            return OS_OSX;
+        }
+        
+        return OS_UNKNOWN;
+    }
+    
+    public SensorSerialPort getSerialPort(String name, SensorSerialPort oldPort)
+    {
+        String portClassName = null;
+        
+        if(name.equals("ftdi")){
+            portClassName = "org.concord.sensor.dataharvest.SensorSerialPortFTDI";
+        } else if(name.equals("os")) {
+            portClassName = "org.concord.sensor.serial.SensorSerialPortRXTX";
+        }
+            
+        try {           
+            Class portClass = getClass().getClassLoader().loadClass(portClassName);
+
+            if(!portClass.isInstance(oldPort)){
+                return(SensorSerialPort) portClass.newInstance();
+            } else {
+                return oldPort;
+            }
+        } catch (Exception e) {
+            System.err.println("Can't load serial port driver class: " +
+                    portClassName);
+        }
+        
+        return null;
+    }
+    
+    public void log(String message)
+    {
+        System.err.println(message);        
+    }
+    
+    public void sleep(int millis)
+    {
+        try{
+            Thread.sleep(millis);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public long currentTimeMillis()
+    {
+        return System.currentTimeMillis();
+    }
+    
+    public float intBitsToFloat(int valueInt)
+    {
+        return Float.intBitsToFloat(valueInt);
+    }
 }

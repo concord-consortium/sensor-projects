@@ -29,6 +29,8 @@
  */
 package org.concord.sensor.serial;
 
+import org.concord.sensor.device.DeviceService;
+
 /**
  * @author scott
  *
@@ -41,16 +43,8 @@ public class ByteBufferStream
     int offset;
     int endOffset;
     boolean lowNibble = false;
+    DeviceService devService;
     
-    public static final float readFloat(byte [] inBuf, int offset)
-    {
-        int valueInt = ((0xFF & inBuf[offset]) << 24)
-                | ((0xFF & inBuf[offset + 1]) << 16)
-                | ((0xFF & inBuf[offset + 2]) << 8)
-                | (0xFF & inBuf[offset + 3]);
-        return Float.intBitsToFloat(valueInt);        
-    }
-
     public static final int readUShort(byte [] inBuf, int offset)
     {
         int value =((inBuf[offset] & 0xFF) << 8) | 
@@ -88,11 +82,13 @@ public class ByteBufferStream
         buf[offset+1] = (byte)(value & 0x000000FF);        
     }
 
-    public ByteBufferStream(byte [] buffer, int offset, int length)
+    public ByteBufferStream(byte [] buffer, int offset, int length,
+            DeviceService devService)
     {
         inBuf = buffer;
         this.offset = offset;
         this.endOffset = offset+length;
+        this.devService = devService;
     }
     
     public float readFloat()
@@ -100,7 +96,12 @@ public class ByteBufferStream
         if(lowNibble) {
             throw new RuntimeException("unread low nibble");
         }
-        float value = readFloat(inBuf, offset);
+        int valueInt = ((0xFF & inBuf[offset]) << 24)
+        | ((0xFF & inBuf[offset + 1]) << 16)
+        | ((0xFF & inBuf[offset + 2]) << 8)
+        | (0xFF & inBuf[offset + 3]);
+        float value = devService.intBitsToFloat(valueInt);        
+
         offset += 4;
         
         return value;

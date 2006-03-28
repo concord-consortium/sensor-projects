@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-02-22 21:41:10 $
- * $Author: maven $
+ * $Revision: 1.1 $
+ * $Date: 2006-03-28 23:03:40 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -34,11 +34,30 @@ package org.concord.sensor.device;
 
 import org.concord.sensor.serial.SensorSerialPort;
 
-public interface DeviceServiceProvider
+public interface DeviceService
 {
+    public final static int OS_UNKNOWN = 0;
+    public final static int OS_LINUX = 1;
+    public final static int OS_OSX = 2;
+    public final static int OS_WINDOWS = 3;
+    public final static int OS_PALMOS = 4;
+    public final static int OS_WINCE = 4;  
+    
+    public int getOSType();
+
     public void log(String message);
     
     public void sleep(int millis);
+    
+    public long currentTimeMillis();
+    
+    /**
+     * This is needed because Waba doesn't have the Float class 
+     * 
+     * @param valueInt
+     * @return
+     */
+    public float intBitsToFloat(int valueInt);
     
     public SensorSerialPort getSerialPort(String name, SensorSerialPort oldPort);
 }

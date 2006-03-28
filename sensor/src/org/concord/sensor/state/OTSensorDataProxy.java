@@ -147,6 +147,10 @@ public class OTSensorDataProxy extends DefaultOTObject
 		ExperimentRequest request = resources.getRequest();	
 		if(producer == null) {
 		    producer = sensorManager.createDataProducer();
+            if(producer == null) {
+                // we couldn't create the producer
+                return;
+            }
 			for(int i=0; i<dataListeners.size(); i++) {
 				DataListener listener = (DataListener)dataListeners.get(i);
 				DataStreamEvent changeEvent = 

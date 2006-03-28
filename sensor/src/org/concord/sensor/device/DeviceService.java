@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2006-03-28 23:03:40 $
+ * $Revision: 1.2 $
+ * $Date: 2006-03-28 23:12:04 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -58,6 +58,16 @@ public interface DeviceService
      * @return
      */
     public float intBitsToFloat(int valueInt);
+    
+    /**
+     * This is need because Waba doesn't have the Float class
+     * so this makes it possible to check if a float is valid
+     * in a platform independent way
+     * 
+     * @param value
+     * @return
+     */
+    public boolean isValidFloat(float value);
     
     public SensorSerialPort getSerialPort(String name, SensorSerialPort oldPort);
 }

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.19 $
- * $Date: 2006-03-28 23:03:40 $
+ * $Revision: 1.20 $
+ * $Date: 2006-03-28 23:12:04 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -228,5 +228,10 @@ public class JavaDeviceFactory
     public float intBitsToFloat(int valueInt)
     {
         return Float.intBitsToFloat(valueInt);
+    }
+    
+    public boolean isValidFloat(float val)
+    {
+        return !Float.isNaN(val);
     }
 }

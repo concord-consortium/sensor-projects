@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.20 $
- * $Date: 2006-03-28 23:12:04 $
+ * $Revision: 1.21 $
+ * $Date: 2006-04-01 13:23:09 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -105,6 +105,9 @@ public class JavaDeviceFactory
 			case PASCO_SERIAL:
 			    className = "org.concord.sensor.pasco.SW500SensorDevice";
 			    break;
+			case PASCO_AIRLINK:
+			    className = "org.concord.sensor.pasco.AirLinkSensorDevice";
+			    break;
 			case DATA_HARVEST_CF:
 			case IMAGIWORKS_SERIAL:
 			case IMAGIWORKS_SD:
@@ -125,27 +128,32 @@ public class JavaDeviceFactory
 			    break;
 		}
 
-		if(className != null) {
-			try {
-				Class sensDeviceClass = 
-					getClass().getClassLoader().loadClass(className);
-				
-				device = (SensorDevice) sensDeviceClass.newInstance();
-				
-				if(device instanceof DeviceIdAware) {
-				    ((DeviceIdAware)device).setDeviceId(id);
-				}
-                
-                if(device instanceof DeviceServiceAware) {
-                    ((DeviceServiceAware)device).
-                        setDeviceService(this);
-                }
- 				device.open(config.getConfigString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				
+		if(className == null) {
+			// We didn't get a class for this device so warn the user 
+			// at least in the console
+			System.err.println("Unknown Sensor Interface type: " + id);
+			return null;
+		}
+		
+		try {
+			Class sensDeviceClass = 
+				getClass().getClassLoader().loadClass(className);
+
+			device = (SensorDevice) sensDeviceClass.newInstance();
+
+			if(device instanceof DeviceIdAware) {
+				((DeviceIdAware)device).setDeviceId(id);
 			}
+
+			if(device instanceof DeviceServiceAware) {
+				((DeviceServiceAware)device).
+				setDeviceService(this);
+			}
+			device.open(config.getConfigString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
 		}
 
 		deviceTable.put(deviceConfigId, device);

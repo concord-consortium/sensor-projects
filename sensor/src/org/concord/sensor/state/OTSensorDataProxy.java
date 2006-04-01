@@ -61,6 +61,8 @@ public class OTSensorDataProxy extends DefaultOTObject
 	private SensorDataManager sensorManager;
 	private SensorDataProducer producer = null;
 
+	// Eclipse bug gives this a warning making it look like it isn't
+	// read locally.  That is not correct.
 	private boolean running = false;
 	
 	private Vector dataListeners = new Vector();
@@ -161,7 +163,7 @@ public class OTSensorDataProxy extends DefaultOTObject
 			}
 		}
 		ExperimentConfig config = producer.configure(request);
-		if(!config.isValid()) {
+		if(config == null || !config.isValid()) {
 		    return;
 		}
 		

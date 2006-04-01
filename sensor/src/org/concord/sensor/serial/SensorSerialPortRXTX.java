@@ -123,7 +123,7 @@ public class SensorSerialPortRXTX
             port.setSerialPortParams(baud, dataBits, stopBits, parity);
             port.setFlowControlMode(flowcontrol);
         } catch (UnsupportedCommOperationException e) {
-            throw new SerialException("UnsupportedCommOperation");
+            throw new SerialException("UnsupportedCommOperation", e);
         }        
         
 	}

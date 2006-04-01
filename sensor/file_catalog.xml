@@ -3,13 +3,13 @@
     <server>cvs.concord.org</server>
     <repo>/home/buildspace/CodeBank</repo>
     <module>Projects/Sensor</module>
-    <tagname>rel_1_1</tagname>
+    <tagname>rel_SNAPSHOT</tagname>
     <file>
         <name>.classpath</name>
-        <rev>1.6</rev>
-        <modtime>1110777767000</modtime>
-        <size>469</size>
-        <md5sum>c09dc64308e22a479d5dd678feb7a192</md5sum>
+        <rev>1.7</rev>
+        <modtime>1130906933000</modtime>
+        <size>496</size>
+        <md5sum>d50ed6acf1c1e021e32d649d076eab1b</md5sum>
     </file>
     <file>
         <name>.cvsignore</name>
@@ -41,17 +41,31 @@
     </file>
     <file>
         <name>file_catalog.xml</name>
-        <rev>1.2</rev>
-        <modtime>1129147203000</modtime>
-        <size>14351</size>
-        <md5sum>c939373110bc432855327febdfd6fc6f</md5sum>
+        <rev>1.3</rev>
+        <modtime>1129147214000</modtime>
+        <size>14561</size>
+        <md5sum>abdd520b3d9964bea541fb568fa8a57a</md5sum>
     </file>
     <file>
         <name>project.xml</name>
-        <rev>1.8</rev>
-        <modtime>1129147211000</modtime>
-        <size>1428</size>
-        <md5sum>d9623814a44772fb5f2e1d5032bd8b5d</md5sum>
+        <rev>1.10</rev>
+        <modtime>1143918716000</modtime>
+        <size>1438</size>
+        <md5sum>6d4d6b6b6d5c59a743ec39604e4fe6a8</md5sum>
+    </file>
+    <file>
+        <name>.settings/org.eclipse.jdt.core.prefs</name>
+        <rev>1.1</rev>
+        <modtime>1130906933000</modtime>
+        <size>620</size>
+        <md5sum>799b622de73ce03a8788107fd91c32be</md5sum>
+    </file>
+    <file>
+        <name>.settings/org.eclipse.jdt.ui.prefs</name>
+        <rev>1.1</rev>
+        <modtime>1130906933000</modtime>
+        <size>96</size>
+        <md5sum>302828d9f0fdcf61b0f53e7e52ceff6c</md5sum>
     </file>
     <file>
         <name>bin/librxtxSerial.jnilib</name>
@@ -118,10 +132,10 @@
     </file>
     <file>
         <name>src/org/concord/sensor/ExperimentConfig.java</name>
-        <rev>1.10</rev>
-        <modtime>1123266368000</modtime>
-        <size>3611</size>
-        <md5sum>0d13784373f80e0376771e6a2fe5de4e</md5sum>
+        <rev>1.1</rev>
+        <modtime>1130906932000</modtime>
+        <size>3616</size>
+        <md5sum>3761e11576ae8ce9c07a88c8447cea07</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/ExperimentRequest.java</name>
@@ -153,45 +167,31 @@
     </file>
     <file>
         <name>src/org/concord/sensor/SensorDataProducer.java</name>
-        <rev>1.6</rev>
-        <modtime>1123266368000</modtime>
-        <size>2587</size>
-        <md5sum>3ce2f276c8671675fbad65a077a356fe</md5sum>
+        <rev>1.7</rev>
+        <modtime>1132070824000</modtime>
+        <size>2903</size>
+        <md5sum>7a51a38f6a27352b5c748d8ebd41c14f</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/SensorRequest.java</name>
-        <rev>1.5</rev>
-        <modtime>1123266368000</modtime>
-        <size>4623</size>
-        <md5sum>8512f84224dc6e2ce4f08ea308ce501a</md5sum>
-    </file>
-    <file>
-        <name>src/org/concord/sensor/contrib/DefaultExperimentRequest.java</name>
-        <rev>1.3</rev>
-        <modtime>1123266368000</modtime>
-        <size>2119</size>
-        <md5sum>622818b4638530e56f169e118c14e995</md5sum>
-    </file>
-    <file>
-        <name>src/org/concord/sensor/contrib/DefaultSensorRequest.java</name>
-        <rev>1.3</rev>
-        <modtime>1123266368000</modtime>
-        <size>2805</size>
-        <md5sum>b4a063da82eb321d7c8595c2fda26736</md5sum>
+        <rev>1.6</rev>
+        <modtime>1130906932000</modtime>
+        <size>4817</size>
+        <md5sum>cdafff009c8d8387326294943d41a43d</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/contrib/SimpleSensorDataConsumer.java</name>
-        <rev>1.5</rev>
-        <modtime>1123266368000</modtime>
-        <size>3487</size>
-        <md5sum>d88142a5115da81380da264dc3bbe25b</md5sum>
+        <rev>1.6</rev>
+        <modtime>1130906932000</modtime>
+        <size>3619</size>
+        <md5sum>3435438483b2c5374f06c567d66f0c13</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/contrib/Util.java</name>
-        <rev>1.4</rev>
-        <modtime>1123266368000</modtime>
-        <size>2451</size>
-        <md5sum>7d0b2a657392289fc26009e9fbe99b30</md5sum>
+        <rev>1.5</rev>
+        <modtime>1130906932000</modtime>
+        <size>2956</size>
+        <md5sum>478c6178b68eaaccd6997a0537cea736</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/device/DeviceFactory.java</name>
@@ -215,18 +215,32 @@
         <md5sum>1b82160e9f2f77c68880970329bce662</md5sum>
     </file>
     <file>
-        <name>src/org/concord/sensor/device/SensorDevice.java</name>
-        <rev>1.6</rev>
-        <modtime>1123266368000</modtime>
-        <size>6481</size>
-        <md5sum>f2acc40aacccba1323d7299a5a6c32f8</md5sum>
+        <name>src/org/concord/sensor/device/DeviceService.java</name>
+        <rev>1.2</rev>
+        <modtime>1143587524000</modtime>
+        <size>2193</size>
+        <md5sum>cb5480358fbf19ddd3cfed874b779b15</md5sum>
     </file>
     <file>
-        <name>src/org/concord/sensor/device/impl/AbstractJavaSensorDevice.java</name>
-        <rev>1.4</rev>
-        <modtime>1123266368000</modtime>
-        <size>1711</size>
-        <md5sum>af63ca30e9dfa13cbdbf7966609ef803</md5sum>
+        <name>src/org/concord/sensor/device/DeviceServiceAware.java</name>
+        <rev>1.1</rev>
+        <modtime>1143587020000</modtime>
+        <size>1257</size>
+        <md5sum>b6476d01f9035fc4d000d554fc6ca2eb</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/device/SensorDevice.java</name>
+        <rev>1.7</rev>
+        <modtime>1141427711000</modtime>
+        <size>6710</size>
+        <md5sum>cb30da7609958020f985ee239790eb70</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/device/impl/AbstractSensorDevice.java</name>
+        <rev>1.3</rev>
+        <modtime>1143587020000</modtime>
+        <size>2018</size>
+        <md5sum>e5e98e1e15c142538137d8bbed82bf9f</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/device/impl/DeviceConfigImpl.java</name>
@@ -236,25 +250,32 @@
         <md5sum>36c83c040f1d1a1bd608a7e45817f480</md5sum>
     </file>
     <file>
+        <name>src/org/concord/sensor/device/impl/DeviceID.java</name>
+        <rev>1.3</rev>
+        <modtime>1143587020000</modtime>
+        <size>1759</size>
+        <md5sum>94a96e0c9b791876b133bf3612a393ab</md5sum>
+    </file>
+    <file>
         <name>src/org/concord/sensor/device/impl/InterfaceManager.java</name>
-        <rev>1.14</rev>
-        <modtime>1123266368000</modtime>
-        <size>7617</size>
-        <md5sum>bc7a75991649db798620af147ca50bed</md5sum>
+        <rev>1.16</rev>
+        <modtime>1143587020000</modtime>
+        <size>7841</size>
+        <md5sum>97bd77f5d68a2a716bb7aa8ac9f10544</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/device/impl/JavaDeviceFactory.java</name>
-        <rev>1.16</rev>
-        <modtime>1123266368000</modtime>
-        <size>4762</size>
-        <md5sum>156e4d4b86e606b4eb38426377827f45</md5sum>
+        <rev>1.21</rev>
+        <modtime>1143897789000</modtime>
+        <size>6543</size>
+        <md5sum>bbb302b5ea26ca6e47ed77e32ddbe6b8</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/device/impl/JavaTicker.java</name>
-        <rev>1.7</rev>
-        <modtime>1123266368000</modtime>
-        <size>4192</size>
-        <md5sum>4582436f58b0dd4956a791f38a53bf0a</md5sum>
+        <rev>1.8</rev>
+        <modtime>1130906933000</modtime>
+        <size>4302</size>
+        <md5sum>0e6cde4b954d55150a1dbc69a4808e50</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/device/impl/SensorConfigImpl.java</name>
@@ -265,10 +286,10 @@
     </file>
     <file>
         <name>src/org/concord/sensor/impl/DataStreamDescUtil.java</name>
-        <rev>1.5</rev>
-        <modtime>1123266368000</modtime>
-        <size>3281</size>
-        <md5sum>6f9818ae96772a1eb8af09dd992dec55</md5sum>
+        <rev>1.6</rev>
+        <modtime>1130906933000</modtime>
+        <size>3304</size>
+        <md5sum>60858a7555ecd99bd3e06ba96bdb0e8d</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/impl/ExperimentConfigImpl.java</name>
@@ -279,17 +300,31 @@
     </file>
     <file>
         <name>src/org/concord/sensor/impl/ExperimentRequestImpl.java</name>
-        <rev>1.4</rev>
-        <modtime>1123266368000</modtime>
-        <size>3376</size>
-        <md5sum>15a64cbb8056dfa5627096a0113cf0ee</md5sum>
+        <rev>1.5</rev>
+        <modtime>1130906933000</modtime>
+        <size>2294</size>
+        <md5sum>4ae1a24ac82505c52c186e1fd2c4adcf</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/impl/JavaSensorDataProducer.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>2950</size>
+        <md5sum>4ef6fcc7a5ca59ddc28f7bac7f47c015</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/impl/SensorDataProducerImpl.java</name>
-        <rev>1.7</rev>
-        <modtime>1123266368000</modtime>
-        <size>12458</size>
-        <md5sum>242b8972f9e4959ce34116a9465d006d</md5sum>
+        <rev>1.10</rev>
+        <modtime>1140643843000</modtime>
+        <size>12212</size>
+        <md5sum>68afcaf540f26249663b20550bf9c20c</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/impl/SensorRequestImpl.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>2809</size>
+        <md5sum>d86a2e620736d2fd17b37be119f4a3d2</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/impl/SensorUnit.java</name>
@@ -307,10 +342,17 @@
     </file>
     <file>
         <name>src/org/concord/sensor/impl/Ticker.java</name>
-        <rev>1.4</rev>
-        <modtime>1123266368000</modtime>
-        <size>2129</size>
-        <md5sum>0832bf244c74f400e082704cb411d00d</md5sum>
+        <rev>1.5</rev>
+        <modtime>1130906933000</modtime>
+        <size>2298</size>
+        <md5sum>dd3a9247468077428c72c0d727997cb0</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/impl/Vector.java</name>
+        <rev>1.3</rev>
+        <modtime>1141427711000</modtime>
+        <size>10258</size>
+        <md5sum>88cc5294a61a390bd221404e3c0d8767</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/meld/Meld.java</name>
@@ -334,11 +376,18 @@
         <md5sum>c1d958eb47604eddc585e59c45c7a699</md5sum>
     </file>
     <file>
-        <name>src/org/concord/sensor/pseudo/PseudoJavaSensorDevice.java</name>
-        <rev>1.7</rev>
-        <modtime>1123266368000</modtime>
-        <size>5756</size>
-        <md5sum>b2ab71d48c69e7180dcdc8276d26363a</md5sum>
+        <name>src/org/concord/sensor/pseudo/AbstractPseudoSensorDevice.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>5816</size>
+        <md5sum>5fbffa67096f6adb3f0514c312223f3e</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/pseudo/JavaPseudoSensorDevice.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>1130</size>
+        <md5sum>26d413bb07c2464f60d7446e996d8c58</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/pseudo/PseudoSensorConfig.java</name>
@@ -349,24 +398,45 @@
     </file>
     <file>
         <name>src/org/concord/sensor/serial/ByteBufferStream.java</name>
-        <rev>1.5</rev>
-        <modtime>1123266368000</modtime>
-        <size>4651</size>
-        <md5sum>1f949280dbcd7de811afd337ba00e996</md5sum>
+        <rev>1.6</rev>
+        <modtime>1143587020000</modtime>
+        <size>4667</size>
+        <md5sum>7a4c369b36dc20a0124e5900179a8b6e</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/serial/JavaSerialPortFactory.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>1930</size>
+        <md5sum>0735f90aba942d75bac0f4125161133a</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/serial/SensorSerialPort.java</name>
-        <rev>1.5</rev>
-        <modtime>1123266368000</modtime>
-        <size>2873</size>
-        <md5sum>c3c7734f65ef8613acc0f6c900a767a7</md5sum>
+        <rev>1.8</rev>
+        <modtime>1143587020000</modtime>
+        <size>3552</size>
+        <md5sum>4cbdf3ca35b284bc7bea17de074c2b2b</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/serial/SensorSerialPortRXTX.java</name>
-        <rev>1.6</rev>
-        <modtime>1123266368000</modtime>
-        <size>6355</size>
-        <md5sum>946bf807bf54920d07a80dbbc2f797dc</md5sum>
+        <rev>1.10</rev>
+        <modtime>1143899118000</modtime>
+        <size>8194</size>
+        <md5sum>a171ef28e4c598ddf55359e9f570b7f5</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/serial/SerialException.java</name>
+        <rev>1.2</rev>
+        <modtime>1143587128000</modtime>
+        <size>1783</size>
+        <md5sum>ffc0a9614fc387432d3125f0e8a1165f</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/serial/SerialPortFactory.java</name>
+        <rev>1.2</rev>
+        <modtime>1130907071000</modtime>
+        <size>1344</size>
+        <md5sum>ffb798cad5a0d50d8a8dd1200ddbf836</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTDeviceConfig.java</name>
@@ -391,17 +461,17 @@
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTSensorDataProxy.java</name>
-        <rev>1.9</rev>
-        <modtime>1123266368000</modtime>
-        <size>5740</size>
-        <md5sum>294a0825831696e01d9fe0dc2be25c3f</md5sum>
+        <rev>1.12</rev>
+        <modtime>1143899118000</modtime>
+        <size>6080</size>
+        <md5sum>8e32a424ad5ac1cea6ac30ec448c9b16</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTSensorRequest.java</name>
-        <rev>1.6</rev>
-        <modtime>1123266368000</modtime>
-        <size>3993</size>
-        <md5sum>a7948d17d0eaf7d9404ea41aed1c1332</md5sum>
+        <rev>1.7</rev>
+        <modtime>1130906933000</modtime>
+        <size>4111</size>
+        <md5sum>163ed5ed2476610ee3d904313c2fbab0</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/state/PrintUserMessageHandler.java</name>

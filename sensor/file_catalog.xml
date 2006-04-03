@@ -3,7 +3,7 @@
     <server>cvs.concord.org</server>
     <repo>/home/buildspace/CodeBank</repo>
     <module>Projects/Sensor</module>
-    <tagname>rel_SNAPSHOT</tagname>
+    <tagname>rel_1_2</tagname>
     <file>
         <name>.classpath</name>
         <rev>1.7</rev>
@@ -41,17 +41,17 @@
     </file>
     <file>
         <name>file_catalog.xml</name>
-        <rev>1.3</rev>
-        <modtime>1129147214000</modtime>
-        <size>14561</size>
-        <md5sum>abdd520b3d9964bea541fb568fa8a57a</md5sum>
+        <rev>1.4</rev>
+        <modtime>1143900741000</modtime>
+        <size>16959</size>
+        <md5sum>7c4827e29eea7b4f002707ce92a6005a</md5sum>
     </file>
     <file>
         <name>project.xml</name>
-        <rev>1.10</rev>
-        <modtime>1143918716000</modtime>
-        <size>1438</size>
-        <md5sum>6d4d6b6b6d5c59a743ec39604e4fe6a8</md5sum>
+        <rev>1.12</rev>
+        <modtime>1144060790000</modtime>
+        <size>1428</size>
+        <md5sum>a114a3ab3d1b3252677b3a3e174c4ec4</md5sum>
     </file>
     <file>
         <name>.settings/org.eclipse.jdt.core.prefs</name>

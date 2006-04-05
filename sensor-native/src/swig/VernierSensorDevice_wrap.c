@@ -9,6 +9,23 @@
  * ----------------------------------------------------------------------------- */
 
 
+#ifdef __cplusplus
+template<class T> class SwigValueWrapper {
+    T *tt;
+public:
+    SwigValueWrapper() : tt(0) { }
+    SwigValueWrapper(const SwigValueWrapper<T>& rhs) : tt(new T(*rhs.tt)) { }
+    SwigValueWrapper(const T& t) : tt(new T(t)) { }
+    ~SwigValueWrapper() { delete tt; } 
+    SwigValueWrapper& operator=(const T& t) { delete tt; tt = new T(t); return *this; }
+    operator T&() const { return *tt; }
+    T *operator&() { return tt; }
+private:
+    SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+};                                                    
+#endif
+
+
 #if defined(__GNUC__)
     typedef long long __int64; /*For gcc on Windows */
 #endif
@@ -54,10 +71,10 @@ static void SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionCodes code, 
   while (except_ptr->code != code && except_ptr->code)
     except_ptr++;
 
-  (*jenv)->ExceptionClear(jenv);
-  excep = (*jenv)->FindClass(jenv, except_ptr->java_exception);
+  jenv->ExceptionClear();
+  excep = jenv->FindClass(except_ptr->java_exception);
   if (excep)
-    (*jenv)->ThrowNew(jenv, excep, msg);
+    jenv->ThrowNew(excep, msg);
 }
 
 
@@ -114,11 +131,11 @@ ExperimentConfig *configureHelper(SENSOR_DEVICE_HANDLE hDevice, ExperimentConfig
 
 
 static float *new_floatArray(int nelements) { 
-  return (float *) calloc(nelements,sizeof(float)); 
+  return new float[nelements]; 
 }
 
 static void delete_floatArray(float *ary) { 
-  free(ary); 
+  delete [] ary; 
 }
 
 static float floatArray_getitem(float *ary, int index) {
@@ -143,21 +160,21 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorParam_1key(J
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
     {
-        if (arg1->key) free((char*)arg1->key);
+        if (arg1->key) delete [] arg1->key;
         if (arg2) {
-            arg1->key = (char *) malloc(strlen(arg2)+1);
-            strcpy((char*)arg1->key,arg2);
+            arg1->key = (char *) (new char[strlen(arg2)+1]);
+            strcpy((char *) arg1->key,arg2);
         } else {
             arg1->key = 0;
         }
     }
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -173,7 +190,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorParam_1ke
     result = (char *) ((arg1)->key);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -189,21 +206,21 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorParam_1value
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
     {
-        if (arg1->value) free((char*)arg1->value);
+        if (arg1->value) delete [] arg1->value;
         if (arg2) {
-            arg1->value = (char *) malloc(strlen(arg2)+1);
-            strcpy((char*)arg1->value,arg2);
+            arg1->value = (char *) (new char[strlen(arg2)+1]);
+            strcpy((char *) arg1->value,arg2);
         } else {
             arg1->value = 0;
         }
     }
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -219,7 +236,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorParam_1va
     result = (char *) ((arg1)->value);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -231,7 +248,7 @@ JNIEXPORT jlong JNICALL Java_ccsd_vernier_NativeBridgeJNI_new_1SensorParam(JNIEn
     
     (void)jenv;
     (void)jcls;
-    result = (SensorParam *)(SensorParam *) calloc(1, sizeof(SensorParam));
+    result = (SensorParam *)new SensorParam();
     
     *(SensorParam **)&jresult = result; 
     return jresult;
@@ -244,7 +261,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_delete_1SensorParam(JNI
     (void)jenv;
     (void)jcls;
     arg1 = *(SensorParam **)&jarg1; 
-    free((char *) arg1);
+    delete arg1;
     
 }
 
@@ -427,7 +444,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1port
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
@@ -437,7 +454,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1port
     }
     
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -453,7 +470,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1p
     result = (char *)(char *) ((arg1)->portName);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -469,7 +486,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1name
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
@@ -479,7 +496,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1name
     }
     
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -495,7 +512,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1n
     result = (char *)(char *) ((arg1)->name);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -511,7 +528,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1unit
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
@@ -521,7 +538,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1SensorConfig_1unit
     }
     
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -537,7 +554,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1SensorConfig_1u
     result = (char *)(char *) ((arg1)->unitStr);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -611,17 +628,17 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensorConfig_1getSen
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return 0;
         }
     }
     result = (char *)SensorConfig_getSensorParam(arg1,arg2);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
     return jresult;
 }
@@ -633,7 +650,7 @@ JNIEXPORT jlong JNICALL Java_ccsd_vernier_NativeBridgeJNI_new_1SensorConfig(JNIE
     
     (void)jenv;
     (void)jcls;
-    result = (SensorConfig *)(SensorConfig *) calloc(1, sizeof(SensorConfig));
+    result = (SensorConfig *)new SensorConfig();
     
     *(SensorConfig **)&jresult = result; 
     return jresult;
@@ -646,7 +663,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_delete_1SensorConfig(JN
     (void)jenv;
     (void)jcls;
     arg1 = *(SensorConfig **)&jarg1; 
-    free((char *) arg1);
+    delete arg1;
     
 }
 
@@ -689,21 +706,21 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1ExperimentConfig_1
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
     {
-        if (arg1->invalidReason) free((char*)arg1->invalidReason);
+        if (arg1->invalidReason) delete [] arg1->invalidReason;
         if (arg2) {
-            arg1->invalidReason = (char *) malloc(strlen(arg2)+1);
-            strcpy((char*)arg1->invalidReason,arg2);
+            arg1->invalidReason = (char *) (new char[strlen(arg2)+1]);
+            strcpy((char *) arg1->invalidReason,arg2);
         } else {
             arg1->invalidReason = 0;
         }
     }
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -719,7 +736,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1ExperimentConfi
     result = (char *) ((arg1)->invalidReason);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -847,7 +864,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1ExperimentConfig_1
     {
         arg2 = 0;
         if (jarg2) {
-            arg2 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg2, 0);
+            arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
             if (!arg2) return ;
         }
     }
@@ -857,7 +874,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_set_1ExperimentConfig_1
     }
     
     {
-        if (arg2) (*jenv)->ReleaseStringUTFChars(jenv, jarg2, arg2); 
+        if (arg2) jenv->ReleaseStringUTFChars(jarg2, arg2); 
     }
 }
 
@@ -873,7 +890,7 @@ JNIEXPORT jstring JNICALL Java_ccsd_vernier_NativeBridgeJNI_get_1ExperimentConfi
     result = (char *)(char *) ((arg1)->deviceName);
     
     {
-        if(result) jresult = (*jenv)->NewStringUTF(jenv, result); 
+        if(result) jresult = jenv->NewStringUTF(result); 
     }
     return jresult;
 }
@@ -986,7 +1003,7 @@ JNIEXPORT jlong JNICALL Java_ccsd_vernier_NativeBridgeJNI_new_1ExperimentConfig(
     
     (void)jenv;
     (void)jcls;
-    result = (ExperimentConfig *)(ExperimentConfig *) calloc(1, sizeof(ExperimentConfig));
+    result = (ExperimentConfig *)new ExperimentConfig();
     
     *(ExperimentConfig **)&jresult = result; 
     return jresult;
@@ -999,7 +1016,7 @@ JNIEXPORT void JNICALL Java_ccsd_vernier_NativeBridgeJNI_delete_1ExperimentConfi
     (void)jenv;
     (void)jcls;
     arg1 = *(ExperimentConfig **)&jarg1; 
-    free((char *) arg1);
+    delete arg1;
     
 }
 
@@ -1261,7 +1278,7 @@ JNIEXPORT jlong JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensDev_1open(JNIEnv *
     {
         arg1 = 0;
         if (jarg1) {
-            arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
+            arg1 = (char *)jenv->GetStringUTFChars(jarg1, 0);
             if (!arg1) return 0;
         }
     }
@@ -1269,7 +1286,7 @@ JNIEXPORT jlong JNICALL Java_ccsd_vernier_NativeBridgeJNI_SensDev_1open(JNIEnv *
     
     *(SENSOR_DEVICE_HANDLE *)&jresult = result; 
     {
-        if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, arg1); 
+        if (arg1) jenv->ReleaseStringUTFChars(jarg1, arg1); 
     }
     return jresult;
 }

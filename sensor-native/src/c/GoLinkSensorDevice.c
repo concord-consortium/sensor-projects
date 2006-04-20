@@ -36,7 +36,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_LONG_TEMP			 5  // 22K:  extra long temp sensor degC
 #define SENSOR_ID_CO2				 6  // 68K:  PPM 0 to 5000 ppm
 #define SENSOR_ID_OXYGEN			 7  // 100K: PCT 0 to 27%
-#define SENSOR_ID_CV_VOLTAGE		 8  // 150K: volts
+#define SENSOR_ID_CV_VOLTAGE		 8  // 150K: volts - Differential Voltage
 #define SENSOR_ID_CV_CURRENT 		 9  // 220K: amps
 #define SENSOR_ID_TEMPERATURE_C 	10  // 10K:  verified for fast response probe
 #define SENSOR_ID_TEMPERATURE_F 	11  // 15K:
@@ -82,6 +82,9 @@ float calibrate_temp(float voltage);
 float calibrate_illum(float voltage);
 float calibrate_rel_hum(float voltage);
 float calibrate_student_force(float voltage);
+float calibrate_ti_voltage(float voltage);
+float calibrate_dif_voltage(float voltage);
+float calibrate_raw_voltage(float voltage);
 
 SENSOR_DEVICE_HANDLE SensDev_open(char *configString)
 {
@@ -414,16 +417,37 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				state->calibrationFunct = calibrate_illum;
 				break;			
 			case SENSOR_ID_TI_VOLTAGE:			
+			case SENSOR_ID_VOLTAGE:
+			case SENSOR_ID_CV_VOLTAGE:
+				if(request &&
+					request->type == QUANTITY_VOLTAGE) {
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "V");
+				sprintf(sensConfig->name, "Voltage");
+				sensConfig->type = QUANTITY_VOLTAGE;
+				// FIXME: this is a hack we should be able calc this				
+				sensConfig->stepSize = 0.01;
+				switch(ddsRec.SensorNumber){
+				case SENSOR_ID_TI_VOLTAGE:	
+					state->calibrationFunct = calibrate_ti_voltage;
+					break;		
+				case SENSOR_ID_VOLTAGE:
+					state->calibrationFunct = calibrate_raw_voltage;
+					break;
+				case SENSOR_ID_CV_VOLTAGE:
+					state->calibrationFunct = calibrate_dif_voltage;
+					break;
+				}
+				break;
 			case SENSOR_ID_CURRENT:
 			case SENSOR_ID_RESISTANCE:
 			case SENSOR_ID_LONG_TEMP:
 			case SENSOR_ID_CO2:
 			case SENSOR_ID_OXYGEN:
-			case SENSOR_ID_CV_VOLTAGE:
 			case SENSOR_ID_CV_CURRENT:
 			case SENSOR_ID_TEMPERATURE_F:
 			case SENSOR_ID_HEART_RATE:
-			case SENSOR_ID_VOLTAGE:
 			case SENSOR_ID_EKG:
 				break;
 			default:
@@ -777,3 +801,22 @@ float calibrate_student_force(float voltage)
 	return STUDENT_FORCE_B*voltage + STUDENT_FORCE_A;
 } 
 
+float calibrate_ti_voltage(float voltage)
+{
+	// raw voltage
+	return voltage;
+}
+
+#define DIFFERENTIAL_VOLTAGE_A 6.25
+#define DIFFERENTIAL_VOLTAGE_B -2.5
+float calibrate_dif_voltage(float voltage)
+{	
+	// differential voltage
+	return DIFFERENTIAL_VOLTAGE_B*voltage + DIFFERENTIAL_VOLTAGE_A;
+}
+
+float calibrate_raw_voltage(float voltage)
+{
+	// standard voltage
+	return voltage;
+}

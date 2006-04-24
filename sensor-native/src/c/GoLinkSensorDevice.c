@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <strings.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define _MAX_PATH 256
 
@@ -678,7 +679,7 @@ int SensDev_start(SENSOR_DEVICE_HANDLE hDevice)
 		
 	if(err) {
 		printf("  error starting measurements: %d\n", err);
-		return;
+		return 1;
 	}
 		
 	return 0;
@@ -699,7 +700,7 @@ int SensDev_stop(SENSOR_DEVICE_HANDLE hDevice)
 		
 	if(err) {
 		printf("  error stoping measurements: %d\n", err);
-		return;
+		return 1;
 	}
 
 	return 0;

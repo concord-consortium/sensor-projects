@@ -1,7 +1,7 @@
 CFLAGS = -Iinclude -Ivernier_goio_sdk
 
-#SWIG = swig
-SWIG = /cygdrive/c/swig-1.3.21/swig
+SWIG = swig
+#SWIG = /cygdrive/c/swig-1.3.21/swig
 
 QUERY_OBJS = nativelib/test/QueryDevice.o nativelib/test/CCSensorUtils.o 
 PRINTDATA_OBJS = nativelib/test/PrintData.o nativelib/test/CCSensorUtils.o 
@@ -45,7 +45,7 @@ bin nativelib nativelib/test nativelib/swig $(SWIG_OUTPUT_DIR)/ccsd/vernier $(SW
 
 ######### Vernier targets ###########
 vernier_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/vernier
-	$(SWIG) -java -Iinclude -package ccsd.vernier -outdir src/swig/java/ccsd/vernier -o src/swig/VernierSensorDevice_wrap.c src/swig/CCSensorDevice.i  
+	$(SWIG) -java -c++ -Iinclude -package ccsd.vernier -outdir src/swig/java/ccsd/vernier -o src/swig/VernierSensorDevice_wrap.c src/swig/CCSensorDevice.i  
 
 bin/vernier_ccsd.dll : 	vernier_swig $(GOLINK_OBJS) nativelib/swig/VernierSensorDevice_wrap.o bin
 	$(build-jni-dll)

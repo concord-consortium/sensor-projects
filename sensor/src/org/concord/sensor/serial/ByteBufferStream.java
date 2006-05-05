@@ -82,6 +82,11 @@ public class ByteBufferStream
         buf[offset+1] = (byte)(value & 0x000000FF);        
     }
 
+    public static final void writeUByte(int value, byte [] buf, int offset)    
+    {
+        buf[offset] = (byte)(value & 0x000000FF);        
+    }
+
     public ByteBufferStream(byte [] buffer, int offset, int length,
             DeviceService devService)
     {
@@ -159,5 +164,23 @@ public class ByteBufferStream
         }
         
         return returnStr;
+    }
+    
+    public void writeULong(long value)
+    {
+        writeULong(value, inBuf, offset);
+        offset += 4;
+    }
+    
+    public void writeUShort(int value)    
+    {
+        writeUShort(value, inBuf, offset);
+        offset += 2;
+    }
+
+    public void writeUByte(int value)    
+    {
+        writeUByte(value, inBuf, offset);
+        offset += 1;
     }
 }

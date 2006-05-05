@@ -64,7 +64,6 @@ public class OTExperimentRequest extends DefaultOTObject implements
 	 * @see org.concord.sensor.ExperimentRequest#getPeriod()
 	 */
 	public float getPeriod() {
-		// TODO Auto-generated method stub
 		return resources.getPeriod();
 	}
 

@@ -29,6 +29,7 @@
  */
 package org.concord.sensor.impl;
 
+import org.concord.framework.util.Copyable;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 
@@ -39,7 +40,7 @@ import org.concord.sensor.SensorConfig;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ExperimentConfigImpl 
-	implements ExperimentConfig 
+	implements ExperimentConfig, Copyable
 {
 	private SensorConfig [] sensorConfigs = null;
 	private boolean valid;
@@ -157,5 +158,23 @@ public class ExperimentConfigImpl
     public void setDataReadPeriod(float dataReadPeriod)
     {
         this.dataReadPeriod = dataReadPeriod;
+    }
+
+    /**
+     * This will not be a deep copy
+     */
+    public Object getCopy()
+    {
+        ExperimentConfigImpl copy = new ExperimentConfigImpl();
+        copy.dataReadPeriod = dataReadPeriod;
+        copy.deviceId = deviceId;
+        copy.deviceName = deviceName;
+        copy.exactPeriod = exactPeriod;
+        copy.invalidReason = invalidReason;
+        copy.period = period;
+        copy.sensorConfigs = sensorConfigs;
+        copy.valid = valid;
+        
+        return copy;
     }
 }

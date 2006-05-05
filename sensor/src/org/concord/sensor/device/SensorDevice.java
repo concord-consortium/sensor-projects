@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.7 $
- * $Date: 2006-03-03 23:15:11 $
+ * $Revision: 1.8 $
+ * $Date: 2006-05-05 15:44:31 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -104,8 +104,8 @@ public interface SensorDevice
 
 	/**
 	 * After the device is started this method is called again and again
-	 * it should be called within the value returned by getRightMilliseconds()
-	 * If it takes longer than getRightMilliseconds() to execute then it will
+	 * it should be called within the value returned by getDataReadPeriod()
+	 * If it takes longer than getDataReadPeriod() to execute then it will
 	 * be called again as soon as possible.
 	 * 
 	 * It should place values read from the device in the values buffer, starting

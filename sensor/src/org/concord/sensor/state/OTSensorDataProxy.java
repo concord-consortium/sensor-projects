@@ -36,7 +36,9 @@ import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.otrunk.DefaultOTObject;
+import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.OTResourceSchema;
+import org.concord.framework.util.Copyable;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
@@ -50,11 +52,12 @@ import org.concord.sensor.impl.DataStreamDescUtil;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OTSensorDataProxy extends DefaultOTObject 
-	implements DataProducer 
+	implements DataProducer, Copyable
 {
 	public static interface ResourceSchema extends OTResourceSchema
 	{
-		OTExperimentRequest getRequest();		
+		OTExperimentRequest getRequest();
+        void setRequest(OTExperimentRequest request);
 	}
 	
 	private ResourceSchema resources;
@@ -200,4 +203,20 @@ public class OTSensorDataProxy extends DefaultOTObject
 	public void init()
 	{
 	}	
+    
+    public Object getCopy()
+    {        
+        OTObjectService service = getOTObjectService();
+        try {
+            OTSensorDataProxy copy = 
+                (OTSensorDataProxy)service.createObject(OTSensorDataProxy.class);
+            copy.resources.setName(resources.getName());
+            copy.resources.setRequest(resources.getRequest());
+            return copy;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 }

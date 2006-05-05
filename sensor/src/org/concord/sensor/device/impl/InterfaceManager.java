@@ -30,7 +30,6 @@ import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.JavaSensorDataProducer;
-import org.concord.sensor.impl.SensorDataProducerImpl;
 import org.concord.sensor.impl.Ticker;
 
 /**
@@ -65,17 +64,8 @@ import org.concord.sensor.impl.Ticker;
  * @author scott<p>
  *
  */
-public class InterfaceManager implements SensorDataManager
+public class InterfaceManager extends AbstractSensorDataManager
 {
-	protected UserMessageHandler messageHandler;
-	protected Ticker ticker;
-		
-	private boolean prepared;
-	private DeviceConfig[] deviceConfigs;
-	private static DeviceFactory deviceFactory = new JavaDeviceFactory();
-		
-	protected SensorDevice currentDevice = null; 
-	
 	/**
 	 * The UserMessageHandler is used by the SensorDataProducer
 	 * to show messages to the user.  If an device is detached in the 
@@ -95,8 +85,10 @@ public class InterfaceManager implements SensorDataManager
 
 	public InterfaceManager(UserMessageHandler h, Ticker ticker)
 	{
-		messageHandler = h;
-		this.ticker = ticker;
+        super(h, ticker);
+        if(deviceFactory == null) {
+            deviceFactory = new JavaDeviceFactory();
+        }
 	}
 		
 	/**
@@ -106,73 +98,26 @@ public class InterfaceManager implements SensorDataManager
 	 */
 	public SensorDataProducer createDataProducer()
 	{
-		// Check the policy it can be one of the following:
-		// use only a specific device
-		// use only one of a collection of devices
-		// use any attached device.
-		// The policy will be determined by looking at the
-		// device list.  If it is null then any device will
-		// be used.  Otherwise the list will be traversed trying
-		// to find an available device.
-		if(deviceConfigs == null) {
-			// in this case how do we know the address strings
-			// and how do we know the set of known devices?  I guess
-			// the factory would need to tell us and we would need to create
-			// each one and see if it is attached.
-			System.err.println("Searching all possible devices isn't supported yet");
-			return null;
-		}
-				
-		if(currentDevice != null) {
-			// check if it is attached.
-			// if not then it should be closed.
-			// this means we only support one device at a time
-		    if(ticker.isTicking()) {
-		        ticker.stopTicking(null);
-		    }
-		    
-			if(!currentDevice.isAttached()) {
-				deviceFactory.destroyDevice(currentDevice);
-				currentDevice = null;
-			}
-		}
-		
-		if(currentDevice == null) {
-			for(int i=0; i<deviceConfigs.length; i++) {
-				SensorDevice device = 
-					deviceFactory.createDevice(deviceConfigs[i]);
-				if(device.isAttached()){
-					currentDevice = device;
-					break;
-				}
-				deviceFactory.destroyDevice(device);
-			}
-		}
-		
-		if(currentDevice == null) {
-			// prompt the user to connect one of the supported devices
-			// then try again, recursively?
-			System.err.println("Couldn't find attached device");
-			
-            // We used to give them a default psuedo device, but that makes it difficult
-            // to handle the error where the device might not be attached
-			return null;
-		}
+        SensorDevice requestedDevice = getSensorDevice();
 
-		if(ticker.isTicking()) {
-		    // we need to stop this ticker from running
-		    // it was probably running from being added to another
-		    // dataProducer.  It would be better if we had an instance
-		    // of this dataProducer so we could stop it directly.
-		    ticker.stopTicking(null);
-		}
-		
+        if(requestedDevice == null) {
+            return null;
+        }
+        
+        if(ticker.isTicking()) {
+            // we need to stop this ticker from running
+            // it was probably running from being added to another
+            // dataProducer.  It would be better if we had an instance
+            // of this dataProducer so we could stop it directly.
+            ticker.stopTicking(null);
+        }
+        
 		SensorDataProducer dataProducer = 
-		    new JavaSensorDataProducer(currentDevice, ticker, messageHandler);
+		    new JavaSensorDataProducer(requestedDevice, ticker, messageHandler);
 
 		return dataProducer;
 	}
-		
+
 	/**
 	 * This should return a sensordataproducer for all the currently 
 	 * attached devices.  This method currently is not implemented.  When it 
@@ -183,41 +128,6 @@ public class InterfaceManager implements SensorDataManager
 	{
 		return null;
 	}	
-	
-	/**
-	 * This returns all the device configs that have been set.  
-	 * These configs are used to determine the available devices.
-	 * @return
-	 */
-	public DeviceConfig [] getDeviceConfigs()
-	{
-		return deviceConfigs; 
-	}
-	
-	/**
-	 * Set the list of device configs.  This list is used when
-	 * prepareDataProducer is called.  The list is traversed and the 
-	 * first available device is used.  If the list is null then all 
-	 * devices available from the DeviceFactory are checked for.  
-	 * 
-	 * @param configs
-	 */
-	public void setDeviceConfigs(DeviceConfig [] configs)
-	{
-		deviceConfigs = configs;
-	}
-	
-	/**
-	 * This factory is used to actually create the SensorDataProducers.
-	 * 
-	 * 
-	 * @param factory
-	 */
-	public static void setDeviceFactory(DeviceFactory factory)
-	{
-		deviceFactory = factory;
-	}
-	
 	
 	public static SensorDataProducer getDataProducerForDeviceNoConsumer(int deviceId){
 	    return getDataProducerForDeviceNoConsumer(deviceId,null,null);

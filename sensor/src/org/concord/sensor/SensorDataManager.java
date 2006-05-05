@@ -23,14 +23,16 @@
 
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.6 $
+ * $Date: 2006-05-05 15:44:30 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor;
+
+import org.concord.sensor.device.SensorDevice;
 
 
 
@@ -49,6 +51,13 @@ package org.concord.sensor;
  */
 public interface SensorDataManager
 {
+    /**
+     * This might be temporary to follow the design of before users
+     * of the sensor data manager shouldn't know about the SensorDevice
+     * however right now that is the easiest way for this to work.
+     */
+    public SensorDevice getSensorDevice();
+    
 	/**
 	 * A request is sent in allong with a data consumer.  A SensorDataProducer
 	 * is created and then passed to the consumer.  This method

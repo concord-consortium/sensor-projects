@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.21 $
- * $Date: 2006-04-01 13:23:09 $
+ * $Revision: 1.22 $
+ * $Date: 2006-05-12 16:38:20 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -34,6 +34,7 @@ package org.concord.sensor.device.impl;
 
 import java.util.Hashtable;
 
+import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.DeviceIdAware;
@@ -241,5 +242,11 @@ public class JavaDeviceFactory
     public boolean isValidFloat(float val)
     {
         return !Float.isNaN(val);
+    }
+
+    public UserMessageHandler getMessageHandler()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

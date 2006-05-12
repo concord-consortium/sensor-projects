@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-03-28 23:12:04 $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-12 16:38:20 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -32,6 +32,7 @@
 */
 package org.concord.sensor.device;
 
+import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.serial.SensorSerialPort;
 
 public interface DeviceService
@@ -46,6 +47,8 @@ public interface DeviceService
     public int getOSType();
 
     public void log(String message);
+
+    public UserMessageHandler getMessageHandler();
     
     public void sleep(int millis);
     

@@ -96,6 +96,11 @@ public class ByteBufferStream
         this.devService = devService;
     }
     
+    public void setOffset(int offset)
+    {
+    	this.offset = offset;
+    }
+    
     public float readFloat()
     {
         if(lowNibble) {

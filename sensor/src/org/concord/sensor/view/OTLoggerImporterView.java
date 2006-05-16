@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-16 19:12:21 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -34,6 +34,7 @@ package org.concord.sensor.view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,6 +46,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.concord.framework.data.stream.DataStoreCollection;
 import org.concord.framework.data.stream.DataStoreImporter;
@@ -67,17 +70,20 @@ public class OTLoggerImporterView extends JPanel
     JDialog dialog = new JDialog((JFrame)null, "Record Chooser");
     JComponent dialogBody;
     JList recordList;
+    JButton select;
     
     public void initialize(OTObject otObject, OTViewContainer viewContainer)
     {
         this.viewContainer = viewContainer;
         importer = (OTLoggerImporter)otObject;
         
-        JButton select = new JButton("Select");
+        select = new JButton("Select");
         JButton cancel = new JButton("Cancel");
         
         Box buttonBox = Box.createHorizontalBox();
+        buttonBox.add(Box.createGlue());
         buttonBox.add(cancel);
+        buttonBox.add(Box.createHorizontalStrut(6));
         buttonBox.add(select);
         Container contentPane = dialog.getContentPane();
         contentPane.add(buttonBox, BorderLayout.SOUTH);
@@ -89,7 +95,7 @@ public class OTLoggerImporterView extends JPanel
                 SensorLoggedRecord selectedRecord = 
                     (SensorLoggedRecord)recordList.getSelectedValue();
                 dialog.setVisible(false);
-                importer.importData(collection, selectedRecord);                
+                importer.importData(collection, selectedRecord); 
                 // import the record
             }            
         });
@@ -106,7 +112,6 @@ public class OTLoggerImporterView extends JPanel
 
     public JComponent getComponent(boolean editable)
     {
-        setLayout(new BorderLayout());
         JButton button = new JButton("Import Record");
         button.addActionListener(new ActionListener(){
 
@@ -136,6 +141,21 @@ public class OTLoggerImporterView extends JPanel
                     System.out.println("dev Time: " + devTime.getBasicString());
                     logger.close();
                     recordList = new JList(records);
+                    
+                    // disable select button until user
+                    // selects an item
+                    select.setEnabled(false);
+                    recordList.addListSelectionListener(new ListSelectionListener(){
+
+						public void valueChanged(ListSelectionEvent event) {
+							if(recordList.getSelectedValue() != null){
+								select.setEnabled(true);
+							} else {
+								select.setEnabled(false);
+							}
+						}
+                    	
+                    });
                     JPanel recordChooser = new JPanel(new BorderLayout());
                     recordChooser.add(recordList, BorderLayout.CENTER);
                     recordChooser.add(new JLabel("Current Device Time: " + devTime.getBasicString()),
@@ -151,7 +171,18 @@ public class OTLoggerImporterView extends JPanel
             }
             
         });
-        add(button);
+        
+        // This is the usual swing layout hack.  I want to make sure
+        // the returned JPanel has similar properties to a button.  
+        // it should have the prefered size of the button, but the 
+        // container it is being added to will want to stretch it to 
+        // the width of the container.  The following doesn't really
+        // do that but it will have to do.  SpringLayout might be able
+        // to do this correctly.
+        this.setLayout(new FlowLayout());
+        button.setAlignmentX(0.5f);        		
+        this.add(button);
+        
         return this;
     }
 

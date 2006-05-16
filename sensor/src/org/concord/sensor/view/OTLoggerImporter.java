@@ -23,21 +23,19 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-16 19:12:21 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
 */
 package org.concord.sensor.view;
 
-import org.concord.framework.data.stream.DataStore;
 import org.concord.framework.data.stream.DataStoreCollection;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.WritableArrayDataStore;
 import org.concord.framework.otrunk.DefaultOTObject;
-import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.view.OTAction;
 import org.concord.sensor.ExperimentConfig;
@@ -48,7 +46,6 @@ import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
 import org.concord.sensor.impl.DataStreamDescUtil;
 import org.concord.sensor.state.OTExperimentRequest;
-import org.concord.sensor.state.OTLoggingRequest;
 
 public class OTLoggerImporter extends DefaultOTObject
     implements OTAction
@@ -125,7 +122,7 @@ public class OTLoggerImporter extends DefaultOTObject
        
        dataStore.setValues(sensorConfigs.length, values, 0, numSamples, 8);
        
-       collection.addDataStore("new dataset", dataStore);
+       collection.addDataStore(record.getDescription(), dataStore);
     }
 
     /**

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2006-05-05 15:44:30 $
+ * $Revision: 1.7 $
+ * $Date: 2006-05-17 19:56:43 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -52,20 +52,16 @@ import org.concord.sensor.device.SensorDevice;
 public interface SensorDataManager
 {
     /**
-     * This might be temporary to follow the design of before users
+     * This might be temporary.  The design before was that users
      * of the sensor data manager shouldn't know about the SensorDevice
-     * however right now that is the easiest way for this to work.
+     * However right now using it is the easiest way for this to work.
      */
     public SensorDevice getSensorDevice();
     
 	/**
-	 * A request is sent in allong with a data consumer.  A SensorDataProducer
-	 * is created and then passed to the consumer.  This method
-	 * does not directly return a SensorDataProducer because it might take
-	 * a while to create and initialize it.   
+	 * Creates a data producer that can then be configured with a
+	 * particular experiment request.
 	 * 
-	 * @param request
-	 * @param consumer
 	 */
 	public SensorDataProducer createDataProducer();
 	

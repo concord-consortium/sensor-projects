@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-17 19:56:43 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -70,12 +70,10 @@ public class OTLoggerRecordChooser extends DefaultOTObject
     
     SensorLoggedRecord [] getRecords()
     {
-        SensorDevice device = sensorManager.getSensorDevice();
-        if(!(device instanceof SensorLogger)) {
-            return null;
+        SensorLogger logger = getLogger();
+        if(logger == null){
+        	return null;
         }
-
-        SensorLogger logger = (SensorLogger)device;
         SensorLoggedRecord [] records =  logger.getAvailableRecords();
         
         return records;

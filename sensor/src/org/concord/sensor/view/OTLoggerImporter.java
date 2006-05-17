@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2006-05-16 19:12:21 $
+ * $Revision: 1.4 $
+ * $Date: 2006-05-17 19:56:43 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -142,12 +142,10 @@ public class OTLoggerImporter extends DefaultOTObject
     
     public SensorLoggedRecord [] getRecords()
     {
-        SensorDevice device = sensorManager.getSensorDevice();
-        if(!(device instanceof SensorLogger)) {
-            return null;
-        }
-
-        SensorLogger logger = (SensorLogger)device;
+    	SensorLogger logger = getLogger();
+    	if(logger == null){
+    		return null;
+    	}
         SensorLoggedRecord [] records =  logger.getAvailableRecords();
 
         logger.close();

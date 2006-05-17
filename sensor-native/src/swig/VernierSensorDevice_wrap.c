@@ -100,7 +100,7 @@ SensorConfig *ExperimentConfig_getSensorConfig(ExperimentConfig *self,int i){
 		return (self->sensorConfigArray) + i;
 	}
 void ExperimentConfig_createSensorConfigArray(ExperimentConfig *self,int size){
-		self->sensorConfigArray = malloc(sizeof(SensorConfig)*size);
+		self->sensorConfigArray = (SensorConfig*)malloc(sizeof(SensorConfig)*size);
 	}
 void ExperimentConfig_setSensorConfig(ExperimentConfig *self,SensorConfig *sConfig,int i){
 		self->sensorConfigArray[i] = *sConfig;

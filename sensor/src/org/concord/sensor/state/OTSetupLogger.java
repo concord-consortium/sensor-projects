@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-18 19:48:25 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -97,5 +97,10 @@ public class OTSetupLogger extends DefaultOTObject
     public String getActionText()
     {
         return "Setup Logger";
+    }
+    
+    public void setRequest(OTLoggingRequest request)
+    {
+        resources.setRequest(request);
     }
 }

@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2006-05-18 19:48:25 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.concord.framework.otrunk.OTObjectService;
 import org.concord.sensor.DeviceTime;
 import org.concord.sensor.LoggingRequest;
 
@@ -122,6 +123,14 @@ public class OTLoggingRequest extends OTExperimentRequest
     public float getTriggerValue()
     {
         return resources.getTriggerValue();
+    }
+
+    /**
+     * Make this method public.
+     */
+    public OTObjectService getOTObjectService()
+    {
+        return super.getOTObjectService();
     }
 
 }

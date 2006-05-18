@@ -3,7 +3,7 @@
     <server>cvs.concord.org</server>
     <repo>/home/buildspace/CodeBank</repo>
     <module>Projects/Sensor</module>
-    <tagname>rel_1_3</tagname>
+    <tagname>rel_1_4</tagname>
     <file>
         <name>.classpath</name>
         <rev>1.7</rev>
@@ -41,17 +41,17 @@
     </file>
     <file>
         <name>file_catalog.xml</name>
-        <rev>1.5</rev>
-        <modtime>1144042814000</modtime>
-        <size>16954</size>
-        <md5sum>6527ace6d795db22251fe13375de2c14</md5sum>
+        <rev>1.6</rev>
+        <modtime>1147896241000</modtime>
+        <size>20136</size>
+        <md5sum>3fd803e506aca351611a10fb3b1239db</md5sum>
     </file>
     <file>
         <name>project.xml</name>
-        <rev>1.14</rev>
-        <modtime>1147896231000</modtime>
+        <rev>1.16</rev>
+        <modtime>1147982615000</modtime>
         <size>1428</size>
-        <md5sum>a12b9fe1d3e7c1c766191be396fcb920</md5sum>
+        <md5sum>20fd9ab4e20da093fe3a94461a0bb3f3</md5sum>
     </file>
     <file>
         <name>.settings/org.eclipse.jdt.core.prefs</name>
@@ -510,10 +510,10 @@
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTLoggingRequest.java</name>
-        <rev>1.2</rev>
-        <modtime>1146843969000</modtime>
-        <size>3678</size>
-        <md5sum>e38de07b39204115c5f9c51ba3e59053</md5sum>
+        <rev>1.3</rev>
+        <modtime>1147981705000</modtime>
+        <size>3886</size>
+        <md5sum>d5039d1b9181151b2931e855bb67026a</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTSensorDataProxy.java</name>
@@ -531,10 +531,10 @@
     </file>
     <file>
         <name>src/org/concord/sensor/state/OTSetupLogger.java</name>
-        <rev>1.2</rev>
-        <modtime>1146843969000</modtime>
-        <size>2954</size>
-        <md5sum>3222ebb0ddc1b2884aa0a6c0f2c47730</md5sum>
+        <rev>1.3</rev>
+        <modtime>1147981705000</modtime>
+        <size>3066</size>
+        <md5sum>8c408e9e4d812e79843e9c7650e46f67</md5sum>
     </file>
     <file>
         <name>src/org/concord/sensor/state/PrintUserMessageHandler.java</name>
@@ -591,6 +591,13 @@
         <modtime>1146843969000</modtime>
         <size>3025</size>
         <md5sum>51de5f93a6c6e44fa27cfbcd737f4a74</md5sum>
+    </file>
+    <file>
+        <name>src/org/concord/sensor/view/OTLoggingRequestView.java</name>
+        <rev>1.1</rev>
+        <modtime>1147981705000</modtime>
+        <size>3051</size>
+        <md5sum>9a7301054e6f79b05e0115fdc0d4f8ae</md5sum>
     </file>
 </filecatalog>
 

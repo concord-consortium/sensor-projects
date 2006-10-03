@@ -58,17 +58,24 @@ public class OTSensorDataProxy extends DefaultOTObject
 	{
 		OTExperimentRequest getRequest();
         void setRequest(OTExperimentRequest request);
+        
+        OTZeroSensor getZeroSensor();
 	}
 	
 	private ResourceSchema resources;
 	private SensorDataManager sensorManager;
-	private SensorDataProducer producer = null;
+	private DataProducer producer = null;
+	private SensorDataProducer sensorDataProducer = null;
 
 	// Eclipse bug gives this a warning making it look like it isn't
 	// read locally.  That is not correct.
 	private boolean running = false;
 	
 	private Vector dataListeners = new Vector();
+	
+	// This is just to keep a reference so it doesn't get garbage collected
+	// while this sensor proxy is still around
+	private OTZeroSensor zeroSensor;
 	
 	/**
 	 * @param resources
@@ -150,9 +157,10 @@ public class OTSensorDataProxy extends DefaultOTObject
 
 		running = true;
 		ExperimentRequest request = resources.getRequest();	
-		if(producer == null) {
-		    producer = sensorManager.createDataProducer();
-            if(producer == null) {
+		if(sensorDataProducer == null) {
+			sensorDataProducer = sensorManager.createDataProducer();
+			producer = sensorDataProducer;
+            if(sensorDataProducer == null) {
                 // we couldn't create the producer
                 return;
             }
@@ -165,9 +173,32 @@ public class OTSensorDataProxy extends DefaultOTObject
 				producer.addDataListener(listener);
 			}
 		}
-		ExperimentConfig config = producer.configure(request);
+		ExperimentConfig config = sensorDataProducer.configure(request);
 		if(config == null || !config.isValid()) {
 		    return;
+		}
+		
+		if(resources.getZeroSensor() != null){
+			// need to setup the taring datafilter and wrap it around the
+			// producer
+			
+			// keep a reference to this zero sensor object so it doesn't
+			// get garbage collected before the button is pushed
+			zeroSensor = resources.getZeroSensor();
+			
+			DataProducer newProducer = zeroSensor.setupDataFilter(sensorDataProducer);
+			if(producer != newProducer){
+				// need to transfer all the listeners from the old
+				// producer to the new one
+				for(int i=0; i<dataListeners.size(); i++) {
+					DataListener listener = (DataListener)dataListeners.get(i);
+					producer.removeDataListener(listener);
+					newProducer.addDataListener(listener);
+				}
+
+				producer = newProducer;
+			}
+			
 		}
 		
 		producer.start();

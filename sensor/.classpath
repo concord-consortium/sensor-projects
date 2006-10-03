@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="/home/scott/ExtProjects/rxtx-2.1-7pre17/src" kind="lib" path="/thirdparty/RXTXcomm-2.1.7.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Framework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Data"/>
 	<classpathentry kind="output" path="lib"/>
 </classpath>

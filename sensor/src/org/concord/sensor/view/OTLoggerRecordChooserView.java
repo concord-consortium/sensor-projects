@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2007-01-24 22:11:22 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -41,7 +41,6 @@ import javax.swing.JPanel;
 
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.view.OTObjectView;
-import org.concord.framework.otrunk.view.OTViewContainer;
 import org.concord.sensor.DeviceTime;
 import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
@@ -49,17 +48,12 @@ import org.concord.sensor.device.SensorLogger;
 public class OTLoggerRecordChooserView 
     implements OTObjectView
 {
-    protected OTViewContainer viewContainer;
     protected OTLoggerRecordChooser chooser;
     
-    public void initialize(OTObject otObject, OTViewContainer viewContainer)
+    public JComponent getComponent(OTObject otObject, boolean editable)
     {
-        this.viewContainer = viewContainer;
         chooser = (OTLoggerRecordChooser)otObject;
-    }
 
-    public JComponent getComponent(boolean editable)
-    {
         // This should return a list of the records
         SensorLogger logger = chooser.getLogger();
         if(logger == null) {

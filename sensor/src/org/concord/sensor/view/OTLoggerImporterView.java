@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2006-05-16 19:12:21 $
+ * $Revision: 1.4 $
+ * $Date: 2007-01-24 22:11:22 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -53,7 +53,6 @@ import org.concord.framework.data.stream.DataStoreCollection;
 import org.concord.framework.data.stream.DataStoreImporter;
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.view.OTObjectView;
-import org.concord.framework.otrunk.view.OTViewContainer;
 import org.concord.sensor.DeviceTime;
 import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
@@ -61,7 +60,11 @@ import org.concord.sensor.device.SensorLogger;
 public class OTLoggerImporterView extends JPanel
     implements OTObjectView, DataStoreImporter
 {
-    protected OTViewContainer viewContainer;
+	/**
+	 * Not intended to be serialized, just added remove compile warning
+	 */
+	private static final long serialVersionUID = 1L;
+	
     protected OTLoggerImporter importer;
     protected DataStoreCollection collection;
 
@@ -72,9 +75,8 @@ public class OTLoggerImporterView extends JPanel
     JList recordList;
     JButton select;
     
-    public void initialize(OTObject otObject, OTViewContainer viewContainer)
+    public JComponent getComponent(OTObject otObject, boolean editable)
     {
-        this.viewContainer = viewContainer;
         importer = (OTLoggerImporter)otObject;
         
         select = new JButton("Select");
@@ -108,10 +110,6 @@ public class OTLoggerImporterView extends JPanel
             }            
         });
         
-    }
-
-    public JComponent getComponent(boolean editable)
-    {
         JButton button = new JButton("Import Record");
         button.addActionListener(new ActionListener(){
 

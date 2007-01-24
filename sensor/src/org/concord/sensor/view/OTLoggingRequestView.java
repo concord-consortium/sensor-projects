@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2006-05-18 19:48:25 $
+ * $Revision: 1.2 $
+ * $Date: 2007-01-24 22:11:22 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -38,25 +38,17 @@ import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.view.OTActionView;
 import org.concord.framework.otrunk.view.OTObjectView;
-import org.concord.framework.otrunk.view.OTViewContainer;
-
+import org.concord.framework.otrunk.view.OTViewFactory;
+import org.concord.framework.otrunk.view.OTViewFactoryAware;
 import org.concord.sensor.state.OTLoggingRequest;
 import org.concord.sensor.state.OTSetupLogger;
 
 public class OTLoggingRequestView
-    implements OTObjectView
+    implements OTObjectView, OTViewFactoryAware
 {
-    protected OTViewContainer viewContainer;
+    protected OTViewFactory viewFactory;
     protected OTLoggingRequest request;
-
     
-    public void initialize(OTObject otObject, OTViewContainer viewContainer)
-    {
-        this.viewContainer = viewContainer;
-        request = (OTLoggingRequest)otObject;
-        
-    }
-
     /**
      * This should be replaced by a facility 
      * for creating views from otrunk objects.  This would
@@ -64,13 +56,16 @@ public class OTLoggingRequestView
      * view class it would take an OTObject and a perhaps a 
      * path to set a part of that object with the input object
      */
-    public JComponent getComponent(boolean editable)
+    public JComponent getComponent(OTObject otObject, boolean editable)
     {
+        request = (OTLoggingRequest)otObject;
+
         try {
             OTObjectService otService = request.getOTObjectService();
             ClassLoader cLoader = getClass().getClassLoader();
-            OTObject buttonObj = 
-                otService.createObject(cLoader.loadClass("org.concord.otrunk.control.OTButton"));
+            Class otButtonClass =
+            	cLoader.loadClass("org.concord.otrunk.control.OTButton");
+            OTObject buttonObj = otService.createObject(otButtonClass);
 
             OTSetupLogger setupObj = (OTSetupLogger)
                 otService.createObject(OTSetupLogger.class);
@@ -79,7 +74,7 @@ public class OTLoggingRequestView
 
             ((OTActionView)buttonObj).setAction(setupObj);
             
-            return viewContainer.getComponent(buttonObj, editable);            
+            return viewFactory.getComponent(buttonObj, null, editable);            
         } catch (Exception e){
             
         }
@@ -92,4 +87,8 @@ public class OTLoggingRequestView
         // TODO Auto-generated method stub
         
     }
+
+	public void setViewFactory(OTViewFactory factory) {
+		viewFactory = factory;		
+	}
 }

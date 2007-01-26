@@ -20,6 +20,7 @@
 
   <xsl:template match="Sensor">
      <tr><td><xsl:value-of select="LocalName"/></td>
+	 <td><xsl:value-of select="@Product"/></td>
 	 <td><xsl:value-of select="@BaseID"/></td>
 	 <td><xsl:value-of select="@Legacy"/></td>
 	 <td><xsl:value-of select="SensorFamily"/></td>

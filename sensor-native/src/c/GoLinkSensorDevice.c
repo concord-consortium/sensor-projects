@@ -45,6 +45,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_HEART_RATE		13  // 1K:   BPM 
 #define SENSOR_ID_VOLTAGE			14  // 47K: 
 #define SENSOR_ID_EKG				15  // 1.5K:
+#define SENSOR_ID_CO2_GAS           17
 
 /*
  * smart sensors
@@ -58,6 +59,8 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SMART_HUMIDITY    47
 #define SENSOR_ID_GO_TEMP           60 
 #define SENSOR_ID_GO_MOTION         69 
+#define SENSOR_ID_IR_TEMP           73
+
 
 /*
  * This is not how this is supposed to be done
@@ -371,6 +374,16 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 			 	sensConfig->type = QUANTITY_RELATIVE_HUMIDITY;
 			 	sensConfig->stepSize = 0.1;
 			 	break;
+			case SENSOR_ID_IR_TEMP:
+				if(request &&
+					(request->type == QUANTITY_TEMPERATURE ||
+					 request->type == QUANTITY_TEMPERATURE_WAND)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "degC");
+				sensConfig->type = QUANTITY_TEMPERATURE_WAND;
+				sensConfig->stepSize = 0.01;
+				break;
 			default:
 				valid = 0;
 				sensConfig->type = QUANTITY_UNKNOWN;
@@ -441,6 +454,18 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 					break;
 				}
 				break;
+			case SENSOR_ID_CO2_GAS:
+				if(request &&
+					request->type == QUANTITY_CO2_GAS) {
+					valid = 1;
+				}
+				
+				sprintf(sensConfig->unitStr, "ppm");
+				sprintf(sensConfig->name, "CO2 Gas");
+				sensConfig->type = QUANTITY_CO2_GAS;			
+				sensConfig->stepSize = 4.0; // FIXME: this is a hack we should be able calc this					
+			
+				break;
 			case SENSOR_ID_CURRENT:
 			case SENSOR_ID_RESISTANCE:
 			case SENSOR_ID_LONG_TEMP:
@@ -451,6 +476,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 			case SENSOR_ID_HEART_RATE:
 			case SENSOR_ID_EKG:
 				break;
+				
 			default:
 				printf("Unknown sensor id: %d", (int)ddsRec.SensorNumber);
 		}
@@ -820,4 +846,12 @@ float calibrate_raw_voltage(float voltage)
 {
 	// standard voltage
 	return voltage;
+}
+
+#define CO2_GAS_A 0
+#define CO2_GAS_B 2
+float calibrate_co2_gas(float voltage)
+{
+	// ppm 
+	return CO2_GAS_B*voltage + CO2_GAS_A;
 }

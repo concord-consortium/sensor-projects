@@ -158,6 +158,7 @@ enum QuantityType
 {
 	/****************************************************
 	 ****************************************************
+	 *** taken from org.concord.sensor.SensorConfig *****
 	public static int QUANTITY_UNKNOWN=             -1;
 	
 	// Required
@@ -186,6 +187,7 @@ enum QuantityType
 	public static int QUANTITY_ANGULAR_VELOCITY=	16; // rad/s
 	
 	public static int QUANTITY_WIND_SPEED=			17; // m/s
+	public static int QUANTITY_CO2_GAS=             18; // ppm
 	 *****************************************************
 	 *****************************************************/
 	
@@ -219,6 +221,8 @@ enum QuantityType
 	QUANTITY_ANGULAR_VELOCITY,
 	
 	QUANTITY_WIND_SPEED,
+	
+	QUANTITY_CO2_GAS,
 };
 
 /*

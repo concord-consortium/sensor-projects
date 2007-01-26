@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.9 $
- * $Date: 2005-08-05 18:26:08 $
- * $Author: maven $
+ * $Revision: 1.10 $
+ * $Date: 2007-01-26 16:12:53 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -103,6 +103,8 @@ public interface SensorConfig
 	public static int QUANTITY_ANGULAR_VELOCITY=	16;
 	
 	public static int QUANTITY_WIND_SPEED=			17;
+	
+	public static int QUANTITY_CO2_GAS=             18;
 	
 	/**
 	 * If the attached sensor can be identified by the device

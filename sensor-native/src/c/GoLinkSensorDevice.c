@@ -89,6 +89,7 @@ float calibrate_student_force(float voltage);
 float calibrate_ti_voltage(float voltage);
 float calibrate_dif_voltage(float voltage);
 float calibrate_raw_voltage(float voltage);
+float calibrate_co2_gas(float voltage);
 
 SENSOR_DEVICE_HANDLE SensDev_open(char *configString)
 {
@@ -464,6 +465,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->name, "CO2 Gas");
 				sensConfig->type = QUANTITY_CO2_GAS;			
 				sensConfig->stepSize = 4.0; // FIXME: this is a hack we should be able calc this					
+				state->calibrationFunct = calibrate_co2_gas;
 			
 				break;
 			case SENSOR_ID_CURRENT:

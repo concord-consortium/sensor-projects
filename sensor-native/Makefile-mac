@@ -15,7 +15,7 @@ TI_OBJS = nativelib/TISensorDevice.o
 SWIG_OUTPUT_DIR = src/swig/java
 
 #OSX_LINK_FLAGS = -framework IOKit -framework CoreFoundation -framework CoreServices -framework Carbon -lstdc++
-OSX_LINK_FLAGS = -framework IOKit -framework Carbon -lstdc++
+OSX_LINK_FLAGS = -bind_at_load -framework IOKit -framework Carbon
 
 # this is used to build native test executables
 # this filter grabs the .o and .lib files from the dependency list

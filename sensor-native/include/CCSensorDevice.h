@@ -188,6 +188,10 @@ enum QuantityType
 	
 	public static int QUANTITY_WIND_SPEED=			17; // m/s
 	public static int QUANTITY_CO2_GAS=             18; // ppm
+	public static int QUANTITY_OXYGEN_GAS=          19; // ppt
+
+	public static int QUANTITY_PH=                  20; // pH
+	public static int QUANTITY_SALINITY=            21; // ppt
 	 *****************************************************
 	 *****************************************************/
 	
@@ -223,6 +227,10 @@ enum QuantityType
 	QUANTITY_WIND_SPEED,
 	
 	QUANTITY_CO2_GAS,
+	QUANTITY_OXYGEN_GAS,
+
+	QUANTITY_PH,
+	QUANTITY_SALINITY,
 };
 
 /*

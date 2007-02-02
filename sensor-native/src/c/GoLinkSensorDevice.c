@@ -46,10 +46,12 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_VOLTAGE			14  // 47K: 
 #define SENSOR_ID_EKG				15  // 1.5K:
 #define SENSOR_ID_CO2_GAS           17
+#define SENSOR_ID_OXYGEN_GAS        18
 
 /*
  * smart sensors
  */
+#define SENSOR_ID_PH                20
 #define SENSOR_ID_GASS_PRESSURE     24
 #define SENSOR_ID_DUAL_R_FORCE_10   25
 #define SENSOR_ID_DUAL_R_FORCE_50   26
@@ -90,6 +92,7 @@ float calibrate_ti_voltage(float voltage);
 float calibrate_dif_voltage(float voltage);
 float calibrate_raw_voltage(float voltage);
 float calibrate_co2_gas(float voltage);
+float calibrate_oxygen_gas(float voltage);
 
 SENSOR_DEVICE_HANDLE SensDev_open(char *configString)
 {
@@ -385,6 +388,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_TEMPERATURE_WAND;
 				sensConfig->stepSize = 0.01;
 				break;
+			case SENSOR_ID_PH:
+				if(request &&
+					(request->type == QUANTITY_PH)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "pH");
+				sensConfig->type = QUANTITY_PH;
+				sensConfig->stepSize = 0.0077;
+				break;			
 			default:
 				valid = 0;
 				sensConfig->type = QUANTITY_UNKNOWN;
@@ -466,6 +478,19 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_CO2_GAS;			
 				sensConfig->stepSize = 4.0; // FIXME: this is a hack we should be able calc this					
 				state->calibrationFunct = calibrate_co2_gas;
+			
+				break;
+			case SENSOR_ID_OXYGEN_GAS:
+				if(request &&
+					request->type == QUANTITY_OXYGEN_GAS) {
+					valid = 1;
+				}
+				
+				sprintf(sensConfig->unitStr, "ppt");
+				sprintf(sensConfig->name, "Oxygen Gas");
+				sensConfig->type = QUANTITY_OXYGEN_GAS;			
+				sensConfig->stepSize = 0.1; // FIXME: this is a hack we should be able calc this					
+				state->calibrationFunct = calibrate_oxygen_gas;
 			
 				break;
 			case SENSOR_ID_CURRENT:
@@ -850,10 +875,20 @@ float calibrate_raw_voltage(float voltage)
 	return voltage;
 }
 
+// This it the ppm calibration
 #define CO2_GAS_A 0
-#define CO2_GAS_B 2
+#define CO2_GAS_B 2000
 float calibrate_co2_gas(float voltage)
 {
 	// ppm 
 	return CO2_GAS_B*voltage + CO2_GAS_A;
+}
+
+// this is the ppt calibration
+#define OXYGEN_GAS_A 0
+#define OXYGEN_GAS_B 67.69
+float calibrate_oxygen_gas(float voltage)
+{
+	// ppt
+	return OXYGEN_GAS_B*voltage + OXYGEN_GAS_A;
 }

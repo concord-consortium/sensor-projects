@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.10 $
- * $Date: 2007-01-26 16:12:53 $
+ * $Revision: 1.11 $
+ * $Date: 2007-02-02 13:04:22 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -105,6 +105,10 @@ public interface SensorConfig
 	public static int QUANTITY_WIND_SPEED=			17;
 	
 	public static int QUANTITY_CO2_GAS=             18;
+	public static int QUANTITY_OXYGEN_GAS=          19;
+
+	public static int QUANTITY_PH=                  20;
+	public static int QUANTITY_SALINITY=            21;
 	
 	/**
 	 * If the attached sensor can be identified by the device

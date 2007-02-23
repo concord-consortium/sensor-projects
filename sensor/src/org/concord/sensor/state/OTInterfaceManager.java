@@ -32,6 +32,7 @@ package org.concord.sensor.state;
 import org.concord.framework.otrunk.OTID;
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectList;
+import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
@@ -93,5 +94,10 @@ public class OTInterfaceManager extends InterfaceManager
 			configs [i] = (DeviceConfig)deviceConfigList.get(i);
 		}
 		setDeviceConfigs(configs);
+	}
+
+	public OTObjectService getOTObjectService() 
+	{
+		return resources.getOTObjectService();
 	}
 }

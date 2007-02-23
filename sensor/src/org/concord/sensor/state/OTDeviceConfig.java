@@ -29,13 +29,13 @@
  */
 package org.concord.sensor.state;
 
-import org.concord.framework.otrunk.OTObject;
+import org.concord.framework.otrunk.OTObjectInterface;
 import org.concord.sensor.DeviceConfig;
 
 /**
  * @author scytacki
  *
  */
-public interface OTDeviceConfig extends DeviceConfig, OTObject {
+public interface OTDeviceConfig extends DeviceConfig, OTObjectInterface {
 
 }

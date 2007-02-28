@@ -1,0 +1,5 @@
+VERSION=2.1.7
+PLATFORM=macosx
+NATIVE_FILES="../../bin/librxtxSerial.jnilib"
+GROUP_ID=org.concord.external.rxtx
+ARTIFACT_ID=rxtx-serial

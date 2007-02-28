@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--  this is really just to pick up the deployment information -->
+  <parent>
+    <groupId>org.concord</groupId>
+    <artifactId>maven2-parent</artifactId>
+    <version>6</version>
+    <relativePath>../Builds/maven2-parent</relativePath>
+  </parent>
+  
+  <groupId>org.concord.external.rxtx</groupId>
+  <artifactId>rxtx-cross-platform</artifactId>  
+  <version>2.1.7</version>
+  <packaging>pom</packaging>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.concord.external.rxtx</groupId>
+      <artifactId>rxtx-comm</artifactId>
+      <version>2.1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.concord.external.rxtx</groupId>
+      <artifactId>rxtx-serial</artifactId>
+      <version>2.1.7</version>
+      <classifier>linux</classifier>
+      <type>nar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.concord.external.rxtx</groupId>
+      <artifactId>rxtx-serial</artifactId>
+      <version>2.1.7</version>
+      <classifier>win32</classifier>
+      <type>nar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.concord.external.rxtx</groupId>
+      <artifactId>rxtx-serial</artifactId>
+      <version>2.1.7</version>
+      <classifier>macosx</classifier>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+
+  <!--this is required to find out parent pom you should-->
+  <repositories>
+    <repository>
+      <id>cc-repo-internal</id>
+      <name>Concord Consortium Internal</name>
+      <url>http://source.concord.org/maven2/internal</url>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
+
+</project>

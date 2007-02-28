@@ -1,0 +1,5 @@
+VERSION=2.1.7
+PLATFORM=linux
+NATIVE_FILES="../../bin/librxtxSerial.so"
+GROUP_ID=org.concord.external.rxtx
+ARTIFACT_ID=rxtx-serial

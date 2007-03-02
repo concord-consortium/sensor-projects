@@ -1,3 +1,6 @@
+#this should be turned into a plugin, or we should try to use 
+#already existing nar plugin
+
 cd $1
 source properties
 

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2007-01-24 22:11:22 $
+ * $Revision: 1.5 $
+ * $Date: 2007-03-09 17:51:59 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -52,13 +52,13 @@ import javax.swing.event.ListSelectionListener;
 import org.concord.framework.data.stream.DataStoreCollection;
 import org.concord.framework.data.stream.DataStoreImporter;
 import org.concord.framework.otrunk.OTObject;
-import org.concord.framework.otrunk.view.OTObjectView;
+import org.concord.framework.otrunk.view.OTJComponentView;
 import org.concord.sensor.DeviceTime;
 import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
 
 public class OTLoggerImporterView extends JPanel
-    implements OTObjectView, DataStoreImporter
+    implements OTJComponentView, DataStoreImporter
 {
 	/**
 	 * Not intended to be serialized, just added remove compile warning

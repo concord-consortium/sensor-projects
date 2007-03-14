@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2007-03-11 23:38:46 $
+ * $Revision: 1.5 $
+ * $Date: 2007-03-14 00:30:34 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -36,15 +36,12 @@ import javax.swing.JComponent;
 
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectService;
-import org.concord.framework.otrunk.view.AbstractOTView;
+import org.concord.framework.otrunk.view.AbstractOTJComponentView;
 import org.concord.framework.otrunk.view.OTActionView;
-import org.concord.framework.otrunk.view.OTJComponentView;
-import org.concord.framework.otrunk.view.OTViewFactory;
 import org.concord.sensor.state.OTLoggingRequest;
 import org.concord.sensor.state.OTSetupLogger;
 
-public class OTLoggingRequestView extends AbstractOTView
-    implements OTJComponentView
+public class OTLoggingRequestView extends AbstractOTJComponentView
 {
     protected OTLoggingRequest request;
     
@@ -57,9 +54,6 @@ public class OTLoggingRequestView extends AbstractOTView
      */
     public JComponent getComponent(OTObject otObject, boolean editable)
     {
-    	OTViewFactory viewFactory = 
-    		   (OTViewFactory)getViewService(OTViewFactory.class);
-
         request = (OTLoggingRequest)otObject;
 
         try {
@@ -76,7 +70,7 @@ public class OTLoggingRequestView extends AbstractOTView
 
             ((OTActionView)buttonObj).setAction(setupObj);
             
-            return viewFactory.getComponent(buttonObj, null, editable);            
+            return getChildComponent(buttonObj, null, editable);            
         } catch (Exception e){
             
         }

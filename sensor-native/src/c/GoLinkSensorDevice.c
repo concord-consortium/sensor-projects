@@ -60,7 +60,8 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SMART_LIGHT_3     36
 #define SENSOR_ID_BAROMETER         46
 #define SENSOR_ID_SMART_HUMIDITY    47
-#define SENSOR_ID_GO_TEMP           60 
+#define SENSOR_ID_GO_TEMP           60
+#define SENSOR_ID_SALINITY          61 
 #define SENSOR_ID_GO_MOTION         69 
 #define SENSOR_ID_IR_TEMP           73
 
@@ -435,6 +436,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->unitStr, "pH");
 				sensConfig->type = QUANTITY_PH;
 				sensConfig->stepSize = 0.0077;
+				break;			
+			case SENSOR_ID_SALINITY:
+				if(request &&
+					(request->type == QUANTITY_SALINITY)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "ppt");
+				sensConfig->type = QUANTITY_SALINITY;
+				sensConfig->stepSize = 0.02;
 				break;			
 			default:
 				valid = 0;

@@ -58,12 +58,11 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SMART_LIGHT_1     34
 #define SENSOR_ID_SMART_LIGHT_2     35
 #define SENSOR_ID_SMART_LIGHT_3     36
+#define SENSOR_ID_BAROMETER         46
 #define SENSOR_ID_SMART_HUMIDITY    47
 #define SENSOR_ID_GO_TEMP           60 
 #define SENSOR_ID_GO_MOTION         69 
 #define SENSOR_ID_IR_TEMP           73
-// FIXME need to figure out correct id
-#define SENSOR_ID_BAROMETER         100
 
 /*
  * This is not how this is supposed to be done

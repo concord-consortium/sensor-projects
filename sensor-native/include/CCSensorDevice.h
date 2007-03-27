@@ -192,6 +192,10 @@ enum QuantityType
 
 	public static int QUANTITY_PH=                  20; // pH
 	public static int QUANTITY_SALINITY=            21; // ppt
+	
+	public static int QUANTITY_RAW_DATA=            22; // raw
+	public static int QUANTITY_RAW_VOLTAGE=         23; // V
+		
 	 *****************************************************
 	 *****************************************************/
 	
@@ -231,6 +235,9 @@ enum QuantityType
 
 	QUANTITY_PH,
 	QUANTITY_SALINITY,
+	
+	QUANTITY_RAW_DATA,
+	QUANTITY_RAW_VOLTAGE,
 };
 
 /*

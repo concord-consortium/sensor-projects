@@ -52,7 +52,7 @@ typedef enum _GoDeviceType{
  * smart sensors
  */
 #define SENSOR_ID_PH                20
-#define SENSOR_ID_GASS_PRESSURE     24
+#define SENSOR_ID_GAS_PRESSURE     24
 #define SENSOR_ID_DUAL_R_FORCE_10   25
 #define SENSOR_ID_DUAL_R_FORCE_50   26
 #define SENSOR_ID_SMART_LIGHT_1     34
@@ -62,7 +62,8 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_GO_TEMP           60 
 #define SENSOR_ID_GO_MOTION         69 
 #define SENSOR_ID_IR_TEMP           73
-
+// FIXME need to figure out correct id
+#define SENSOR_ID_BAROMETER         100
 
 /*
  * This is not how this is supposed to be done
@@ -91,6 +92,7 @@ float calibrate_student_force(float voltage);
 float calibrate_ti_voltage(float voltage);
 float calibrate_dif_voltage(float voltage);
 float calibrate_raw_voltage(float voltage);
+float calibrate_raw_data(float voltage);
 float calibrate_co2_gas(float voltage);
 float calibrate_oxygen_gas(float voltage);
 
@@ -299,6 +301,28 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 	printf("  sensor units: %.7s\n", ddsRec.CalibrationPage[ddsRec.ActiveCalPage].Units);
 	printf("  sensor current: %d\n", (int)ddsRec.CurrentRequirement);
 	
+	// Check if the author wants raw data or raw voltage in which case
+	// we won't bother chcking which sensor is attached.
+	if(request) {
+		if(request->type == QUANITITY_RAW_DATA){
+			state->calibrationFunct = calibrate_raw_data;
+			// set the sensorID to zero so our calibration function 
+			// is always used
+			state->sensorID = 0;
+			sprintf(sensConfig->unitStr, "raw");
+			sensConfig->type = QUANTITY_RAW_DATA;
+			sensConfig->stepSize = 1.0; 
+			return 1;
+		} else if(request->type == QUANTITY_RAW_VOLTAGE){
+			state->calibrationFunct = calibrate_raw_voltage;
+			sprintf(sensConfig->unitStr, "V");
+			sensConfig->type = QUANTITY_RAW_VOLTAGE;
+			sensConfig->stepSize = 0.001;  // FIXME I should look this up 
+			return 1;
+		}
+	}
+
+	
 	if(ddsRec.SensorNumber >= 20) {
 		sensConfig->confirmed = 1;
 		
@@ -308,14 +332,30 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 		sprintf(sensConfig->name, ddsRec.SensorLongName);
 		state->calibrationFunct = NULL;
 		switch(ddsRec.SensorNumber){
-			case SENSOR_ID_GASS_PRESSURE:
+			case SENSOR_ID_BAROMETER:
 				if(request &&
-					request->type == QUANTITY_GAS_PRESSURE) {
+					(request->type == QUANTITY_GAS_PRESSURE) &&
+					(isnan(request->requiredMin) || 
+					    request->requiredMin  > 81000.0) &&
+					(isnan(request->requiredMax) ||
+					    request->requiredMax < 106000.0)){
+						valid = 1;
+				}					
+				
+				sprintf(sensConfig->unitStr, "Pa");
+				sensConfig->type = QUANTITY_GAS_PRESSURE;
+				sensConfig->stepSize = 10.0; // FIXME: this is a hack we should be able calc this
+				break;
+			case SENSOR_ID_GAS_PRESSURE:
+				if(request &&
+					(request->type == QUANTITY_GAS_PRESSURE) &&
+					(isnan(request->stepSize) ||
+						request->stepSize > 50)) {
 					valid = 1;
 				}
 				sprintf(sensConfig->unitStr, "Pa");
 				sensConfig->type = QUANTITY_GAS_PRESSURE;
-				sensConfig->stepSize = 0.01; // FIXME: this is a hack we should be able calc this
+				sensConfig->stepSize = 50.0; // FIXME: this is a hack we should be able calc this
 				break;
 			case SENSOR_ID_DUAL_R_FORCE_10:
 				if(request &&
@@ -784,6 +824,15 @@ int SensDev_read(SENSOR_DEVICE_HANDLE hDevice,
 		printf("SensDev_read: error reading raw measurements: %d\n", err);
 		return -1;
 	}	
+	
+	if(state->calibrationFunction == calibrate_raw_data){
+		int j=0;
+		for(j=0; j<numRawValues; j++) {
+		    buffer[j] = (float)raw[j];
+		}
+		return numRawValues;
+	}
+	
 	int i=0;
 	for(i=0; i<numRawValues; i++) {
 		gtype_real64 voltage = GoIO_Sensor_ConvertToVoltage(state->goHandle, raw[i]);
@@ -873,6 +922,15 @@ float calibrate_raw_voltage(float voltage)
 {
 	// standard voltage
 	return voltage;
+}
+
+// Special calibration function for flagging raw data
+// it should actually never be called.
+float calibrate_raw_data(float voltage)
+{
+	// return a value which hopefully will obviously 
+	// indicate an error
+	return 0.12345;
 }
 
 // This it the ppm calibration

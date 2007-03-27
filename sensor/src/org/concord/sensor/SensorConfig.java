@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.11 $
- * $Date: 2007-02-02 13:04:22 $
+ * $Revision: 1.12 $
+ * $Date: 2007-03-27 03:46:14 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -109,6 +109,9 @@ public interface SensorConfig
 
 	public static int QUANTITY_PH=                  20;
 	public static int QUANTITY_SALINITY=            21;
+	
+	public static int QUANTITY_RAW_DATA=            22;
+	public static int QUANTITY_RAW_VOLTAGE=         23;
 	
 	/**
 	 * If the attached sensor can be identified by the device

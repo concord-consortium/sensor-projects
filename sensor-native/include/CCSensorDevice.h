@@ -165,7 +165,7 @@ enum QuantityType
 	public static int QUANTITY_TEMPERATURE=			0;  // degC
 	public static int QUANTITY_TEMPERATURE_WAND=    1;  // degC
 	public static int QUANTITY_LIGHT=				2;  // lx
-	public static int QUANTITY_GAS_PRESSURE= 		3;  // Pa
+	public static int QUANTITY_GAS_PRESSURE= 		3;  // kPa
 	public static int QUANTITY_VOLTAGE= 			4;  // V
 	public static int QUANTITY_FORCE=				5;  // N
 	public static int QUANTITY_VELOCITY=			6;  // m/s

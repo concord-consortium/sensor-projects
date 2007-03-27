@@ -336,26 +336,26 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				if(request &&
 					(request->type == QUANTITY_GAS_PRESSURE) &&
 					(isnan(request->requiredMin) || 
-					    request->requiredMin  > 81000.0) &&
+					    request->requiredMin  > 81.0) &&
 					(isnan(request->requiredMax) ||
-					    request->requiredMax < 106000.0)){
+					    request->requiredMax < 106.0)){
 						valid = 1;
 				}					
 				
-				sprintf(sensConfig->unitStr, "Pa");
+				sprintf(sensConfig->unitStr, "kPa");
 				sensConfig->type = QUANTITY_GAS_PRESSURE;
-				sensConfig->stepSize = 10.0; // FIXME: this is a hack we should be able calc this
+				sensConfig->stepSize = 0.01; // FIXME: this is a hack we should be able calc this
 				break;
 			case SENSOR_ID_GAS_PRESSURE:
 				if(request &&
 					(request->type == QUANTITY_GAS_PRESSURE) &&
 					(isnan(request->stepSize) ||
-						request->stepSize > 50)) {
+						request->stepSize > 0.05)) {
 					valid = 1;
 				}
-				sprintf(sensConfig->unitStr, "Pa");
+				sprintf(sensConfig->unitStr, "kPa");
 				sensConfig->type = QUANTITY_GAS_PRESSURE;
-				sensConfig->stepSize = 50.0; // FIXME: this is a hack we should be able calc this
+				sensConfig->stepSize = 0.05; // FIXME: this is a hack we should be able calc this
 				break;
 			case SENSOR_ID_DUAL_R_FORCE_10:
 				if(request &&

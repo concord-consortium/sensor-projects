@@ -303,7 +303,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 	// Check if the author wants raw data or raw voltage in which case
 	// we won't bother chcking which sensor is attached.
 	if(request) {
-		if(request->type == QUANITITY_RAW_DATA){
+		if(request->type == QUANTITY_RAW_DATA){
 			state->calibrationFunct = calibrate_raw_data;
 			// set the sensorID to zero so our calibration function 
 			// is always used
@@ -824,7 +824,7 @@ int SensDev_read(SENSOR_DEVICE_HANDLE hDevice,
 		return -1;
 	}	
 	
-	if(state->calibrationFunction == calibrate_raw_data){
+	if(state->calibrationFunct == calibrate_raw_data){
 		int j=0;
 		for(j=0; j<numRawValues; j++) {
 		    buffer[j] = (float)raw[j];

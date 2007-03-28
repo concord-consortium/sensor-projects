@@ -7,12 +7,17 @@ source properties
 DEPLOY_URL=scpexe://source.concord.org/web/source.concord.org/html/software/maven2/internal/
 DEPLOY_ID=cc-dist-repo-internal
 CLASSIFIER=${PLATFORM}
-NAR_FILE=../../target/${ARTIFACT_ID}-${PLATFORM}.nar
+NAR_FILE=${ARTIFACT_ID}-${PLATFORM}.nar
 
-# need to build the nar file of the linux native libraries
-jar cf ${NAR_FILE} ${NATIVE_FILES}
+# need to have all the native files at the top direcotry
+mkdir -p ../target/native-lib
+cp ${NATIVE_FILES} ../target/native-lib/
+cd ../target/native-lib
+pwd
+jar cf ../${NAR_FILE} *
+cd -
 
-mvn deploy:deploy-file -Dfile=${NAR_FILE} \
+mvn deploy:deploy-file -Dfile=../target/${NAR_FILE} \
     -DartifactId=${ARTIFACT_ID} -DgroupId=${GROUP_ID} \
     -Dclassifier=${CLASSIFIER} \
     -Dversion=${VERSION} -Dpackaging=nar \

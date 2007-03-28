@@ -1,0 +1,5 @@
+VERSION=0.1.0
+PLATFORM=win32
+NATIVE_FILES="../../bin/ti_ccsd.dll"
+GROUP_ID=org.concord.sensor.ti
+ARTIFACT_ID=ti-cbl

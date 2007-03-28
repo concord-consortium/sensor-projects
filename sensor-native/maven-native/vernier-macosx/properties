@@ -1,0 +1,5 @@
+VERSION=0.1.0
+PLATFORM=macosx
+NATIVE_FILES="../../bin/libvernier_ccsd.jnilib"
+GROUP_ID=org.concord.sensor.vernier
+ARTIFACT_ID=vernier-goio

@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2006-05-05 15:46:09 $
- * $Author: maven $
+ * $Revision: 1.3 $
+ * $Date: 2007-03-28 21:57:15 $
+ * $Author: scytacki $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -61,7 +61,9 @@ public abstract class AbstractSensorDataManager
     
     public SensorDevice getSensorDevice()
     {
-    	if(deviceConfigs == null) {
+    	DeviceConfig [] localDeviceConfigs = getDeviceConfigs();
+    	
+    	if(localDeviceConfigs == null) {
             log("Searching all possible devices isn't supported yet");
     		return null;
     	}
@@ -83,9 +85,9 @@ public abstract class AbstractSensorDataManager
         }
         
         String lastError = null;
-        for(int i=0; i<deviceConfigs.length; i++) {
+        for(int i=0; i<localDeviceConfigs.length; i++) {
             SensorDevice device = 
-                deviceFactory.createDevice(deviceConfigs[i]);
+                deviceFactory.createDevice(localDeviceConfigs[i]);
             if(device.isAttached()){
                 currentDevice = device;
                 return currentDevice;

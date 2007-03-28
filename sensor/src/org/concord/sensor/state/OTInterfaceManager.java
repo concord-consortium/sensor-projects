@@ -29,6 +29,8 @@
  */
 package org.concord.sensor.state;
 
+import org.concord.framework.otrunk.OTChangeListener;
+import org.concord.framework.otrunk.OTChangeNotifying;
 import org.concord.framework.otrunk.OTID;
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectList;
@@ -39,13 +41,11 @@ import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.impl.InterfaceManager;
 
 /**
- * @author Informaiton Services
+ * @author Scott Cytacki
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OTInterfaceManager extends InterfaceManager 
-	implements OTObject 
+	implements OTObject, OTChangeNotifying
 {
 	public static interface ResourceSchema extends OTResourceSchema 
 	{
@@ -83,21 +83,39 @@ public class OTInterfaceManager extends InterfaceManager
 		resources.setName(name);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.concord.framework.otrunk.OTObject#init()
-	 */
-	public void init() 
+	public DeviceConfig [] getDeviceConfigs()
 	{
 		OTObjectList deviceConfigList = resources.getDeviceConfigs();
 		DeviceConfig [] configs = new DeviceConfig [deviceConfigList.size()];
 		for(int i=0; i<configs.length; i++) {
 			configs [i] = (DeviceConfig)deviceConfigList.get(i);
 		}
-		setDeviceConfigs(configs);
+		return configs;
 	}
-
+	
+	public void init()
+	{
+		
+	}
+	
+	public OTObjectList getOTDeviceConfigs()
+	{
+		return resources.getDeviceConfigs();
+	}
+	
 	public OTObjectService getOTObjectService() 
 	{
 		return resources.getOTObjectService();
 	}
+	
+    public void addOTChangeListener(OTChangeListener listener)
+    {
+    	resources.addOTChangeListener(listener);
+    }
+    
+    public void removeOTChangeListener(OTChangeListener listener)
+    {
+    	resources.removeOTChangeListener(listener);
+    }    
+
 }

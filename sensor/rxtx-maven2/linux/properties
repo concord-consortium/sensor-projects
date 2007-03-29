@@ -1,4 +1,4 @@
-VERSION=2.1.7
+VERSION=2.1.7.1
 PLATFORM=linux
 NATIVE_FILES="../../bin/librxtxSerial.so"
 GROUP_ID=org.concord.external.rxtx

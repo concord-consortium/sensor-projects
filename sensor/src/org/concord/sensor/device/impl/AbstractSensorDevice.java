@@ -71,6 +71,9 @@ public abstract class AbstractSensorDevice
 	 */
 	public boolean isAttached()
 	{
+		if(port == null || !port.isOpen()){
+			return false;
+		}
 		return isAttachedInternal(portName);
 	}
 	
@@ -92,9 +95,7 @@ public abstract class AbstractSensorDevice
 	    	port.close();
 	    } catch (SerialException e){
 	    	e.printStackTrace();
-	    }
-	    
-	    port = null;	    
+	    }	    
 	}
 	
 	protected boolean openPort()
@@ -110,7 +111,7 @@ public abstract class AbstractSensorDevice
         }
         
         if("_auto_".equals(portName)) {
-            Vector availablePorts = port.getAvailablePorts();
+            Vector availablePorts = getAvailablePorts();
             for(int i=0; i<availablePorts.size(); i++) {  
                 String possiblePort = (String)availablePorts.get(i);
                 
@@ -185,6 +186,23 @@ public abstract class AbstractSensorDevice
 		return attached;
     }
 
+    protected Vector getAvailablePorts()
+    {
+	    // Make sure the port is closed before opening it
+	    closePort();
+	    
+    	if(port == null) {
+	    	port = getSensorSerialPort();
+	    }
+
+	    if(port == null) {
+            log("Cannot open serial driver");
+		    return null;				        
+	    }
+
+        return port.getAvailablePorts();    	
+    }
+    
     public boolean attemptToOpenPort(String portName)
     {
 	    // Make sure the port is closed before opening it

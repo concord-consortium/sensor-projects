@@ -1,4 +1,4 @@
-VERSION=2.1.7.1
+VERSION=2.1.7-r2
 PLATFORM=win32
 NATIVE_FILES="../../bin/rxtxSerial.dll"
 GROUP_ID=org.concord.external.rxtx

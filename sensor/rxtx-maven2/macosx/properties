@@ -1,4 +1,4 @@
-VERSION=2.1.7.1
+VERSION=2.1.7-r2
 PLATFORM=macosx
 NATIVE_FILES="../../bin/librxtxSerial.jnilib"
 GROUP_ID=org.concord.external.rxtx

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.1 $
- * $Date: 2006-10-03 21:17:57 $
+ * $Revision: 1.2 $
+ * $Date: 2007-04-04 02:54:05 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -37,6 +37,7 @@ import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.view.OTAction;
+import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.ZeroingSensor;
@@ -67,13 +68,19 @@ public class OTZeroSensor extends DefaultOTObject
     {
     	int index = resources.getSensorIndex();
     	
-    	SensorConfig [] configs = producer.getCurrentConfig().getSensorConfigs();
+    	ExperimentConfig expConfig = producer.getCurrentConfig();
     	
-    	if(configs[index] instanceof ZeroingSensor &&
-    			((ZeroingSensor)configs[index]).getSupportsZeroing()){
-    		((ZeroingSensor)configs[index]).zeroSensor();
-    		return producer;
+    	// Some devices don't correctly return the current config
+    	if(expConfig != null){    		
+        	SensorConfig [] configs = expConfig.getSensorConfigs();
+        	
+        	if(configs[index] instanceof ZeroingSensor &&
+        			((ZeroingSensor)configs[index]).getSupportsZeroing()){
+        		((ZeroingSensor)configs[index]).zeroSensor();
+        		return producer;
+        	}
     	}
+    	
     	
     	dataFilter = new TaringDataFilter();
     	dataFilter.addDataProducer(producer);

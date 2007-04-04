@@ -74,8 +74,15 @@ public class SensorSerialPortRXTX
         Enumeration ports = CommPortIdentifier.getPortIdentifiers();
         while(ports.hasMoreElements()) {
             CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
-            System.out.println("RXTX: found port: " + portID.getName());
-            availablePorts.add(portID.getName());
+            String portName = portID.getName();
+            if(System.getProperty("os.name").startsWith("Mac OS X")){
+            	// only return the tty ports we can skip the cu ports
+            	if(!portName.startsWith("/dev/tty")){
+            		continue;
+            	}
+            }
+            System.out.println("RXTX: found port: " + portName);
+            availablePorts.add(portName);
         }
         
         return availablePorts;

@@ -31,4 +31,22 @@ public class JavaPseudoSensorDevice extends AbstractPseudoSensorDevice
 		return !Float.isNaN(val);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#getSerialPortParams()
+	 */
+	protected int[] getSerialPortParams()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#initializeOpenPort(java.lang.String)
+	 */
+	protected boolean initializeOpenPort(String portName)
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

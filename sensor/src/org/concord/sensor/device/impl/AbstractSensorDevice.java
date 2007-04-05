@@ -137,6 +137,8 @@ public abstract class AbstractSensorDevice
         if(!attemptToOpenPort(possiblePort)){
             // we couldn't even open this port
         	log("could not open port: " + possiblePort);
+        	// close the port just to be safe
+        	closePort();
             return false;
         }
         

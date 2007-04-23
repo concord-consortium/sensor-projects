@@ -11,6 +11,7 @@ NAR_FILE=${ARTIFACT_ID}-${PLATFORM}.nar
 
 # need to have all the native files at the top direcotry
 mkdir -p ../target/native-lib
+rm ../target/native-lib/*
 cp ${NATIVE_FILES} ../target/native-lib/
 cd ../target/native-lib
 pwd

@@ -96,7 +96,7 @@ public interface SensorSerialPort
 	 * @param off
 	 * @param len
 	 * @param timeout
-	 * @return
+	 * @return number bytes read
 	 * @throws SerialException
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)

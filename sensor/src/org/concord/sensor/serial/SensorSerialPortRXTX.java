@@ -121,7 +121,13 @@ public class SensorSerialPortRXTX
         // streams
         try {
             inStream = port.getInputStream();
+            if(inStream == null){
+            	throw new SerialException("null inStream");
+            }
             outStream = port.getOutputStream();
+            if(outStream == null){
+            	throw new SerialException("null outStream");
+            }
         } catch (IOException e){
             throw new SerialException("can't open streams", e);
         }

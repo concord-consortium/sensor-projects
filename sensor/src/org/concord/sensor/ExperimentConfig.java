@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.11 $
- * $Date: 2005-11-02 04:48:52 $
+ * $Revision: 1.12 $
+ * $Date: 2007-04-23 16:55:44 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -98,7 +98,9 @@ public interface ExperimentConfig
 		
 	/**
 	 * An array of SensorConfig, each SensorConfig contains configuration
-	 * information about the sensor.
+	 * information about the sensor.  This will return null if there are no
+	 * sensor configs.  Zero length arrays are not handled by waba which is 
+	 * one target for this code.
 	 */
 	public SensorConfig [] getSensorConfigs();	
 	

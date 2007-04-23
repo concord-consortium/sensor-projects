@@ -37,5 +37,11 @@ package org.concord.sensor.device;
  */
 public interface DeviceIdAware
 {
+	/**
+	 * give the device id to the device this way one device class
+	 * can change its behavior for multiple device ids
+	 * 
+	 * @param id
+	 */
     public void setDeviceId(int id);
 }

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.8 $
- * $Date: 2006-05-05 15:44:31 $
+ * $Revision: 1.9 $
+ * $Date: 2007-04-23 16:55:44 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -177,8 +177,10 @@ public interface SensorDevice
 	/**
 	 * This will be called to figure out the setup of the current device
 	 * If the device cannot detect sensors then it should just fill
-	 * out the ExperimentConfig with the device name, 0 for the number
-	 * of sensors, and valid should be false.
+	 * out the ExperimentConfig with the device name and null for the 
+	 * sensorConfigs.  Waba cannot handle zero length arrays this why the 
+	 * sensorConfigs needs to be null.
+	 * 
 	 * @return
 	 */
 	public ExperimentConfig getCurrentConfig();

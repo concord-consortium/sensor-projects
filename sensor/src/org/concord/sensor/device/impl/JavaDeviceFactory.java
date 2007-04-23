@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.22 $
- * $Date: 2006-05-12 16:38:20 $
+ * $Revision: 1.23 $
+ * $Date: 2007-04-23 17:02:50 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -89,10 +89,13 @@ public class JavaDeviceFactory
 		
 		switch(id) {
 			case PSEUDO_DEVICE:
-				className = "org.concord.sensor.pseudo.JavaPseudoSensorDevice";
+				className = "org.concord.sensor.pseudo.PseudoSensorDevice";
 				break;
 			case VERNIER_GO_LINK:
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
+				break;
+			case VERNIER_LAB_PRO:
+				className = "org.concord.sensor.vernier.LabProSensorDevice";
 				break;
 			case TI_CONNECT:
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";

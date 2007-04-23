@@ -50,6 +50,8 @@ public class ExperimentConfigImpl
     private String deviceName;
 	private int deviceId;
     private float dataReadPeriod;
+
+    private Range periodRange;
     
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentConfig#isValid()
@@ -177,4 +179,14 @@ public class ExperimentConfigImpl
         
         return copy;
     }
+
+	public Range getPeriodRange()
+    {
+    	return periodRange;
+    }
+
+	public void setPeriodRange(Range periodRange)
+    {
+    	this.periodRange = periodRange;
+    }    
 }

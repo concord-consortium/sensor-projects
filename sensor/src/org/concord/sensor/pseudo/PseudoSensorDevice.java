@@ -33,6 +33,7 @@ import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.impl.AbstractSensorDevice;
+import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.impl.SensorUnit;
 
@@ -40,12 +41,10 @@ import org.concord.sensor.impl.SensorUnit;
  * @author scott
  *
  */
-public abstract class AbstractPseudoSensorDevice extends AbstractSensorDevice 
+public class PseudoSensorDevice extends AbstractSensorDevice 
 {   
     PseudoSensorConfig [] sensConfigs; 
 	float time = 0;
-	
-	protected abstract boolean isValidFloat(float val);
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#open(java.lang.String)
@@ -53,14 +52,6 @@ public abstract class AbstractPseudoSensorDevice extends AbstractSensorDevice
 	public void open(String openString) 
 	{
 		// we have no real sensors so we dont' need to open anything
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.device.SensorDevice#close()
-	 */
-	public void close() 
-	{
-		// again no real sensors so nothing to close
 	}
 
 	/* (non-Javadoc)
@@ -88,7 +79,7 @@ public abstract class AbstractPseudoSensorDevice extends AbstractSensorDevice
 			sensConfig.setUnit(sensRequests[i].getUnit());
 			float max = sensRequests[i].getRequiredMax();
 			float min = sensRequests[i].getRequiredMin();
-			if(isValidFloat(max) && isValidFloat(min)){
+			if(devService.isValidFloat(max) && devService.isValidFloat(min)){
 			    sensConfig.setSinOffset((max + min) / 2);
 			    sensConfig.setSinMagnitude((max - min) / 2);
 			}
@@ -187,4 +178,19 @@ public abstract class AbstractPseudoSensorDevice extends AbstractSensorDevice
 		return currentConfig;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#getSerialPortParams()
+	 */
+	protected SerialPortParams getSerialPortParams()
+	{
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#initializeOpenPort(java.lang.String)
+	 */
+	protected boolean initializeOpenPort(String portName)
+	{
+		return true;
+	}
 }

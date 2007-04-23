@@ -31,6 +31,7 @@ package org.concord.sensor.device.impl;
 
 import org.concord.framework.data.DataDimension;
 import org.concord.sensor.SensorConfig;
+import org.concord.sensor.impl.Range;
 
 /**
  * @author scott
@@ -49,6 +50,8 @@ public class SensorConfigImpl
     private float stepSize;
     private DataDimension unit;
 
+    private Range valueRange;
+        
     /* (non-Javadoc)
      * @see org.concord.sensor.SensorConfig#isConfirmed()
      */
@@ -166,6 +169,16 @@ public class SensorConfigImpl
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+	public Range getValueRange()
+    {
+    	return valueRange;
+    }
+
+	public void setValueRange(Range valueRange)
+    {
+    	this.valueRange = valueRange;
     }
 
 }

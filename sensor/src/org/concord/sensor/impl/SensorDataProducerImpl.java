@@ -255,8 +255,14 @@ public abstract class SensorDataProducerImpl
 			// because maybe you would want to just return the
 			// currently attached setup
 		}
-
+		
+		// It is not clear if the experiment config should be null if the 
+		// actualConfig is not valid
 	    experimentConfig = actualConfig;
+	    
+	    if(actualConfig != null && !actualConfig.isValid()){
+	    	actualConfig = null;
+	    }
 		DataStreamDescUtil.setupDescription(dDesc, request, actualConfig);
 
 		DataStreamEvent event = 

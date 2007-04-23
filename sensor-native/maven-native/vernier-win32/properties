@@ -1,5 +1,5 @@
-VERSION=0.1.0
+VERSION=0.1.2
 PLATFORM=win32
-NATIVE_FILES="../../bin/vernier_ccsd.dll"
+NATIVE_FILES="../../bin/vernier_ccsd.dll ../../vernier_goio_sdk/GoIO_DLL.dll"
 GROUP_ID=org.concord.sensor.vernier
 ARTIFACT_ID=vernier-goio

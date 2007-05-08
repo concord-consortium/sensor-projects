@@ -29,6 +29,7 @@
  */
 package org.concord.sensor.state;
 
+import org.concord.framework.otrunk.OTBundle;
 import org.concord.framework.otrunk.OTChangeListener;
 import org.concord.framework.otrunk.OTChangeNotifying;
 import org.concord.framework.otrunk.OTID;
@@ -36,8 +37,10 @@ import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectList;
 import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.OTResourceSchema;
+import org.concord.framework.otrunk.OTServiceContext;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
+import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.device.impl.InterfaceManager;
 
 /**
@@ -45,7 +48,7 @@ import org.concord.sensor.device.impl.InterfaceManager;
  *
  */
 public class OTInterfaceManager extends InterfaceManager 
-	implements OTObject, OTChangeNotifying
+	implements OTObject, OTChangeNotifying, OTBundle
 {
 	public static interface ResourceSchema extends OTResourceSchema 
 	{
@@ -116,6 +119,21 @@ public class OTInterfaceManager extends InterfaceManager
     public void removeOTChangeListener(OTChangeListener listener)
     {
     	resources.removeOTChangeListener(listener);
-    }    
+    }
 
+	/* (non-Javadoc)
+     * @see org.concord.framework.otrunk.OTBundle#registerServices(org.concord.framework.otrunk.OTServiceContext)
+     */
+    public void registerServices(OTServiceContext serviceContext)
+    {
+    	serviceContext.addService(SensorDataManager.class, this);
+    }    
+    
+	/* (non-Javadoc)
+     * @see org.concord.framework.otrunk.OTBundle#initializeBundle(org.concord.framework.otrunk.OTServiceContext)
+     */
+    public void initializeBundle(OTServiceContext serviceContext)
+    {
+    	// nothing to do here
+    }
 }

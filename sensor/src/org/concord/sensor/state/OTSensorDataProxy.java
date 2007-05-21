@@ -67,10 +67,6 @@ public class OTSensorDataProxy extends DefaultOTObject
 	private DataProducer producer = null;
 	private SensorDataProducer sensorDataProducer = null;
 
-	// Eclipse bug gives this a warning making it look like it isn't
-	// read locally.  That is not correct.
-	private boolean running = false;
-	
 	private Vector dataListeners = new Vector();
 	
 	// This is just to keep a reference so it doesn't get garbage collected
@@ -155,7 +151,6 @@ public class OTSensorDataProxy extends DefaultOTObject
 		// the datamanager should be careful so it doens't
 		// start two requests at once.  
 
-		running = true;
 		ExperimentRequest request = resources.getRequest();	
 		if(sensorDataProducer == null) {
 			sensorDataProducer = sensorManager.createDataProducer();
@@ -215,7 +210,6 @@ public class OTSensorDataProxy extends DefaultOTObject
 		
 		// FIXME we will a potential memory leak here unless
 		// we clean up these listeners.
-		running = false;
 		if(producer != null) {
 			producer.stop();
 		}

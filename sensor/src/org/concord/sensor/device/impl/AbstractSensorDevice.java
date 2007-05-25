@@ -579,11 +579,11 @@ public abstract class AbstractSensorDevice
      * @param type
      * @return
      */
-    protected SensorConfig createSensorConfig(int type, int port)
+    protected SensorConfig createSensorConfig(int type, int requestPort)
     {
     	SensorConfigImpl config = new SensorConfigImpl();
     	config.setType(type);
-    	config.setPort(port);
+    	config.setPort(requestPort);
     	return config;
     }
 

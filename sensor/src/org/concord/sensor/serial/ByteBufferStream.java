@@ -188,4 +188,42 @@ public class ByteBufferStream
         writeUByte(value, inBuf, offset);
         offset += 1;
     }
+
+    /**
+     * Print each byte as 2 digit hex with no 0x prefix and a space inbetween
+     * @param numBytes
+     * @param buf
+     * @return
+     */
+	public static String printBytesHex(int numBytes, byte []buf)
+	{
+		String result = "";
+		// FIXME this is going to break Waba
+		for(int i=0; i<numBytes; i++) {
+			result += Integer.toString(buf[i] & 0xFF, 16) + " ";
+		}		
+		return result;
+	}		
+
+	/**
+	 * Print each byte a char.  They are padded so they can be lined
+	 * up with printBytesHex.
+	 * 
+	 * @param numBytes
+	 * @param buf
+	 * @return
+	 */
+	public static String printBytesChar(int numBytes, byte [] buf)
+	{
+		String result = "";
+		for(int i=0; i<numBytes; i++) {
+			int charInt = buf[i] & 0xFF;
+			if(charInt > 0x20 && charInt < 0x80){
+				result += (char)buf[i] + "  ";
+			} else {
+				result += "   ";
+			}
+		}
+		return result;
+	}
 }

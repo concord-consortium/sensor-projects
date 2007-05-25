@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.12 $
- * $Date: 2007-03-27 03:46:14 $
+ * $Revision: 1.13 $
+ * $Date: 2007-05-25 12:17:26 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -110,8 +110,13 @@ public interface SensorConfig
 	public static int QUANTITY_PH=                  20;
 	public static int QUANTITY_SALINITY=            21;
 	
-	public static int QUANTITY_RAW_DATA=            22;
-	public static int QUANTITY_RAW_VOLTAGE=         23;
+	public static int QUANTITY_RAW_DATA_1=          22;
+	public static int QUANTITY_RAW_VOLTAGE_1=       23;
+
+	// Some devices provide 2 readings for a single channel
+	public static int QUANTITY_RAW_DATA_2=          24;
+	public static int QUANTITY_RAW_VOLTAGE_2=       25;
+	
 	
 	/**
 	 * If the attached sensor can be identified by the device
@@ -152,11 +157,10 @@ public interface SensorConfig
 	 * port.  If the author wants distance and velocity from the same
 	 * sensor.
 	 * 
-	 * The ports in a experiment should be continuous starting at 0. 
-	 * The SensorDevice implementation should assign these ports to the 
-	 * first available physical port that has the correct type.  Ports
-	 * types could be analog, digital or some other special type.
-	 *        
+	 * Unlike the ports in a SensorRequest, this port can be whatever
+	 * makes the most sense for the device.  So it might not be continuous
+	 * and it might not match the port of the request.
+	 *         
 	 * @return
 	 */
 	public int getPort();

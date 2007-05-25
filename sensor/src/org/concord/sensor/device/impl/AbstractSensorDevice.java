@@ -71,6 +71,14 @@ public abstract class AbstractSensorDevice
 
     protected DeviceService devService;
     
+    public final static boolean isRawType(int type)    
+    {    	
+    	return type == SensorConfig.QUANTITY_RAW_VOLTAGE_1
+		        || type == SensorConfig.QUANTITY_RAW_VOLTAGE_2
+		        || type == SensorConfig.QUANTITY_RAW_DATA_1
+		        || type == SensorConfig.QUANTITY_RAW_DATA_2;
+    }
+    
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#isAttached()
 	 */
@@ -524,30 +532,62 @@ public abstract class AbstractSensorDevice
 			return null;
 		}
 
-		ExperimentConfigImpl expConfig = 
+		ExperimentConfigImpl deviceConfig = 
 			(ExperimentConfigImpl)getCurrentConfig();
 		
-		if(expConfig.getSensorConfigs() == null){
+		// We need to check if there is a raw voltage or raw data in the request
+		// if so then a sensor might be attached that doesn't id itself, so we 
+		// should ignore the deviceConfig
+		
+		// FIXME this is a hack for the Olathe workshop this should be handled
+		// more generally.
+		SensorRequest[] sensorRequests = request.getSensorRequests();
+		if(sensorRequests != null && sensorRequests.length > 0 &&
+				(isRawType(sensorRequests[0].getType()))){
+			SensorConfig rawSensorConfig = 
+				createSensorConfig(sensorRequests[0].getType(), 0);
+			SensorConfig [] sensorConfigs = new SensorConfig [] {rawSensorConfig};
+			deviceConfig.setSensorConfigs(sensorConfigs);
+			deviceConfig.setValid(true);
+		}
+		
+		if(deviceConfig.getSensorConfigs() == null){
 			// there is no point in trying auto configure with no sensors
 			// attached.  
-			expConfig.setValid(false);
-		} else if(expConfig.getSensorConfigs().length == 0){
+			deviceConfig.setValid(false);
+		} else if(deviceConfig.getSensorConfigs().length == 0){
 			devService.log("warning getCurrentConfig returned 0 length " + 
 					"sensorConfigs waba cannot handle that");
-			expConfig.setValid(false);
+			deviceConfig.setValid(false);
 		} else {
-			autoIdConfigureInternal(expConfig, request);			
+			autoIdConfigureInternal(deviceConfig, request);			
 		}
 				
-        if(expConfig.isValid()){
-            currentConfig = expConfig;            
+        if(deviceConfig.isValid()){
+            currentConfig = deviceConfig;            
         }
 
-		return expConfig;
+		return deviceConfig;
 	}
 
 
     /**
+     * This method is used to handle raw voltage and data configs.  If a device
+     * can only handle its internal SensorConfig implementations this should be overriden
+     * to create on of those.
+     *  
+     * @param type
+     * @return
+     */
+    protected SensorConfig createSensorConfig(int type, int port)
+    {
+    	SensorConfigImpl config = new SensorConfigImpl();
+    	config.setType(type);
+    	config.setPort(port);
+    	return config;
+    }
+
+	/**
      * This method is called after the port has been setup with the 
      * serialPortParams returned by getSerialPortParams and then opened
      * with this portName.  

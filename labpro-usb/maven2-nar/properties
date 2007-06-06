@@ -1,0 +1,5 @@
+VERSION=0.1.0-SNAPSHOT
+PLATFORM=win32
+NATIVE_FILES="../bin/labprousb_wrapper.dll"
+GROUP_ID=org.concord.sensor
+ARTIFACT_ID=labpro-usb-native

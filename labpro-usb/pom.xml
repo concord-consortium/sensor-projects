@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.concord</groupId>
+    <artifactId>sensor</artifactId>
+    <version>1</version>
+  </parent>
+  
+  <groupId>org.concord.sensor</groupId>
+  <artifactId>labpro-usb</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>LabPro USB</name>
+  <description>
+     LabPro USB Java library which uses native LabPro USB library provided by Vernier 
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.concord</groupId>
+      <artifactId>ftdi-serial-wrapper-native</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <classifier>win32</classifier>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+  
+  <build>
+     <plugins>
+  		<plugin>
+  			<groupId>org.concord.maven.plugin</groupId>
+  			<artifactId>multiple-src-dirs</artifactId>
+  			<version>0.1.0</version>
+  			<configuration>
+  				<srcDirs>
+  					<srcDir>src/swig/java</srcDir>
+  				</srcDirs>
+  			</configuration>
+  			<executions>
+  				<execution>
+  					<goals>
+  						<goal>adddirs</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  	</plugins>
+  </build>
+
+  <!--MVN_AUTO 
+    This comment and the elements below it are automatically 
+    generated any changes you make to these elements will be replaced if the pom is
+    regenerated. Do not edit this comment or the elements below it.-->
+
+  <!--this is required to find out parent pom you should-->
+  <repositories>
+    <repository>
+      <id>cc-repo-internal</id>
+      <name>Concord Consortium Internal</name>
+      <url>http://source.concord.org/maven2/internal</url>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
+
+</project>

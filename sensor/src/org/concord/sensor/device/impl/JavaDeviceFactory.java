@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.24 $
- * $Date: 2007-06-06 06:54:38 $
+ * $Revision: 1.25 $
+ * $Date: 2007-06-06 13:02:38 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -140,6 +140,7 @@ public class JavaDeviceFactory
 		}
 		
 		try {
+			System.out.println("Loading sensor device: " + className);
 			Class sensDeviceClass = 
 				getClass().getClassLoader().loadClass(className);
 

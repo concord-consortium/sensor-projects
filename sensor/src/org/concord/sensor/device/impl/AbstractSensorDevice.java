@@ -150,33 +150,44 @@ public abstract class AbstractSensorDevice
         }
         
         if("_auto_".equals(portName)) {
-        	// In another version of the code we called closePort
-        	// here.  It doesn't seem like that should be necessary
+        	return openAutoPort();
+        } 
         
-        	if(port == null) {
-    	    	port = getSensorSerialPort();
-    	    }
-
-            Vector availablePorts = port.getAvailablePorts();
-            for(int i=0; i<availablePorts.size(); i++) {  
-                String possiblePort = (String)availablePorts.get(i);
-                
-                // Try opening the port
-                if(openPortName(possiblePort)){
-                	// replace _auto_ with the opened port name
-                    portName = possiblePort;
-                    return true;
-                }
-            }
-        } else {
-        	if(openPortName(portName)) {
-        		return true;
-        	}
-        }
-
-        return false;
+        return openPortName(portName);        
 	}
 
+	/**
+	 * Override this if you device wants to use a different technique for automatically
+	 * identify where the device is attached.  One case is if the the software supports
+	 * multiple types of "serialPorts" for example the LabPro can work with its one USB
+	 * port, or with the rxtx serial port.
+	 * 
+	 * @return
+	 */
+	protected boolean openAutoPort()
+	{
+    	// In another version of the code we called closePort
+    	// here.  It doesn't seem like that should be necessary
+    
+    	if(port == null) {
+	    	port = getSensorSerialPort();
+	    }
+
+        Vector availablePorts = port.getAvailablePorts();
+        for(int i=0; i<availablePorts.size(); i++) {  
+            String possiblePort = (String)availablePorts.get(i);
+            
+            // Try opening the port
+            if(openPortName(possiblePort)){
+            	// replace _auto_ with the opened port name
+                portName = possiblePort;
+                return true;
+            }
+        }
+        
+        return false;
+	}
+	
 	protected boolean openPortName(String possiblePort)
 	{
     	log("looking for device on port: " + possiblePort);

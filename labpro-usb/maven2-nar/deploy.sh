@@ -10,7 +10,7 @@ NAR_FILE=${ARTIFACT_ID}-${PLATFORM}.nar
 
 # need to build the nar file of the linux native libraries
 # need to have all the native files at the top direcotry
-mkdir ../target/native-lib
+mkdir -p ../target/native-lib
 cp ${NATIVE_FILES} ../target/native-lib/
 cd ../target/native-lib
 jar cf ../${NAR_FILE} *

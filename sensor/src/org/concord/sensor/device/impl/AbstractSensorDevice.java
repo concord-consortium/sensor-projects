@@ -535,6 +535,11 @@ public abstract class AbstractSensorDevice
 		ExperimentConfigImpl deviceConfig = 
 			(ExperimentConfigImpl)getCurrentConfig();
 		
+		if(deviceConfig == null){
+			// There was an error possibly the device isn't attached
+			return null;
+		}
+		
 		// We need to check if there is a raw voltage or raw data in the request
 		// if so then a sensor might be attached that doesn't id itself, so we 
 		// should ignore the deviceConfig

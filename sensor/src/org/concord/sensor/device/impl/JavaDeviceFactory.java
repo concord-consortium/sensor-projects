@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.23 $
- * $Date: 2007-04-23 17:02:50 $
+ * $Revision: 1.24 $
+ * $Date: 2007-06-06 06:54:38 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -195,11 +195,14 @@ public class JavaDeviceFactory
     {
         String portClassName = null;
         
-        if(name.equals("ftdi")){
+        if(FTDI_SERIAL_PORT.equals(name)){
             portClassName = "org.concord.sensor.dataharvest.SensorSerialPortFTDI";
-        } else if(name.equals("os")) {
+        } else if(OS_SERIAL_PORT.equals(name)) {
             portClassName = "org.concord.sensor.serial.SensorSerialPortRXTX";
+        } else if(LABPROUSB_SERIAL_PORT.equals(name)) {
+            portClassName = "org.concord.sensor.vernier.SensorSerialPortLabProUSB";        	
         }
+        		
             
         try {           
             Class portClass = getClass().getClassLoader().loadClass(portClassName);

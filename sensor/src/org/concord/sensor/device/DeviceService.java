@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2006-05-12 16:38:20 $
+ * $Revision: 1.4 $
+ * $Date: 2007-06-06 06:54:38 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -43,6 +43,10 @@ public interface DeviceService
     public final static int OS_WINDOWS = 3;
     public final static int OS_PALMOS = 4;
     public final static int OS_WINCE = 4;  
+    
+    public final static String OS_SERIAL_PORT = "os";
+    public final static String FTDI_SERIAL_PORT = "ftdi";
+    public final static String LABPROUSB_SERIAL_PORT = "labprousb";
     
     public int getOSType();
 

@@ -18,8 +18,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.concord</groupId>
-      <artifactId>ftdi-serial-wrapper-native</artifactId>
+      <groupId>org.concord.sensor</groupId>
+      <artifactId>labpro-usb-native</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <classifier>win32</classifier>
       <type>nar</type>

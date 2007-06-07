@@ -307,4 +307,13 @@ public class SensorSerialPortRXTX
             throw new SerialException("write error", e); 
         }
     }
+
+    /**
+     * This port is very slow to open.  It might be possible to speed it up.
+     * 
+     */
+    public boolean isOpenFast() 
+    {
+    	return false;
+    }
 }

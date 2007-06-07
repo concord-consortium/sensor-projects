@@ -110,4 +110,16 @@ public interface SensorSerialPort
     
     public void write(byte [] buffer, int start, int length)
         throws SerialException;
+
+    /**
+     * This should return true the port can open itself quickly.  If that is true
+     * then the code working with the port might close and open it often to reduce
+     * the chance of conflict.
+     * 
+     * Exactly how fast "quickly" is, is not clear yet.  I would guess it is around less
+     * than 100ms.
+     * 
+     * @return
+     */
+    public boolean isOpenFast();
 }

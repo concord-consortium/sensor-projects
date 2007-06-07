@@ -1,4 +1,7 @@
 %module FtdiSerialWrapper
+
+// The code in this block is included verbatum into the swig generated code.
+// it is not included into swig.
 %{
 #include "windows.h"
 #include "FTD2XX.h"
@@ -29,16 +32,26 @@ typedef CHAR *PCHAR,*LPCH,*PCH,*NPSTR,*LPSTR,*PSTR;
 typedef DWORD *PDWORD,*LPDWORD;
 typedef const CHAR *LPCCH,*PCSTR,*LPCSTR;
 
+// Customize how the arrays are handled by java
 %include "arrays_java.i"
+// Apply the "signed char []" typemap to the LPVOID lpBuffer arguments
+// the signed char [] typemap is deinfed in arrays_java.i  this allows 
+// byte arrays to be passed to the java wrapper around FTClassicPort
 %apply signed char [] {LPVOID lpBuffer};
 
+// Define the struct for swig.
 typedef struct {
 	FT_HANDLE handle;
 	FT_STATUS status;
 } FTClassicPort;
 
-
+// Added methods to the struct, these will get turned into a java object with
+// methods.
 %extend FTClassicPort {
+
+// This wrapps all the method declarations with this exception handling
+// The $action is replaced with the method call
+// arg1 is like self.  I'm not sure how arg1 is mapped to self
 %javaexception ("java.io.IOException" ) {
 	$action
 	if(arg1->status != FT_OK){

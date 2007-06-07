@@ -391,6 +391,9 @@ public abstract class SensorDataProducerImpl
 	
 	public void close()
 	{
+		// make sure we are stopped.
+		stop();
+		
 		device.close();
 	}
 	

@@ -89,4 +89,10 @@ public class OTSensorDataProxyController extends DefaultOTController
 	    
     }
 	
+    public void dispose(Object realObject) 
+    {
+    	super.dispose(realObject);
+    	SensorDataProxy proxy = (SensorDataProxy) realObject;
+    	proxy.close();
+    }
 }

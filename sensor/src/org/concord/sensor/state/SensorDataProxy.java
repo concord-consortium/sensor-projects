@@ -253,4 +253,10 @@ public class SensorDataProxy
 		return copy;
 	}
 
+	public void close()
+	{
+		if(sensorDataProducer != null){
+			sensorDataProducer.close();
+		}
+	}
 }

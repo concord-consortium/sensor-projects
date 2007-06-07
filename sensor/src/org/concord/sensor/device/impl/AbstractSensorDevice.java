@@ -105,6 +105,7 @@ public abstract class AbstractSensorDevice
 
 	public void close()
 	{
+		System.err.println("Closing device: " + getClass());
 		closePort();
 		
 		// make sure the port is set to null

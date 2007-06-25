@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2006-05-17 19:56:43 $
+ * $Revision: 1.5 $
+ * $Date: 2007-06-25 18:53:36 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -32,23 +32,15 @@
 */
 package org.concord.sensor.view;
 
-import org.concord.framework.data.stream.DataStoreCollection;
-import org.concord.framework.data.stream.DataStreamDescription;
-import org.concord.framework.data.stream.WritableArrayDataStore;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
-import org.concord.framework.otrunk.view.OTAction;
-import org.concord.sensor.ExperimentConfig;
-import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
-import org.concord.sensor.impl.DataStreamDescUtil;
 import org.concord.sensor.state.OTExperimentRequest;
 
 public class OTLoggerImporter extends DefaultOTObject
-    implements OTAction
 {
     public static interface ResourceSchema extends OTResourceSchema
     {
@@ -68,63 +60,11 @@ public class OTLoggerImporter extends DefaultOTObject
         this.sensorManager = sdm;
     }
     
-    public void doAction()
+    public OTExperimentRequest getRequest()
     {
-        System.out.println("Got action");
+    	return resources.getRequest();
     }
     
-    public String getActionText()
-    {
-        return "Import";
-    }
-    
-    public void importData(DataStoreCollection collection, 
-            SensorLoggedRecord record)
-    {
-        
-       int numSamples = record.getNumSamples();
-       
-       OTExperimentRequest request = resources.getRequest();
-       
-       ExperimentConfig config = record.initializeRead(request);
-       
-       int currentSample = 0;
-       // This isn't quite right it needs to be multiplied by the 
-       // sample size.
-       float [] values = new float [numSamples*8];
-       while(currentSample < numSamples){
-           int numRead = 
-               record.read(currentSample, values, currentSample, 8);
-           currentSample += numRead;
-       }
-       
-       SensorConfig [] sensorConfigs = config.getSensorConfigs();
-       int sensorIndex = 1;
-       for(int i=0; i<numSamples; i++){
-           System.out.println("" + values[i*8+sensorIndex] + " " + 
-                   sensorConfigs[sensorIndex].getName());
-       }
-       
-       // need to create a DataStore 
-       // and then add it to the collection
-       WritableArrayDataStore dataStore = collection.createDataStore();
-
-       dataStore.setDt(record.getLoggedConfig().getPeriod());
-
-       DataStreamDescription dDesc = new DataStreamDescription();
-       DataStreamDescUtil.setupDescription(dDesc, request, config);
-       dataStore.setDataChannelDescription(-1, dDesc.getDtChannelDescription());
-       for(int i=0; i<dDesc.getChannelsPerSample(); i++){
-           dataStore.setDataChannelDescription(i, dDesc.getChannelDescription(i));
-       }
-
-       
-       
-       dataStore.setValues(sensorConfigs.length, values, 0, numSamples, 8);
-       
-       collection.addDataStore(record.getDescription(), dataStore);
-    }
-
     /**
      * Methods on the logger will automatically open it
      * so be sure to close it again.

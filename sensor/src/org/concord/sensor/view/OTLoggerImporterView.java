@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2007-03-09 17:51:59 $
+ * $Revision: 1.6 $
+ * $Date: 2007-06-25 18:53:36 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -51,11 +51,17 @@ import javax.swing.event.ListSelectionListener;
 
 import org.concord.framework.data.stream.DataStoreCollection;
 import org.concord.framework.data.stream.DataStoreImporter;
+import org.concord.framework.data.stream.DataStreamDescription;
+import org.concord.framework.data.stream.WritableArrayDataStore;
 import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.view.OTJComponentView;
 import org.concord.sensor.DeviceTime;
+import org.concord.sensor.ExperimentConfig;
+import org.concord.sensor.SensorConfig;
 import org.concord.sensor.device.SensorLoggedRecord;
 import org.concord.sensor.device.SensorLogger;
+import org.concord.sensor.impl.DataStreamDescUtil;
+import org.concord.sensor.state.OTExperimentRequest;
 
 public class OTLoggerImporterView extends JPanel
     implements OTJComponentView, DataStoreImporter
@@ -97,8 +103,7 @@ public class OTLoggerImporterView extends JPanel
                 SensorLoggedRecord selectedRecord = 
                     (SensorLoggedRecord)recordList.getSelectedValue();
                 dialog.setVisible(false);
-                importer.importData(collection, selectedRecord); 
-                // import the record
+                importData(collection, selectedRecord); 
             }            
         });
         
@@ -197,4 +202,54 @@ public class OTLoggerImporterView extends JPanel
     {
         this.collection = collection;
     }
+    
+    public void importData(DataStoreCollection collection, 
+            SensorLoggedRecord record)
+    {
+        
+       int numSamples = record.getNumSamples();
+       
+       OTExperimentRequest request = importer.getRequest();
+       
+       ExperimentConfig config = record.initializeRead(request);
+       
+       int currentSample = 0;
+       // This isn't quite right it needs to be multiplied by the 
+       // sample size.
+       float [] values = new float [numSamples*8];
+       while(currentSample < numSamples){
+           int numRead = 
+               record.read(currentSample, values, currentSample, 8);
+           currentSample += numRead;
+       }
+       
+       SensorConfig [] sensorConfigs = config.getSensorConfigs();
+       int sensorIndex = 1;
+       for(int i=0; i<numSamples; i++){
+           System.out.println("" + values[i*8+sensorIndex] + " " + 
+                   sensorConfigs[sensorIndex].getName());
+       }
+       
+       
+       
+       // need to create a DataStore 
+       // and then add it to the collection
+       WritableArrayDataStore dataStore = collection.createDataStore();
+
+       dataStore.setDt(record.getLoggedConfig().getPeriod());
+
+       DataStreamDescription dDesc = new DataStreamDescription();
+       DataStreamDescUtil.setupDescription(dDesc, request, config);
+       dataStore.setDataChannelDescription(-1, dDesc.getDtChannelDescription());
+       for(int i=0; i<dDesc.getChannelsPerSample(); i++){
+           dataStore.setDataChannelDescription(i, dDesc.getChannelDescription(i));
+       }
+
+       
+       
+       dataStore.setValues(sensorConfigs.length, values, 0, numSamples, 8);
+       
+       collection.addDataStore(record.getDescription(), dataStore);
+    }
+
 }

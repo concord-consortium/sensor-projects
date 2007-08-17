@@ -29,13 +29,9 @@
  */
 package org.concord.sensor.state;
 
+import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTBundle;
-import org.concord.framework.otrunk.OTChangeListener;
-import org.concord.framework.otrunk.OTChangeNotifying;
-import org.concord.framework.otrunk.OTID;
-import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectList;
-import org.concord.framework.otrunk.OTObjectService;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.OTServiceContext;
 import org.concord.framework.text.UserMessageHandler;
@@ -47,43 +43,26 @@ import org.concord.sensor.device.impl.InterfaceManager;
  * @author Scott Cytacki
  *
  */
-public class OTInterfaceManager extends InterfaceManager 
-	implements OTObject, OTChangeNotifying, OTBundle
+public class OTInterfaceManager extends DefaultOTObject 
+	implements OTBundle
 {
 	public static interface ResourceSchema extends OTResourceSchema 
 	{
 		OTObjectList getDeviceConfigs(); 
 	}
 	private ResourceSchema resources;
+	private UserMessageHandler messageHandler;
+
+	
 	/**
 	 * @param h
 	 */
 	public OTInterfaceManager(ResourceSchema resources, 
-			UserMessageHandler messageHandler) {
-		super(messageHandler);
-		
+			UserMessageHandler messageHandler) 
+	{	
+		super(resources);
+		this.messageHandler = messageHandler;
 		this.resources = resources;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.framework.otrunk.OTObject#getGlobalId()
-	 */
-	public OTID getGlobalId() {
-		return resources.getGlobalId();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.framework.otrunk.OTObject#getName()
-	 */
-	public String getName() {
-		return resources.getName();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.framework.otrunk.OTObject#setName(java.lang.String)
-	 */
-	public void setName(String name) {
-		resources.setName(name);
 	}
 
 	public DeviceConfig [] getDeviceConfigs()
@@ -96,37 +75,22 @@ public class OTInterfaceManager extends InterfaceManager
 		return configs;
 	}
 	
-	public void init()
-	{
-		
-	}
-	
 	public OTObjectList getOTDeviceConfigs()
 	{
 		return resources.getDeviceConfigs();
 	}
 	
-	public OTObjectService getOTObjectService() 
-	{
-		return resources.getOTObjectService();
-	}
-	
-    public void addOTChangeListener(OTChangeListener listener)
-    {
-    	resources.addOTChangeListener(listener);
-    }
-    
-    public void removeOTChangeListener(OTChangeListener listener)
-    {
-    	resources.removeOTChangeListener(listener);
-    }
-
 	/* (non-Javadoc)
      * @see org.concord.framework.otrunk.OTBundle#registerServices(org.concord.framework.otrunk.OTServiceContext)
      */
     public void registerServices(OTServiceContext serviceContext)
     {
-    	serviceContext.addService(SensorDataManager.class, this);
+    	InterfaceManager interfaceManager = new InterfaceManager(messageHandler);
+
+    	// TODO this should probably add a listener so if the device configs are changed on this
+    	// object then it will update this service object
+    	interfaceManager.setDeviceConfigs(getDeviceConfigs());
+    	serviceContext.addService(SensorDataManager.class, interfaceManager);
     }    
     
 	/* (non-Javadoc)

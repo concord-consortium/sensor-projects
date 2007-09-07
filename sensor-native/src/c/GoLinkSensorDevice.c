@@ -451,7 +451,7 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				break;			
 			case SENSOR_ID_CO2_GAS_LOW:
 				if(request &&
-					(request->type == QUANTITY_CO2)){
+					(request->type == QUANTITY_CO2_GAS)){
 					 valid = 1;
 				}
 				sprintf(sensConfig->unitStr, "ppm");

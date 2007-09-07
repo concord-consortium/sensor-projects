@@ -72,7 +72,7 @@
 	
 	void createSensorConfigArray(int size)
 	{
-		self->sensorConfigArray = malloc(sizeof(SensorConfig)*size);
+		self->sensorConfigArray = (SensorConfig*)malloc(sizeof(SensorConfig)*size);
 	}
 	
 	void setSensorConfig(SensorConfig *sConfig, int i)

@@ -64,6 +64,7 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SALINITY          61 
 #define SENSOR_ID_GO_MOTION         69 
 #define SENSOR_ID_IR_TEMP           73
+#define SENSOR_ID_CO2_GAS_LOW       75
 
 /*
  * This is not how this is supposed to be done
@@ -287,6 +288,8 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 		printf("  requested sensor id: %d\n", request->type);
 		printf("  requested sensor requiredMax: %f\n", request->requiredMax);
 		printf("  requested sensor requiredMax isnan: %d\n", isnan(request->requiredMax));
+		printf("  requested sensor stepSize: %f\n", request->stepSize);
+		printf("  requested sensor stepSize isnan: %d\n", isnan(request->stepSize));
 	}
 	printf("  sensor long name: %s\n", ddsRec.SensorLongName);
 	printf("  sensor short name: %s\n", ddsRec.SensorShortName);
@@ -445,6 +448,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->unitStr, "ppt");
 				sensConfig->type = QUANTITY_SALINITY;
 				sensConfig->stepSize = 0.02;
+				break;			
+			case SENSOR_ID_CO2_GAS_LOW:
+				if(request &&
+					(request->type == QUANTITY_CO2)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "ppm");
+				sensConfig->type = QUANTITY_CO2_GAS;			
+				sensConfig->stepSize = 4.0; // FIXME: this is a hack we should be able calc this					
 				break;			
 			default:
 				valid = 0;

@@ -20,7 +20,7 @@ endef
 # this builds a jni comptable dll with gcc
 # this filter grabs the .o and .lib files from the dependency list
 define build-jni-dll
-gcc -mno-cygwin -shared $(filter %.o %.lib,$^) -Wl,--add-stdcall-alias -o $@
+g++ -mno-cygwin -shared $(filter %.o %.lib,$^) -Wl,--add-stdcall-alias -o $@
 endef
 
 all: vernier_swig
@@ -28,11 +28,11 @@ all: vernier_swig
 nativelib/test/%.o : src/c/test/%.c include/CCSensorDevice.h src/c/test/CCSensorUtils.h nativelib/test
 	$(CC) $(CFLAGS) -c $< -o $@
 
-nativelib/swig/%.o : src/swig/%.c nativelib/swig
+nativelib/swig/%.o : src/swig/%.cpp nativelib/swig
 	$(CC) -c $< -I/usr/java/include -I/usr/java/include/win32 -Iinclude -o $@
 
 nativelib/%.o : src/c/%.c include/CCSensorDevice.h nativelib nativelib/test
-	$(CC) $(CFLAGS) -c $< -o $@
+	g++ $(CFLAGS) -c $< -o $@
 
 bin nativelib nativelib/test nativelib/swig $(SWIG_OUTPUT_DIR)/ccsd/vernier $(SWIG_OUTPUT_DIR)/ccsd/pseudo $(SWIG_OUTPUT_DIR)/ccsd/ti:
 	mkdir -p $@
@@ -45,9 +45,11 @@ bin nativelib nativelib/test nativelib/swig $(SWIG_OUTPUT_DIR)/ccsd/vernier $(SW
 
 ######### Vernier targets ###########
 vernier_swig : include/CCSensorDevice.h src/swig/CCSensorDevice.i $(SWIG_OUTPUT_DIR)/ccsd/vernier
-	$(SWIG) -java -c++ -Iinclude -package ccsd.vernier -outdir src/swig/java/ccsd/vernier -o src/swig/VernierSensorDevice_wrap.c src/swig/CCSensorDevice.i  
+	$(SWIG) -java -c++ -Iinclude -package ccsd.vernier -outdir src/swig/java/ccsd/vernier -o src/swig/VernierSensorDevice_wrap.cpp src/swig/CCSensorDevice.i  
 
-bin/vernier_ccsd.dll : 	vernier_swig $(GOLINK_OBJS) nativelib/swig/VernierSensorDevice_wrap.o bin
+# the vernier_swig dep is commented out because running it producers a _wrap file which can't be
+# compiled.
+bin/vernier_ccsd.dll : 	$(GOLINK_OBJS) nativelib/swig/VernierSensorDevice_wrap.o bin
 	$(build-jni-dll)
 
 bin/GoLinkQuery : $(QUERY_OBJS) $(GOLINK_OBJS) bin

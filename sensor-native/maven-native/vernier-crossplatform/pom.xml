@@ -13,21 +13,21 @@
   
   <groupId>org.concord.sensor.vernier</groupId>
   <artifactId>vernier-goio-crossplatform</artifactId>  
-  <version>0.1.3</version>
+  <version>0.1.4</version>
   <packaging>pom</packaging>
   
   <dependencies>
     <dependency>
       <groupId>org.concord.sensor.vernier</groupId>
       <artifactId>vernier-goio</artifactId>
-      <version>0.1.3</version>
+      <version>0.1.4</version>
       <classifier>win32</classifier>
       <type>nar</type>
     </dependency>
     <dependency>
       <groupId>org.concord.sensor.vernier</groupId>
       <artifactId>vernier-goio</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.4</version>
       <classifier>macosx</classifier>
       <type>nar</type>
     </dependency>

@@ -38,7 +38,7 @@ import org.concord.sensor.DeviceConfig;
  */
 public interface OTDeviceConfig extends DeviceConfig, OTObjectInterface {
 	
-	//These are in DeviceConfig, but are apparently not being read at the moment
+	//TODO: These are in DeviceConfig, but are apparently not being read at the moment
 	public void setDeviceId(int id);
 
 	public int getDeviceId();

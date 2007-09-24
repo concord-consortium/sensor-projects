@@ -35,10 +35,8 @@ import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
 
 /**
- * @author Informaiton Services
+ * @author scytacki
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OTSensorDataProxyController extends DefaultOTController
 {

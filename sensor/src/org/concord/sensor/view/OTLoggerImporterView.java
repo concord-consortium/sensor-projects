@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.6 $
- * $Date: 2007-06-25 18:53:36 $
+ * $Revision: 1.7 $
+ * $Date: 2007-09-25 12:24:25 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -81,7 +81,7 @@ public class OTLoggerImporterView extends JPanel
     JList recordList;
     JButton select;
     
-    public JComponent getComponent(OTObject otObject, boolean editable)
+    public JComponent getComponent(OTObject otObject)
     {
         importer = (OTLoggerImporter)otObject;
         

@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.5 $
- * $Date: 2007-03-14 00:30:34 $
+ * $Revision: 1.6 $
+ * $Date: 2007-09-25 12:24:25 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -52,7 +52,7 @@ public class OTLoggingRequestView extends AbstractOTJComponentView
      * view class it would take an OTObject and a perhaps a 
      * path to set a part of that object with the input object
      */
-    public JComponent getComponent(OTObject otObject, boolean editable)
+    public JComponent getComponent(OTObject otObject)
     {
         request = (OTLoggingRequest)otObject;
 
@@ -70,7 +70,7 @@ public class OTLoggingRequestView extends AbstractOTJComponentView
 
             ((OTActionView)buttonObj).setAction(setupObj);
             
-            return getChildComponent(buttonObj, null, editable);            
+            return getChildComponent(buttonObj, null);            
         } catch (Exception e){
             
         }

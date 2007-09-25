@@ -23,8 +23,8 @@
 
 /*
  * Last modification information:
- * $Revision: 1.4 $
- * $Date: 2007-03-09 17:51:59 $
+ * $Revision: 1.5 $
+ * $Date: 2007-09-25 12:24:25 $
  * $Author: scytacki $
  *
  * Licence Information
@@ -50,7 +50,7 @@ public class OTLoggerRecordChooserView
 {
     protected OTLoggerRecordChooser chooser;
     
-    public JComponent getComponent(OTObject otObject, boolean editable)
+    public JComponent getComponent(OTObject otObject)
     {
         chooser = (OTLoggerRecordChooser)otObject;
 

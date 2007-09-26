@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.2 $
- * $Date: 2007-04-04 02:54:05 $
- * $Author: scytacki $
+ * $Revision: 1.3 $
+ * $Date: 2007-09-26 18:39:31 $
+ * $Author: imoncada $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -37,6 +37,7 @@ import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.view.OTAction;
+import org.concord.framework.otrunk.view.OTActionContext;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataProducer;
@@ -88,10 +89,11 @@ public class OTZeroSensor extends DefaultOTObject
     	return dataFilter;
     }
     
-    /**
+	/**
+	 * @see org.concord.framework.otrunk.view.OTAction#doAction(org.concord.framework.otrunk.view.OTActionContext)
      * Send the logg request to the attached sensor interface
-     */
-    public void doAction()
+	 */
+	public void doAction(OTActionContext context)
     {
     	if(dataFilter == null){
     		// FIXME

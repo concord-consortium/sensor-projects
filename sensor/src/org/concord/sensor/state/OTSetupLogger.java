@@ -23,9 +23,9 @@
 
 /*
  * Last modification information:
- * $Revision: 1.3 $
- * $Date: 2006-05-18 19:48:25 $
- * $Author: scytacki $
+ * $Revision: 1.4 $
+ * $Date: 2007-09-26 18:39:31 $
+ * $Author: imoncada $
  *
  * Licence Information
  * Copyright 2004 The Concord Consortium 
@@ -35,6 +35,7 @@ package org.concord.sensor.state;
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.view.OTAction;
+import org.concord.framework.otrunk.view.OTActionContext;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.device.SensorLogger;
@@ -63,10 +64,11 @@ public class OTSetupLogger extends DefaultOTObject
         this.sensorManager = sdm;
     }
     
-    /**
+	/**
+	 * @see org.concord.framework.otrunk.view.OTAction#doAction(org.concord.framework.otrunk.view.OTActionContext)
      * Send the logg request to the attached sensor interface
-     */
-    public void doAction()
+	 */
+	public void doAction(OTActionContext context)
     {
         // get the logger device
         // send the logging request to that

@@ -3,9 +3,6 @@
  */
 package org.concord.sensor.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.concord.framework.otrunk.OTControllerRegistry;
 import org.concord.framework.otrunk.OTPackage;
 import org.concord.framework.otrunk.OTrunk;
@@ -29,20 +26,24 @@ public class OTSensorPackage
 		registry.registerControllerClass(OTSensorDataProxyController.class);
 	}
 
-	public List getOTClasses() 
+	public Class [] getOTClasses() 
 	{
-		ArrayList list = new ArrayList();
+		return new Class [] {
+				OTDeviceConfig.class,
+				OTExperimentRequest.class,
+				OTInterfaceManager.class,
+				OTLoggingRequest.class,
+				OTSensorDataProxy.class,
+				OTSensorRequest.class,
+				OTSetupLogger.class,
+				OTZeroSensor.class,
+		};
+	}
 
-		list.add(OTDeviceConfig.class);
-		list.add(OTExperimentRequest.class);
-		list.add(OTInterfaceManager.class);
-		list.add(OTLoggingRequest.class);
-		list.add(OTSensorDataProxy.class);
-		list.add(OTSensorRequest.class);
-		list.add(OTSetupLogger.class);
-		list.add(OTZeroSensor.class);
-		
-		return list;
+	public Class[] getPackageDependencies() 
+	{
+		// TODO return a list of dependencies
+		return null;
 	}
 
 }

@@ -92,6 +92,10 @@ public class OTSensorRequest extends DefaultOTObject
 	{
 		return resources.getType();
 	}
+	
+	public void setType(int type){
+		resources.setType(type);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorRequest#getStepSize()
@@ -99,6 +103,10 @@ public class OTSensorRequest extends DefaultOTObject
 	public float getStepSize() 
 	{
 		return resources.getStepSize();
+	}
+	
+	public void setStepSize(float stepSize){
+		resources.setStepSize(stepSize);
 	}
 
 	/* (non-Javadoc)
@@ -109,12 +117,20 @@ public class OTSensorRequest extends DefaultOTObject
 		return resources.getRequiredMax();
 	}
 	
+	public void setRequiredMax(float requiredMax){
+		resources.setRequiredMax(requiredMax);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorRequest#getRequiredMin()
 	 */
 	public float getRequiredMin() 
 	{
 		return resources.getRequiredMin();
+	}
+	
+	public void setRequiredMin(float requiredMin){
+		resources.setRequiredMin(requiredMin);
 	}
 
 	/* (non-Javadoc)
@@ -123,6 +139,10 @@ public class OTSensorRequest extends DefaultOTObject
 	public int getDisplayPrecision() 
 	{
 		return resources.getDisplayPrecision();
+	}
+	
+	public void setDisplayPrecision(int precision){
+		resources.setDisplayPrecision(precision);
 	}
 
 	/* (non-Javadoc)
@@ -140,6 +160,10 @@ public class OTSensorRequest extends DefaultOTObject
 	{
 		String unitStr = resources.getUnit();
 		return new SensorUnit(unitStr);
+	}
+	
+	public void setUnit(String unit){
+		resources.setUnit(unit);
 	}
 
 	/* (non-Javadoc)

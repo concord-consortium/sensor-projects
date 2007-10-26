@@ -94,5 +94,9 @@ public class OTExperimentRequest extends DefaultOTObject implements
 			
 		return requestArray;
 	}
+	
+	public OTObjectList getSensorRequestsAsObjectList(){
+		return resources.getSensorRequests();
+	}
 
 }

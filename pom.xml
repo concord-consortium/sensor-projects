@@ -6,7 +6,7 @@
     <version>1</version>
   </parent>
   
-  <groupId>org.concord</groupId>
+  <groupId>org.concord.project-groups</groupId>
   <artifactId>sensor</artifactId>
   <version>1</version>
   <packaging>pom</packaging>

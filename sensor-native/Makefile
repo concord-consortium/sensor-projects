@@ -1,5 +1,8 @@
 CFLAGS = -Iinclude -Ivernier_goio_sdk
 
+# NOTE different versions of swig change the names of the generated methods.  If a new
+# so the same version of swig needs to be used to generate the Java code and the 
+# native code.
 SWIG = swig
 #SWIG = /cygdrive/c/swig-1.3.21/swig
 
@@ -28,8 +31,10 @@ all: vernier_swig
 nativelib/test/%.o : src/c/test/%.c include/CCSensorDevice.h src/c/test/CCSensorUtils.h nativelib/test
 	$(CC) $(CFLAGS) -c $< -o $@
 
-nativelib/swig/%.o : src/swig/%.cpp nativelib/swig
-	$(CC) -c $< -I/usr/java/include -I/usr/java/include/win32 -Iinclude -o $@
+# g++ is used because otherwise the c compiler is used for this file, but the jenv structure is not 
+# included correctly for the compiler.  If you switch g++ to $(CC) you can see the errors.
+nativelib/swig/%.o : src/swig/%.c nativelib/swig
+	g++ -c $< -I/usr/java/include -I/usr/java/include/win32 -Iinclude -o $@
 
 nativelib/%.o : src/c/%.c include/CCSensorDevice.h nativelib nativelib/test
 	g++ $(CFLAGS) -c $< -o $@

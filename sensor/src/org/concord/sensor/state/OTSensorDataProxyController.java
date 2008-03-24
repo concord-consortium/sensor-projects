@@ -30,6 +30,7 @@
 package org.concord.sensor.state;
 
 import org.concord.framework.otrunk.DefaultOTController;
+import org.concord.framework.otrunk.OTObject;
 import org.concord.framework.otrunk.OTObjectService;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorDataManager;
@@ -93,4 +94,14 @@ public class OTSensorDataProxyController extends DefaultOTController
     	SensorDataProxy proxy = (SensorDataProxy) realObject;
     	proxy.close();
     }
+
+    // QX: option to make sensor data producer sharable
+    public boolean isRealObjectSharable(OTObject otObject, Object realObject) 
+	{
+    	if(otObject instanceof OTSensorDataProxy){
+    		return ((OTSensorDataProxy)otObject).getSharable();
+    	}
+		return super.isRealObjectSharable(otObject, realObject);
+	}
+
 }

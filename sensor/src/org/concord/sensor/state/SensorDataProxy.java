@@ -3,6 +3,7 @@
  */
 package org.concord.sensor.state;
 
+import java.awt.EventQueue;
 import java.util.Vector;
 
 import org.concord.framework.data.stream.DataListener;
@@ -141,6 +142,9 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		if (producer != null) {
 			producer.reset();
 		}
+		// QX
+		if (resetTask != null)
+			EventQueue.invokeLater(resetTask);
 	}
 
 	/*
@@ -199,6 +203,9 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		}
 
 		producer.start();
+		// QX
+		if (startTask != null)
+			EventQueue.invokeLater(startTask);
 	}
 
 	/*
@@ -216,6 +223,9 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		if (producer != null) {
 			producer.stop();
 		}
+		// QX
+		if (stopTask != null)
+			EventQueue.invokeLater(stopTask);
 	}
 
 	/*
@@ -236,4 +246,20 @@ public class SensorDataProxy implements DataProducer, Copyable {
 			sensorDataProducer.close();
 		}
 	}
+
+	// QX: add additional tasks to start(), reset(), and stop()
+	private Runnable startTask, stopTask, resetTask;
+
+	public void setStartTask(Runnable r) {
+		startTask = r;
+	}
+
+	public void setStopTask(Runnable r) {
+		stopTask = r;
+	}
+
+	public void setResetTask(Runnable r) {
+		resetTask = r;
+	}
+
 }

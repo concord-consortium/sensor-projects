@@ -569,9 +569,16 @@ public abstract class AbstractSensorDevice
 		}
 		
 		if(deviceConfig.getSensorConfigs() == null){
-			// there is no point in trying auto configure with no sensors
-			// attached.  
-			deviceConfig.setValid(false);
+			// If some of the sensors don't auto id
+			// then it should assume the sensors are configured the way they 
+			// are requested.
+			// If the device doesn't support non auto id sensors then there is no point 
+			// in trying auto configure with no sensors attached.  			
+			if(hasNonAutoIdSensors()){
+				nonAutoIdConfigureInteral(sensorRequests, deviceConfig);
+			} else {				
+				deviceConfig.setValid(false);
+			}
 		} else if(deviceConfig.getSensorConfigs().length == 0){
 			devService.log("warning getCurrentConfig returned 0 length " + 
 					"sensorConfigs waba cannot handle that");
@@ -588,7 +595,25 @@ public abstract class AbstractSensorDevice
 	}
 
 
-    /**
+    protected void nonAutoIdConfigureInteral(SensorRequest[] sensorRequests, ExperimentConfigImpl deviceConfig) 
+    {
+    	if(sensorRequests == null || sensorRequests.length == 0){
+    		deviceConfig.setSensorConfigs(null);
+    		deviceConfig.setValid(false);
+    		return;
+    	}
+    	
+    	SensorConfig [] sensorConfigs = new SensorConfig [sensorRequests.length];
+    	for(int i=0; i<sensorRequests.length; i++){
+    		// I'm not sure if the request port here will be accurate.
+    		sensorConfigs[i] = 
+    			createSensorConfig(sensorRequests[i].getType(), sensorRequests[i].getPort());    		
+    	}
+		deviceConfig.setSensorConfigs(sensorConfigs);
+		deviceConfig.setValid(true);
+	}
+
+	/**
      * This method is used to handle raw voltage and data configs.  If a device
      * can only handle its internal SensorConfig implementations this should be overriden
      * to create on of those.
@@ -604,6 +629,23 @@ public abstract class AbstractSensorDevice
     	return config;
     }
 
+    /**
+     * Subclasses should override this method if they support sensors that don't provide
+     * autoId.  
+     * If this returns true, then the autoIdConfigure method check if the getCurrentConfig
+     * returns a device config that returns null on getSensorConfigs().  Then it will 
+     * assume the device is has the requested sensors attached.  It will call 
+     * createSensorConfig with the type and port of the sensor requested.
+     * 
+     * TODO Currently this won't handled mixed sensors where some are autoid and some are not.
+     * 
+     * @return
+     */
+    protected boolean hasNonAutoIdSensors()
+    {
+    	return false;
+    }
+    
 	/**
      * This method is called after the port has been setup with the 
      * serialPortParams returned by getSerialPortParams and then opened

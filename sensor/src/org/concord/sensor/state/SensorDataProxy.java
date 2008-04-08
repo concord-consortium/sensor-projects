@@ -3,7 +3,6 @@
  */
 package org.concord.sensor.state;
 
-import java.awt.EventQueue;
 import java.util.Vector;
 
 import org.concord.framework.data.stream.DataListener;
@@ -93,7 +92,8 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		// is testing whether the source matches this object
 		// then they will get screwed up unless we change
 		// the source.
-		dataListeners.add(listener);
+		if (!dataListeners.contains(listener))
+			dataListeners.add(listener);
 		if (producer != null) {
 			producer.addDataListener(listener);
 		}
@@ -198,7 +198,6 @@ public class SensorDataProxy implements DataProducer, Copyable {
 			}
 
 		}
-
 		producer.start();
 	}
 

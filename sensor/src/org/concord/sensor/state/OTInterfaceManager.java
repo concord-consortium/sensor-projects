@@ -31,6 +31,8 @@ package org.concord.sensor.state;
 
 import org.concord.framework.otrunk.DefaultOTObject;
 import org.concord.framework.otrunk.OTBundle;
+import org.concord.framework.otrunk.OTChangeEvent;
+import org.concord.framework.otrunk.OTChangeListener;
 import org.concord.framework.otrunk.OTObjectList;
 import org.concord.framework.otrunk.OTResourceSchema;
 import org.concord.framework.otrunk.OTServiceContext;
@@ -52,6 +54,8 @@ public class OTInterfaceManager extends DefaultOTObject
 	}
 	private ResourceSchema resources;
 	private UserMessageHandler messageHandler;
+	private InterfaceManager interfaceManager;
+	private OTChangeListener changeListener;
 
 	
 	/**
@@ -85,12 +89,19 @@ public class OTInterfaceManager extends DefaultOTObject
      */
     public void registerServices(OTServiceContext serviceContext)
     {
-    	InterfaceManager interfaceManager = new InterfaceManager(messageHandler);
-
-    	// TODO this should probably add a listener so if the device configs are changed on this
-    	// object then it will update this service object
-    	interfaceManager.setDeviceConfigs(getDeviceConfigs());
+    	interfaceManager = new InterfaceManager(messageHandler);
+		interfaceManager.setDeviceConfigs(getDeviceConfigs());
     	serviceContext.addService(SensorDataManager.class, interfaceManager);
+    	changeListener = new OTChangeListener(){
+
+			public void stateChanged(OTChangeEvent e) {
+				if(e.getProperty().equals("deviceConfigs")){
+					interfaceManager.setDeviceConfigs(getDeviceConfigs());
+				}				
+			}
+    		
+    	};
+    	resources.addOTChangeListener(changeListener);
     }    
     
 	/* (non-Javadoc)

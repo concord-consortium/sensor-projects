@@ -255,6 +255,12 @@ int SensDev_getCurrentConfig(
 	SensorConfig *sensConfig = (SensorConfig *)malloc(sizeof(SensorConfig));
 	expConfig->sensorConfigArray = sensConfig;
 	
+	// init sensorConfig strings to empty strings 
+	// so there are no memory issues with them 
+	sensConfig->name[0] = 0;
+	sensConfig->unitStr[0] = 0;
+	
+	
 	configure_sensor(state, NULL, sensConfig);
 		
 	current[0] = expConfig;
@@ -313,12 +319,14 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 			// is always used
 			state->sensorID = 0;
 			sprintf(sensConfig->unitStr, "raw");
+			sprintf(sensConfig->name, "Raw Data");
 			sensConfig->type = QUANTITY_RAW_DATA;
 			sensConfig->stepSize = 1.0; 
 			return 1;
 		} else if(request->type == QUANTITY_RAW_VOLTAGE){
 			state->calibrationFunct = calibrate_raw_voltage;
 			sprintf(sensConfig->unitStr, "V");
+			sprintf(sensConfig->name, "Raw Voltage");
 			sensConfig->type = QUANTITY_RAW_VOLTAGE;
 			sensConfig->stepSize = 0.001;  // FIXME I should look this up 
 			return 1;

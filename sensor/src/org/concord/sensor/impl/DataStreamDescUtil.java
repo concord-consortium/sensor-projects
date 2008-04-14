@@ -90,6 +90,10 @@ public class DataStreamDescUtil
 			if(result != null && sensConfigs != null) {
 				chDescrip.setName(sensConfigs[i].getName());
 			}
+			
+			// FIXME: this should probably use the unit from the config if there
+			//  is one.  I don't want to change it though because I haven't
+			// check if all the devices return correct units for their sensors.
 			chDescrip.setUnit(sensRequests[i].getUnit());
 			
 			chDescrip.setPrecision(sensRequests[i].getDisplayPrecision());			

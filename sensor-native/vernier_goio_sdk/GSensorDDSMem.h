@@ -50,7 +50,7 @@ typedef enum
 	kProbeTypeAnalog10V = 3,//Skip supports this!
 //	kProbeTypeHeatPulser,
 //	kProbeTypeAnalogOut,
-//	kProbeTypeMD,
+	kProbeTypeMD = 6,
 //	kProbeTypePhotoGate = 7,
 //	kProbeTypePhotoGatePulseWidth,  no longer allowed (never used)
 //	kProbeTypePhotoGatePulsePeriod, no longer allowed (never used)

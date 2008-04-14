@@ -2,8 +2,6 @@
 #define _GOIO_DLL_INTERFACE_H_
 
 /***************************************************************************************************************************
-	GoIO_DLL_interface.h version 2.11
-
 	This file documents the 'C' interface to GoIO_DLL.
 
 	This library is implemented as GoIO_DLL.dll on Windows and as libGoIO_DLL.dylib on the Mac.
@@ -73,8 +71,6 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Uninit();
 
 				If a function is not guaranteed to be present in all supported versions of GoIO_DLL, then the line
 				"Added in version 'major.minor'" will appear in the function description in this file.
-				Vernier currently only supports GoIO_DLL versions 1.60 and 2.11 . GoIO_GetVersion() is the only
-				API function present in version 2.11 that is not present in version 1.60 .
 
 				It is our intention that all versions of GoIO_DLL created subsequent to a given version, will be
 				backwards compatible with the older version. You should be able to replace an old version of GoIO_DLL
@@ -275,7 +271,7 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_ClearIO(
 ****************************************************************************************************************************/
 GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_SendCmdAndGetResponse(
 	GOIO_SENSOR_HANDLE hSensor,	//[in] handle to open sensor.
-	unsigned char cmd,		//[in] command code. See SKIP_CMD_ID_* in GSkipComm.h.
+	unsigned char cmd,		//[in] command code. See SKIP_CMD_ID_* in GSkipCommExt.h.
 	void *pParams,			//[in] ptr to cmd specific parameter block, may be NULL. See GSkipCommExt.h.
 	gtype_int32 nParamBytes,//[in] # of bytes in (*pParams).
 	void *pRespBuf,			//[out] ptr to destination buffer, may be NULL. See GSkipCommExt.h.
@@ -488,7 +484,8 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_GetLatestRawMeasurement(
 	
 	Purpose:	Convert a raw measurement integer value into a real voltage value.
 				Depending on the type of sensor(see GoIO_Sensor_GetProbeType()), the voltage
-				may range from 0.0 to 5.0, or from -10.0 to 10.0 .
+				may range from 0.0 to 5.0, or from -10.0 to 10.0 . For Go! Motion, voltage returned is simply distance
+				in meters.
 
 	Return:		voltage corresponding to a specified raw measurement value.
 
@@ -516,9 +513,9 @@ GOIO_DLL_INTERFACE_DECL gtype_real64 GoIO_Sensor_CalibrateData(
 /***************************************************************************************************************************
 	Function Name: GoIO_Sensor_GetProbeType()
 	
-	Purpose:	Find out if the probe type is kProbeTypeAnalog5V or kProbeTypeAnalog10V.
+	Purpose:	Find out the probe type. See EProbeType in GSensorDDSMem.h.
 
-				This attribute is dependent on the OperationType in the SensorDDSRecord. 
+				For Go! Link devices, this attribute is dependent on the OperationType in the SensorDDSRecord. 
 				See GoIO_Sensor_DDSMem_GetOperationType().
 				If (2 == OperationType) then the sensor is kProbeTypeAnalog10V, else kProbeTypeAnalog5V.
 
@@ -528,7 +525,10 @@ GOIO_DLL_INTERFACE_DECL gtype_real64 GoIO_Sensor_CalibrateData(
 				programs do not have to deal with this, because GoIO_Sensor_Open() automatically sends
 				SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL to the device with the appropriate parameters.
 
-	Return:		kProbeTypeAnalog5V or kProbeTypeAnalog10V.
+				Go! Temp => kProbeTypeAnalog5V.
+				Go! Motion => kProbeTypeMD.
+
+	Return:		EProbeType.
 
 ****************************************************************************************************************************/
 GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_GetProbeType(
@@ -685,7 +685,7 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_DDSMem_GetMemMapVersion(
 				you might want to use GoIO_Sensor_DDSMem_SetSensorNumber() to change it.
 
 				
-	SIDE EFFECTS:	
+	SIDE EFFECTS(Go! Link only):	
 				If the new SensorDDSRecord.SensorNumber is set to kSensorIdNumber_Voltage10, then
 					SensorDDSRecord.OperationType is set = 2 to imply a probeType of kProbeTypeAnalog10V,
 				else
@@ -695,7 +695,7 @@ GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_DDSMem_GetMemMapVersion(
 				If the GoIO_Sensor_DDSMem_SetSensorNumber() causes the probeType to change, then you should
 				send a SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL command to the sensor. See GoIO_Sensor_GetProbeType().
 
-	Return:		0 if hSensor is valid, else -1.
+	Return:		0 if hSensor is valid and sensor is connected to a Go! Link, else -1.
 
 ****************************************************************************************************************************/
 GOIO_DLL_INTERFACE_DECL gtype_int32 GoIO_Sensor_DDSMem_SetSensorNumber(

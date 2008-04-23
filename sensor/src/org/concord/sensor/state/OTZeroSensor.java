@@ -72,7 +72,7 @@ public class OTZeroSensor extends DefaultOTObject
     	ExperimentConfig expConfig = producer.getCurrentConfig();
     	
     	// Some devices don't correctly return the current config
-    	if(expConfig != null){    		
+    	if(expConfig != null && expConfig.getSensorConfigs() != null){    		
         	SensorConfig [] configs = expConfig.getSensorConfigs();
         	
         	if(configs[index] instanceof ZeroingSensor &&

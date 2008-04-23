@@ -55,8 +55,15 @@ public class OTInterfaceManager extends DefaultOTObject
 	private ResourceSchema resources;
 	private UserMessageHandler messageHandler;
 	private InterfaceManager interfaceManager;
+	
 	private OTChangeListener changeListener;
 
+	/**
+	 * This is a hack to make sure the interface manager stays around.  It seems likely that it will
+	 * be garbage collected without this.  That didn't used to be a problem but now we are listening 
+	 * to changes in ourselves and updating the InterfaceManager.
+	 */
+	private static OTInterfaceManager latest;
 	
 	/**
 	 * @param h
@@ -67,6 +74,7 @@ public class OTInterfaceManager extends DefaultOTObject
 		super(resources);
 		this.messageHandler = messageHandler;
 		this.resources = resources;
+		latest = this;
 	}
 
 	public DeviceConfig [] getDeviceConfigs()

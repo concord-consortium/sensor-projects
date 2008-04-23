@@ -575,7 +575,7 @@ public abstract class AbstractSensorDevice
 			// If the device doesn't support non auto id sensors then there is no point 
 			// in trying auto configure with no sensors attached.  			
 			if(hasNonAutoIdSensors()){
-				nonAutoIdConfigureInteral(sensorRequests, deviceConfig);
+				nonAutoIdConfigureInteral(deviceConfig, request);
 			} else {				
 				deviceConfig.setValid(false);
 			}
@@ -595,8 +595,10 @@ public abstract class AbstractSensorDevice
 	}
 
 
-    protected void nonAutoIdConfigureInteral(SensorRequest[] sensorRequests, ExperimentConfigImpl deviceConfig) 
+    protected void nonAutoIdConfigureInteral(ExperimentConfigImpl deviceConfig , ExperimentRequest request) 
     {
+    	SensorRequest[] sensorRequests = request.getSensorRequests();
+    	
     	if(sensorRequests == null || sensorRequests.length == 0){
     		deviceConfig.setSensorConfigs(null);
     		deviceConfig.setValid(false);
@@ -611,6 +613,11 @@ public abstract class AbstractSensorDevice
     	}
 		deviceConfig.setSensorConfigs(sensorConfigs);
 		deviceConfig.setValid(true);
+		
+		deviceConfig.setPeriod(request.getPeriod());			
+		deviceConfig.setDataReadPeriod(deviceConfig.getPeriod());
+		deviceConfig.setExactPeriod(hasExactPeriod());
+
 	}
 
 	/**

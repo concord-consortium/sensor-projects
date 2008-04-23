@@ -1,4 +1,4 @@
-VERSION=1.0.0
+VERSION=1.1.0
 PLATFORM=macosx
 NATIVE_FILES="../../bin/libvernier_ccsd.jnilib"
 GROUP_ID=org.concord.sensor.vernier

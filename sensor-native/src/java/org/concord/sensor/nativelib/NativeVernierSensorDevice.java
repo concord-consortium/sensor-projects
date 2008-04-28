@@ -38,10 +38,10 @@ import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
 
 import ccsd.vernier.ExperimentConfig;
-import ccsd.vernier.SensorConfig;
 import ccsd.vernier.NativeBridge;
 import ccsd.vernier.SWIGTYPE_p_float;
 import ccsd.vernier.SWIGTYPE_p_void;
+import ccsd.vernier.SensorConfig;
 
 /**
  * NativeSensorDevice
@@ -189,24 +189,23 @@ public class NativeVernierSensorDevice
 	}
 
 	/**
-	 * Can be native.
+	 * native
 	 * 
 	 * @see org.concord.sensor.SensorDataProducer#getCurrentConfig()
 	 */
 	public org.concord.sensor.ExperimentConfig getCurrentConfig()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return NativeBridge.getCurrentConfigHelper(deviceHandle);
 	}
 
 	/**
-	 * can be native
+	 * This could be native, but since the native implementation only works with 
+	 * go-link and go-temp we can just return true here.
 	 * @see org.concord.sensor.SensorDataProducer#canDetectSensors()
 	 */
 	public boolean canDetectSensors()
 	{
-		// TODO: send this request to the NativeBridge
-		return false;
+		return true;
 	}
 
 	/**

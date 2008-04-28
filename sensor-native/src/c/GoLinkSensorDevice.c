@@ -265,7 +265,7 @@ int SensDev_getCurrentConfig(
 		
 	current[0] = expConfig;
 	
-	return 1;
+	return 0;
 }
 
 int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensConfig)

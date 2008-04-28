@@ -29,19 +29,23 @@
  */
 package org.concord.sensor.nativelib;
 
+
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
+import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.SensorRequest;
+import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.device.impl.DeviceConfigImpl;
 import org.concord.sensor.device.impl.InterfaceManager;
 import org.concord.sensor.device.impl.JavaDeviceFactory;
 import org.concord.sensor.impl.ExperimentRequestImpl;
 import org.concord.sensor.impl.SensorRequestImpl;
+import org.concord.sensor.impl.SensorUtilJava;
 import org.concord.sensor.state.PrintUserMessageHandler;
 
 /**
@@ -63,6 +67,12 @@ public class TestNative
 		dConfigs[0] = new DeviceConfigImpl(JavaDeviceFactory.VERNIER_GO_LINK, null);		
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
 				
+		// Check what is attached, this isn't necessary if you know what you want
+		// to be attached.  But sometimes you want the user to see what is attached
+		SensorDevice sensorDevice = sdManager.getSensorDevice();
+		ExperimentConfig currentConfig = sensorDevice.getCurrentConfig();
+		SensorUtilJava.printExperimentConfig(currentConfig);
+		
 		
 		ExperimentRequestImpl request = new ExperimentRequestImpl();
 		request.setPeriod(0.1f);

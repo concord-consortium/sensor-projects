@@ -73,7 +73,7 @@ public interface SensorDevice
 	/**
 	 * This method is called after open but before start.  The request is 
 	 * a general sensor configuration request.  The device should try to
-	 * meet this request.  If the device can id sensors then it should just
+	 * meet this request.  If the device cannot id sensors then it should just
 	 * assume the appropriate sensors are attached based on the request.  
 	 * 
 	 * If the device can id sensors then it should verify the appropriate
@@ -81,7 +81,7 @@ public interface SensorDevice
 	 * with an isValid that returns false.  The sensors should be set to the 
 	 * actual sensors even if they are wrong.  If the device returns an invalid
 	 * config with sensors that don't match then a message will be shown to the
-	 * user asking them to plug in the appropriate sensors.  The getInvalidReaon
+	 * user asking them to plug in the appropriate sensors.  The getInvalidReason
 	 * might be used in this case.  If getSensorConfig() returns null then 
 	 * getInvalidReason will be displayed to the user.
 	 * 

@@ -42,29 +42,43 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_TEMPERATURE_C 	10  // 10K:  verified for fast response probe
 #define SENSOR_ID_TEMPERATURE_F 	11  // 15K:
 #define SENSOR_ID_LIGHT 			12  // 4.7K: verified for light sensor
-#define SENSOR_ID_HEART_RATE		13  // 1K:   BPM 
+#define SENSOR_ID_HEART_RATE		13  // 1K:   v
 #define SENSOR_ID_VOLTAGE			14  // 47K: 
-#define SENSOR_ID_EKG				15  // 1.5K:
+#define SENSOR_ID_EKG				15  // 1.5K:  Plymouth has one
 #define SENSOR_ID_CO2_GAS           17
 #define SENSOR_ID_OXYGEN_GAS        18
 
 /*
  * smart sensors
  */
-#define SENSOR_ID_PH                20
-#define SENSOR_ID_GAS_PRESSURE     24
-#define SENSOR_ID_DUAL_R_FORCE_10   25
-#define SENSOR_ID_DUAL_R_FORCE_50   26
-#define SENSOR_ID_SMART_LIGHT_1     34
-#define SENSOR_ID_SMART_LIGHT_2     35
-#define SENSOR_ID_SMART_LIGHT_3     36
-#define SENSOR_ID_BAROMETER         46
-#define SENSOR_ID_SMART_HUMIDITY    47
-#define SENSOR_ID_GO_TEMP           60
-#define SENSOR_ID_SALINITY          61 
-#define SENSOR_ID_GO_MOTION         69 
-#define SENSOR_ID_IR_TEMP           73
-#define SENSOR_ID_CO2_GAS_LOW       75
+#define SENSOR_ID_PH                  20
+#define SENSOR_ID_CONDUCTIVITY_200    21  // NEW
+#define SENSOR_ID_CONDUCTIVITY_2000   22  // NEW
+#define SENSOR_ID_CONDUCTIVITY_20000  23  // NEW
+#define SENSOR_ID_GAS_PRESSURE        24
+#define SENSOR_ID_DUAL_R_FORCE_10     25
+#define SENSOR_ID_DUAL_R_FORCE_50     26
+#define SENSOR_ID_25G_ACCEL           27  // NEW
+#define SENSOR_ID_LOWG_ACCEL          28  // NEW
+#define SENSOR_ID_SMART_LIGHT_1       34
+#define SENSOR_ID_SMART_LIGHT_2       35
+#define SENSOR_ID_SMART_LIGHT_3       36
+#define SENSOR_ID_MAGNETIC_FIELD      44  // NEW
+#define SENSOR_ID_BAROMETER           46
+#define SENSOR_ID_SMART_HUMIDITY      47
+#define SENSOR_ID_GO_TEMP             60
+#define SENSOR_ID_SALINITY            61 
+#define SENSOR_ID_BLOOD_PRESSURE      66  // NEW
+#define SENSOR_ID_SPIROMETER          68  // NEW
+#define SENSOR_ID_GO_MOTION           69 
+#define SENSOR_ID_IR_TEMP             73
+#define SENSOR_ID_SOUND_LEVEL         74  // NEW
+#define SENSOR_ID_CO2_GAS_LOW         75
+
+
+
+/*
+*/
 
 /*
  * This is not how this is supposed to be done
@@ -439,6 +453,18 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_TEMPERATURE_WAND;
 				sensConfig->stepSize = 0.01;
 				break;
+			case SENSOR_ID_CONDUCTIVITY_200:
+			case SENSOR_ID_CONDUCTIVITY_2000:
+			case SENSOR_ID_CONDUCTIVITY_20000:
+                // fixme this should the request ranges foreach one
+				if(request &&
+					(request->type == QUANTITY_CONDUCTIVITY)){
+					 valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "MICS");
+				sensConfig->type = QUANTITY_CONDUCTIVITY;
+				sensConfig->stepSize = 0.1314;			
+				break;
 			case SENSOR_ID_PH:
 				if(request &&
 					(request->type == QUANTITY_PH)){
@@ -466,6 +492,66 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_CO2_GAS;			
 				sensConfig->stepSize = 4.0; // FIXME: this is a hack we should be able calc this					
 				break;			
+			case SENSOR_ID_25G_ACCEL:
+				if(request &&
+					(request->type == QUANTITY_ACCELERATION)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "m/s^2");
+				sensConfig->type = QUANTITY_ACCELERATION;			
+				sensConfig->stepSize = 0.255; 									
+				break;	
+			case SENSOR_ID_LOWG_ACCEL:
+				if(request &&
+					(request->type == QUANTITY_ACCELERATION)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "m/s^2");
+				sensConfig->type = QUANTITY_ACCELERATION;			
+				sensConfig->stepSize = 0.0458; 									
+				break;
+			case SENSOR_ID_MAGNETIC_FIELD:
+				if(request &&
+					(request->type == QUANTITY_MAGNETIC_FIELD)){
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "G");
+				sensConfig->type = QUANTITY_MAGNETIC_FIELD;			
+				sensConfig->stepSize = 0.0032; 									
+				break;
+			case SENSOR_ID_SPIROMETER:
+				if(request &&
+					(request->type == QUANTITY_LUNG_AIR_FLOW)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "L/s");
+				sensConfig->type = QUANTITY_LUNG_AIR_FLOW;			
+				sensConfig->stepSize = 0.01437; 									
+				break;
+			case SENSOR_ID_SOUND_LEVEL:
+				if(request &&
+					(request->type == QUANTITY_SOUND_INTENSITY)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "dB");
+				sensConfig->type = QUANTITY_SOUND_INTENSITY;			
+				sensConfig->stepSize = 0.2; 									
+				break;			
+			case SENSOR_ID_BLOOD_PRESSURE:
+				if(request &&
+					(request->type == QUANTITY_BLOOD_PRESSURE)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "mm Hg");
+				sensConfig->type = QUANTITY_BLOOD_PRESSURE;			
+				sensConfig->stepSize = 0.11222; 									
+				break;			
+			
 			default:
 				valid = 0;
 				sensConfig->type = QUANTITY_UNKNOWN;
@@ -569,10 +655,36 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 			case SENSOR_ID_OXYGEN:
 			case SENSOR_ID_CV_CURRENT:
 			case SENSOR_ID_TEMPERATURE_F:
-			case SENSOR_ID_HEART_RATE:
-			case SENSOR_ID_EKG:
 				break;
+			case SENSOR_ID_HEART_RATE:
+				if(request &&
+					request->type == QUANTITY_HEART_RATE_SIGNAL) {
+					valid = 1;
+				}
 				
+				sprintf(sensConfig->unitStr, "v");
+				sprintf(sensConfig->name, "Heart Rate Signal");
+				sensConfig->type = QUANTITY_HEART_RATE_SIGNAL;			
+				sensConfig->stepSize = 0.002; 
+				// the heart rate sensor just returns voltage and the software has to convert 
+				// it to a heart rate					
+				state->calibrationFunct = calibrate_raw_voltage;
+			
+				break;
+			case SENSOR_ID_EKG:
+				if(request &&
+					request->type == QUANTITY_EKG) {
+					valid = 1;
+				}
+				
+				sprintf(sensConfig->unitStr, "v");
+				sprintf(sensConfig->name, "EKG");
+				sensConfig->type = QUANTITY_EKG;			
+				sensConfig->stepSize = 0.002; // FIXME: this is a hack we should be able calc this					
+				// the ekg sensor just returns voltage and the software has to convert 
+				// it to a heart rate					
+				state->calibrationFunct = calibrate_raw_voltage;			
+				break;				
 			default:
 				printf("Unknown sensor id: %d", (int)ddsRec.SensorNumber);
 		}

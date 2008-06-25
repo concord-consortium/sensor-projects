@@ -196,6 +196,12 @@ enum QuantityType
 	public static int QUANTITY_RAW_DATA=            22; // raw
 	public static int QUANTITY_RAW_VOLTAGE=         23; // V
 		
+	// Some devices provide 2 readings for a single channel
+	public static int QUANTITY_RAW_DATA_2=          24;
+	public static int QUANTITY_RAW_VOLTAGE_2=       25;
+	
+	public static int QUANTITY_MAGNETIC_FIELD=      26;
+	public static int QUANTITY_LUNG_AIR_FLOW=       27;
 	 *****************************************************
 	 *****************************************************/
 	
@@ -238,6 +244,16 @@ enum QuantityType
 	
 	QUANTITY_RAW_DATA,
 	QUANTITY_RAW_VOLTAGE,
+
+	QUANTITY_RAW_DATA_2,
+	QUANTITY_RAW_VOLTAGE_2,
+	
+	QUANTITY_MAGNETIC_FIELD,
+	QUANTITY_LUNG_AIR_FLOW,
+	QUANTITY_HEART_RATE_SIGNAL,
+	QUANTITY_EKG,
+	QUANTITY_BLOOD_PRESSURE,	
+	QUANTITY_CONDUCTIVITY,
 };
 
 /*

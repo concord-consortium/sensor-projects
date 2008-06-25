@@ -58,14 +58,14 @@ public interface SensorConfig
 	 * 
 	 * Or acceleration could be a derivative from a distance sensor
 	 * or it could be an dedicated acc sensor.   Which would give
-	 * instantaeous acceration.
+	 * instantaneous acceleration.
 	 * 
 	 * Also several of these quantity can be derived from other 
 	 * quantities.  So if they are specified in a experiment config
 	 * how will the software know what the author wants.
 	 * 
 	 * Also the technical hints will depend on how the sensors are 
-	 * configured.  So there needs to be conection between this
+	 * configured.  So there needs to be connection between this
 	 * configuration and the technical hints. 
 	 * 
 	 * Lets say no for now.  Because we are writing most of this
@@ -117,6 +117,12 @@ public interface SensorConfig
 	public static int QUANTITY_RAW_DATA_2=          24;
 	public static int QUANTITY_RAW_VOLTAGE_2=       25;
 	
+	public static int QUANTITY_MAGNETIC_FIELD=      26;
+	public static int QUANTITY_LUNG_AIR_FLOW=       27;
+	public static int QUANTITY_HEART_RATE_SIGNAL=   28;
+	public static int QUANTITY_EKG=                 29;
+	public static int QUANTITY_BLOOD_PRESSURE=      30;	
+	public static int QUANTITY_CONDUCTIVITY=        31;
 	
 	/**
 	 * If the attached sensor can be identified by the device

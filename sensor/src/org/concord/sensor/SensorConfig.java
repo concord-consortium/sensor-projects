@@ -123,6 +123,7 @@ public interface SensorConfig
 	public static int QUANTITY_EKG=                 29;
 	public static int QUANTITY_BLOOD_PRESSURE=      30;	
 	public static int QUANTITY_CONDUCTIVITY=        31;
+	public static int QUANTITY_DISSOLVED_OXYGEN=    32;
 	
 	/**
 	 * If the attached sensor can be identified by the device

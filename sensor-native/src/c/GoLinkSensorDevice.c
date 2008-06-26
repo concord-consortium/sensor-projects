@@ -52,27 +52,28 @@ typedef enum _GoDeviceType{
  * smart sensors
  */
 #define SENSOR_ID_PH                  20
-#define SENSOR_ID_CONDUCTIVITY_200    21  // NEW
-#define SENSOR_ID_CONDUCTIVITY_2000   22  // NEW
-#define SENSOR_ID_CONDUCTIVITY_20000  23  // NEW
+#define SENSOR_ID_CONDUCTIVITY_200    21 
+#define SENSOR_ID_CONDUCTIVITY_2000   22 
+#define SENSOR_ID_CONDUCTIVITY_20000  23 
 #define SENSOR_ID_GAS_PRESSURE        24
 #define SENSOR_ID_DUAL_R_FORCE_10     25
 #define SENSOR_ID_DUAL_R_FORCE_50     26
-#define SENSOR_ID_25G_ACCEL           27  // NEW
-#define SENSOR_ID_LOWG_ACCEL          28  // NEW
+#define SENSOR_ID_25G_ACCEL           27 
+#define SENSOR_ID_LOWG_ACCEL          28 
 #define SENSOR_ID_SMART_LIGHT_1       34
 #define SENSOR_ID_SMART_LIGHT_2       35
 #define SENSOR_ID_SMART_LIGHT_3       36
-#define SENSOR_ID_MAGNETIC_FIELD      44  // NEW
+#define SENSOR_ID_DISSOLVED_OXYGEN    37
+#define SENSOR_ID_MAGNETIC_FIELD      44 
 #define SENSOR_ID_BAROMETER           46
 #define SENSOR_ID_SMART_HUMIDITY      47
 #define SENSOR_ID_GO_TEMP             60
 #define SENSOR_ID_SALINITY            61 
-#define SENSOR_ID_BLOOD_PRESSURE      66  // NEW
-#define SENSOR_ID_SPIROMETER          68  // NEW
+#define SENSOR_ID_BLOOD_PRESSURE      66 
+#define SENSOR_ID_SPIROMETER          68 
 #define SENSOR_ID_GO_MOTION           69 
 #define SENSOR_ID_IR_TEMP             73
-#define SENSOR_ID_SOUND_LEVEL         74  // NEW
+#define SENSOR_ID_SOUND_LEVEL         74 
 #define SENSOR_ID_CO2_GAS_LOW         75
 
 
@@ -550,6 +551,16 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sprintf(sensConfig->unitStr, "mm Hg");
 				sensConfig->type = QUANTITY_BLOOD_PRESSURE;			
 				sensConfig->stepSize = 0.11222; 									
+				break;			
+			case SENSOR_ID_DISSOLVED_OXYGEN:
+				if(request &&
+					(request->type == QUANTITY_DISSOLVED_OXYGEN)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "mg/L");
+				sensConfig->type = QUANTITY_DISSOLVED_OXYGEN;			
+				sensConfig->stepSize = 0.00654; 									
 				break;			
 			
 			default:

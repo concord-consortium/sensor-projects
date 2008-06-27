@@ -64,7 +64,8 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_SMART_LIGHT_2       35
 #define SENSOR_ID_SMART_LIGHT_3       36
 #define SENSOR_ID_DISSOLVED_OXYGEN    37
-#define SENSOR_ID_MAGNETIC_FIELD      44 
+#define SENSOR_ID_MAGNETIC_FIELD_HIGH 44 
+#define SENSOR_ID_MAGNETIC_FIELD_LOW  45 
 #define SENSOR_ID_BAROMETER           46
 #define SENSOR_ID_SMART_HUMIDITY      47
 #define SENSOR_ID_GO_TEMP             60
@@ -513,13 +514,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_ACCELERATION;			
 				sensConfig->stepSize = 0.0458; 									
 				break;
-			case SENSOR_ID_MAGNETIC_FIELD:
+			case SENSOR_ID_MAGNETIC_FIELD_HIGH:
+			case SENSOR_ID_MAGNETIC_FIELD_LOW:
 				if(request &&
 					(request->type == QUANTITY_MAGNETIC_FIELD)){
 					valid = 1;
 				}
 				sprintf(sensConfig->unitStr, "G");
 				sensConfig->type = QUANTITY_MAGNETIC_FIELD;			
+				// FIXME this should be different for the different sensors. 
 				sensConfig->stepSize = 0.0032; 									
 				break;
 			case SENSOR_ID_SPIROMETER:

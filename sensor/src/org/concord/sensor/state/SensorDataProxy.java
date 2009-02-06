@@ -237,4 +237,8 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		}
 	}
 
+	public boolean isRunning() {
+		return producer.isRunning();
+	}
+
 }

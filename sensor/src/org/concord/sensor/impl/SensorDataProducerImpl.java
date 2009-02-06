@@ -328,6 +328,7 @@ public abstract class SensorDataProducerImpl
 	 */
 	public final void reset()
 	{	
+		stop();
 	    dataTimeOffset = 0;
 	}
 	

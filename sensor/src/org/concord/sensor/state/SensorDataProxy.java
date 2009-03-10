@@ -25,6 +25,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 	private DataProducer producer = null;
 	private SensorDataProducer sensorDataProducer = null;
 	private ExperimentRequest experimentRequest = null;
+	private boolean running = false;
 
 	/**
 	 * This is a hack to make this refactoring simple. This should be refactored
@@ -142,6 +143,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		if (producer != null) {
 			producer.reset();
 		}
+		running = false;
 	}
 
 	/*
@@ -199,6 +201,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 
 		}
 		producer.start();
+		running = true;
 	}
 
 	/*
@@ -216,6 +219,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		if (producer != null) {
 			producer.stop();
 		}
+		running = false;
 	}
 
 	/*
@@ -238,10 +242,6 @@ public class SensorDataProxy implements DataProducer, Copyable {
 	}
 
 	public boolean isRunning() {
-		if (sensorDataProducer != null)
-			return producer.isRunning();
-		else 
-			return false;
+		return running;
 	}
-
 }

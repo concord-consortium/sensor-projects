@@ -95,7 +95,10 @@ public class JavaDeviceFactory
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
 				break;
 			case VERNIER_LAB_PRO:
-				className = "org.concord.sensor.vernier.LabProSensorDevice";
+				className = "org.concord.sensor.vernier.labpro.LabProSensorDevice";
+				break;
+			case VERNIER_LAB_QUEST:
+				className = "org.concord.sensor.vernier.labquest.LabQuestSensorDevice";
 				break;
 			case TI_CONNECT:
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
@@ -151,8 +154,7 @@ public class JavaDeviceFactory
 			}
 
 			if(device instanceof DeviceServiceAware) {
-				((DeviceServiceAware)device).
-				setDeviceService(this);
+				((DeviceServiceAware)device).setDeviceService(this);
 			}
 			device.open(config.getConfigString());
 

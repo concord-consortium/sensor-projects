@@ -29,6 +29,7 @@ public interface DeviceID
 	public final static int PSEUDO_DEVICE = 0;
 	public final static int VERNIER_GO_LINK = 10;
 	public final static int VERNIER_LAB_PRO = 11;
+	public final static int VERNIER_LAB_QUEST = 12;
 	public final static int TI_CONNECT = 20;
 	public final static int FOURIER = 30;
 	public final static int DATA_HARVEST_USB = 40;

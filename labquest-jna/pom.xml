@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.concord.project-groups</groupId>
+    <artifactId>sensor</artifactId>
+    <version>2</version>
+  </parent>
+  
+  <groupId>org.concord.sensor</groupId>
+  <artifactId>labquest-jna</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>LabQuest JNA</name>
+  <description>
+     LabQuest JNA Java library which uses the Vernier LabQuest SDK 
+  </description>
+
+  <dependencies>
+   <dependency>
+      <groupId>org.concord.external.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>3.0.9</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+  	<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+	</plugins>
+  </build>
+    
+  <!--this is required to find out parent pom you should-->
+  <repositories>
+    <repository>
+      <id>cc-repo-internal</id>
+      <name>Concord Consortium Internal</name>
+      <url>http://source.concord.org/maven2/internal</url>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
+
+</project>

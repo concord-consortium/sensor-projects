@@ -17,11 +17,12 @@
   </description>
 
   <dependencies>
-   <dependency>
+    <dependency>
       <groupId>org.concord.external.jna</groupId>
-      <artifactId>jna</artifactId>
+      <artifactId>jna-jws-crossplatform</artifactId>
       <version>3.0.9</version>
       <scope>compile</scope>
+      <type>pom</type>
     </dependency>
   </dependencies>
   

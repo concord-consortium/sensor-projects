@@ -108,6 +108,11 @@ public class LabQuestLibrary
 		Pointer openDeviceListSnapshotHandle = ngio.openDeviceListSnapshot(hLibrary, 
 				NGIOLibrary.DEVTYPE_LABPRO2, 
 				numDevices, listSig);
+		if(openDeviceListSnapshotHandle == null){
+			System.err.println("got a null snapshot handle");
+			return;
+		}
+		
 		System.out.println("labpro2 num devices: " + numDevices.getValue() + 
 				" list sig: " + listSig.getValue());
 	

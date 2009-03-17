@@ -46,11 +46,13 @@ public class Main {
 			System.out.println("major: " + version[0] + 
 					" minor: " + version[1]);
 
-			for(int i=0; i<15; i++){
-				labQuestLib.searchForDevices();
-				labQuestLib.printListOfDevices();
-				Thread.sleep(50);
-			}
+			// This is necessary on windows.
+			// on my tests only 50ms was necessary but I choose 100ms to be safe
+			Thread.sleep(100);
+
+			labQuestLib.searchForDevices();
+			labQuestLib.printListOfDevices();
+
 			String firstDevice = null;
 			firstDevice = labQuestLib.getFirstDeviceName();
 

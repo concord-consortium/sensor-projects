@@ -53,6 +53,13 @@ public class LabQuestLibrary
 			ngio.diags_SetDebugTraceThreshold(hLibrary, lqDebugLevel);
 		}
 
+		// This is necessary on windows, before calling certain methods the device needs 
+		// some time to wake up.
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void cleanup()

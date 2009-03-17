@@ -47,6 +47,12 @@ public class LabQuestLibrary
 				NGIOLibrary.class, options);
 		
 		hLibrary = ngio.init();
+
+		int lqDebugLevel = Integer.getInteger("labquest.debug.level", -1);
+		if(lqDebugLevel != -1){
+			ngio.diags_SetDebugTraceThreshold(hLibrary, lqDebugLevel);
+		}
+
 	}
 
 	public void cleanup()

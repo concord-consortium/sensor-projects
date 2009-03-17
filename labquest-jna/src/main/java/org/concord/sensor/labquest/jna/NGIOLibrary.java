@@ -41,6 +41,11 @@ public interface NGIOLibrary extends Library {
 	public final static int DEVICE_STATUS_MASK_OPEN = 1;
 	public final static int DEVICE_STATUS_MASK_OPENED_BY_THIS_CLIENT = 2;
 	
+	public final static int TRACE_SEVERITY_LOWEST = 1;
+	public final static int TRACE_SEVERITY_LOW = 10;
+	public final static int TRACE_SEVERITY_MEDIUM = 50;
+	public final static int TRACE_SEVERITY_HIGH = 100;
+	
 	public final static byte FALSE = (byte)0;
 	public final static byte TRUE = (byte)1;
 	
@@ -175,5 +180,7 @@ public interface NGIOLibrary extends Library {
 	int device_DDSMem_CalculateChecksum(Pointer hDevice, byte channel,
 			ByteByReference pChecksum);
 	
+	// untested
+	int diags_SetDebugTraceThreshold(Pointer hLibrary, int threshold);
 	
 }

@@ -46,10 +46,11 @@ public class Main {
 			System.out.println("major: " + version[0] + 
 					" minor: " + version[1]);
 
-			labQuestLib.searchForDevices();
-
-			labQuestLib.printListOfDevices();
-
+			for(int i=0; i<5; i++){
+				labQuestLib.searchForDevices();
+				labQuestLib.printListOfDevices();
+				Thread.sleep(500);
+			}
 			String firstDevice = null;
 			firstDevice = labQuestLib.getFirstDeviceName();
 

@@ -203,7 +203,7 @@ public class JavaDeviceFactory
         } else if(OS_SERIAL_PORT.equals(name)) {
             portClassName = "org.concord.sensor.serial.SensorSerialPortRXTX";
         } else if(LABPROUSB_SERIAL_PORT.equals(name)) {
-            portClassName = "org.concord.sensor.vernier.SensorSerialPortLabProUSB";        	
+            portClassName = "org.concord.sensor.vernier.labpro.SensorSerialPortLabProUSB";        	
         }
         		
             

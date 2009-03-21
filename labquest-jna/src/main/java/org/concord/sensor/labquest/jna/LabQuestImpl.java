@@ -245,6 +245,23 @@ public class LabQuestImpl implements LabQuest
 	}
 
 	/**
+	 * @see org.concord.sensor.labquest.jna.LabQuest#setAnalogInput(byte, byte)
+	 */
+	public void setAnalogInput(byte channel, byte analogInput) throws LabQuestException
+	{
+		NGIOSourceCmds.NGIOSetAnalogInputParams setAnalogInputParams =
+			new NGIOSourceCmds.NGIOSetAnalogInputParams();
+		setAnalogInputParams.channel = channel;
+		setAnalogInputParams.analogInput = analogInput;
+		try {
+			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_ANALOG_INPUT, 
+					setAnalogInputParams, null);
+		} catch (NGIOException e) {
+			throw new LabQuestException(e);
+		}
+	}
+
+	/**
 	 * @see org.concord.sensor.labquest.jna.LabQuest#setSamplingMode(byte, byte)
 	 */
 	public void setSamplingMode(byte channel, byte samplingMode) throws LabQuestException

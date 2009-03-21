@@ -65,6 +65,15 @@ public interface NGIOSourceCmds
 	public final static byte STATUS_ERROR_AUDIO_CONTROL_FAILURE = 0x3C;
 	public final static byte STATUS_ERROR_AUDIO_STREAM_FAILURE = 0x3D;
 
+	public final static byte ANALOG_INPUT_5V_BUILTIN_12BIT_ADC = 0;
+	public final static byte ANALOG_INPUT_5V_BUILTIN_10BIT_ADC = 1;
+	public final static byte ANALOG_INPUT_5V_EXT_12BIT_ADC = 2;
+	public final static byte ANALOG_INPUT_5V_EXT_16BIT_ADC = 3;
+	public final static byte ANALOG_INPUT_PM10V_BUILTIN_12BIT_ADC = 4;
+	public final static byte ANALOG_INPUT_PM10V_BUILTIN_10BIT_ADC = 5;
+	public final static byte ANALOG_INPUT_PM10V_EXT_12BIT_ADC = 6;
+	public final static byte ANALOG_INPUT_PM10V_EXT_16BIT_ADC = 7;
+	
 	public final static byte SAMPLING_MODE_PERIODIC_LEVEL_SNAPSHOT = 0;
 	public final static byte SAMPLING_MODE_APERIODIC_EDGE_DETECT = 1;
 	public final static byte SAMPLING_MODE_PERIODIC_PULSE_COUNT = 2;
@@ -105,6 +114,17 @@ public interface NGIOSourceCmds
 	{
 		public byte [] enableSensorChannels = new byte[4];  // byte 0 channels 0-7, byte 1 8-15 ...
 	} 
+
+	class NGIOSetAnalogInputParams extends NGIOStructure
+	{
+		public byte channel; //NGIO_CHANNEL_ID_ANALOG1 ...
+		
+		/**
+		 * This should be one of the ANALOG_INPUT_* constants
+		 * NGIO_CMD_ID_INIT causes analogInput to be ANALOG_INPUT_5V_BUILTIN_12BIT_ADS
+		 */
+		public byte analogInput; 
+	}
 
 	class NGIOSetSamplingModeParams extends NGIOStructure
 	{

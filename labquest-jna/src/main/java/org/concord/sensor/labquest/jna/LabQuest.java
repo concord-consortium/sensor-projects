@@ -50,6 +50,9 @@ public interface LabQuest {
 	public float convertToVoltage(byte channel, int rawMeasurement,
 			int probeType);
 
+	public void setAnalogInput(byte channel, byte analogInput) 
+		throws LabQuestException;
+
 	public void setSamplingMode(byte channel, byte samplingMode)
 			throws LabQuestException;
 

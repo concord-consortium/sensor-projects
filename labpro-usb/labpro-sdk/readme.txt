@@ -20,3 +20,7 @@ LabPro USB device driver installer.exe - installs the Jungo device driver(windrv
 \LabPro_console_exe\LabProUSB.dll - Use functions in this dll to communicate to the LabPro via USB.
 \LabPro_console_src - Folder containing source code to LabPro_console.exe. You need Microsoft Visual C++ version 6 or later to build this.
 redist\LabProUSB.dll - Another copy of the dll. Use functions in this dll to communicate to the LabPro via USB.
+
+Release Notes:
+version 3.02
+Support new Jungo device driver for 32 bit XP and Vista. 64 bit operating systems are not supported yet.

@@ -14,9 +14,8 @@
 #define LABPROUSB_INTERFACE_DECL _declspec(dllimport)
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern "C"
+{
 
 #endif
 
@@ -223,9 +222,7 @@ LABPROUSB_INTERFACE_DECL short int LabProUSB_SetNumChannelsAndModes(int nNumChan
 
 #else
 
-#ifdef __cplusplus
 } //extern "C"
-#endif
 
 #endif
 

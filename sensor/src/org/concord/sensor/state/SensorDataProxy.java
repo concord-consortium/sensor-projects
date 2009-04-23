@@ -242,6 +242,16 @@ public class SensorDataProxy implements DataProducer, Copyable {
 	}
 
 	public boolean isRunning() {
-		return running;
+		if(producer == null){
+			return false;
+		}
+		return producer.isRunning();
+	}
+
+	public boolean isInInitialState() {
+		if(producer == null){
+			return true;
+		}
+		return producer.isInInitialState();
 	}
 }

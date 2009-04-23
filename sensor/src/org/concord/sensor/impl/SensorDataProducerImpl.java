@@ -376,6 +376,13 @@ public abstract class SensorDataProducerImpl
 		return ticker.isTicking();
 	}
 	
+	public boolean isInInitialState() {
+		if(dataTimeOffset == 0){
+			return true;
+		}
+		return false;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorDataProducer#canDetectSensors()
 	 */

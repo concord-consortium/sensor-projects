@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="org/concord/sensor/meld/|org/concord/sensor/transformers/" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry sourcepath="/home/scott/ExtProjects/rxtx-2.1-7pre17/src" kind="lib" path="/thirdparty-jars/RXTXcomm-2.1.7.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="/thirdparty-jars/RXTXcomm-2.1.7.jar" sourcepath="/home/scott/ExtProjects/rxtx-2.1-7pre17/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/framework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/data"/>
 	<classpathentry kind="output" path="lib"/>

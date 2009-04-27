@@ -29,7 +29,7 @@ import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.SensorDataProducer;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.SensorDevice;
-import org.concord.sensor.impl.JavaSensorDataProducer;
+import org.concord.sensor.impl.SensorDataProducerImpl;
 import org.concord.sensor.impl.Ticker;
 
 /**
@@ -113,7 +113,7 @@ public class InterfaceManager extends AbstractSensorDataManager
         }
         
 		SensorDataProducer dataProducer = 
-		    new JavaSensorDataProducer(requestedDevice, ticker, messageHandler);
+		    new SensorDataProducerImpl(requestedDevice, ticker, messageHandler);
 
 		return dataProducer;
 	}

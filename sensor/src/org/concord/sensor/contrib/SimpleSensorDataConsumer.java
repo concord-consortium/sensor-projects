@@ -100,12 +100,6 @@ class SimpleDataListener implements DataListener{
 		if(eventType == 1001) return;
 		
 		switch(eventType) {
-			case DataStreamEvent.DATA_STARTED:
-				eventString = "Ready to start";
-			break;
-			case DataStreamEvent.DATA_STOPPED:
-				eventString = "Stopped";
-			break;
 			case DataStreamEvent.DATA_DESC_CHANGED:
 				eventString = "Description changed";
 			break;

@@ -25,6 +25,7 @@ package org.concord.sensor.impl;
 
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.framework.data.stream.DefaultDataProducer;
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
@@ -34,16 +35,13 @@ import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
 
 
-public abstract class SensorDataProducerImpl
+public class SensorDataProducerImpl extends DefaultDataProducer
 	implements SensorDataProducer, DeviceReader, TickListener
 {
 	public int		startTimer =  0;
 	protected Ticker ticker = null;
 	protected UserMessageHandler messageHandler;
 	
-	public DataStreamDescription dDesc = new DataStreamDescription();
-	public DataStreamEvent	processedDataEvent = new DataStreamEvent();
-
 	protected float [] processedData;
 	private static final int DEFAULT_BUFFERED_SAMPLE_NUM = 1000;
 	
@@ -70,9 +68,7 @@ public abstract class SensorDataProducerImpl
 		messageHandler = h;
 		
 		processedData = new float[DEFAULT_BUFFERED_SAMPLE_NUM];
-		processedDataEvent.setData(processedData);
-		processedDataEvent.setSource(this);
-		processedDataEvent.setDataDescription(dDesc);
+		dataEvent.setData(processedData);
 		dataTimeOffset = 0;
 	}
 
@@ -89,13 +85,13 @@ public abstract class SensorDataProducerImpl
 	    // flushes
 	    totalDataRead = 0;
 
-		dDesc.setDataOffset(0);
+		dataDesc.setDataOffset(0);
 
 	    // track when we are in the device read so if flush
 	    // is called outside of this we can complain
 	    inDeviceRead = true;
 	    ret = device.read(processedData, 0, 
-	    			dDesc.getChannelsPerSample(), this);
+	    			dataDesc.getChannelsPerSample(), this);
 	    inDeviceRead = false;
 	    
 	    if(ret < 0) {
@@ -136,8 +132,8 @@ public abstract class SensorDataProducerImpl
 		if(ret > 0){
 			// There was some data that didn't get flushed during the read
 			// so send this out to our listeners.
-			processedDataEvent.setNumSamples(ret);
-			notifyDataListenersReceived(processedDataEvent);				
+			dataEvent.setNumSamples(ret);
+			notifyDataReceived();
 		} 	
 	}
 	
@@ -177,9 +173,9 @@ public abstract class SensorDataProducerImpl
 			test.equals(test);
 		}
 		
-		processedDataEvent.setNumSamples(numSamples);
-		notifyDataListenersReceived(processedDataEvent);
-		dDesc.setDataOffset(dDesc.getDataOffset()+numSamples);
+		dataEvent.setNumSamples(numSamples);
+		notifyDataReceived();
+		dataDesc.setDataOffset(dataDesc.getDataOffset()+numSamples);
 		
 		totalDataRead += numSamples;
 		
@@ -263,12 +259,9 @@ public abstract class SensorDataProducerImpl
 	    if(actualConfig != null && !actualConfig.isValid()){
 	    	actualConfig = null;
 	    }
-		DataStreamDescUtil.setupDescription(dDesc, request, actualConfig);
+		DataStreamDescUtil.setupDescription(dataDesc, request, actualConfig);
 
-		DataStreamEvent event = 
-		    new DataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED, null, dDesc);
-		event.setSource(this);
-		notifyDataListenersEvent(event);
+		notifyDataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);
 		
 		return actualConfig;
 	}
@@ -316,6 +309,7 @@ public abstract class SensorDataProducerImpl
 		    dataReadMillis = autoDataReadMillis;
 		}
 		ticker.startTicking(dataReadMillis, this);
+		super.start();
 
 	}
 	
@@ -330,6 +324,7 @@ public abstract class SensorDataProducerImpl
 	{	
 		stop();
 	    dataTimeOffset = 0;
+	    super.reset();
 	}
 	
 	public final void stop()
@@ -341,6 +336,7 @@ public abstract class SensorDataProducerImpl
 		ticker.stopTicking(this);
 
 		deviceStop(ticking);
+		super.stop();
 	}
 
 	
@@ -367,6 +363,7 @@ public abstract class SensorDataProducerImpl
 		return device.isAttached();
 	}
 	
+	@Override
 	public boolean isRunning()
 	{
 		if(ticker == null) {
@@ -376,6 +373,7 @@ public abstract class SensorDataProducerImpl
 		return ticker.isTicking();
 	}
 	
+	@Override
 	public boolean isInInitialState() {
 		if(dataTimeOffset == 0){
 			return true;
@@ -405,12 +403,22 @@ public abstract class SensorDataProducerImpl
 		device.close();
 	}
 	
-	public final DataStreamDescription getDataDescription()
-	{
-		return dDesc;
+	@Override
+	protected void notifyDataReceived() {
+		// if the data has timestamps they should be adjusted
+		// the contract for sensor devices is that time starts 
+		// at 0 when start is called, however for data producers
+		// time starts at 0 when reset is called.  The stop method
+		// is more like a pause for data producers.
+		if(dataDesc.getDataType() == DataStreamDescription.DATA_SERIES){
+		    // the first channel will be time.
+		    for(int i=dataDesc.getDataOffset(); 
+		    	i < dataEvent.getNumSamples(); 
+		    	i+= dataDesc.getNextSampleOffset()){
+		        processedData[i] += dataTimeOffset;
+		    }
+		}
+
+		super.notifyDataReceived();
 	}
-		
-	public abstract void notifyDataListenersEvent(DataStreamEvent e);
-	
-	public abstract void notifyDataListenersReceived(DataStreamEvent e);
 }

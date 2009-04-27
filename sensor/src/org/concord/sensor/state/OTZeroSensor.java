@@ -84,8 +84,8 @@ public class OTZeroSensor extends DefaultOTObject
     	
     	
     	dataFilter = new TaringDataFilter();
-    	dataFilter.addDataProducer(producer);
-    	dataFilter.setChannel(resources.getSensorIndex() + 1);
+    	dataFilter.setSource(producer);
+    	dataFilter.setSourceChannel(resources.getSensorIndex() + 1);
     	return dataFilter;
     }
     

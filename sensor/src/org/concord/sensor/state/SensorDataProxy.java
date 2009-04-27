@@ -3,12 +3,15 @@
  */
 package org.concord.sensor.state;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataProducer;
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
+import org.concord.framework.startable.StartableInfo;
+import org.concord.framework.startable.StartableListener;
 import org.concord.framework.util.Copyable;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
@@ -33,8 +36,9 @@ public class SensorDataProxy implements DataProducer, Copyable {
 	 */
 	private OTZeroSensor zeroSensor = null;
 
-	private Vector dataListeners = new Vector();
-
+	private ArrayList<DataListener> dataListeners = new ArrayList<DataListener>();
+	private ArrayList<StartableListener> startableListeners = new ArrayList();
+	
 	/**
 	 * should pass in resources.getRequest(); resources.getZeroSensor();
 	 * 
@@ -93,10 +97,24 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		// is testing whether the source matches this object
 		// then they will get screwed up unless we change
 		// the source.
-		if (!dataListeners.contains(listener))
+		if (!dataListeners.contains(listener)) {
 			dataListeners.add(listener);
+		}
+		
 		if (producer != null) {
 			producer.addDataListener(listener);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.concord.framework.data.stream.DataProducer#removeDataListener(org.concord.framework.data.stream.DataListener)
+	 */
+	public void removeDataListener(DataListener listener) {
+		dataListeners.remove(listener);
+		if (producer != null) {
+			producer.removeDataListener(listener);
 		}
 	}
 
@@ -120,18 +138,6 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		}
 
 		return producer.getDataDescription();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.concord.framework.data.stream.DataProducer#removeDataListener(org.concord.framework.data.stream.DataListener)
-	 */
-	public void removeDataListener(DataListener listener) {
-		dataListeners.remove(listener);
-		if (producer != null) {
-			producer.removeDataListener(listener);
-		}
 	}
 
 	/*
@@ -254,4 +260,32 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		}
 		return producer.isInInitialState();
 	}
+
+	public void addStartableListener(StartableListener listener) 
+	{
+		if (!startableListeners.contains(listener)) {
+			startableListeners.add(listener);
+		}
+		
+		if (producer != null) {
+			producer.addStartableListener(listener);
+		}		
+	}
+
+	public void removeStartableListener(StartableListener listener) 
+	{
+		startableListeners.remove(listener);
+		if (producer != null) {
+			producer.removeStartableListener(listener);
+		}		
+	}
+
+	public StartableInfo getStartableInfo() {
+		if (producer == null) {
+			return null;
+		}
+		
+		return producer.getStartableInfo();
+	}
+
 }

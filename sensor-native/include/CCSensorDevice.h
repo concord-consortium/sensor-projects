@@ -202,6 +202,13 @@ enum QuantityType
 	
 	public static int QUANTITY_MAGNETIC_FIELD=      26;
 	public static int QUANTITY_LUNG_AIR_FLOW=       27;
+	public static int QUANTITY_HEART_RATE_SIGNAL=   28;
+	public static int QUANTITY_EKG=                 29;
+	public static int QUANTITY_BLOOD_PRESSURE=      30;	
+	public static int QUANTITY_CONDUCTIVITY=        31;
+	public static int QUANTITY_DISSOLVED_OXYGEN=    32;
+	public static int QUANTITY_COLORIMETER=         33;
+	public static int QUANTITY_HAND_DYNAMOMETER=    34;
 	 *****************************************************
 	 *****************************************************/
 	
@@ -255,6 +262,8 @@ enum QuantityType
 	QUANTITY_BLOOD_PRESSURE,	
 	QUANTITY_CONDUCTIVITY,
 	QUANTITY_DISSOLVED_OXYGEN,
+	QUANTITY_COLORIMETER,
+	QUANTITY_HAND_DYNAMOMETER,
 };
 
 /*

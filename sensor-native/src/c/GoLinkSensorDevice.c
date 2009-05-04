@@ -68,9 +68,11 @@ typedef enum _GoDeviceType{
 #define SENSOR_ID_MAGNETIC_FIELD_LOW  45 
 #define SENSOR_ID_BAROMETER           46
 #define SENSOR_ID_SMART_HUMIDITY      47
+#define SENSOR_ID_COLORIMETER         54
 #define SENSOR_ID_GO_TEMP             60
 #define SENSOR_ID_SALINITY            61 
 #define SENSOR_ID_BLOOD_PRESSURE      66 
+#define SENSOR_ID_HAND_DYNAMOMETER    67
 #define SENSOR_ID_SPIROMETER          68 
 #define SENSOR_ID_GO_MOTION           69 
 #define SENSOR_ID_IR_TEMP             73
@@ -445,6 +447,15 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 			 	sensConfig->type = QUANTITY_RELATIVE_HUMIDITY;
 			 	sensConfig->stepSize = 0.1;
 			 	break;
+			case SENSOR_ID_COLORIMETER:
+			 	if(request &&
+			 		(request->type == QUANTITY_COLORIMETER)){
+			 			valid = 1;
+			 	}
+			 	sprintf(sensConfig->unitStr, "%T");
+			 	sensConfig->type = QUANTITY_COLORIMETER;
+			 	sensConfig->stepSize = 0.057;
+			 	break;
 			case SENSOR_ID_IR_TEMP:
 				if(request &&
 					(request->type == QUANTITY_TEMPERATURE ||
@@ -555,6 +566,16 @@ int configure_sensor(GO_STATE *state, SensorConfig *request, SensorConfig *sensC
 				sensConfig->type = QUANTITY_BLOOD_PRESSURE;			
 				sensConfig->stepSize = 0.11222; 									
 				break;			
+			case SENSOR_ID_HAND_DYNAMOMETER:
+				if(request &&
+					(request->type == QUANTITY_HAND_DYNAMOMETER)){
+					// should also check if this matches the requested params
+					valid = 1;
+				}
+				sprintf(sensConfig->unitStr, "N");
+				sensConfig->type = QUANTITY_HAND_DYNAMOMETER;			
+				sensConfig->stepSize = 0.35; 									
+				break;
 			case SENSOR_ID_DISSOLVED_OXYGEN:
 				if(request &&
 					(request->type == QUANTITY_DISSOLVED_OXYGEN)){

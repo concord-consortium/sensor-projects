@@ -13,6 +13,8 @@ TI_OBJS = nativelib/TISensorDevice.o
 SWIG_OUTPUT_DIR = src/swig/java
 
 #OSX_LINK_FLAGS = -framework IOKit -framework CoreFoundation -framework CoreServices -framework Carbon -lstdc++
+# scytacki: To compile this for older operating systems something 
+# like this is needed: -isysroot /Developer/SDKs/MacOSX10.4.sdk -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4.sdk 
 OSX_LINK_FLAGS = -bind_at_load -framework IOKit -framework Cocoa -framework Carbon
 
 # this is used to build native test executables

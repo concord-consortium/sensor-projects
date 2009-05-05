@@ -124,6 +124,9 @@ public interface SensorConfig
 	public static int QUANTITY_BLOOD_PRESSURE=      30;	
 	public static int QUANTITY_CONDUCTIVITY=        31;
 	public static int QUANTITY_DISSOLVED_OXYGEN=    32;
+	public static int QUANTITY_COLORIMETER=         33;
+	public static int QUANTITY_HAND_DYNAMOMETER=    34;
+	
 	
 	/**
 	 * If the attached sensor can be identified by the device

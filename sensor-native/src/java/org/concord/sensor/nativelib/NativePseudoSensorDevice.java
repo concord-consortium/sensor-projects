@@ -38,10 +38,10 @@ import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
 
 import ccsd.pseudo.ExperimentConfig;
-import ccsd.pseudo.SensorConfig;
 import ccsd.pseudo.NativeBridge;
 import ccsd.pseudo.SWIGTYPE_p_float;
 import ccsd.pseudo.SWIGTYPE_p_void;
+import ccsd.pseudo.SensorConfig;
 
 /**
  * NativeSensorDevice
@@ -206,7 +206,7 @@ public class NativePseudoSensorDevice
 	 * native. but with the associated cookie.  unless there is another
 	 * perhaps the cookie can be stored in this object so the native code
 	 * can look it up and then it won't need to be in each of these methods.
-	 * @see org.concord.framework.data.DataFlow#stop()
+	 * @see org.concord.framework.startable.Startable#stop()
 	 */
 	public synchronized void stop(boolean wasRunning)
 	{
@@ -216,7 +216,7 @@ public class NativePseudoSensorDevice
 	
 	/**
 	 * native.
-	 * @see org.concord.framework.data.DataFlow#start()
+	 * @see org.concord.framework.startable.Startable#start()
 	 */
 	public synchronized boolean start()
 	{

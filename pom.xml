@@ -19,11 +19,11 @@
   <!--this is required to find out parent pom you should-->
   <repositories>
     <repository>
-      <id>cc-repo-internal</id>
+      <id>cc-repo-internal-snapshot</id>
       <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal</url>
+      <url>http://source.concord.org/maven2/internal_snapshot</url>
       <snapshots>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </snapshots>
     </repository>
   </repositories>

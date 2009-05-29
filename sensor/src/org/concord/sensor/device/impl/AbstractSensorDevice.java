@@ -29,6 +29,8 @@
  */
 package org.concord.sensor.device.impl;
 
+import java.util.ArrayList;
+
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
@@ -481,11 +483,15 @@ public abstract class AbstractSensorDevice
 	    
 		SensorRequest [] sensorRequests = request.getSensorRequests();
 		SensorConfig [] sensorConfigs = expConfig.getSensorConfigs();
-		Vector matchingConfigs = new Vector();
+		ArrayList<SensorConfig> matchingConfigs = new ArrayList<SensorConfig>();
 		expConfig.setValid(true);
 
 		// compare these objects to the request.  
 		boolean sensorTypesAvailable = true;
+		
+		// There is one score array for each sensor request
+		// the array contains the scores for each sensor config
+		ArrayList<int []> scores = new ArrayList<int []>();
 		for(int i=0; i<sensorRequests.length; i++) {
 			// we need to handle the case where a probe sensor
 			// is requested but there is also an internal sensor
@@ -495,22 +501,38 @@ public abstract class AbstractSensorDevice
 			// is requested.  I think in this device it can't tell
 			// if the sensor is attached
 			
+		    int [] scoreArray = new int [sensorConfigs.length]; 
+		    
+	        for(int j=0; j<sensorConfigs.length; j++) {
+	        	scoreArray[j] = matchesScore(sensorConfigs[j], sensorRequests[i]);
+	        }
+	        scores.add(scoreArray);
+		}
+		
+		for(int i=0; i<sensorRequests.length; i++) {
+
 			// start out with 0 for the high score that way things won't
 			// get counted that doen't match anything
 		    int highScore = 0;
 		    int highScoreIndex = -1;
-	        for(int j=0; j<sensorConfigs.length; j++) {
-	        	int score = matchesScore(sensorConfigs[j], sensorRequests[i]);
-	            if(score == 100){
-	                highScoreIndex = j;
-	                break;
-	            }
-	            if(score > highScore) {
-	            	highScoreIndex = j;
-	            	highScore = score;
-	            }
-	        }		        
 
+			int [] scoreArray = scores.get(i);
+			for(int j=0; j<scoreArray.length; j++){
+				// once a sensor is found then in the future matches should ignore it.
+				SensorConfig sensorConfig = sensorConfigs[j];
+				if(matchingConfigs.contains(sensorConfig)){
+					continue;
+				}
+				
+				int score = scoreArray[j];
+				
+				if(score > highScore) {
+					highScoreIndex = j;
+					highScore = score;
+				}				
+			}
+			
+			
 		    if(highScoreIndex == -1 ) {
 		        sensorTypesAvailable = false;
 		        break;

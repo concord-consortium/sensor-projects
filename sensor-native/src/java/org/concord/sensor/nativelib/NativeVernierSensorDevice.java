@@ -62,7 +62,8 @@ public class NativeVernierSensorDevice
 	private boolean nativeLibAvailable = false;
 	private boolean useTimeStamps = false;
 	private int numberOfChannels = 1;
-		
+	private String lastErrorMessage = "no error message yet";
+	
 	/**
 	 * 
 	 */
@@ -89,6 +90,7 @@ public class NativeVernierSensorDevice
 	{
 		if(!nativeLibAvailable) {
 			open = false;
+			lastErrorMessage = "Cannot load vernier GoIO native library";
 			return;
 		}
 		
@@ -115,9 +117,8 @@ public class NativeVernierSensorDevice
 	 * @see org.concord.sensor.device.AbstractSensorDevice#getErrorMessage(int)
 	 */
 	public String getErrorMessage(int error)
-	{
-		// TODO configure errors and error messages
-		return "no error message yet";
+	{		
+		return lastErrorMessage;
 	}
 	
 	
@@ -267,4 +268,16 @@ public class NativeVernierSensorDevice
 		
 		return numberRead;
 	}
+	
+	public String getVendorName() 
+	{
+		return "Vernier";
+	}
+
+	public String getDeviceName() 
+	{
+		// this can be a Go! Link, Go! Temp, or Go! Motion 
+		return "Go! Device";
+	}
+	
 }

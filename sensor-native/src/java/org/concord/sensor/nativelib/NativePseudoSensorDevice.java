@@ -260,4 +260,15 @@ public class NativePseudoSensorDevice
 		
 		return numberRead;
 	}
+	
+	public String getVendorName() 
+	{
+		return "Native Pseudo";
+	}
+
+	public String getDeviceName() 
+	{
+		return "Psuedo";
+	}
+
 }

@@ -46,6 +46,16 @@ public class PseudoSensorDevice extends AbstractSensorDevice
     PseudoSensorConfig [] sensConfigs; 
 	float time = 0;
 	
+	public String getVendorName()
+	{
+		return "Simulated";
+	}
+	
+	public String getDeviceName()
+	{
+		return "Simulated Data";
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#open(java.lang.String)
 	 */

@@ -259,4 +259,15 @@ public class NativeTISensorDevice
 		
 		return numberRead;
 	}
+	
+	public String getVendorName() 
+	{
+		return "TI";
+	}
+
+	public String getDeviceName() 
+	{
+		return "CBL2";
+	}
+
 }

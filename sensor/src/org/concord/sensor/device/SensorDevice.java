@@ -48,6 +48,37 @@ import org.concord.sensor.ExperimentRequest;
 public interface SensorDevice
 {
 	/**
+	 * Return the name of the vendor of this device.  The goal is to provide a useful
+	 * name to the user.
+	 * 
+	 * This can be called at any time.  If the implementation can handle
+	 * multiple vendors, then this should return the most specific name at the 
+	 * time it is called.
+	 * 
+	 * The open call might narrow this down based on the config string
+	 * If the device is DeviceIdAware then the passed in id might narrow it down.
+	 * If the physical device has been polled that might narrow it down. 
+	 * @return
+	 */
+	public String getVendorName();
+	
+	/**
+	 * Return the name of this device.  The goal is to provide a userful name
+	 * to the user.
+	 * 
+	 * This can be called at any time.  If the implementation can handle
+	 * multiple devices, then this should return the most specific name at the 
+	 * time it is called. 
+	 * 
+	 * The open call might narrow this down based on the config string
+	 * If the device is DeviceIdAware then the passed in id might narrow it down.
+	 * If the physical device has been polled that might narrow it down. 
+	 * @return
+	 */
+	public String getDeviceName();
+
+	
+	/**
 	 * This is the first method called in the life cycle of this object.
 	 * The passed in string can contain whatever configuration information
 	 * this device needs.  For a serial port device it probably needs to 

@@ -62,6 +62,28 @@ public class JavaDeviceFactory
 	Hashtable deviceTable = new Hashtable();
 	Hashtable configTable = new Hashtable();
 	
+	/*
+	 *
+		new DeviceID( 0, "Pseudo Device"           ,null),
+		new DeviceID(10, "Vernier GoLink"         ,null),
+		new DeviceID(11, "Vernier LabPro"         ,null),
+		new DeviceID(12, "Vernier LabQuest"       ,null),
+		new DeviceID(20, "TI Connect"              ,null),
+		new DeviceID(30, "Fourier"                 ,null),
+		new DeviceID(40, "Data Harvest USB"        ,null),
+		new DeviceID(45, "Data Harvest CF"         ,null),
+    	new DeviceID(41, "Data Harvest Advanced"   ,null),
+    	new DeviceID(42, "Data Harvest QAdvanced"  ,null),
+		new DeviceID(50, "ImagiWorks Serial"       ,null),
+		new DeviceID(55, "ImagiWorks SD"           ,null),
+		new DeviceID(60, "Pasco Serial"            ,null),
+		new DeviceID(61, "Pasco Airlink"           ,null),
+		new DeviceID(70, "CCProbe Version 0"       ,null),
+		new DeviceID(71, "CCProbe Version 1"       ,null),
+		new DeviceID(72, "CCProbe Version 2"       ,null),
+		new DeviceID(80, "Coach"                   ,null),
+
+	*/
 	/**
 	 * 
 	 */

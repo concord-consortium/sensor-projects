@@ -32,7 +32,10 @@
 */
 package org.concord.sensor.device.impl;
 
+import java.util.ArrayList;
+
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.framework.text.UserMessageHandlerExt1;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.SensorDataManager;
 import org.concord.sensor.device.DeviceFactory;
@@ -59,6 +62,14 @@ public abstract class AbstractSensorDataManager
         this.ticker = ticker;
     }
     
+    class OpenAttempt {
+    	String vendorName;
+    	String deviceName;
+    	String error;
+    	DeviceConfig config;
+    	String className;
+    }
+    
     public SensorDevice getSensorDevice()
     {
     	DeviceConfig [] localDeviceConfigs = getDeviceConfigs();
@@ -83,8 +94,8 @@ public abstract class AbstractSensorDataManager
                 currentDevice = null;                
             }
         }
-        
-        String lastError = null;
+
+        ArrayList<OpenAttempt> openAttempts = new ArrayList<OpenAttempt>();
         for(int i=0; i<localDeviceConfigs.length; i++) {
             SensorDevice device = 
                 deviceFactory.createDevice(localDeviceConfigs[i]);
@@ -93,10 +104,13 @@ public abstract class AbstractSensorDataManager
                 return currentDevice;
             }
             
-            lastError = device.getErrorMessage(0);
-            if(lastError == null) {
-                lastError = "null";
-            }
+            OpenAttempt attempt = new OpenAttempt();
+            attempt.vendorName = device.getVendorName();
+            attempt.deviceName = device.getDeviceName();
+            attempt.error = device.getErrorMessage(0);
+            attempt.config = localDeviceConfigs[i];
+            attempt.className = device.getClass().getCanonicalName();
+            openAttempts.add(attempt);
             
             deviceFactory.destroyDevice(device);
         }
@@ -105,7 +119,52 @@ public abstract class AbstractSensorDataManager
         // found, we'll print the error from the last device
         // searched for.
         if(messageHandler != null) {
-            messageHandler.showMessage("Can't find device: " + lastError, "Device Not Found");
+        	// Construct the error message
+        	String title = "Sensor Interface Not Found";
+        	String body = "";
+        	String details = null;
+    		ArrayList<String> deviceNames = new ArrayList<String>();
+    		
+    		// collect a unique list of device names
+    		for(OpenAttempt attempt: openAttempts){
+        		String name = attempt.vendorName + " " + attempt.deviceName;
+        		if(deviceNames.contains(name)){
+        			continue;
+        		}
+        		deviceNames.add(name);
+    		}
+
+    		if(deviceNames.size() == 1){
+        		OpenAttempt attempt = openAttempts.get(0);
+        		body += attempt.vendorName + " " + attempt.deviceName + " could not be found.";
+        		if(attempt.error != null){
+        			body += "\n" + attempt.error;
+        		}
+        	} else {
+        		body += "None of the following devices could be found:\n";
+        		for(String deviceName: deviceNames){
+        			body += "  " + deviceName;
+        		}
+        	}
+
+        	details = "";
+        	int index = 0;
+        	for(OpenAttempt attempt: openAttempts){
+        		if(openAttempts.size() > 1){
+        			details += "Attempt: " + index + "\n";
+        		}
+        		details += "Error: " + attempt.error + "\n";
+        		details += "Device Id: " + attempt.config.getDeviceId() + "\n";
+        		details += "Class Name: " + attempt.className + "\n";        		
+        		details += "Config: " + attempt.config.getConfigString() + "\n";        		
+        		index++;
+        	}
+        	
+        	if(messageHandler instanceof UserMessageHandlerExt1){
+        		((UserMessageHandlerExt1) messageHandler).showMessage(body, title, details);
+        	} else {
+        		messageHandler.showMessage(body, title);
+        	}
         }
 
         return currentDevice;        

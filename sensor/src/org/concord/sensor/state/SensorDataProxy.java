@@ -166,6 +166,11 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		// start two requests at once.
 
 		ExperimentRequest request = experimentRequest;
+		if (sensorDataProducer != null && !sensorDataProducer.isAttached()){
+			sensorDataProducer.close();			
+			sensorDataProducer = null;
+		}
+		
 		if (sensorDataProducer == null) {
 			sensorDataProducer = sensorManager.createDataProducer();
 			producer = sensorDataProducer;

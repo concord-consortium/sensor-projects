@@ -35,6 +35,7 @@ import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
+import org.concord.sensor.impl.Range;
 import org.concord.sensor.impl.SensorUnit;
 
 /**
@@ -89,6 +90,7 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 			sensConfig.setUnit(sensRequests[i].getUnit());
 			float max = sensRequests[i].getRequiredMax();
 			float min = sensRequests[i].getRequiredMin();
+			sensConfig.setValueRange(new Range(min, max));
 			if(devService.isValidFloat(max) && devService.isValidFloat(min)){
 			    sensConfig.setSinOffset((max + min) / 2);
 			    sensConfig.setSinMagnitude((max - min) / 2);

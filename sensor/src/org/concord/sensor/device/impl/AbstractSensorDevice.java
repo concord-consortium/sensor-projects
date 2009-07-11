@@ -40,6 +40,7 @@ import org.concord.sensor.device.DeviceServiceAware;
 import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.impl.Range;
+import org.concord.sensor.impl.SensorUtilJava;
 import org.concord.sensor.impl.Vector;
 import org.concord.sensor.serial.SensorSerialPort;
 import org.concord.sensor.serial.SerialException;
@@ -312,133 +313,25 @@ public abstract class AbstractSensorDevice
 	 * @param request
 	 * @return
 	 */
-	protected int matchesScore(SensorConfig config, SensorRequest request)
+	protected int compareSensorConfigAndRequest(SensorConfig config, SensorRequest request)
 	{
 		float score = 100f;
 		
-		float typeFactor = scoreSensorType(config, request);
+		float typeFactor = SensorUtilJava.scoreSensorType(config, request);
 
 		score = score * typeFactor;
 		
-        float rangeFactor = scoreValueRange(config, request);
+        float rangeFactor = SensorUtilJava.scoreValueRange(config, request);
         
         score = score * rangeFactor;
         
-        float stepSizeFactor = scoreStepSize(config, request);
+        float stepSizeFactor = SensorUtilJava.scoreStepSize(config, request);
         
         score = score * stepSizeFactor;
         
         return (int)score;
 	}
 	
-    protected float scoreSensorType(SensorConfig config, SensorRequest request)
-    {
-    	// There are a few cases where different types should still match
-    	// or different types should be given preference
-
-    	if(request.getType() == SensorConfig.QUANTITY_TEMPERATURE){
-    		// We always prefer the temperature wand over just plain temperature
-    		if(config.getType() == SensorConfig.QUANTITY_TEMPERATURE) {
-    			return 0.75f;
-    		}
-    		if(config.getType() == SensorConfig.QUANTITY_TEMPERATURE_WAND) {
-    			return 1f;
-    		}
-    	}  
-
-    	// Some devices return velocity when they should be returning distance
-    	// currently we don't have any devices actually returning velocity 
-    	// and no activities need velocity, so this is currently ok.
-    	if(config.getType() == SensorConfig.QUANTITY_DISTANCE) {
-    		if(request.getType() == SensorConfig.QUANTITY_DISTANCE ||
-    				request.getType() == SensorConfig.QUANTITY_VELOCITY) {
-    			return 1f;
-    		}
-    	}
-
-    	// The types don't match and this isn't one of the cases above
-    	if(config.getType() != request.getType()) {
-    		return 0f;
-    	}
-
-    	return 1;
-    }
-
-    protected float scoreValueRange(SensorConfig config, SensorRequest request)
-    {
-        if(config instanceof SensorConfigImpl){
-        	Range valueRange = ((SensorConfigImpl)config).getValueRange();
-        	if(valueRange == null){
-        		return 1f;
-        	} 
-        	
-        	// valueRange is not null
-
-        	float reqMin = request.getRequiredMin();
-        	float reqMax = request.getRequiredMax();
-
-          	if(devService.isValidFloat(reqMin) && 
-          			reqMin < valueRange.minimum){
-          		// at least this requirement is out of range
-          		return 0.5f;
-          	}
-          	
-          	if(devService.isValidFloat(reqMax) && 
-          			reqMax >= valueRange.maximum){
-          		// at least this requirement is out of range
-          		return 0.5f;	
-          	}
-
-          	// if we got here either both requirements are not specified
-          	// or they passed. 
-          	return 1f;
-        }
-        
-        // We know nothing about the value range of the sensor config so 
-        // we should not dock the score
-        return 1f;
-    }
-    
-    protected float scoreStepSize(SensorConfig config, SensorRequest request)
-    {
-    	// we currently only care about the step size for pressure and force
-    	// sensors
-    	// for pressure 
-    	// it is how we differenciate between a barometer sensor and a regular
-    	// pressure sensor
-    	// for force it is how we differenciate between the 10N and 50N
-    	// setting on many force probes
-    	if(request.getType() == SensorConfig.QUANTITY_GAS_PRESSURE ||
-    			request.getType() == SensorConfig.QUANTITY_FORCE){
-    		if(devService.isValidFloat(request.getStepSize())){
-    			// the request doesn't have a valid step size
-    			return 1f;
-    		}
-    		
-    		if(request.getStepSize() <= 0 && config.getStepSize() <= 0){
-    			// if either the stepSize is <= 0 it means the step size isn't
-    			// specified or isn't available so in this case we have to 
-    			// play dumb and return 1f
-    			return 1f;
-    		}
-    		
-    		if(request.getStepSize() >= config.getStepSize()){
-    			// The request has a larger step size, in otherwords it requires
-    			// less precision, so this is ok.
-    			return 1f;
-    		}
-    		
-    		// The request step size is less than the available step size of 
-    		// the sensor.  So this sensor can not be used for this experiment.
-    		// Typically it might be better to simply return a low value here 
-    		// not zero, but in the case of pressure it is difficult measure 
-    		// barometric pressure if the sensor isn't precise enough.
-    		return 0f;
-    	}
-    	
-    	return 1f;
-    }
-    
     /**
 	 * override this if you need change it
 	 * @return
@@ -504,7 +397,7 @@ public abstract class AbstractSensorDevice
 		    int [] scoreArray = new int [sensorConfigs.length]; 
 		    
 	        for(int j=0; j<sensorConfigs.length; j++) {
-	        	scoreArray[j] = matchesScore(sensorConfigs[j], sensorRequests[i]);
+	        	scoreArray[j] = compareSensorConfigAndRequest(sensorConfigs[j], sensorRequests[i]);
 	        }
 	        scores.add(scoreArray);
 		}

@@ -31,6 +31,7 @@ package org.concord.sensor.pseudo;
 
 import org.concord.framework.data.DataDimension;
 import org.concord.sensor.SensorConfig;
+import org.concord.sensor.device.impl.SensorConfigImpl;
 
 /**
  * @author scott
@@ -38,14 +39,9 @@ import org.concord.sensor.SensorConfig;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class PseudoSensorConfig 
-	implements SensorConfig 
+public class PseudoSensorConfig extends SensorConfigImpl
 {
-	int type = -1;
-	float stepSize = -1;
-	int port = -1;
 	String name = null;
-	private DataDimension unit;
     private float sinOffset = 5;
     private float sinMagnitude = 10;
 	
@@ -59,50 +55,11 @@ public class PseudoSensorConfig
 	}
 
 	/* (non-Javadoc)
-	 * @see org.concord.sensor.SensorConfig#getType()
-	 */
-	public int getType() 
-	{
-		return type;
-	}
-
-	public void setType(int type)
-	{
-		this.type = type;
-	}
-		
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.SensorConfig#getStepSize()
-	 */
-	public float getStepSize() 
-	{
-		return stepSize;
-	}
-
-	public void setStepSize(float size)
-	{
-		this.stepSize = size;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.SensorConfig#getPort()
-	 */
-	public int getPort() 
-	{
-		return port;
-	}
-
-	public void setPort(int port)
-	{
-		this.port = port;
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.concord.sensor.SensorConfig#getPortName()
 	 */
 	public String getPortName() 
 	{
-		return "Pseudo Port " + port;
+		return "Pseudo Port " + getPort();
 	}
 
 	/* (non-Javadoc)
@@ -112,29 +69,6 @@ public class PseudoSensorConfig
 	{
 		// FIXME this should take into account the quantity type
 		return "PseudoSensor";
-	}
-
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.SensorConfig#getUnit()
-	 */
-	public DataDimension getUnit() 
-	{
-		// TODO Auto-generated method stub
-		return unit;
-	}
-
-	public void setUnit(DataDimension unit)
-	{
-		this.unit = unit;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.concord.sensor.SensorConfig#getSensorParam(java.lang.String)
-	 */
-	public String getSensorParam(String key) 
-	{
-		// no sensor params in this pseudo sensor
-		return null;
 	}
 
     /**

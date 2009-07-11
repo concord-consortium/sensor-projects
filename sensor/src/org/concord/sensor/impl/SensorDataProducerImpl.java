@@ -27,12 +27,15 @@ import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.data.stream.DefaultDataProducer;
 import org.concord.framework.text.UserMessageHandler;
+import org.concord.framework.text.UserMessageHandlerExt1;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorDataProducer;
+import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.device.impl.SensorConfigImpl;
 
 
 public class SensorDataProducerImpl extends DefaultDataProducer
@@ -209,12 +212,12 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 			// match the requested sensors.
 			// It is in this case that we need more error information
 			// from the device.  I suppose one solution is to get a 
-			// listing of the actual sensors and then do the comparision
+			// listing of the actual sensors and then do the comparison
 			// here in a general way.
 			// That will work if the interface can auto identify sensors
 			// if it can't then how would it know they are incorrect???
 			// I guess in case it would have to check if the returned values
-			// are valid.  Othwise it will just have to trust the student and
+			// are valid.  Otherwise it will just have to trust the student and
 			// the experiments will have to be designed (technical hints) to help
 			// the student figure out what is wrong.
 			// So we will try to tackle the general error cases here :S
@@ -223,28 +226,39 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 			if(actualConfig == null) {
 				// we don't have any config.  this should mean there was
 				// a more serious error talking to the device.  Either it
-				// isn't there, our communiction channel is messed up, or
+				// isn't there, our communication channel is messed up, or
 				// the device is messed up.
 				if(messageHandler != null) {
+					
 					// get the error message from the device
 					String devErrStr = device.getErrorMessage(0);
-					if(devErrStr == null) {
-						devErrStr = "unknown";
+					
+					String title = "Sensor Device Error";
+					String body = "Error getting sensors description from " + getFullDeviceName();;
+					if(devErrStr != null) {
+						body = "\n" + devErrStr;
 					}
 					
-					messageHandler.showMessage("Device error: " + devErrStr, "Alert");
+					if(messageHandler instanceof UserMessageHandlerExt1){
+						String detail = "DeviceClassName: " + device.getClass().getCanonicalName() + "\n";
+						detail += SensorUtilJava.experimentRequestToString(request); 
+						
+						((UserMessageHandlerExt1)messageHandler).showMessage(
+								body, 
+								title,
+								detail);
+					} else {
+						messageHandler.showMessage(body, title);						
+					}
 				}
 			} else {
 				// we have a valid config so that should mean the device
 				// can detect the sensors, but the ones it found didn't 
 				// match the request so it set the config to invalid
 				if(messageHandler != null) {
-					messageHandler.showMessage("Wrong sensors attached", "Alert");
+					sendWrongSensorAttachedMessage(request, actualConfig);
 				}				
 
-				// System.err.println("  device reason: " + actualConfig.getInvalidReason());
-				SensorConfig [] sensorConfigs = actualConfig.getSensorConfigs();
-				// System.err.println("  sensor attached: " + sensorConfigs[0].getType());
 			}
 						
 			// Maybe should be a policy decision somewhere
@@ -264,6 +278,136 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 		notifyDataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);
 		
 		return actualConfig;
+	}
+
+	protected String getFullDeviceName() {
+		return device.getVendorName() + " " + device.getDeviceName();
+	}
+	
+	/**
+	 * At this point the SensorDevice has rejected the request and returned
+	 * a config which is marked invalid.
+	 * This method assumes userMessageHandler is not null
+	 * 
+	 * @param request
+	 * @param actualConfig
+	 * @return
+	 */
+	protected void sendWrongSensorAttachedMessage(
+			ExperimentRequest request, ExperimentConfig actualConfig)
+	{
+		// So far requests are only rejected if the sensorRequests don't match the 
+		// attached sensors.  Any properties on ExperimentRequest itself don't cause
+		// rejection.
+		
+		SensorRequest[] sensorRequests = request.getSensorRequests();
+		SensorConfig[] sensorConfigs = actualConfig.getSensorConfigs();
+
+		if(!device.canDetectSensors()){
+			// this device can't detect sensors so it is an error if we get to this point
+			messageHandler.showMessage(
+					"Device Error: The " + getFullDeviceName() + 
+					" can't identify sensors and rejected the requested sensors", 
+					"Device Error");
+			return;
+		}
+		
+		if(sensorRequests == null || sensorRequests.length == 0){
+			// the request is invalid
+			String body = "Configuration Error: No sensors types were specified.";
+			String deviceError = device.getErrorMessage(0); 
+			if(deviceError != null){
+				body += "\n" + deviceError; 
+			}
+			String invalidReason = experimentConfig.getInvalidReason();
+			if(invalidReason != null){
+				body += "\n" + invalidReason;
+			}
+			
+			messageHandler.showMessage(body, "Configuration Error");
+			return;
+		}
+		
+		if(sensorConfigs == null || sensorConfigs.length == 0) {
+			// the device can auto detect sensors, but it returned an empty sensorConfigs.
+			// this could be that the attached sensor doesn't auto id, or that no sensor
+			// is attached.  If we are here then it means the device rejected the request
+			// so even if the attached sensors don't auto id, then it decided the request 
+			// wouldn't match 
+			String body = "The " + getFullDeviceName() + " reported no valid sensors are attached\n";
+			body += "Check if the sensors attached correctly";
+			String title = "No sensors attached";
+			if (messageHandler instanceof UserMessageHandlerExt1){
+				((UserMessageHandlerExt1)messageHandler).showMessage(body, title, 
+						SensorUtilJava.experimentRequestToString(request));
+			} else {
+				messageHandler.showMessage(body, title);
+			}
+			return;
+		}
+		
+		// handle the simple case
+		if(sensorConfigs.length == 1 && sensorRequests.length == 1){
+			SensorConfig sensorConfig = sensorConfigs[0];
+			SensorRequest sensorRequest = sensorRequests[0];
+			float sensorTypeScore = SensorUtilJava.scoreSensorType(sensorConfig, sensorRequest);
+			float valueRangeScore = SensorUtilJava.scoreValueRange(sensorConfig, sensorRequest);
+			float stepSizeScore = SensorUtilJava.scoreStepSize(sensorConfig, sensorRequest);
+			String title = null;
+			String body = null;
+			if(sensorTypeScore < 0.1f){
+				// the request and config don't have a compatible type
+				title = "Wrong Sensor Attached";
+				
+				// FIXME there should be a better string representation of the sensor names.
+				body = "This data collection requires a " + 
+					SensorUtilJava.getTypeConstantName(sensorRequest.getType()) + " sensor.\n";
+				body += "However a " + sensorConfig.getName() + " is attached";				
+			} else if(valueRangeScore < 0.6f) {
+				// Some sensor devices will reject a request if the value range doesn't match
+				// This is because not all devices use general scoring system
+				// So far the only part of the range that really matters is the maximum.
+				title = "Wrong Sensor Range";
+				body = "This data collection requires a sensor that can measure up to: " + sensorRequest.getRequiredMax() + "\n"; 
+				if(sensorConfig instanceof SensorConfigImpl){
+					body += " However the attached sensor can only measure up to: " + 
+					   ((SensorConfigImpl)sensorConfig).getValueRange().maximum + "\n";
+				}
+				body += "\n";
+				body += "If the sensor has ranges switch, try another setting.";
+			} else if(stepSizeScore < 0.1f){
+				title = "Wrong Sensor Accuracy";
+				body = "This data collection requires a more accurate sensor.\n";
+				body += "\n";
+				body += "If the sensor has a range switch, try another setting.";
+			} else {
+				title = "Wrong Sensor Attached";
+				body = "The attached sensor cannot be used by this data collection.";				
+			}
+			
+			if(messageHandler instanceof UserMessageHandlerExt1){
+				String details = SensorUtilJava.experimentRequestToString(request);
+				details += "\n\n";
+				details += SensorUtilJava.experimentConfigToString(actualConfig);
+				((UserMessageHandlerExt1)messageHandler).showMessage(body, title, details);
+			} else {
+				messageHandler.showMessage(body, title);
+			}
+			return;
+		}
+
+		String title = "Wrong Sensor(s) Attached";
+		String body = "The data collection requires a different set of sensors.\n";
+		body += " see the details for more information";
+		if(messageHandler instanceof UserMessageHandlerExt1){
+			String details = SensorUtilJava.experimentRequestToString(request);
+			details += "\n\n";
+			details += SensorUtilJava.experimentConfigToString(actualConfig);
+			((UserMessageHandlerExt1)messageHandler).showMessage(body, title, details);
+		} else {
+			messageHandler.showMessage(body, title);
+		}
+		
 	}
 	
 	public final void start()

@@ -177,7 +177,7 @@ public abstract class AbstractSensorDevice
 	    	port = getSensorSerialPort();
 	    }
 
-        Vector availablePorts = port.getAvailablePorts();
+        Vector availablePorts = getAvailablePortNames();
         for(int i=0; i<availablePorts.size(); i++) {  
             String possiblePort = (String)availablePorts.get(i);
             
@@ -242,6 +242,18 @@ public abstract class AbstractSensorDevice
 	protected SensorSerialPort getSensorSerialPort()
 	{
 		return devService.getSerialPort("os", port);
+	}
+	
+	/**
+	 * By default this returns the list of strings provided by the port object
+	 * returned from getSensorSerialPort.
+	 * It can be overriden if the device needs to filter out or add some special ports. 
+	 * 
+	 * @return
+	 */
+	protected Vector getAvailablePortNames()
+	{
+        return port.getAvailablePorts();
 	}
 	
     protected boolean isAttachedInternal(String portLabel)

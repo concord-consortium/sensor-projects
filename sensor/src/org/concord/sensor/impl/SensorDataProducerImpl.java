@@ -23,6 +23,8 @@
 
 package org.concord.sensor.impl;
 
+import java.util.logging.Logger;
+
 import org.concord.framework.data.stream.DataStreamDescription;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.data.stream.DefaultDataProducer;
@@ -41,6 +43,9 @@ import org.concord.sensor.device.impl.SensorConfigImpl;
 public class SensorDataProducerImpl extends DefaultDataProducer
 	implements SensorDataProducer, DeviceReader, TickListener
 {
+	private static final Logger logger = Logger
+			.getLogger(SensorDataProducerImpl.class.getCanonicalName());
+	
 	public int		startTimer =  0;
 	protected Ticker ticker = null;
 	protected UserMessageHandler messageHandler;
@@ -207,64 +212,63 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 	    }
 	    
 		ExperimentConfig actualConfig = device.configure(request);
-		if(actualConfig == null || !actualConfig.isValid()) {
-			// prompt the user because the attached sensors do not
-			// match the requested sensors.
-			// It is in this case that we need more error information
-			// from the device.  I suppose one solution is to get a 
-			// listing of the actual sensors and then do the comparison
-			// here in a general way.
-			// That will work if the interface can auto identify sensors
-			// if it can't then how would it know they are incorrect???
-			// I guess in case it would have to check if the returned values
-			// are valid.  Otherwise it will just have to trust the student and
-			// the experiments will have to be designed (technical hints) to help
-			// the student figure out what is wrong.
-			// So we will try to tackle the general error cases here :S
-			// But there is now a way for the device to explain why the configuration
-			// is invalid.
-			if(actualConfig == null) {
-				// we don't have any config.  this should mean there was
-				// a more serious error talking to the device.  Either it
-				// isn't there, our communication channel is messed up, or
-				// the device is messed up.
-				if(messageHandler != null) {
-					
-					// get the error message from the device
-					String devErrStr = device.getErrorMessage(0);
-					
-					String title = "Sensor Device Error";
-					String body = "Error getting sensors description from " + getFullDeviceName();;
-					if(devErrStr != null) {
-						body = "\n" + devErrStr;
-					}
-					
-					if(messageHandler instanceof UserMessageHandlerExt1){
-						String detail = "DeviceClassName: " + device.getClass().getCanonicalName() + "\n";
-						detail += SensorUtilJava.experimentRequestToString(request); 
-						
-						((UserMessageHandlerExt1)messageHandler).showMessage(
-								body, 
-								title,
-								detail);
-					} else {
-						messageHandler.showMessage(body, title);						
-					}
-				}
-			} else {
-				// we have a valid config so that should mean the device
-				// can detect the sensors, but the ones it found didn't 
-				// match the request so it set the config to invalid
-				if(messageHandler != null) {
-					sendWrongSensorAttachedMessage(request, actualConfig);
-				}				
+		
+		// prompt the user because the attached sensors do not
+		// match the requested sensors.
+		// It is in this case that we need more error information
+		// from the device.  I suppose one solution is to get a 
+		// listing of the actual sensors and then do the comparison
+		// here in a general way.
+		// That will work if the interface can auto identify sensors
+		// if it can't then how would it know they are incorrect???
+		// I guess in case it would have to check if the returned values
+		// are valid.  Otherwise it will just have to trust the student and
+		// the experiments will have to be designed (technical hints) to help
+		// the student figure out what is wrong.
+		// So we will try to tackle the general error cases here :S
+		// But there is now a way for the device to explain why the configuration
+		// is invalid.
+		if(actualConfig == null) {
+			// we don't have any config.  this should mean there was
+			// a more serious error talking to the device.  Either it
+			// isn't there, our communication channel is messed up, or
+			// the device is messed up.
+			if(messageHandler != null) {
 
+				// get the error message from the device
+				String devErrStr = device.getErrorMessage(0);
+
+				String title = "Sensor Device Error";
+				String body = "Error getting sensors description from " + getFullDeviceName();;
+				if(devErrStr != null) {
+					body = "\n" + devErrStr;
+				}
+
+				if(messageHandler instanceof UserMessageHandlerExt1){
+					String detail = "DeviceClassName: " + device.getClass().getCanonicalName() + "\n";
+					detail += SensorUtilJava.experimentRequestToString(request); 
+
+					((UserMessageHandlerExt1)messageHandler).showMessage(
+							body, 
+							title,
+							detail);
+				} else {
+					messageHandler.showMessage(body, title);						
+				}
 			}
-						
-			// Maybe should be a policy decision somewhere
-			// because maybe you would want to just return the
-			// currently attached setup
+		} else if (!actualConfig.isValid()){
+			// we have a valid config so that should mean the device
+			// can detect the sensors, but the ones it found didn't 
+			// match the request so it set the config to invalid
+			if(messageHandler != null) {
+				sendWrongSensorAttachedMessage(request, actualConfig);
+			}				
+
 		}
+						
+		// Maybe should be a policy decision somewhere
+		// because maybe you would want to just return the
+		// currently attached setup
 		
 		// It is not clear if the experiment config should be null if the 
 		// actualConfig is not valid
@@ -273,6 +277,15 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 	    if(actualConfig != null && !actualConfig.isValid()){
 	    	actualConfig = null;
 	    }
+	    
+	    if(actualConfig != null &&  
+	    		(actualConfig.getSensorConfigs() == null ||
+	    				actualConfig.getSensorConfigs().length != 
+	    					request.getSensorRequests().length)){
+	    	logger.warning("Device returned a 'valid' config but it has a different number of sensors");
+	    	actualConfig = null;
+	    }
+	    
 		DataStreamDescUtil.setupDescription(dataDesc, request, actualConfig);
 
 		notifyDataStreamEvent(DataStreamEvent.DATA_DESC_CHANGED);

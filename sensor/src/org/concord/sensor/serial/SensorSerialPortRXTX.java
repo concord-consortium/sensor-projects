@@ -283,6 +283,7 @@ public class SensorSerialPortRXTX
     {
         try {
             outStream.write(buffer);
+            outStream.flush();
         }   catch (IOException e) {
             throw new SerialException("write error", e); 
         }
@@ -292,7 +293,8 @@ public class SensorSerialPortRXTX
     throws SerialException
     {
         try {
-            outStream.write(buffer, start, length);        
+            outStream.write(buffer, start, length);
+            outStream.flush();
         }   catch (IOException e) {
             throw new SerialException("write error", e); 
         }
@@ -303,6 +305,7 @@ public class SensorSerialPortRXTX
     {
         try {
             outStream.write(value);
+            outStream.flush();
         }   catch (IOException e) {
             throw new SerialException("write error", e); 
         }

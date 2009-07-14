@@ -239,9 +239,9 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 				String devErrStr = device.getErrorMessage(0);
 
 				String title = "Sensor Device Error";
-				String body = "Error getting sensors description from " + getFullDeviceName();;
+				String body = "Error getting sensors description from " + getFullDeviceName();
 				if(devErrStr != null) {
-					body = "\n" + devErrStr;
+					body += "\n" + devErrStr;
 				}
 
 				if(messageHandler instanceof UserMessageHandlerExt1){

@@ -40,6 +40,7 @@ public interface DeviceID
 	public final static int IMAGIWORKS_SD = 55;
 	public final static int PASCO_SERIAL = 60;
 	public final static int PASCO_AIRLINK = 61;
+	public final static int PASCO_USB = 62;
 	public final static int CCPROBE_VERSION_0 = 70;
 	public final static int CCPROBE_VERSION_1 = 71;
 	public final static int CCPROBE_VERSION_2 = 72;

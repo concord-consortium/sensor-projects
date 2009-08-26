@@ -137,6 +137,9 @@ public class JavaDeviceFactory
 			case PASCO_AIRLINK:
 			    className = "org.concord.sensor.pasco.AirLinkSensorDevice";
 			    break;
+			case PASCO_USB:
+				className = "org.concord.sensor.pasco.PascoUsbSensorDevice";
+				break;
 			case DATA_HARVEST_CF:
 			case IMAGIWORKS_SERIAL:
 			case IMAGIWORKS_SD:

@@ -33,6 +33,7 @@
 package org.concord.sensor.device.impl;
 
 import java.util.Hashtable;
+import java.util.logging.Logger;
 
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
@@ -57,6 +58,7 @@ import org.concord.sensor.serial.SensorSerialPort;
 public class JavaDeviceFactory
 	implements DeviceFactory, DeviceID, DeviceService
 {	
+	private static final Logger logger = Logger.getLogger(JavaDeviceFactory.class.getCanonicalName());
 	Ticker ticker = null;
 		
 	Hashtable deviceTable = new Hashtable();
@@ -250,7 +252,7 @@ public class JavaDeviceFactory
     
     public void log(String message)
     {
-        System.err.println(message);        
+        logger.info(message);        
     }
     
     public void sleep(int millis)

@@ -443,7 +443,7 @@ public abstract class AbstractSensorDevice
 		        break;
 		    }
 		 
-            devService.log("selected sensor: " + highScoreIndex);
+            // devService.log("selected sensor: " + highScoreIndex);
             matchingConfigs.add(sensorConfigs[highScoreIndex]);            
 		}
 		

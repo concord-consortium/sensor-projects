@@ -158,7 +158,7 @@ public class JavaDeviceFactory
 				className = "org.concord.sensor.cc.CCInterface1";
 				break;
 			case CCPROBE_VERSION_2:
-			    className = "org.concord.sensor.cc.CCinterface2";
+			    className = "org.concord.sensor.cc.CCInterface2";
 			    break;
 		}
 

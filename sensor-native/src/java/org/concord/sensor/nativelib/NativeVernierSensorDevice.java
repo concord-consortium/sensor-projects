@@ -55,7 +55,8 @@ import ccsd.vernier.SensorConfig;
 public class NativeVernierSensorDevice 
 	implements SensorDevice
 {
-	SWIGTYPE_p_void deviceHandle = null;
+	public static final String VERNIER_NATIVE_LIB_LOADED = "org.concord.sensor.vernier.loaded";
+    SWIGTYPE_p_void deviceHandle = null;
 	SWIGTYPE_p_float readValuesBuffer = null;
 	SWIGTYPE_p_float readTimestampsBuffer = null;
 	private boolean open;
@@ -69,21 +70,25 @@ public class NativeVernierSensorDevice
 	 */
 	public NativeVernierSensorDevice()
 	{
-		try {
-			if(System.getProperty("os.name").startsWith("Windows")) {
-				System.loadLibrary("GoIO_DLL");
-			}else if(System.getProperty("os.name").startsWith("Mac")) {
-			    try{//I need try/catch block for not interrupting remaining code
-				    System.loadLibrary("SetDylibPath");
-				}catch(Throwable tt){}
-			}
-			
-			System.loadLibrary("vernier_ccsd");
-			nativeLibAvailable = true;
-//			System.loadLibrary("blah");
-		} catch (Throwable thr) {
-			thr.printStackTrace();
-		}
+	    if (Boolean.getBoolean(VERNIER_NATIVE_LIB_LOADED)) {
+	        nativeLibAvailable = true;
+	    } else {
+	        try {
+	            if(System.getProperty("os.name").startsWith("Windows")) {
+	                System.loadLibrary("GoIO_DLL");
+	            }else if(System.getProperty("os.name").startsWith("Mac")) {
+	                try{//I need try/catch block for not interrupting remaining code
+	                    System.loadLibrary("SetDylibPath");
+	                }catch(Throwable tt){}
+	            }
+
+	            System.loadLibrary("vernier_ccsd");
+	            nativeLibAvailable = true;
+	            //			System.loadLibrary("blah");
+	        } catch (Throwable thr) {
+	            thr.printStackTrace();
+	        }
+	    }
 	}
 	
 	public synchronized void open(String config)

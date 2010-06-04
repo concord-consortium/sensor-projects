@@ -62,7 +62,7 @@ public class Main {
 
 			labQuest = labQuestLib.openDevice(firstDevice);
 
-			testMotion();
+			test();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}

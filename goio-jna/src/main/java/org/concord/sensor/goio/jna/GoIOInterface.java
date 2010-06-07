@@ -59,7 +59,19 @@ public class GoIOInterface
 	};
 
 	
-	
+	public void cleanup()
+	{
+		//System.err.println("GoIOInterface: cleaning up");
+		
+		int ret = goio.GoIO_Uninit();
+
+		if(ret != 0){
+			System.err.println("GoIOInterface  GoIO_Uninit() failed");
+		}
+
+		goio = null;
+	}
+		
 	
 	
 	

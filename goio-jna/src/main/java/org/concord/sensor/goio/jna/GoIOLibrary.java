@@ -15,4 +15,6 @@ public interface GoIOLibrary extends Library {
 	
 	int GoIO_Init();
 	
+	int GoIO_Uninit();	
+	
 }

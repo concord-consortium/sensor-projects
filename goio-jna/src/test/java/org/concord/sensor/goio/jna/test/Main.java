@@ -25,7 +25,8 @@ public class Main {
 			System.out.println("goIOInterface.init() failed --bye");
 			return;
 		}
-		
+
+		goIOInterface.cleanup();
 		
 		System.out.println("end  main");
 	};//end main

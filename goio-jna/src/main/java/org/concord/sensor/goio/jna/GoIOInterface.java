@@ -72,7 +72,18 @@ public class GoIOInterface
 		goio = null;
 	}
 		
-	
+
+
+	public boolean is_golink_attached() {
+
+		int numDevices = 
+			goio.GoIO_UpdateListOfAvailableDevices(
+					GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID,
+					GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID
+					);
+
+		return numDevices>0;
+	}
 	
 	
 	//FIX: Copied from LabQuestLibrary, then modified:	

@@ -26,6 +26,10 @@ public class Main {
 			return;
 		}
 
+		boolean isthere =
+		goIOInterface.is_golink_attached();
+		System.out.println("Is golink there: "+isthere);
+		
 		goIOInterface.cleanup();
 		
 		System.out.println("end  main");

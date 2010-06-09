@@ -27,7 +27,7 @@ import com.sun.jna.ptr.ShortByReference;
 public class GoIOInterface
 {
 
-	protected GoIOLibrary goio;
+	protected GoIOLibrary goIOLibrary;
 //	protected Pointer hLibrary;
 
 	public boolean init()
@@ -49,10 +49,10 @@ public class GoIOInterface
 		Map options = new HashMap();
 		options.put(Library.OPTION_FUNCTION_MAPPER, functMapper);
 		options.put(Library.OPTION_STRUCTURE_ALIGNMENT, Structure.ALIGN_NONE);
-		goio = (GoIOLibrary) Native.loadLibrary(nativeLibPath, 
+		goIOLibrary = (GoIOLibrary) Native.loadLibrary(nativeLibPath, 
 				GoIOLibrary.class, options);
 		
-		int ret = goio.GoIO_Init();
+		int ret = goIOLibrary.GoIO_Init();
 		
 		return 0 == ret;
 		
@@ -63,13 +63,13 @@ public class GoIOInterface
 	{
 		//System.err.println("GoIOInterface: cleaning up");
 		
-		int ret = goio.GoIO_Uninit();
+		int ret = goIOLibrary.GoIO_Uninit();
 
 		if(ret != 0){
 			System.err.println("GoIOInterface  GoIO_Uninit() failed");
 		}
 
-		goio = null;
+		goIOLibrary = null;
 	}
 		
 
@@ -77,13 +77,27 @@ public class GoIOInterface
 	public boolean is_golink_attached() {
 
 		int numDevices = 
-			goio.GoIO_UpdateListOfAvailableDevices(
+			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
 					GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID,
 					GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID
 					);
 
 		return numDevices>0;
 	}
+	
+
+	public boolean is_temperature_probe_attached() {
+
+		int numDevices = 
+			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+					GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID,
+					GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID
+					);
+
+		return numDevices>0;
+	}
+
+	
 	
 	
 	//FIX: Copied from LabQuestLibrary, then modified:	

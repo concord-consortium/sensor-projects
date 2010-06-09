@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
 		printf("No Go devices found.\n");
 	else
 	{
+		printf("Found Device name: %s",deviceName);
 		GOIO_SENSOR_HANDLE hDevice = GoIO_Sensor_Open(deviceName, vendorId, productId, 0);
 		if (hDevice != NULL)
 		{

@@ -14,6 +14,8 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		boolean sweet = false;
+		boolean isthere = false;
+		
 		goIOInterface = new GoIOInterface();
 		
 		System.out.println("start main");
@@ -26,9 +28,12 @@ public class Main {
 			return;
 		}
 
-		boolean isthere =
-		goIOInterface.is_golink_attached();
+
+		isthere = goIOInterface.is_golink_attached();
 		System.out.println("Is golink there: "+isthere);
+
+		isthere = goIOInterface.is_temperature_probe_attached();
+		System.out.println("Is temperature probe there: "+isthere);		
 		
 		goIOInterface.cleanup();
 		

@@ -85,19 +85,57 @@ public class GoIOInterface
 		return numDevices>0;
 	}
 	
-
+	
 	public boolean is_temperature_probe_attached() {
 
 		int numDevices = 
 			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
 					GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID,
-					GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID
+					GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID
 					);
 
 		return numDevices>0;
 	}
 
 	
+	protected int update_device_list_entry(int vendor, int device_id)
+	{
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
+	}
+	
+	public boolean get_device_name(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
+	{
+		boolean bFoundDevice = true;
+		
+		deviceName[0] = 0;
+		int VDV_ID = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
+		
+		int numSkips     = update_device_list_entry(VDV_ID, GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID);
+		int numJonahs    = update_device_list_entry(VDV_ID, GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID);
+		int numCyclopses = update_device_list_entry(VDV_ID, GoIOLibrary.CYCLOPS_DEFAULT_PRODUCT_ID);
+		int numMiniGCs   = update_device_list_entry(VDV_ID, GoIOLibrary.MINI_GC_DEFAULT_PRODUCT_ID);
+
+		
+		do
+		{
+
+			if(numSkips>0)
+			{
+				goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, nameLength, VDV_ID, GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID, 0);
+				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
+				pProductId[0]= GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID;				
+				break;
+			}
+			
+			
+			bFoundDevice = false;
+			
+		}while(false);
+		
+		
+		
+		return bFoundDevice;
+	}
 	
 	
 	//FIX: Copied from LabQuestLibrary, then modified:	

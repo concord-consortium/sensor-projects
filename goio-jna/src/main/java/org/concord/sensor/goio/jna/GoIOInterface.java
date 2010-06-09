@@ -121,22 +121,47 @@ public class GoIOInterface
 
 			if(numSkips>0)
 			{
-				goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, nameLength, VDV_ID, GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID, 0);
 				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
 				pProductId[0]= GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID;				
 				break;
 			}
 			
+			if(numJonahs>0)
+			{
+				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
+				pProductId[0]= GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;				
+				break;
+			}
 			
+			if(numCyclopses>0)
+			{
+				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
+				pProductId[0]= GoIOLibrary.CYCLOPS_DEFAULT_PRODUCT_ID;		
+				break;
+			}
+			
+			if(numMiniGCs>0)
+			{
+				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
+				pProductId[0]= GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID;				
+				break;
+			}
+			
+			//default, no device found:
 			bFoundDevice = false;
 			
 		}while(false);
 		
-		
+		if(bFoundDevice)
+			goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, nameLength, pVendorId[0], pProductId[0], 0);
 		
 		return bFoundDevice;
 	}
 	
+	public Pointer sensor_open(char []pDeviceName, int vendorId, int productId)
+	{
+		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...		
+	}
 	
 	//FIX: Copied from LabQuestLibrary, then modified:	
     private static File getNativeLibraryFromJar() {

@@ -32,7 +32,12 @@ public class Main {
 		isthere = goIOInterface.is_golink_attached();
 		System.out.println("Is golink there: "+isthere);
 
-		isthere = goIOInterface.is_temperature_probe_attached();
+		char []deviceName = new char[GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME];
+		int []pVendorId = new int[1];
+		int []pProductId = new int[1];
+		
+		isthere = goIOInterface.get_device_name(deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, pVendorId, pProductId);
+		//isthere = goIOInterface.is_temperature_probe_attached();
 		System.out.println("Is temperature probe there: "+isthere);		
 		
 		goIOInterface.cleanup();

@@ -4,11 +4,14 @@ import java.io.IOException;
 
 import org.concord.sensor.goio.jna.*;
 
+import com.sun.jna.Pointer;
+
 
 //Test GoIO
 public class Main {
 	
 	
+	private static final int SKIP_TIMEOUT_MS_DEFAULT = 0;
 	private static GoIOInterface goIOInterface;
 
 	public static void main(String[] args) throws IOException {
@@ -38,8 +41,16 @@ public class Main {
 		
 		isthere = goIOInterface.get_device_name(deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, pVendorId, pProductId);
 		//isthere = goIOInterface.is_temperature_probe_attached();
-		System.out.println("Is temperature probe there: "+isthere);		
+		System.out.println("Got device name: "+isthere);
 		
+		Pointer hDevice  = goIOInterface.sensor_open(deviceName, pVendorId[0], pProductId[0]);
+		//System.out.println("Device name: "+ new String(deviceName));
+		
+		sweet = goIOInterface.sensor_set_measurement_period(hDevice,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
+		System.out.println("sensor_set_measurement_period: "+sweet);
+		
+		
+		//end
 		goIOInterface.cleanup();
 		
 		System.out.println("end  main");

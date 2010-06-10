@@ -105,45 +105,52 @@ public class GoIOInterface
 	
 	public boolean get_device_name(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{
-		boolean bFoundDevice = true;
+		/*
+		 * FIX: (Ponder)
+		 * This function is more or less from GoIO_DeviceCheck.cpp
+		 * It seems weird to check for 4 devices
+		 * only to return the one that was found first...
+		 * 
+		 */
+		boolean bFoundDevice = true; //Must be true for code to work
 		
 		deviceName[0] = 0;
 		int VDV_ID = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
 		
-		int numSkips     = update_device_list_entry(VDV_ID, GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID);
-		int numJonahs    = update_device_list_entry(VDV_ID, GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID);
-		int numCyclopses = update_device_list_entry(VDV_ID, GoIOLibrary.CYCLOPS_DEFAULT_PRODUCT_ID);
+		int numSkips     = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_GOLINK); 
+		int numJonahs    = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_USB_TEMPERATURE);
+		int numCyclopses = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_GOMOTION);
 		int numMiniGCs   = update_device_list_entry(VDV_ID, GoIOLibrary.MINI_GC_DEFAULT_PRODUCT_ID);
 
 		
-		do
+		do //not a loop: Used in stead of else if 
 		{
 
 			if(numSkips>0)
 			{
 				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID;				
+				pProductId[0]= GoIOLibrary.PROBE_GOLINK;		
 				break;
 			}
 			
 			if(numJonahs>0)
 			{
 				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOLibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;				
+				pProductId[0]= GoIOLibrary.PROBE_USB_TEMPERATURE;				
 				break;
 			}
 			
 			if(numCyclopses>0)
 			{
 				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOLibrary.CYCLOPS_DEFAULT_PRODUCT_ID;		
+				pProductId[0]= GoIOLibrary.PROBE_GOMOTION;		
 				break;
 			}
 			
 			if(numMiniGCs>0)
 			{
 				pVendorId[0] = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID;				
+				pProductId[0]= GoIOLibrary.PROBE_MINI_GAS_CHROMATOGRAPH;				
 				break;
 			}
 			

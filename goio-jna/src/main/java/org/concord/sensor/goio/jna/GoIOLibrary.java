@@ -30,12 +30,12 @@ public interface GoIOLibrary extends Library {
 	public final static int STANDALONE_DAQ_DEFAULT_PRODUCT_ID = 0x0008;
 			
 	//Some of ^^ in human readable form:
-	public final static int GOIO_GOTEMP = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID; 
-	public final static int GOIO_GOLINK = SKIP_DEFAULT_PRODUCT_ID; 
-	public final static int GOIO_GOMOTION = CYCLOPS_DEFAULT_PRODUCT_ID;
-	public final static int GOIO_LABQUEST = NGI_DEFAULT_PRODUCT_ID; 
-	public final static int GOIO_CK_SPECTROMETER = LOWCOST_SPEC_DEFAULT_PRODUCT_ID; 
-	public final static int GOIO_VERNIER_MINI_GAS_CHROMATOGRAPH = MINI_GC_DEFAULT_PRODUCT_ID ;			
+	public final static int PROBE_USB_TEMPERATURE = USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID; 
+	public final static int PROBE_GOLINK = SKIP_DEFAULT_PRODUCT_ID; 
+	public final static int PROBE_GOMOTION = CYCLOPS_DEFAULT_PRODUCT_ID;
+	public final static int PROBE_LABQUEST = NGI_DEFAULT_PRODUCT_ID; 
+	public final static int PROBE_CK_SPECTROMETER = LOWCOST_SPEC_DEFAULT_PRODUCT_ID; 
+	public final static int PROBE_MINI_GAS_CHROMATOGRAPH = MINI_GC_DEFAULT_PRODUCT_ID ;			
 	
 	
 	//Some from GoIO_DLL_interface.h

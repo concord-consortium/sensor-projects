@@ -165,6 +165,25 @@ public class GoIOInterface
 		return bFoundDevice;
 	}
 	
+	
+	//
+	//GoIO_Sensor_SetMeasurementPeriod(hDevice, 0.040, SKIP_TIMEOUT_MS_DEFAULT);//40 milliseconds measurement period.
+	
+	public boolean sensor_set_measurement_period(Pointer hSensor, double desiredPeriod, int timeoutMs)
+	{
+		//FIX:
+		//Pointer hSensor,	//[in] handle to open sensor.
+		//double desiredPeriod,	//[in] desired measurement period in seconds.
+		//int timeoutMs);		//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.
+
+		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(hSensor,desiredPeriod,timeoutMs);
+		
+		return 0 == ret;
+		
+	}
+	
+	
+	
 	public Pointer sensor_open(char []pDeviceName, int vendorId, int productId)
 	{
 		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...		

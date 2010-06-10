@@ -41,6 +41,11 @@ public interface GoIOLibrary extends Library {
 	//Some from GoIO_DLL_interface.h
 	public final static int STRUCTURE_ALIGNMENT = Structure.ALIGN_NONE; 
 	public final static int GOIO_MAX_SIZE_DEVICE_NAME = 255; //FIX: 260 Non Mac OS's
+	
+	public static final int SKIP_TIMEOUT_MS_DEFAULT = 2000;
+
+	//#define SKIP_TIMEOUT_MS_READ_DDSMEMBLOCK 2000
+	//#define SKIP_TIMEOUT_MS_WRITE_DDSMEMBLOCK 4000
 
 	//Functions in GoIO_DLL_interface.h	
 	int GoIO_Init();
@@ -323,6 +328,37 @@ public interface GoIOLibrary extends Library {
 	double GoIO_Sensor_GetMaximumMeasurementPeriod(
 													Pointer hSensor);//[in] handle to open sensor.
 
+
+	/***************************************************************************************************************************
+	Function Name: GoIO_Sensor_SetMeasurementPeriod()
+	
+	Purpose:	Set the measurement period to a specified number of seconds. The Go! sensor will report measurements
+				to the computer at the measurement period interval once measurements have been started. These 
+				measurements are held in the GoIO Measurement Buffer. 
+				See documentation for GoIO_Sensor_GetNumMeasurementsAvailable().
+
+				This routine sends SKIP_CMD_ID_SET_MEASUREMENT_PERIOD to the sensor with the parameter block configured 
+				for the desiredPeriod.
+
+				Because the measurement period is constrained to be a multiple of the tick returned by
+				GoIO_Sensor_GetMeasurementTickInSeconds(), and because it must be 
+					>= GoIO_Sensor_GetMinimumMeasurementPeriod(), and
+					<= GoIO_Sensor_GetMaximumMeasurementPeriod(), 
+				the actual period is different than the desiredPeriod.
+
+				You can determine the actual period by calling GoIO_Sensor_GetMeasurementPeriod().
+
+				This routine will fail if we are currently collecting measurements from the sensor. Note that collection
+				is started by sending SKIP_CMD_ID_START_MEASUREMENTS to the sensor, and stopped by sending 
+				SKIP_CMD_ID_STOP_MEASUREMENTS.
+
+	Return:		0 if successful, else -1.
+
+	****************************************************************************************************************************/
+	int GoIO_Sensor_SetMeasurementPeriod(
+											Pointer hSensor,	//[in] handle to open sensor.
+											double desiredPeriod,	//[in] desired measurement period in seconds.
+											int timeoutMs);		//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.
 
 
 	/***************************************************************************************************************************

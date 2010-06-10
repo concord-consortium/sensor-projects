@@ -8,5 +8,4 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.concord.sensor.goio.jna.test.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="goio-jna"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-d32"/>
 </launchConfiguration>

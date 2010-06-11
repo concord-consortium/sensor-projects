@@ -259,7 +259,7 @@ public class GoIOInterface
     //FIX: Copied from LabQuestLibrary, then modified:
     private static String getNativeLibraryName() {
         if (Platform.isWindows()) {
-        	return "libGoIO_DLL";
+        	return "GoIO_DLL.dll";
         }
         else if (Platform.isMac()) {
         	return "libGoIO_DLL.dylib";

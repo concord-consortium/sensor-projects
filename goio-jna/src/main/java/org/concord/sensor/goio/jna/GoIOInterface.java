@@ -1,3 +1,12 @@
+/*
+ * TBD: Write proper header comment (this)
+ * Add exceptions
+ * Formatting: Move protected functions, public functions to own group
+ * Comment
+ */
+
+
+
 package org.concord.sensor.goio.jna;
 
 import java.io.File;
@@ -10,9 +19,6 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-//import org.concord.sensor.labquest.jna.NGIOLibrary;
-
-
 import com.sun.jna.FunctionMapper;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -21,14 +27,13 @@ import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Native.DeleteNativeLibrary;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.ShortByReference;
+//import com.sun.jna.ptr.IntByReference;
+//import com.sun.jna.ptr.ShortByReference;
 
 public class GoIOInterface
 {
 
 	protected GoIOLibrary goIOLibrary;
-//	protected Pointer hLibrary;
 
 	public class GoIOSensor {
 		
@@ -36,6 +41,7 @@ public class GoIOInterface
 		char []deviceName = new char[GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME];
 		int []pVendorId = new int[1];
 		int []pProductId = new int[1];
+		public Pointer hDevice = null;
 		
 		public GoIOSensor() {
 			
@@ -93,7 +99,7 @@ public class GoIOInterface
 		
 
 
-	public boolean is_golink_attached() {
+	public boolean isGolinkAttached() {
 
 		int numDevices = 
 			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
@@ -105,37 +111,41 @@ public class GoIOInterface
 	}
 	
 	
-	public boolean is_temperature_probe_attached() {
 
-		int numDevices = 
-			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
-					GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID,
-					GoIOLibrary.SKIP_DEFAULT_PRODUCT_ID
-					);
-
-		return numDevices>0;
-	}
 
 	
-	protected int update_device_list_entry(int vendor, int device_id)
+	protected int updateDeviceListEntry(int vendor, int device_id)
 	{
 		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
 	}
 	
 	
 
-	public Pointer sensorOpen(GoIOSensor goArg)
+	public boolean sensorOpen(GoIOSensor goArg)
 	{
-		return goIOLibrary.GoIO_Sensor_Open(goArg.deviceName, goArg.pVendorId[0], goArg.pProductId[0], 0); //last arg 0 in all examples...		
+		
+		goArg.hDevice = goIOLibrary.GoIO_Sensor_Open(goArg.deviceName, goArg.pVendorId[0], goArg.pProductId[0], 0); //last arg 0 in all examples...		
+	
+		return (null != goArg.hDevice);
 	}
 	
 	public boolean getDeviceName(GoIOSensor goArg)
 	{
 		
-		return get_device_name(goArg.deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, goArg.pVendorId, goArg.pProductId);
+		return getDeviceName(goArg.deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, goArg.pVendorId, goArg.pProductId);
 
 	}
-	public boolean get_device_name(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
+	
+	public boolean sensorSetMeasurementPeriod(GoIOSensor goArg,double desiredPeriod, int timeoutMs)
+	{
+		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(goArg.hDevice,desiredPeriod,timeoutMs);	
+		
+		return 0 == ret;
+	}
+	
+	
+	
+	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{
 		/*
 		 * FIX: (Ponder)
@@ -149,10 +159,10 @@ public class GoIOInterface
 		deviceName[0] = 0;
 		int VDV_ID = GoIOLibrary.VERNIER_DEFAULT_VENDOR_ID;
 		
-		int numSkips     = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_GOLINK); 
-		int numJonahs    = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_USB_TEMPERATURE);
-		int numCyclopses = update_device_list_entry(VDV_ID, GoIOLibrary.PROBE_GOMOTION);
-		int numMiniGCs   = update_device_list_entry(VDV_ID, GoIOLibrary.MINI_GC_DEFAULT_PRODUCT_ID);
+		int numSkips     = updateDeviceListEntry(VDV_ID, GoIOLibrary.PROBE_GOLINK); 
+		int numJonahs    = updateDeviceListEntry(VDV_ID, GoIOLibrary.PROBE_USB_TEMPERATURE);
+		int numCyclopses = updateDeviceListEntry(VDV_ID, GoIOLibrary.PROBE_GOMOTION);
+		int numMiniGCs   = updateDeviceListEntry(VDV_ID, GoIOLibrary.MINI_GC_DEFAULT_PRODUCT_ID);
 
 		
 		do //not a loop: Used in stead of else if 
@@ -199,17 +209,11 @@ public class GoIOInterface
 	
 	
 	
-	public boolean sensor_set_measurement_period(Pointer hSensor,double desiredPeriod, int timeoutMs)
-	{
-		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(hSensor,desiredPeriod,timeoutMs);	
-		
-		return 0 == ret;
-	}
 	
 	
 
 
-	public boolean sensor_send_cmd_n_get_response(
+	protected boolean sensorSendCmd(
 			Pointer hSensor,	
 			byte cmd,		
 			Pointer pParams,			
@@ -231,7 +235,7 @@ public class GoIOInterface
 	}
 	
 	
-	public Pointer sensor_open(char []pDeviceName, int vendorId, int productId)
+	protected Pointer sensorOpen(char []pDeviceName, int vendorId, int productId)
 	{
 		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...		
 	}

@@ -4,21 +4,18 @@ import java.io.IOException;
 
 import org.concord.sensor.goio.jna.*;
 
-import com.sun.jna.Pointer;
-
-
 //Test GoIO
 public class Main {
 	
 	
 //	private static final int SKIP_TIMEOUT_MS_DEFAULT = 0;
-	private static GoIOInterface goIOInterface;
+//	private static GoIOInterface goIOInterface;
 
 	public static void main(String[] args) throws IOException {
 		
 		boolean sweet = false;
 		boolean isthere = false;
-
+		GoIOInterface goIOInterface;
 		
 		goIOInterface = new GoIOInterface();
 		
@@ -37,7 +34,7 @@ public class Main {
 		}
 
 
-		isthere = goIOInterface.is_golink_attached();
+		isthere = goIOInterface.isGolinkAttached();
 		System.out.println("Is golink there: "+isthere);
 
 
@@ -46,12 +43,12 @@ public class Main {
 		isthere = goIOInterface.getDeviceName(sensor);
 		System.out.println("Got device name: "+isthere);
 		
-		Pointer hDevice  = goIOInterface.sensorOpen(sensor);
 
-		//System.out.println("Device name: "+ new String(deviceName));
+		goIOInterface.sensorOpen(sensor);
+
 		
-		sweet = goIOInterface.sensor_set_measurement_period(hDevice,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
-		System.out.println("sensor_set_measurement_period: "+sweet);
+		sweet = goIOInterface.sensorSetMeasurementPeriod(sensor,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
+		System.out.println("sensorSetMeasurementPeriod: "+sweet);
 		
 		
 		//end

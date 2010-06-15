@@ -30,6 +30,25 @@ public class GoIOInterface
 	protected GoIOLibrary goIOLibrary;
 //	protected Pointer hLibrary;
 
+	public class GoIOSensor {
+		
+		public 
+		char []deviceName = new char[GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME];
+		int []pVendorId = new int[1];
+		int []pProductId = new int[1];
+		
+		public GoIOSensor() {
+			
+		}
+		
+	}
+	
+	public GoIOSensor mkSensor() {
+		
+		return new GoIOSensor();
+		
+	}
+	@SuppressWarnings("unchecked")
 	public boolean init()
 	{
 		File nativeLibFile = getNativeLibraryFromJar();
@@ -103,6 +122,19 @@ public class GoIOInterface
 		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
 	}
 	
+	
+
+	public Pointer sensorOpen(GoIOSensor goArg)
+	{
+		return goIOLibrary.GoIO_Sensor_Open(goArg.deviceName, goArg.pVendorId[0], goArg.pProductId[0], 0); //last arg 0 in all examples...		
+	}
+	
+	public boolean getDeviceName(GoIOSensor goArg)
+	{
+		
+		return get_device_name(goArg.deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, goArg.pVendorId, goArg.pProductId);
+
+	}
 	public boolean get_device_name(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{
 		/*

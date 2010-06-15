@@ -1,0 +1,162 @@
+TDeviceCheck
+v7
+r0
+t297784824.337023
+cCheck dependencies
+cCompileC build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/GoIO_DeviceCheck.o /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cLd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck normal i386
+cPBXCp build/Debug/libGoIO_DLL.dylib ../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib
+cPhaseScriptExecution "Zip and Copy to Redist" /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Script-C4D189710FBB81B100C13778.sh
+
+N/Developer/SDKs/MacOSX10.5.sdk
+c000000004A49A9E400000000000000EE
+t1246341604
+s238
+
+N/Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Carbon.framework/Headers/Carbon.h
+c000000004864BE3E00000000000005D7
+t1214561854
+s1495
+
+N/Developer/SDKs/MacOSX10.5.sdk/usr/include/memory.h
+c0000000047BA99300000000000000765
+t1203411248
+s1893
+
+N/Developer/SDKs/MacOSX10.5.sdk/usr/include/stdio.h
+c0000000047BA99310000000000003D1D
+t1203411249
+s15645
+
+N/Developer/SDKs/MacOSX10.5.sdk/usr/include/string.h
+c0000000047BA99320000000000001731
+t1203411250
+s5937
+
+N/Developer/SDKs/MacOSX10.5.sdk/usr/include/sys/time.h
+c0000000047E883D20000000000001E18
+t1206420434
+s7704
+
+N/System/Library/Frameworks/Carbon.framework/Carbon
+c000000004BAD902A000000000000A5F0
+t1269665834
+s42480
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib
+c000000004C0D36320000000000269664
+t1275934258
+s2528868
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../GoIO_DLL/GoIO_DLL_interface.h
+c000000004C0D3632000000000000D1C4
+t1275934258
+s53700
+i"GSkipCommExt.h"
+i"GSensorDDSMem.h"
+i"GVernierUSB.h"
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../GoIO_cpp/GSensorDDSMem.h
+c000000004C0D36320000000000001408
+t1275934258
+s5128
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../GoIO_cpp/GSkipCommExt.h
+c000000004C0D36320000000000002AF9
+t1275934258
+s11001
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../GoIO_cpp/GVernierUSB.h
+c000000004C0D3632000000000000061E
+t1275934258
+s1566
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp
+c000000004C0D36320000000000001654
+t1275934258
+s5716
+i<stdio.h>
+i<string.h>
+i<memory.h>
+i<windows.h>
+i<sys/time.h>
+i<Carbon/Carbon.h>
+i"GoIO_DLL_interface.h"
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck
+t1276092023
+s15460
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/libGoIO_DLL.dylib
+t1276092024
+s2528868
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/DeviceCheck.LinkFileList
+c000000004C0F9E7500000000000000B2
+t1276092021
+s178
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/GoIO_DeviceCheck.o
+t1276092023
+s11680
+
+N/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Script-C4D189710FBB81B100C13778.sh
+c000000004C0F9E750000000000000251
+t1276092021
+s593
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies297784821#297784822#0(0"0(0#1#0"31244212048494624#0"0#
+
+CCompileC build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/GoIO_DeviceCheck.o /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s297784822.019914
+e297784823.222214
+r1
+xCompileC
+xbuild/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/GoIO_DeviceCheck.o
+x/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+o/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'
+lSLF07#2@125"Compile /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297784822#297784823#0(1480"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp:23: warning: deprecated conversion from string constant to 'char*'10(22@111"The option '-D_GLIBCXX_DEBUG_PEDANTIC=1' should not be passed to GCC 4.2 and has been automatically suppressed.297784793#18446744073709551615#0#0(1@0"0(22@102"The option '-D_GLIBCXX_DEBUG=1' should not be passed to GCC 4.2 and has been automatically suppressed.297784793#18446744073709551615#0#0(1@0"0(22@53"Deprecated conversion from string constant to 'char*'297784823#0#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#185#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#370#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#555#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#740#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#925#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#1110#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(22@53"Deprecated conversion from string constant to 'char*'297784823#1295#185#0(6@117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp297627058#23#0#23#0#49"deprecated conversion from string constant to '*'0(0#0#117"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp8531300245266067456#1977"    cd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -DTARGET_OS_MAC=1 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mfix-and-continue -fvisibility-inlines-hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DeviceCheck-generated-files.hmap -I/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DeviceCheck-own-target-headers.hmap -I/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DeviceCheck-all-target-headers.hmap -iquote /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DeviceCheck-project-headers.hmap -F/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug -I/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/include -I/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DerivedSources/i386 -I/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DerivedSources -c /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../GoIO_DeviceCheck.cpp -o /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/GoIO_DeviceCheck.o0#
+
+CLd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck normal i386
+s297784823.222319
+e297784823.983521
+r1
+xLd
+x/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck
+xnormal
+xi386
+lSLF07#2@119"Link /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck297784823#297784824#0(0"0(0#0#0"28429397856419960#927"    cd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv MACOSX_DEPLOYMENT_TARGET 10.5    /Developer/usr/bin/g++-4.2 -arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk -L/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug -L/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../../redist/GoIO_DLL/MacOSX -F/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug -filelist /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/DeviceCheck.LinkFileList -mmacosx-version-min=10.5 -lGoIO_DLL -framework Carbon -o /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck0#
+
+CPBXCp build/Debug/libGoIO_DLL.dylib ../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib
+s297784823.983691
+e297784824.119387
+r1
+xPBXCp
+xbuild/Debug/libGoIO_DLL.dylib
+x../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib
+lSLF07#2@57"Copy ../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib297784823#297784824#0(0"0(0#0#143"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib4300911832#493"    cd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../../redist/GoIO_DLL/MacOSX/libGoIO_DLL.dylib /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug0#
+
+CPhaseScriptExecution "Zip and Copy to Redist" /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Script-C4D189710FBB81B100C13778.sh
+s297784824.119492
+e297784824.336958
+r1
+xPhaseScriptExecution
+xZip and Copy to Redist
+x/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Script-C4D189710FBB81B100C13778.sh
+o  adding: DeviceCheck (deflated 78%)
+o  adding: libGoIO_DLL.dylib (deflated 77%)
+lSLF07#2@48"Run custom shell script 'Zip and Copy to Redist'297784824#297784824#0(80"  adding: DeviceCheck (deflated 78%)  adding: libGoIO_DLL.dylib (deflated 77%)2(13@37"  adding: DeviceCheck (deflated 78%)297784824#0#37#0(1@0"0(13@43"  adding: libGoIO_DLL.dylib (deflated 77%)297784824#37#43#0(1@0"0(0#0#0"4300911832#16864"    cd /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv ACTION build    setenv ALTERNATE_GROUP staff    setenv ALTERNATE_MODE u+w,go-w,a+rX    setenv ALTERNATE_OWNER johan    setenv ALWAYS_SEARCH_USER_PATHS NO    setenv APPLE_INTERNAL_DEVELOPER_DIR /AppleInternal/Developer    setenv APPLE_INTERNAL_DIR /AppleInternal    setenv APPLE_INTERNAL_DOCUMENTATION_DIR /AppleInternal/Documentation    setenv APPLE_INTERNAL_LIBRARY_DIR /AppleInternal/Library    setenv APPLE_INTERNAL_TOOLS /AppleInternal/Developer/Tools    setenv APPLY_RULES_IN_COPY_FILES NO    setenv ARCHS i386    setenv ARCHS_STANDARD_32_64_BIT "x86_64 i386 ppc"    setenv ARCHS_STANDARD_32_BIT "i386 ppc"    setenv ARCHS_STANDARD_64_BIT x86_64    setenv BUILD_COMPONENTS "headers build"    setenv BUILD_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build    setenv BUILD_ROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build    setenv BUILD_STYLE Debug    setenv BUILD_VARIANTS normal    setenv BUILT_PRODUCTS_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug    setenv CACHE_ROOT /var/folders/3T/3Txt-xLGH9i68K+MHyX7OE+++TI/-Caches-/com.apple.Xcode.501    setenv CCHROOT /var/folders/3T/3Txt-xLGH9i68K+MHyX7OE+++TI/-Caches-/com.apple.Xcode.501    setenv CHMOD /bin/chmod    setenv CHOWN /usr/sbin/chown    setenv CLASS_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/JavaClasses    setenv CLEAN_PRECOMPS YES    setenv CLONE_HEADERS NO    setenv CODESIGNING_FOLDER_PATH /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DeviceCheck    setenv CODE_SIGNING_ALLOWED YES    setenv COMMAND_MODE legacy    setenv COMPOSITE_SDK_DIRS /var/folders/3T/3Txt-xLGH9i68K+MHyX7OE+++TI/-Caches-/com.apple.Xcode.501/CompositeSDKs    setenv CONFIGURATION Debug    setenv CONFIGURATION_BUILD_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug    setenv CONFIGURATION_TEMP_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug    setenv COPYING_PRESERVES_HFS_DATA NO    setenv COPY_PHASE_STRIP NO    setenv COPY_RESOURCES_FROM_STATIC_FRAMEWORKS YES    setenv CP /bin/cp    setenv CURRENT_ARCH i386    setenv CURRENT_VARIANT normal    setenv DEAD_CODE_STRIPPING NO    setenv DEBUGGING_SYMBOLS YES    setenv DEBUG_INFORMATION_FORMAT dwarf    setenv DEPLOYMENT_LOCATION NO    setenv DEPLOYMENT_POSTPROCESSING NO    setenv DERIVED_FILES_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DerivedSources    setenv DERIVED_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DerivedSources    setenv DERIVED_SOURCES_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DerivedSources    setenv DEVELOPER_APPLICATIONS_DIR /Developer/Applications    setenv DEVELOPER_BIN_DIR /Developer/usr/bin    setenv DEVELOPER_DIR /Developer    setenv DEVELOPER_FRAMEWORKS_DIR /Developer/Library/Frameworks    setenv DEVELOPER_FRAMEWORKS_DIR_QUOTED "\"/Developer/Library/Frameworks\""    setenv DEVELOPER_LIBRARY_DIR /Developer/Library    setenv DEVELOPER_SDK_DIR /Developer/SDKs    setenv DEVELOPER_TOOLS_DIR /Developer/Tools    setenv DEVELOPER_USR_DIR /Developer/usr    setenv DEVELOPMENT_LANGUAGE English    setenv DO_HEADER_SCANNING_IN_JAM NO    setenv DSTROOT /tmp/DeviceCheck.dst    setenv DWARF_DSYM_FILE_NAME DeviceCheck.dSYM    setenv DWARF_DSYM_FOLDER_PATH /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug    setenv ENABLE_HEADER_DEPENDENCIES YES    setenv ENABLE_OPENMP_SUPPORT NO    setenv EXCLUDED_INSTALLSRC_SUBDIRECTORY_PATTERNS ".svn CVS"    setenv EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES "*.nib *.lproj *.framework *.gch (*) CVS .svn *.xcodeproj *.xcode *.pbproj *.pbxproj"    setenv EXECUTABLE_NAME DeviceCheck    setenv EXECUTABLE_PATH DeviceCheck    setenv FILE_LIST /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects/LinkFileList    setenv FIXED_FILES_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/FixedFiles    setenv FRAMEWORK_FLAG_PREFIX -framework    setenv FRAMEWORK_SEARCH_PATHS "\"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug\" "    setenv FRAMEWORK_VERSION A    setenv FULL_PRODUCT_NAME DeviceCheck    setenv GCC3_VERSION 3.3    setenv GCC_C_LANGUAGE_STANDARD c99    setenv GCC_DYNAMIC_NO_PIC NO    setenv GCC_ENABLE_FIX_AND_CONTINUE YES    setenv GCC_INLINES_ARE_PRIVATE_EXTERN YES    setenv GCC_MODEL_TUNING G5    setenv GCC_OPTIMIZATION_LEVEL 0    setenv GCC_PFE_FILE_C_DIALECTS "c objective-c c++ objective-c++"    setenv GCC_PREPROCESSOR_DEFINITIONS "TARGET_OS_MAC=1 _GLIBCXX_DEBUG=1 _GLIBCXX_DEBUG_PEDANTIC=1"    setenv GCC_SYMBOLS_PRIVATE_EXTERN YES    setenv GCC_TREAT_WARNINGS_AS_ERRORS NO    setenv GCC_VERSION 4.2    setenv GCC_WARN_ABOUT_RETURN_TYPE YES    setenv GCC_WARN_UNUSED_VARIABLE YES    setenv GENERATE_MASTER_OBJECT_FILE NO    setenv GENERATE_PKGINFO_FILE NO    setenv GENERATE_PROFILING_CODE NO    setenv GID 20    setenv GROUP staff    setenv HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT YES    setenv HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES YES    setenv HEADERMAP_INCLUDES_NONPUBLIC_NONPRIVATE_HEADERS YES    setenv HEADERMAP_INCLUDES_PROJECT_HEADERS YES    setenv HEADER_SEARCH_PATHS "\"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/include\" "    setenv ICONV /usr/bin/iconv    setenv INFOPLIST_EXPAND_BUILD_SETTINGS YES    setenv INFOPLIST_OUTPUT_FORMAT same-as-input    setenv INFOPLIST_PREPROCESS NO    setenv INSTALL_DIR /tmp/DeviceCheck.dst/usr/local/bin    setenv INSTALL_GROUP staff    setenv INSTALL_MODE_FLAG u+w,go-w,a+rX    setenv INSTALL_OWNER johan    setenv INSTALL_PATH /usr/local/bin    setenv INSTALL_ROOT /tmp/DeviceCheck.dst    setenv JAVAC_DEFAULT_FLAGS "-J-Xms64m -J-XX:NewSize=4M -J-Dfile.encoding=UTF8"    setenv JAVA_APP_STUB /System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub    setenv JAVA_ARCHIVE_CLASSES YES    setenv JAVA_ARCHIVE_TYPE JAR    setenv JAVA_COMPILER /usr/bin/javac    setenv JAVA_FRAMEWORK_RESOURCES_DIRS Resources    setenv JAVA_JAR_FLAGS cv    setenv JAVA_SOURCE_SUBDIR .    setenv JAVA_USE_DEPENDENCIES YES    setenv JAVA_ZIP_FLAGS -urg    setenv JIKES_DEFAULT_FLAGS "+E +OLDCSO"    setenv KEEP_PRIVATE_EXTERNS NO    setenv LD_GENERATE_MAP_FILE NO    setenv LD_MAP_FILE_PATH /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/DeviceCheck-LinkMap-normal-i386.txt    setenv LD_OPENMP_FLAGS -fopenmp    setenv LEX /Developer/usr/bin/lex    setenv LIBRARY_FLAG_NOSPACE YES    setenv LIBRARY_FLAG_PREFIX -l    setenv LIBRARY_SEARCH_PATHS "\"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug\"  \"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/../../../../redist/GoIO_DLL/MacOSX\""    setenv LINKER_DISPLAYS_MANGLED_NAMES NO    setenv LINK_FILE_LIST_normal_i386 /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal/i386/DeviceCheck.LinkFileList    setenv LINK_WITH_STANDARD_LIBRARIES YES    setenv LOCAL_ADMIN_APPS_DIR /Applications/Utilities    setenv LOCAL_APPS_DIR /Applications    setenv LOCAL_DEVELOPER_DIR /Library/Developer    setenv LOCAL_LIBRARY_DIR /Library    setenv MACOSX_DEPLOYMENT_TARGET 10.5    setenv MAC_OS_X_VERSION_ACTUAL 1063    setenv MAC_OS_X_VERSION_MAJOR 1060    setenv MAC_OS_X_VERSION_MINOR 0603    setenv NATIVE_ARCH i386    setenv NATIVE_ARCH_32_BIT i386    setenv NATIVE_ARCH_64_BIT x86_64    setenv NATIVE_ARCH_ACTUAL x86_64    setenv NO_COMMON YES    setenv OBJECT_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects    setenv OBJECT_FILE_DIR_normal /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Objects-normal    setenv OBJROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build    setenv ONLY_ACTIVE_ARCH YES    setenv OPTIMIZATION_LEVEL 0    setenv OS MACOS    setenv OSAC /usr/bin/osacompile    setenv PACKAGE_TYPE com.apple.package-type.mach-o-executable    setenv PASCAL_STRINGS YES    setenv PATH_PREFIXES_EXCLUDED_FROM_HEADER_DEPENDENCIES "/usr/include /usr/local/include /System/Library/Frameworks /System/Library/PrivateFrameworks /Developer/Headers /Developer/SDKs /Developer/Platforms"    setenv PFE_FILE_C_DIALECTS c++    setenv PKGINFO_FILE_PATH /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/PkgInfo    setenv PLATFORM_DEVELOPER_APPLICATIONS_DIR /Developer/Applications    setenv PLATFORM_DEVELOPER_BIN_DIR /Developer/usr/bin    setenv PLATFORM_DEVELOPER_LIBRARY_DIR /Developer/Library    setenv PLATFORM_DEVELOPER_SDK_DIR /Developer/SDKs    setenv PLATFORM_DEVELOPER_TOOLS_DIR /Developer/Tools    setenv PLATFORM_DEVELOPER_USR_DIR /Developer/usr    setenv PLATFORM_NAME macosx    setenv PLIST_FILE_OUTPUT_FORMAT same-as-input    setenv PREBINDING NO    setenv PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR YES    setenv PRECOMP_DESTINATION_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/PrefixHeaders    setenv PRESERVE_DEAD_CODE_INITS_AND_TERMS NO    setenv PRODUCT_NAME DeviceCheck    setenv PRODUCT_SETTINGS_PATH     setenv PRODUCT_TYPE com.apple.product-type.tool    setenv PROFILING_CODE NO    setenv PROJECT DeviceCheck    setenv PROJECT_DERIVED_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/DerivedSources    setenv PROJECT_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv PROJECT_FILE_PATH /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/DeviceCheck.xcodeproj    setenv PROJECT_NAME DeviceCheck    setenv PROJECT_TEMP_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build    setenv RECURSIVE_SEARCH_PATHS_FOLLOW_SYMLINKS YES    setenv REMOVE_CVS_FROM_RESOURCES YES    setenv REMOVE_SVN_FROM_RESOURCES YES    setenv REZ_COLLECTOR_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/ResourceManagerResources    setenv REZ_EXECUTABLE YES    setenv REZ_OBJECTS_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/ResourceManagerResources/Objects    setenv REZ_SEARCH_PATHS "\"/Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug\" "    setenv RUN_CLANG_STATIC_ANALYZER NO    setenv SCAN_ALL_SOURCE_FILES_FOR_INCLUDES NO    setenv SCRIPT_INPUT_FILE_COUNT 0    setenv SCRIPT_OUTPUT_FILE_COUNT 0    setenv SDKROOT /Developer/SDKs/MacOSX10.5.sdk    setenv SDK_DIR /Developer/SDKs/MacOSX10.5.sdk    setenv SDK_NAME macosx10.5    setenv SED /usr/bin/sed    setenv SEPARATE_STRIP NO    setenv SEPARATE_SYMBOL_EDIT NO    setenv SET_DIR_MODE_OWNER_GROUP YES    setenv SET_FILE_MODE_OWNER_GROUP NO    setenv SHARED_DERIVED_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug/DerivedSources    setenv SHARED_PRECOMPS_DIR /var/folders/3T/3Txt-xLGH9i68K+MHyX7OE+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders    setenv SKIP_INSTALL NO    setenv SOURCE_ROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv SRCROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck    setenv STANDARD_C_PLUS_PLUS_LIBRARY_TYPE dynamic    setenv STRINGS_FILE_OUTPUT_ENCODING UTF-16    setenv STRIP_INSTALLED_PRODUCT YES    setenv STRIP_STYLE all    setenv SYMBOL_REPOSITORY_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/SymbolRepositories    setenv SYMROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build    setenv SYSTEM_ADMIN_APPS_DIR /Applications/Utilities    setenv SYSTEM_APPS_DIR /Applications    setenv SYSTEM_CORE_SERVICES_DIR /System/Library/CoreServices    setenv SYSTEM_DEMOS_DIR /Applications/Extras    setenv SYSTEM_DEVELOPER_APPS_DIR /Developer/Applications    setenv SYSTEM_DEVELOPER_BIN_DIR /Developer/usr/bin    setenv SYSTEM_DEVELOPER_DEMOS_DIR "/Developer/Applications/Utilities/Built Examples"    setenv SYSTEM_DEVELOPER_DIR /Developer    setenv SYSTEM_DEVELOPER_DOC_DIR "/Developer/ADC Reference Library"    setenv SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR "/Developer/Applications/Graphics Tools"    setenv SYSTEM_DEVELOPER_JAVA_TOOLS_DIR "/Developer/Applications/Java Tools"    setenv SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR "/Developer/Applications/Performance Tools"    setenv SYSTEM_DEVELOPER_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes"    setenv SYSTEM_DEVELOPER_TOOLS /Developer/Tools    setenv SYSTEM_DEVELOPER_TOOLS_DOC_DIR "/Developer/ADC Reference Library/documentation/DeveloperTools"    setenv SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes/DeveloperTools"    setenv SYSTEM_DEVELOPER_USR_DIR /Developer/usr    setenv SYSTEM_DEVELOPER_UTILITIES_DIR /Developer/Applications/Utilities    setenv SYSTEM_DOCUMENTATION_DIR /Library/Documentation    setenv SYSTEM_LIBRARY_DIR /System/Library    setenv TARGETNAME DeviceCheck    setenv TARGET_BUILD_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/Debug    setenv TARGET_NAME DeviceCheck    setenv TARGET_TEMP_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build    setenv TEMP_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build    setenv TEMP_FILES_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build    setenv TEMP_FILE_DIR /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build    setenv TEMP_ROOT /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build    setenv UID 501    setenv UNSTRIPPED_PRODUCT NO    setenv USER johan    setenv USER_APPS_DIR /Users/johan/Applications    setenv USER_LIBRARY_DIR /Users/johan/Library    setenv USE_DYNAMIC_NO_PIC YES    setenv USE_HEADERMAP YES    setenv USE_HEADER_SYMLINKS NO    setenv VALIDATE_PRODUCT NO    setenv VALID_ARCHS "i386 ppc ppc64 ppc7400 ppc970 x86_64"    setenv VERBOSE_PBXCP NO    setenv VERSION_INFO_BUILDER johan    setenv VERSION_INFO_FILE DeviceCheck_vers.c    setenv VERSION_INFO_STRING "\"@(#)PROGRAM:DeviceCheck  PROJECT:DeviceCheck-\""    setenv XCODE_APP_SUPPORT_DIR /Developer/Library/Xcode    setenv XCODE_VERSION_ACTUAL 0322    setenv XCODE_VERSION_MAJOR 0300    setenv XCODE_VERSION_MINOR 0320    setenv YACC /Developer/usr/bin/yacc    /bin/sh -c /Users/johan/Documents/workspace/goio-jna/GoIO_SDK/src/GoIO_DeviceCheck/MacOSX/DeviceCheck/build/DeviceCheck.build/Debug/DeviceCheck.build/Script-C4D189710FBB81B100C13778.sh0#
+

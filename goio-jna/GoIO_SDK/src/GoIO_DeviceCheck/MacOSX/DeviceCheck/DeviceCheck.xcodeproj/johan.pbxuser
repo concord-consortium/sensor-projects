@@ -64,26 +64,6 @@
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	045B67FF11BFD7B800C905C4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
-		name = "GoIO_DeviceCheck.cpp: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 630;
-		vrLoc = 397;
-	};
-	045B680011BFD7B800C905C4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
-		name = "GoIO_DeviceCheck.cpp: 32";
-		rLen = 0;
-		rLoc = 899;
-		rType = 0;
-		vrLen = 806;
-		vrLoc = 564;
-	};
 	04922CB811BFDB7700A4AFDB /* GoIO_DeviceCheck.cpp:110 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
@@ -120,6 +100,40 @@
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
+	04922CD011BFE60F00A4AFDB /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
+	};
+	04922CFA11C3286500A4AFDB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
+		name = "GoIO_DeviceCheck.cpp: 43";
+		rLen = 0;
+		rLoc = 1250;
+		rType = 0;
+		vrLen = 906;
+		vrLoc = 685;
+	};
+	04922CFB11C3286500A4AFDB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
+		name = "GoIO_DeviceCheck.cpp: 73";
+		rLen = 124;
+		rLoc = 2295;
+		rType = 0;
+		vrLen = 1342;
+		vrLoc = 1301;
+	};
+	04922D0011C3286500A4AFDB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */;
+		name = "GoIO_DeviceCheck.cpp: 47";
+		rLen = 5;
+		rLoc = 1302;
+		rType = 0;
+		vrLen = 1213;
+		vrLoc = 0;
+	};
 	08FB7793FE84155DC02AAC07 /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 045B67E911BFD5D700C905C4 /* DeviceCheck */;
@@ -134,12 +148,36 @@
 			045B67E911BFD5D700C905C4 /* DeviceCheck */,
 		);
 		perUserDictionary = {
+			"PBXConfiguration.PBXBreakpointsDataSource.v1:1CA1AED706398EBD00589147" = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBreakpointsDataSource_BreakpointID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					20,
+					198,
+					20,
+					99,
+					99,
+					29,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBreakpointsDataSource_ActionID,
+					PBXBreakpointsDataSource_TypeID,
+					PBXBreakpointsDataSource_BreakpointID,
+					PBXBreakpointsDataSource_UseID,
+					PBXBreakpointsDataSource_LocationID,
+					PBXBreakpointsDataSource_ConditionID,
+					PBXBreakpointsDataSource_IgnoreCountID,
+					PBXBreakpointsDataSource_ContinueID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					315,
+					1130,
 					20,
 					48,
 					43,
@@ -160,8 +198,10 @@
 			PBXWorkspaceStateSaveDate = 297786020;
 		};
 		perUserProjectItems = {
-			045B67FF11BFD7B800C905C4 = 045B67FF11BFD7B800C905C4 /* PBXTextBookmark */;
-			045B680011BFD7B800C905C4 = 045B680011BFD7B800C905C4 /* PBXTextBookmark */;
+			04922CD011BFE60F00A4AFDB /* PBXBookmark */ = 04922CD011BFE60F00A4AFDB /* PBXBookmark */;
+			04922CFA11C3286500A4AFDB /* PBXTextBookmark */ = 04922CFA11C3286500A4AFDB /* PBXTextBookmark */;
+			04922CFB11C3286500A4AFDB /* PBXTextBookmark */ = 04922CFB11C3286500A4AFDB /* PBXTextBookmark */;
+			04922D0011C3286500A4AFDB /* PBXTextBookmark */ = 04922D0011C3286500A4AFDB /* PBXTextBookmark */;
 		};
 		sourceControlManager = 045B67F311BFD5F600C905C4 /* Source Control */;
 		userBuildSettings = {
@@ -175,9 +215,18 @@
 	};
 	C4B345580FB35F5B008D15F9 /* GoIO_DeviceCheck.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {859, 2275}}";
-			sepNavSelRange = "{899, 0}";
-			sepNavVisRange = "{562, 898}";
+			sepNavIntBoundsRect = "{{0, 0}, {1308, 2158}}";
+			sepNavSelRange = "{2295, 124}";
+			sepNavVisRange = "{1301, 1342}";
+			sepNavWindowFrame = "{{15, 75}, {956, 698}}";
+		};
+	};
+	C4B345660FB35FCF008D15F9 /* GoIO_DLL_interface.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 12454}}";
+			sepNavSelRange = "{1467, 0}";
+			sepNavVisRange = "{891, 1225}";
+			sepNavWindowFrame = "{{113, 243}, {956, 698}}";
 		};
 	};
 }

@@ -1,8 +1,10 @@
 /*
- * TBD: Write proper header comment (this)
- * Add exceptions
- * Formatting: Move protected functions, public functions to own group
- * Comment
+ * TBD: 
+ * 1) Write proper header comment (this)
+ * 2) Add exceptions
+ * 3) Formatting: Move protected functions, public functions to own group
+ * 4) Comment
+ * 5) Add vendor & type to GoIOInterface
  */
 
 
@@ -144,6 +146,32 @@ public class GoIOInterface
 	}
 	
 	
+	public boolean sensorSendCmd(
+			GoIOSensor goArg,	
+			byte cmd,		
+			Pointer pParams,			
+			int nParamBytes,
+			Pointer pRespBuf,			
+			int []pnRespBytes,
+			int timeoutMs)	
+	{
+		
+		
+		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
+				goArg.hDevice,
+				cmd,		
+				pParams,			
+				nParamBytes,
+				pRespBuf,			
+				pnRespBytes,
+				timeoutMs);
+		
+		return ret==0;
+		
+	}
+	
+	
+	
 	
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{
@@ -213,7 +241,7 @@ public class GoIOInterface
 	
 
 
-	protected boolean sensorSendCmd(
+	protected boolean REMOVE(
 			Pointer hSensor,	
 			byte cmd,		
 			Pointer pParams,			

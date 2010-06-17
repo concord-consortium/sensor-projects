@@ -15,6 +15,48 @@ import com.sun.jna.ptr.ShortByReference;
 
 public interface GoIOLibrary extends Library {
 	
+	//Some stuff from GSkipCommExt.h
+	
+	//
+	/*
+	#define SKIP_CMD_ID_GET_STATUS 0x10
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_1BYTE 0x11
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_2BYTES 0x12
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_3BYTES 0x13
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_4BYTES 0x14
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_5BYTES 0x15
+	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_6BYTES 0x16
+	#define SKIP_CMD_ID_READ_LOCAL_NV_MEM 0x17
+	#define SKIP_CMD_ID_START_MEASUREMENTS 0x18
+	#define SKIP_CMD_ID_STOP_MEASUREMENTS 0x19
+	#define SKIP_CMD_ID_INIT 0x1A
+	#define SKIP_CMD_ID_SET_MEASUREMENT_PERIOD 0x1B
+	#define SKIP_CMD_ID_GET_MEASUREMENT_PERIOD 0x1C
+	#define SKIP_CMD_ID_SET_LED_STATE 0x1D
+	#define SKIP_CMD_ID_GET_LED_STATE 0x1E
+	#define SKIP_CMD_ID_GET_SERIAL_NUMBER 0x20
+	//Commands defined above are supported by Skip, Jonah, and Cyclops, except that Cyclops does not support the serial # or the NV_MEM cmds.
+	//Skip extensions:
+	#define SKIP_CMD_ID_SET_VIN_OFFSET_DAC 0x1F
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_1BYTE 0x21
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_2BYTES 0x22
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_3BYTES 0x23
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_4BYTES 0x24
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_5BYTES 0x25
+	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_6BYTES 0x26
+	#define SKIP_CMD_ID_READ_REMOTE_NV_MEM 0x27
+	#define SKIP_CMD_ID_GET_SENSOR_ID 0x28
+	#define SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL 0x29
+	#define SKIP_CMD_ID_GET_ANALOG_INPUT_CHANNEL 0x2A
+	#define SKIP_CMD_ID_GET_VIN_OFFSET_DAC 0x2B
+	#define SKIP_CMD_ID_SPARE1 0x2C
+	#define SKIP_CMD_ID_SPARE2 0x2D
+	#define SKIP_CMD_ID_SPARE3 0x2E
+	#define SKIP_CMD_ID_SPARE4 0x2F
+	#define FIRST_SKIP_CMD_ID SKIP_CMD_ID_GET_STATUS
+	#define LAST_SKIP_CMD_ID SKIP_CMD_ID_SPARE4
+*/
+	public final static byte SKIP_CMD_ID_START_MEASUREMENTS = 0x18; 
 	
 	//Some stuff from GVernierUSB.h
 	//Constants used by the USB protocol to identify our devices:

@@ -170,8 +170,18 @@ public class GoIOInterface
 		
 	}
 	
-	
-	
+	public int sensorReadRawMeasuements(
+			GoIOSensor goArg,
+			int []pMeasurementsBuf,
+			int maxCount)
+	{
+		int ret  = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(
+					goArg.hDevice,		//[in] handle to open sensor.
+					pMeasurementsBuf,	//[out] ptr to loc to store measurements.
+					maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
+
+		return ret;	//how many were read
+	}
 	
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{

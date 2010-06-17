@@ -46,47 +46,37 @@ public class Main {
 		sweet = goIOInterface.sensorSetMeasurementPeriod(sensor,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		System.out.println("sensorSetMeasurementPeriod: "+sweet);
 		
-		byte cmd = 0;
+		//FIX
+
 		Pointer pParams = null;
 		Pointer pRespBuf =null;
 		int []pnRespBytes = null;
 		
-		goIOInterface.sensorSendCmd(sensor,
-									GoIOLibrary.SKIP_CMD_ID_START_MEASUREMENTS, 
-							 
+		sweet = goIOInterface.sensorSendCmd(sensor,
+									GoIOLibrary.SKIP_CMD_ID_START_MEASUREMENTS, 							 
 									pParams, 
 									0, //null,
 									pRespBuf, //null, 
 									pnRespBytes,
 									GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT
 									);
-/*				
 		
-		protected boolean sensorSendCmd(
-				GoIOSensor goArg,	
-				byte cmd,		
-				Pointer pParams,			
-				int nParamBytes,
-				Pointer pRespBuf,			
-				int []pnRespBytes,
-				int timeoutMs)	
-		{
-			
-			
-			int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
-					goArg.hDevice,
-					cmd,		
-					pParams,			
-					nParamBytes,
-					pRespBuf,			
-					pnRespBytes,
-					timeoutMs);
-			
-			return ret==0;
-			
+		System.out.println("sensorSendCmd: "+sweet);
+		
+		//skulk for ~a sec
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.out.println("Bad sleep");
 		}
 		
-*/		
+		int MAX_NUM_MEASUREMENTS = 100;
+		int [] pMeasurementsBuf = new int[MAX_NUM_MEASUREMENTS];
+		
+		int ret = goIOInterface.sensorReadRawMeasuements(sensor, pMeasurementsBuf, MAX_NUM_MEASUREMENTS);
+		
+		System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret);
+
 		//end
 		goIOInterface.cleanup();
 		

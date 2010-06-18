@@ -180,7 +180,7 @@ public class GoIOInterface
 					pMeasurementsBuf,	//[out] ptr to loc to store measurements.
 					maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
 
-		return ret;	//how many were read
+		return ret;	
 	}
 	
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)

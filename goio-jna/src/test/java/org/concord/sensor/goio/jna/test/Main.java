@@ -3,7 +3,7 @@ package org.concord.sensor.goio.jna.test;
 import java.io.IOException;
 
 import org.concord.sensor.goio.jna.*;
-import org.concord.sensor.goio.jna.GoIOInterface.GoIOSensor;
+//import org.concord.sensor.goio.jna.GoIOInterface.GoIOSensor;
 
 import com.sun.jna.Pointer;
 
@@ -76,7 +76,15 @@ public class Main {
 		int ret = goIOInterface.sensorReadRawMeasuements(sensor, pMeasurementsBuf, MAX_NUM_MEASUREMENTS);
 		
 		System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret);
-
+		
+		//print the array
+		int i = 0;
+		 
+		for(i=0;i<ret;i++) //array.length;i++)
+		{
+			System.out.println("> "+pMeasurementsBuf[i]);
+		}
+		
 		//end
 		goIOInterface.cleanup();
 		

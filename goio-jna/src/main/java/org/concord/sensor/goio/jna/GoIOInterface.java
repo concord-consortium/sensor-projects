@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -170,18 +171,46 @@ public class GoIOInterface
 		
 	}
 	
-	public int sensorReadRawMeasuements(
+
+	public boolean sensorStartCollectingData(
+			GoIOSensor goArg)
+	{
+		boolean ret = false;
+		
+		Pointer pParams = null;
+		Pointer pRespBuf =null;
+		int []pnRespBytes = null;
+		
+		ret = sensorSendCmd(goArg,
+									GoIOLibrary.SKIP_CMD_ID_START_MEASUREMENTS, 							 
+									pParams, 
+									0, //null,
+									pRespBuf, //null, 
+									pnRespBytes, //null
+									GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT
+									);
+
+		return ret;
+		
+	}
+	
+	
+	public int[] sensorReadRawMeasuements(
 			GoIOSensor goArg,
-			int []pMeasurementsBuf,
 			int maxCount)
 	{
-		int ret  = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(
+		int [] pMeasurementsBuf = new int[maxCount];
+		
+		int ngot  = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(
 					goArg.hDevice,		//[in] handle to open sensor.
 					pMeasurementsBuf,	//[out] ptr to loc to store measurements.
 					maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
 
-		return ret;	
+		int [] retbuf = new int [ngot];
+		retbuf = Arrays.copyOfRange(pMeasurementsBuf, 0,ngot);
+		return retbuf;	
 	}
+	
 	
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{

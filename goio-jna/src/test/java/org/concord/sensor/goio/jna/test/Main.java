@@ -46,22 +46,10 @@ public class Main {
 		sweet = goIOInterface.sensorSetMeasurementPeriod(sensor,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		System.out.println("sensorSetMeasurementPeriod: "+sweet);
 		
-		//FIX
 
-		Pointer pParams = null;
-		Pointer pRespBuf =null;
-		int []pnRespBytes = null;
+		goIOInterface.sensorStartCollectingData(sensor);
 		
-		sweet = goIOInterface.sensorSendCmd(sensor,
-									GoIOLibrary.SKIP_CMD_ID_START_MEASUREMENTS, 							 
-									pParams, 
-									0, //null,
-									pRespBuf, //null, 
-									pnRespBytes,
-									GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT
-									);
-		
-		System.out.println("sensorSendCmd: "+sweet);
+		System.out.println("sensorStartCollectingData: "+sweet);
 		
 		//skulk for ~a sec
 		try {
@@ -70,20 +58,21 @@ public class Main {
 			System.out.println("Bad sleep");
 		}
 		
+		
+		//Read from sensor:
 		int MAX_NUM_MEASUREMENTS = 100;
-		int [] pMeasurementsBuf = new int[MAX_NUM_MEASUREMENTS];
+	    int []ret = goIOInterface.sensorReadRawMeasuements(sensor,MAX_NUM_MEASUREMENTS);	
+	    
+	    System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret.length);
 		
-		int ret = goIOInterface.sensorReadRawMeasuements(sensor, pMeasurementsBuf, MAX_NUM_MEASUREMENTS);
-		
-		System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret);
-		
-		//print the array
+		//print the acquired data:
 		int i = 0;
 		 
-		for(i=0;i<ret;i++) //array.length;i++)
+		for(i=0;i<ret.length;i++)
 		{
-			System.out.println("> "+pMeasurementsBuf[i]);
+			System.out.println("> "+i+" "+ret[i]);
 		}
+		
 		
 		//end
 		goIOInterface.cleanup();

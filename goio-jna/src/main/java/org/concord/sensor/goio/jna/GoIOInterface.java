@@ -57,6 +57,8 @@ public class GoIOInterface
 		return new GoIOSensor();
 		
 	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public boolean init()
 	{
@@ -101,7 +103,6 @@ public class GoIOInterface
 	}
 		
 
-
 	public boolean isGolinkAttached() {
 
 		int numDevices = 
@@ -113,42 +114,32 @@ public class GoIOInterface
 		return numDevices>0;
 	}
 	
-	
 
-
-	
-	protected int updateDeviceListEntry(int vendor, int device_id)
-	{
-		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
-	}
-	
-	
-
-	public boolean sensorOpen(GoIOSensor goArg)
+	public boolean sensorOpen(GoIOSensor sensor)
 	{
 		
-		goArg.hDevice = goIOLibrary.GoIO_Sensor_Open(goArg.deviceName, goArg.pVendorId[0], goArg.pProductId[0], 0); //last arg 0 in all examples...		
+		sensor.hDevice = goIOLibrary.GoIO_Sensor_Open(sensor.deviceName, sensor.pVendorId[0], sensor.pProductId[0], 0); //last arg 0 in all examples...		
 	
-		return (null != goArg.hDevice);
+		return (null != sensor.hDevice);
 	}
 	
-	public boolean getDeviceName(GoIOSensor goArg)
+	public boolean getDeviceName(GoIOSensor sensor)
 	{
 		
-		return getDeviceName(goArg.deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, goArg.pVendorId, goArg.pProductId);
+		return getDeviceName(sensor.deviceName, GoIOLibrary.GOIO_MAX_SIZE_DEVICE_NAME, sensor.pVendorId, sensor.pProductId);
 
 	}
 	
-	public boolean sensorSetMeasurementPeriod(GoIOSensor goArg,double desiredPeriod, int timeoutMs)
+	public boolean sensorSetMeasurementPeriod(GoIOSensor sensor,double desiredPeriod, int timeoutMs)
 	{
-		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(goArg.hDevice,desiredPeriod,timeoutMs);	
+		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(sensor.hDevice,desiredPeriod,timeoutMs);	
 		
 		return 0 == ret;
 	}
 	
 	
 	public boolean sensorSendCmd(
-			GoIOSensor goArg,	
+			GoIOSensor sensor,	
 			byte cmd,		
 			Pointer pParams,			
 			int nParamBytes,
@@ -159,7 +150,7 @@ public class GoIOInterface
 		
 		
 		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
-				goArg.hDevice,
+				sensor.hDevice,
 				cmd,		
 				pParams,			
 				nParamBytes,
@@ -173,7 +164,7 @@ public class GoIOInterface
 	
 
 	public boolean sensorStartCollectingData(
-			GoIOSensor goArg)
+			GoIOSensor sensor)
 	{
 		boolean ret = false;
 		
@@ -181,7 +172,7 @@ public class GoIOInterface
 		Pointer pRespBuf =null;
 		int []pnRespBytes = null;
 		
-		ret = sensorSendCmd(goArg,
+		ret = sensorSendCmd(sensor,
 									GoIOLibrary.SKIP_CMD_ID_START_MEASUREMENTS, 							 
 									pParams, 
 									0, //null,
@@ -196,13 +187,13 @@ public class GoIOInterface
 	
 	
 	public int[] sensorReadRawMeasuements(
-			GoIOSensor goArg,
+			GoIOSensor sensor,
 			int maxCount)
 	{
 		int [] pMeasurementsBuf = new int[maxCount];
 		
 		int ngot  = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(
-					goArg.hDevice,		//[in] handle to open sensor.
+					sensor.hDevice,		//[in] handle to open sensor.
 					pMeasurementsBuf,	//[out] ptr to loc to store measurements.
 					maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
 
@@ -210,6 +201,10 @@ public class GoIOInterface
 		retbuf = Arrays.copyOfRange(pMeasurementsBuf, 0,ngot);
 		return retbuf;	
 	}
+	
+	
+	//End API
+	//Helper functions:
 	
 	
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
@@ -274,37 +269,17 @@ public class GoIOInterface
 		return bFoundDevice;
 	}
 	
-	
-	
-	
-	
 
-
-	protected boolean REMOVE(
-			Pointer hSensor,	
-			byte cmd,		
-			Pointer pParams,			
-			int nParamBytes,
-			Pointer pRespBuf,			
-			int []pnRespBytes,
-			int timeoutMs)	
-	{
-
-		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
-			hSensor,	
-			cmd,		
-			pParams,			
-			nParamBytes,
-			pRespBuf,			
-			pnRespBytes,
-			timeoutMs);
-		return 0 == ret;
-	}
-	
 	
 	protected Pointer sensorOpen(char []pDeviceName, int vendorId, int productId)
 	{
 		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...		
+	}
+
+	
+	protected int updateDeviceListEntry(int vendor, int device_id)
+	{
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
 	}
 	
 	//FIX: Copied from LabQuestLibrary, then modified:	

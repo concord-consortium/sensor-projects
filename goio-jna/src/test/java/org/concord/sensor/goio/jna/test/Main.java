@@ -3,9 +3,7 @@ package org.concord.sensor.goio.jna.test;
 import java.io.IOException;
 
 import org.concord.sensor.goio.jna.*;
-//import org.concord.sensor.goio.jna.GoIOInterface.GoIOSensor;
 
-import com.sun.jna.Pointer;
 
 //Test GoIO
 public class Main {

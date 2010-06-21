@@ -1,8 +1,8 @@
 /*
  * TBD: 
- * 1) Write proper header comment (this)
+ * 1) Write proper header comment
  * 2) Add exceptions
- * 3) Formatting: Move protected functions, public functions to own group
+ * 3) 
  * 4) Comment
  * 5) Add vendor & type to GoIOInterface
  */

@@ -4,7 +4,6 @@
 package org.concord.sensor.state;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataProducer;
@@ -179,7 +178,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 				return;
 			}
 			for (int i = 0; i < dataListeners.size(); i++) {
-				DataListener listener = (DataListener) dataListeners.get(i);
+				DataListener listener = dataListeners.get(i);
 				DataStreamEvent changeEvent = new DataStreamEvent(
 						DataStreamEvent.DATA_DESC_CHANGED);
 				changeEvent.setDataDescription(getDataDescription());
@@ -202,7 +201,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 				// need to transfer all the listeners from the old
 				// producer to the new one
 				for (int i = 0; i < dataListeners.size(); i++) {
-					DataListener listener = (DataListener) dataListeners.get(i);
+					DataListener listener = dataListeners.get(i);
 					producer.removeDataListener(listener);
 					newProducer.addDataListener(listener);
 				}
@@ -292,5 +291,13 @@ public class SensorDataProxy implements DataProducer, Copyable {
 		
 		return producer.getStartableInfo();
 	}
+
+    public boolean isAtEndOfStream() {
+        if (producer == null) {
+            return ! (isInInitialState() || isRunning() );
+        }
+        
+        return producer.isAtEndOfStream();
+    }
 
 }

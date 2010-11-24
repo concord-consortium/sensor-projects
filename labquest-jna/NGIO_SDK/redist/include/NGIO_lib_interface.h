@@ -2,11 +2,17 @@
 #define _NGIO_LIB_INTERFACE_H_
 
 /***************************************************************************************************************************
-	NGIO_lib_interface.h version 1.022
+	NGIO_lib_interface.h 
 
 	This file documents the 'C' interface to the NGIO library.
 
-	This library is implemented as NGIO_lib.dll on Windows and as libNGIO.dylib on the Mac.
+	This library is implemented as NGIO_lib.dll in Windows, libNGIO.dylib on the Mac, and libNGIO in Linux.
+
+	The NGIO library provides an application program with full access to the data acquisition capabilities built
+	into the LabQuest and the LabQuest Mini.
+
+	The NGIO library API is fairly broad, so knowing where to start is hard. The documentation for the 
+	NGIO_Device_Open() and the NGIO_Device_SendCmdAndGetResponse() functions are a good starting place.
 	
 ***************************************************************************************************************************/
 #ifdef TARGET_OS_LINUX
@@ -29,6 +35,8 @@
 #endif
 #endif
 
+#define NGIO_MAX_SIZE_DEVICE_NAME 220
+
 #include "NGIOSourceCmds.h"
 #include "GSensorDDSMem.h"
 #include "GVernierUSB.h"
@@ -44,7 +52,7 @@ typedef unsigned long int gtype_uint32;
 typedef int gtype_int32;
 typedef unsigned int gtype_uint32;
 #endif
-#ifdef TARGET_OS_WIN
+#ifdef OLD_MSOFT
 typedef __int64 gtype_int64;
 typedef unsigned __int64 gtype_uint64;
 #else
@@ -56,22 +64,12 @@ typedef double gtype_real64;
 typedef float gtype_real32;
 #endif
 
-
-#ifdef TARGET_OS_MAC
-	#define NGIO_MAX_SIZE_DEVICE_NAME 220
-#endif
-
-#if defined (TARGET_OS_WIN) || defined (TARGET_OS_LINUX)
-	#define NGIO_MAX_SIZE_DEVICE_NAME 220
-#endif
-
 typedef void *NGIO_LIBRARY_HANDLE;
 typedef void *NGIO_DEVICE_HANDLE;
 typedef void *NGIO_DEVICE_LIST_HANDLE;
 typedef void *NGIO_PTR;
 
 //List of known communication transport types.
-//Note that this list may grow. Call NGIO_GetNthAvailableCommTransport() to determine complete list at runtime.
 #define NGIO_COMM_TRANSPORT_USB 1
 #define NGIO_COMM_TRANSPORT_SERIAL 2
 #define NGIO_COMM_TRANSPORT_BLUETOOTH 3
@@ -79,18 +77,35 @@ typedef void *NGIO_PTR;
 #define NGIO_COMM_TRANSPORT_WIRELESS_80211_X 5
 #define NGIO_COMM_TRANSPORT_HARDWIRE_LAN 6
 
+//Note that NGIO_SearchForDevices() and NGIO_Device_Open() only support
+//NGIO_DEVTYPE_LABQUEST, NGIO_DEVTYPE_LABQUEST_FILE_SERVER, NGIO_DEVTYPE_LABQUEST_AUDIO,
+//NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR, and NGIO_DEVTYPE_LABQUEST_MINI.
 #define NGIO_DEVTYPE_LABPRO 1
 #define NGIO_DEVTYPE_GO_TEMP 2
 #define NGIO_DEVTYPE_GO_LINK 3
 #define NGIO_DEVTYPE_GO_MOTION 4
-#define NGIO_DEVTYPE_LABPRO2 5
+#define NGIO_DEVTYPE_LABQUEST 5
 #define NGIO_DEVTYPE_WDSS 6
 #define NGIO_DEVTYPE_NI_SENSORDAQ 7
-#define NGIO_DEVTYPE_LABPRO2_FILE_SERVER 8
-#define NGIO_DEVTYPE_LABPRO2_AUDIO 9
+#define NGIO_DEVTYPE_LABQUEST_FILE_SERVER 8
+#define NGIO_DEVTYPE_LABQUEST_AUDIO 9
 #define NGIO_DEVTYPE_DAISYCHAIN_TEST 10
+#define NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR 11
+#define NGIO_DEVTYPE_LABQUEST_MINI 12
 
+//We are deprecating NGIO_DEVTYPE_LABPRO2. Use NGIO_DEVTYPE_LABQUEST instead.
+#define NGIO_DEVTYPE_LABPRO2 NGIO_DEVTYPE_LABQUEST
+//We are deprecating NGIO_DEVTYPE_LABPRO2_FILE_SERVER. Use NGIO_DEVTYPE_LABQUEST_FILE_SERVER instead.
+#define NGIO_DEVTYPE_LABPRO2_FILE_SERVER NGIO_DEVTYPE_LABQUEST_FILE_SERVER
+//We are deprecating NGIO_DEVTYPE_LABPRO2_AUDIO. Use NGIO_DEVTYPE_LABQUEST_AUDIO instead.
+#define NGIO_DEVTYPE_LABPRO2_AUDIO NGIO_DEVTYPE_LABQUEST_AUDIO
+
+//We are deprecating NGIO_DEVTYPE_STANDALONE_DAQ. Use NGIO_DEVTYPE_LABQUEST_MINI instead.
+#define NGIO_DEVTYPE_STANDALONE_DAQ NGIO_DEVTYPE_LABQUEST_MINI
+
+//We are deprecating NGIO_TCPIP_PORT_LABPRO2. Use NGIO_TCPIP_PORT_LABQUEST instead.
 #define NGIO_TCPIP_PORT_LABPRO2 0x9500
+#define NGIO_TCPIP_PORT_LABQUEST 0x9500
 
 #define NGIO_TIMEOUT_MS_DEFAULT 2000
 #define NGIO_TIMEOUT_MS_READ_DDSMEMBLOCK 2000
@@ -102,10 +117,15 @@ typedef void *NGIO_PTR;
 	Purpose:	Call NGIO_Init() once before making any other NGIO function calls.
 				NGIO_Init() and NGIO_Uninit() should be called from the same thread.
 
-				In principle, several different applications should be able to use the NGIO library to access
-				separate LabQuests concurrently. This is our design goal. However, this has not been tested much yet.
+				Currently, only one application at a time may successfully communicate with LabQuests.
+				If separate apps call NGIO_Init() before calling NGIO_Uninit(), generally only the first one to 
+				invoke NGIO_Init() will find devices when it calls NGIO_SearchForDevices() and NGIO_OpenDeviceListSnapshot().
 
-	Return:		0 iff successful, else -1.
+				On Windows systems, NGIO_SearchForDevices() will not find LabQuests until about 200 milliseconds
+				after NGIO_Init() is called because of device driver issues. The NGIO_DeviceCheck sample program invokes 
+				Sleep() between NGIO_Init() and NGIO_SearchForDevices() to cope with this feature.
+
+	Return:		Handle to NGIO library if successful, else NULL.
 
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL NGIO_LIBRARY_HANDLE NGIO_Init();
@@ -120,6 +140,32 @@ NGIO_LIB_INTERFACE_DECL NGIO_LIBRARY_HANDLE NGIO_Init();
 
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Uninit(NGIO_LIBRARY_HANDLE hLib);
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Diags_SetDebugTraceThreshold()
+	
+	Purpose:	NGIO lib generates a variety of debugging messages when it runs. Each message is assigned a severity
+				when it is generated. Only messages that are assigned a priority >= the debug trace threshold are actually
+				sent to the debug output. Call NGIO_Diags_SetDebugTraceThreshold(NGIO_TRACE_SEVERITY_LOWEST) for max
+				debug output.
+				
+				On windows systems, these messages are passed to the OutputDebugString() function.
+				On Mac and Linux systems, these messages are sent to STDOUT and/or STDERR.
+
+	Return:		0 iff successful, else -1.
+
+****************************************************************************************************************************/
+#define NGIO_TRACE_SEVERITY_LOWEST 1
+#define NGIO_TRACE_SEVERITY_LOW 10
+#define NGIO_TRACE_SEVERITY_MEDIUM 50
+#define NGIO_TRACE_SEVERITY_HIGH 100
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_SetDebugTraceThreshold(
+	NGIO_LIBRARY_HANDLE hLib,
+	gtype_int32 threshold);//[in] Only trace messages marked with a severity >= threshold are actually sent to the debug output.
+
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_GetDebugTraceThreshold(
+	NGIO_LIBRARY_HANDLE hLib,
+	gtype_int32 *pThreshold);//[out]
 
 /***************************************************************************************************************************
 	Function Name: NGIO_GetDLLVersion()
@@ -149,73 +195,6 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_GetDLLVersion(
 	NGIO_LIBRARY_HANDLE hLib,	//[in] handle returned by NGIO_Init()
 	gtype_uint16 *pMajorVersion, //[out]
 	gtype_uint16 *pMinorVersion); //[out]
-
-/***************************************************************************************************************************
-	Function Name: NGIO_GetNthAvailableCommTransport()
-	
-	Purpose:	Return the N'th supported communication transport id and description string.
-				This function has been defined so that an application can access transports that are added after the app is
-				written.
-				This function is not currently implemented. Look for NGIO_COMM_TRANSPORT_... constants to see what the known
-				transports are.
-
-	Return:		0 iff successful, else -1.
-
-****************************************************************************************************************************/
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_GetNthAvailableCommTransport(
-	NGIO_LIBRARY_HANDLE hLib,	//[in] handle returned by NGIO_Init()
-	gtype_uint32 N,		//[in] index into list of supported transports.
-	gtype_uint32 *pCommTransportId,	//[out] ptr to loc to store NGIO_COMM_TRANSPORT_... id.
-	char *pDescBuf,		//[out] ptr to buffer to store transport description string.
-	gtype_uint32 bufSize);//[in] number of bytes in buffer pointed to by pDescBuf. Strlen(pBuf) < bufSize, because the string is NULL terminated.
-
-/***************************************************************************************************************************
-	Function Name: NGIO_EnableAutoDeviceDiscoveryAcrossCommTransport()
-	
-	Purpose:	Eventually, calling this function will cause the library to automatically search for new devices attached to
-				system via the specified comm transport.
-
-				This function is not implemented yet. Use NGIO_SearchForDevices() instead.
-
-	Return:		0 iff successful, else -1.
-
-****************************************************************************************************************************/
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_EnableAutoDeviceDiscoveryAcrossCommTransport(
-	NGIO_LIBRARY_HANDLE hLib,	//[in] handle returned by NGIO_Init()
-	gtype_uint32 deviceType,		//[in] NGIO_DEVTYPE_...
-	gtype_uint32 commTransportId);	//[in] NGIO_COMM_TRANSPORT_...
-
-/***************************************************************************************************************************
-	Function Name: NGIO_DisableAutoDeviceDiscoveryAcrossCommTransport()
-	
-	Purpose:	Eventually, calling this function will cause the library to stop automatically searching for new devices 
-				attached to system via the specified comm transport.
-
-				This function is not implemented yet.
-
-	Return:		0 iff successful, else -1.
-
-****************************************************************************************************************************/
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DisableAutoDeviceDiscoveryAcrossCommTransport(
-	NGIO_LIBRARY_HANDLE hLib,		//[in] handle returned by NGIO_Init()
-	gtype_uint32 deviceType,		//[in] NGIO_DEVTYPE_...
-	gtype_uint32 commTransportId);	//[in] NGIO_COMM_TRANSPORT_...
-
-/***************************************************************************************************************************
-	Function Name: NGIO_IsAutoDeviceDiscoveryEnabledAcrossCommTransport()
-	
-	Purpose:	Eventually, calling this function will indicate if the library is looking for devices on the specified comm
-				comm transport.
-
-				This function is not implemented yet.
-
-	Return:		1 if device discovery is enabled, else 0
-
-****************************************************************************************************************************/
-NGIO_LIB_INTERFACE_DECL gtype_bool NGIO_IsAutoDeviceDiscoveryEnabledAcrossCommTransport(
-	NGIO_LIBRARY_HANDLE hLib,		//[in] handle returned by NGIO_Init()
-	gtype_uint32 deviceType,		//[in] NGIO_DEVTYPE_...
-	gtype_uint32 commTransportId);	//[in] NGIO_COMM_TRANSPORT_...
 
 /***************************************************************************************************************************
 	Function Name: NGIO_SearchForDevices()
@@ -313,8 +292,8 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DeviceListSnapshot_GetNthEntry(
 				parent, then return NULL.
 
 				Some devices are regarded as children of other devices. When a LabQuest device is opened on a desktop
-				computer, the audio and FTL devices associated with the LabQuest are regarded as children of the LabQuest
-				device.
+				computer, the audio, FTL, and function generator devices associated with the LabQuest are regarded as 
+				children of the LabQuest device.
 
 	Return:		0 iff successful, else -1.
 
@@ -335,33 +314,6 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_GetDeviceTypeFromDeviceName(
 	const char *pDeviceName,	//[in] NULL terminated string that uniquely identifies the device. See NGIO_GetNthAvailableDeviceName().
 	gtype_uint32 *pDeviceType);	//[out] loc to store NGIO_DEVTYPE_...
 
-typedef gtype_int32 (*P_NGIO_DEVICELISTNOTIFICATION_CALLBACK)
-(
-	NGIO_PTR pNotification,
-	gtype_uint32 numBytes,
-	gtype_uint32 deviceListSignature,
-	NGIO_PTR pContextInfo
-);
-
-/***************************************************************************************************************************
-	Function Name: NGIO_RegisterCallbackForDeviceListNotifications()
-	
-	Purpose:	Register a callback function which we be called when a device list changes.
-				Eventually, device lists will change when NGIO_EnableAutoDeviceDiscoveryAcrossCommTransport() is implemented.
-				NGIO_RegisterCallbackForDeviceListNotifications() is not implemented yet.
-
-	Return:		0 iff successful, else -1.
-
-****************************************************************************************************************************/
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_RegisterCallbackForDeviceListNotifications(
-	NGIO_LIBRARY_HANDLE hLib,
-	P_NGIO_DEVICELISTNOTIFICATION_CALLBACK notificationCallbackFunc,
-	NGIO_PTR pContextInfo);
-
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DeregisterCallbackForDeviceListNotifications(
-	NGIO_LIBRARY_HANDLE hLib,
-	P_NGIO_DEVICELISTNOTIFICATION_CALLBACK notificationCallbackFunc);
-
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_Open()
 	
@@ -369,32 +321,34 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DeregisterCallbackForDeviceListNotifica
 				Note that you must almost always call NGIO_Device_AcquireExclusiveOwnership() immediately after calling
 				NGIO_Device_Open(deviceName) if deviceName corresponds to a basic LabQuest device.
 
-				NGIO_Device_Open() currently opens devices of the types NGIO_DEVTYPE_LABPRO2, 
-				NGIO_DEVTYPE_LABPRO2_FILE_SERVER, and NGIO_DEVTYPE_LABPRO2_AUDIO.
-				NGIO_DEVTYPE_LABPRO2 refers to the basic LabQuest device. Standard Vernier analog and digital sensors
-				are accessed via the NGIO_DEVTYPE_LABPRO2 device. The NGIO_DEVTYPE_LABPRO2_AUDIO device is used to access
-				the audio devices(internal and external) that are built in to the LabQuest. The NGIO_DEVTYPE_LABPRO2_FILE_SERVER
-				device is a special device that provides the caller with access to the Linux file system that is internal to
-				the LabQuest.
+				NGIO_Device_Open() currently opens devices of the types NGIO_DEVTYPE_LABQUEST, NGIO_DEVTYPE_LABQUEST_MINI,
+				NGIO_DEVTYPE_LABQUEST_FILE_SERVER, NGIO_DEVTYPE_LABQUEST_AUDIO, and NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR.
+				NGIO_DEVTYPE_LABQUEST refers to the basic LabQuest device. Standard Vernier analog and digital sensors
+				are accessed via the NGIO_DEVTYPE_LABQUEST and NGIO_DEVTYPE_LABQUEST_MINI devices. 
+				The NGIO_DEVTYPE_LABQUEST_AUDIO device is used to access the audio devices(internal and external) that are 
+				built in to the LabQuest. The NGIO_DEVTYPE_LABQUEST_FILE_SERVER device is a special device that provides the 
+				caller with access to the Linux file system that is internal to the LabQuest. 
+				The NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR device allows the caller to drive the LabQuest audio output.
 
-				For each open NGIO_DEVTYPE_LABPRO2 device, there is a corresponding NGIO_DEVTYPE_LABPRO2_FILE_SERVER and
-				NGIO_DEVTYPE_LABPRO2_AUDIO device that is a logical 'child' of the NGIO_DEVTYPE_LABPRO2 device.
-				NGIO_SearchForDevices() will not find any NGIO_DEVTYPE_LABPRO2_FILE_SERVER or NGIO_DEVTYPE_LABPRO2_AUDIO
-				devices until at least one parent NGIO_DEVTYPE_LABPRO2 device has been opened.
+				For each open NGIO_DEVTYPE_LABQUEST device, there is a corresponding NGIO_DEVTYPE_LABQUEST_FILE_SERVER,
+				NGIO_DEVTYPE_LABQUEST_AUDIO, and a NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR device that is a logical 'child' of 
+				the NGIO_DEVTYPE_LABQUEST device. NGIO_SearchForDevices() will not find any of these child devices until at 
+				least one parent NGIO_DEVTYPE_LABQUEST device has been opened.
 
 				Each device type has a command protocol that is unique to that device type. The command protocol used by
-				NGIO_DEVTYPE_LABPRO2_AUDIO devices is a subset of the protocol used by NGIO_DEVTYPE_LABPRO2 devices. This
+				NGIO_DEVTYPE_LABQUEST_AUDIO devices is a subset of the protocol used by NGIO_DEVTYPE_LABQUEST and NGIO_DEVTYPE_LABQUEST_MINI devices. This
 				protocol is documented in NGIOSourceCmds.h .
 
-				The command protocol used by NGIO_DEVTYPE_LABPRO2_FILE_SERVER devices is documented in NGIOFTLSourceCmds.h 
+				The command protocol used by NGIO_DEVTYPE_LABQUEST_FILE_SERVER devices is documented in NGIOFTLSourceCmds.h 
+				The command protocol used by NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR devices is documented in NGIOFGenSourceCmds.h 
 				
-				The following discussion generally only applies to NGIO_DEVTYPE_LABPRO2 devices. The behaviour of the 
-				NGIO_DEVTYPE_LABPRO2_AUDIO devices types is similar, but not always identical. NGIO_DEVTYPE_LABPRO2_FILE_SERVER
-				devices are very different. The one thing that all device types share is support for 
-				NGIO_Device_SendCmdAndGetResponse().
+				The following discussion generally only applies to NGIO_DEVTYPE_LABQUEST and NGIO_DEVTYPE_LABQUEST_MINI devices. 
+				The behaviour of the NGIO_DEVTYPE_LABQUEST_AUDIO devices types is similar, but not always identical. 
+				NGIO_DEVTYPE_LABQUEST_FILE_SERVER and NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR devices are very different. The one 
+				thing that all device types share is support for NGIO_Device_SendCmdAndGetResponse().
 
 				After establishing basic communication, NGIO_Device_Open() sends a NGIO_CMD_ID_INIT command to the 
-				NGIO_DEVTYPE_LABPRO2 device. In response to NGIO_CMD_ID_INIT, all measurement buffers are cleared and each 
+				NGIO_DEVTYPE_LABQUEST[_MINI] device. In response to NGIO_CMD_ID_INIT, all measurement buffers are cleared and each 
 				channel is configured with default settings. For NGIO_CHANNEL_ID_ANALOG1 .. NGIO_CHANNEL_ID_ANALOG4,
 				sampling mode defaults to NGIO_SAMPLING_MODE_PERIODIC_LEVEL_SNAPSHOT, and analog input defaults to 
 				NGIO_ANALOG_INPUT_5V_BUILTIN_12BIT_ADC. For NGIO_CHANNEL_ID_DIGITAL1 and NGIO_CHANNEL_ID_DIGITAL2,
@@ -411,9 +365,12 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DeregisterCallbackForDeviceListNotifica
 					-	Send a NGIO_CMD_ID_GET_SENSOR_ID command to identify type of sensor connected on a specified channel.
 					-	If the sensor is smart(id >= kSensorIdNumber_FirstSmartSensor) then call 
 							NGIO_Device_DDSMem_ReadRecord() to read the DDS memory from the sensor.
+							Note that NGIO_Device_DDSMem_ReadRecord() reads in the calibration coefficients used by
+							NGIO_Device_CalibrateData(), so NGIO_Device_CalibrateData() will not work correctly unless
+							NGIO_Device_DDSMem_ReadRecord() succeeds.
 					-	If the channel is analog, then set the analog input to NGIO_ANALOG_INPUT_5V_BUILTIN_12BIT_ADC
 							for most sensors, and set analog input to NGIO_ANALOG_INPUT_PM10V_BUILTIN_12BIT_ADC for
-							=/- 10 volt sensors. 
+							+/- 10 volt sensors. 
 							Note that analog sensors default to NGIO_ANALOG_INPUT_5V_BUILTIN_12BIT_ADC and
 							NGIO_SAMPLING_MODE_PERIODIC_LEVEL_SNAPSHOT.
 					-	If the channel is digital, then set the sampling mode to a mode appropriate for the connected sensor.
@@ -439,12 +396,12 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_DeregisterCallbackForDeviceListNotifica
 				the owning thread must call NGIO_Device_Unlock(), and then the new thread should call NGIO_Device_Lock().
 
 				We currently have some additional restrictions on what threads can open and close a LabQuest device.
-				A LabQuest(NGIO_DEVTYPE_LABPRO2) device must be closed on the same thread that initially opened it.
-				Furthermore, the audio and file server child devices of that LabQuest must be opened and closed on the same 
-				thread that initially opened the LabQuest. Once opened, you can transfer ownership of the devices to other 
-				threads and operate on the devices. However, before you close the devices, you must transfer ownership back to 
-				the single thread that the LabQuest and all its children were opened on. Eventually, we plan to relax these
-				restrictions, but for now, that is the way things are.
+				A device must be closed on the same thread that initially opened it.
+				Furthermore, the audio, function generator, and file server child devices of a LabQuest must be opened 
+				and closed on the same thread that initially opened the LabQuest. Once opened, you can transfer ownership of 
+				the devices to other threads and operate on the devices. However, before you close the devices, you must 
+				transfer ownership back to the single thread that the LabQuest and all its children were opened on. 
+				Eventually, we plan to relax these restrictions, but for now, that is the way things are.
   
 	Return:		handle to open device if successful, else NULL.
 
@@ -469,12 +426,12 @@ NGIO_LIB_INTERFACE_DECL NGIO_DEVICE_HANDLE NGIO_Device_Open(
 				the owning thread must call NGIO_Device_Unlock(), and then the new thread should call NGIO_Device_Lock().
 
 				We currently have some additional restrictions on what threads can open and close a LabQuest device.
-				A LabQuest(NGIO_DEVTYPE_LABPRO2) device must be closed on the same thread that initially opened it.
-				Furthermore, the audio and file server child devices of that LabQuest must be opened and closed on the same 
-				thread that initially opened the LabQuest. Once opened, you can transfer ownership of the devices to other 
-				threads and operate on the devices. However, before you close the devices, you must transfer ownership back to 
-				the single thread that the LabQuest and all its children were opened on. Eventually, we plan to relax these
-				restrictions, but for now, that is the way things are.
+				A LabQuest(NGIO_DEVTYPE_LABQUEST) device must be closed on the same thread that initially opened it.
+				Furthermore, the audio, function generator, and file server child devices of that LabQuest must be opened 
+				and closed on the same thread that initially opened the LabQuest. Once opened, you can transfer ownership of 
+				the devices to other threads and operate on the devices. However, before you close the devices, you must 
+				transfer ownership back to the single thread that the LabQuest and all its children were opened on. 
+				Eventually, we plan to relax these restrictions, but for now, that is the way things are.
 
 	Return:		0 if successful, else -1.
 
@@ -524,9 +481,6 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_AcquireExclusiveOwnership(
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_IsDeviceExclusivelyOurs(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	gtype_bool *pExclusiveOwnershipFlag);	//[out] ptr to location to store flag.
-
-//We will also define another API that allows the user to register a callback function that is invoked when sensors are
-//plugged and unplugged. spam
 
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_GetOpenDeviceName()
@@ -610,10 +564,11 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_ClearIO(
 	Purpose:	Send a command to the specified device hardware and wait for a response. 
 
 				Each device type has a command protocol that is unique to that device type. The command protocol used by
-				NGIO_DEVTYPE_LABPRO2_AUDIO devices is a subset of the protocol used by NGIO_DEVTYPE_LABPRO2 devices. This
+				NGIO_DEVTYPE_LABQUEST_AUDIO devices is a subset of the protocol used by NGIO_DEVTYPE_LABQUEST devices. This
 				protocol is documented in NGIOSourceCmds.h .
 
-				The command protocol used by NGIO_DEVTYPE_LABPRO2_FILE_SERVER devices is documented in NGIOFTLSourceCmds.h 
+				The command protocol used by NGIO_DEVTYPE_LABQUEST_FILE_SERVER devices is documented in NGIOFTLSourceCmds.h 
+				The command protocol used by NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR devices is documented in NGIOFGenSourceCmds.h 
 
 				Note that NGIO_Device_SendCmdAndGetResponse() will fail if you send a NGIO_CMD_ID_START_MEASUREMENTS
 				command while NGIO_Device_GetNumMeasurementsAvailable() says measurements are available. 
@@ -621,6 +576,23 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_ClearIO(
 				So...if you are restarting measurements, you should clear any old measurements in the NGIO Measurement 
 				Buffer first by reading in the measurements until the Buffer is empty, or you should call 
 				NGIO_Device_ClearIO().
+
+				Every command supported by NGIO_Device_SendCmdAndGetResponse() has an associated response. If no response
+				specific to a command is defined, then the format of the response is NGIODefaultCmdResponse. Some commands
+				have associated parameter blocks defined for them. If the caller is not concerned about the contents
+				of the response for a command, he may pass in NULL for pRespBuf. This is reasonable because the return
+				code for NGIO_Device_SendCmdAndGetResponse() will indicate success or failure. Even if NULL is
+				passed in for pRespBuf, NGIO_Device_SendCmdAndGetResponse() always waits for a response to come back
+				from the device. If no response is received after timeoutMs milliseconds, then NGIO_Device_SendCmdAndGetResponse()
+				will return with and error code. 
+	
+				If NGIO_Device_SendCmdAndGetResponse() returns -1 and (1 == *pnRespBytes), then *pRespBuf contains
+				NGIODefaultCmdResponse, even if a different response structure is defined for the command.
+				The NGIODefaultCmdResponse structure contains only a single status byte field, which usually contains
+				a NGIO_STATUS_ERROR_... value if the NGIO_DEVTYPE_LABQUEST protocol is in use. Other device protocols
+				(eg. NGIO_DEVTYPE_LABQUEST_FILE_SERVER) may put different error codes in the status field. Additional
+				information about a NGIO_Device_SendCmdAndGetResponse() error may be obtained by calling 
+				NGIO_Device_GetLastCmdResponseStatus().
 	
 	Return:		0 if successful, else -1.
 
@@ -631,10 +603,32 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_SendCmdAndGetResponse(
 	NGIO_PTR pParams,			//[in] ptr to cmd specific parameter block, may be NULL. See GSkipCommExt.h.
 	gtype_uint32 nParamBytes,	//[in] # of bytes in (*pParams).
 	NGIO_PTR pRespBuf,			//[out] ptr to destination buffer, may be NULL.
-	gtype_uint32 *pnRespBytes,	//[in, out] ptr to size of of pRespBuf buffer on input, size of response on output, may be NULL if pRespBuf is NULL.
+	gtype_uint32 *pnRespBytes,	//[in, out] ptr to size of of pRespBuf buffer on input, size of response on output, should be NULL if pRespBuf is NULL.
 	gtype_uint32 timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. Most devices should reply to almost all the 
 							//currently defined commands within NGIO_TIMEOUT_MS_DEFAULT milliseconds. In fact, typical response
 							//times are less than 50 milliseconds. See NGIO_TIMEOUT_MS_* definitions.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_GetLastCmdResponseStatus()
+	
+	Purpose:	Get error information for the device. 
+	
+				In principle, any command sent to the device can result in an error. 
+				If NGIO_Device_SendCmdAndGetResponse() ever fails and returns a non-zero return code,
+				you can gather additional info about what went wrong by calling NGIO_Device_GetLastCmdResponseStatus().
+
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetLastCmdResponseStatus(
+	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
+	unsigned char *pLastCmd,	//[out] last cmd sent to the device
+	unsigned char *pLastCmdStatus,//[out] status of last command sent to the device.
+								  //If command ran successfully and the device reported good status, then this will be be NGIO_STATUS_SUCCESS(aka 0).
+								  //If no response has been reported back from the device, then this will be NGIO_STATUS_ERROR_COMMUNICATION.
+								  //If the device reported a failure, then this will be a cmd specific error, eg NGIO_STATUS_ERROR...
+	unsigned char *pLastCmdWithErrorRespSentOvertheWire, //[out] last cmd sent that caused the device to report back an error.
+	unsigned char *pLastErrorSentOvertheWire);//[out] last error that came back from the device 'over the wire'.
 
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_SendCmd()
@@ -664,15 +658,22 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_SendCmd(
 				NGIO_Device_SendCmdAndGetResponse() instead. After calling NGIO_Device_SendCmd(), you must call
 				NGIO_Device_GetNextResponse() before sending any more commands to the device.
 
+				If NGIO_Device_GetNextResponse() returns 0 and (1 = *pErrRespFlag) and (1 == *pnRespBytes), 
+				then *pRespBuf contains NGIODefaultCmdResponse, even if a different response structure is defined for the 
+				command.
+				The NGIODefaultCmdResponse structure contains only a single status byte field, which usually contains
+				a NGIO_STATUS_ERROR_... value if the NGIO_DEVTYPE_LABQUEST protocol is in use. Other device protocols
+				(eg. NGIO_DEVTYPE_LABQUEST_FILE_SERVER) may put different error codes in the status field.
+
 	Return:		0 if successful, else -1.
 
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNextResponse(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	NGIO_PTR pRespBuf,			//[out] ptr to destination buffer, may be NULL.
-	gtype_uint32 *pnRespBytes,  //[in, out] size of of dest buffer on input, size of response on output, may be NULL if pRespBuf is NULL.
-	unsigned char *pCmd,		//[out] identifies which command this response is for. Must NOT be NULL!
-	gtype_bool *pErrRespFlag,	//[out] flag indicating that the response contains error info. Must NOT be NULL!
+	gtype_uint32 *pnRespBytes,  //[in, out] size of of dest buffer on input, size of response on output, should be NULL if pRespBuf is NULL.
+	unsigned char *pCmd,		//[out] identifies which command this response is for. Ptr must NOT be NULL!
+	gtype_bool *pErrRespFlag,	//[out] flag indicating that the response contains error info. Ptr must NOT be NULL!
 	gtype_uint32 *pSignature,	//[in] if not NULL, then compare command signature emebedded in response blob with *pSignature.
 	gtype_uint32 nTimeoutMs);	//[in] # of milliseconds to wait before giving up.
 
@@ -681,6 +682,10 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNextResponse(
 	
 	Purpose:	The measurement period for devices is specified in discrete 'ticks', so the actual time between 
 				measurements is an integer multiple of the tick time.
+
+				For a given device, the 'tick' used by every channel must be the same, so the channel argument to
+				this function is ignored. We are not removing the channel argument because we do not want to break
+				backwards compatibility.
 	
 	Return:		If hDevice is not valid, then this routine returns -1.0, else the return value = the length of time
 				in seconds between ticks.
@@ -688,7 +693,7 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNextResponse(
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_real64 NGIO_Device_GetMeasurementTick(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	signed char channel);	//[in] -1 => all channels.
+	signed char channel);	//ignored
 	
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_GetMinimumMeasurementPeriod()
@@ -755,7 +760,7 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_SetMeasurementPeriod(
 	gtype_uint32 timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_DEFAULT is recommended.
 
 /***************************************************************************************************************************
-	Function Name: GoIO_Sensor_GetMeasurementPeriod()
+	Function Name: NGIO_Device_GetMeasurementPeriod()
 
 	Purpose:	This routine sends NGIO_CMD_ID_GET_MEASUREMENT_PERIOD to the device to get the measurement period for
 				the specified channel and then converts the result to seconds.
@@ -767,16 +772,6 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetMeasurementPeriod(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	signed char channel,		//[in] -1 => return 'base' period, else return period for specified channel.
 	gtype_real64 *pPeriod,		//[out] ptr to loc to store period in seconds.
-	gtype_uint32 timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_DEFAULT is recommended.
-
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_SetCurrentTime(		//This function is not implemented.
-	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	gtype_real64 currentTime,	//[in] current time in seconds.
-	gtype_uint32 timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_DEFAULT is recommended.
-
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetCurrentTime(		//This function is not implemented.
-	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	gtype_real64 *pCurrentTime,	//[out] ptr to loc to store current time in seconds
 	gtype_uint32 timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_DEFAULT is recommended.
 
 /***************************************************************************************************************************
@@ -844,15 +839,12 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNumMeasurementsAvailable(
 				two measure two different channels at the same time, the measurements occur several microseconds apart,
 				but we generally report these measurements to have occurred at the same time.
 
-				NGIO_Device_ReadRawMeasurements() provides a pTimeStamps parameter so that the caller can obtain
-				timestamps for the measurements. Timestamps have a 1 'tick' resolution, which is 1 microsecond for the 
-				LabQuest. However, the pTimeStamps paramater is only supported if the current sampling mode is 
-				NGIO_SAMPLING_MODE_APERIODIC_EDGE_DETECT or NGIO_SAMPLING_MODE_PERIODIC_MOTION_DETECT.
-				The pTimeStamps parameter must be NULL for the other sampling modes, or the routine will fail.
-				When pTimeStamps is not supported, then the sampling mode is periodic, and we place the burden of
-				creating the timestamps on the caller. These timestamps are easily reconstructed according to the logic
-				described in the previous paragraph. Eventually, we plan to have NGIO_Device_ReadRawMeasurements()
-				always support the pTimeStamps parameter.
+				The timestamps array reports when measurements are taken. Timestamps have a 1 'tick' resolution, which 
+				is 1 microsecond for the LabQuest. Timestamps are reported for all device types on all channels with one 
+				exception: NGIO_DEVTYPE_LABQUEST_AUDIO.
+				Because the measurement period for the LabQuest audio device is generally not an integer multiple of the
+				microsecond tick, timestamps are not reported for this device. Instead, the caller must recreate the
+				audio timestamps by incrementing the gtype_real64 period reported by NGIO_Device_GetMeasurementPeriod().
 
 				NGIO_SAMPLING_MODE_PERIODIC_LEVEL_SNAPSHOT:
 					This sampling mode is used with NGIO_CHANNEL_ID_ANALOG1 thru NGIO_CHANNEL_ID_ANALOG4.
@@ -864,13 +856,11 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNumMeasurementsAvailable(
 				NGIO_SAMPLING_MODE_APERIODIC_EDGE_DETECT:
 					Used with photogates and drop counters in NGIO_CHANNEL_ID_DIGITAL1 and NGIO_CHANNEL_ID_DIGITAL2.
 					Values returned are NGIO_MEAS_PHOTOGATE_BLOCKED or NGIO_MEAS_PHOTOGATE_UNBLOCKED.
-					Timestamps are returned with measurements. 
 
 				NGIO_SAMPLING_MODE_PERIODIC_MOTION_DETECT:
 					Used with motion detectors in NGIO_CHANNEL_ID_DIGITAL1 and NGIO_CHANNEL_ID_DIGITAL2.
 					Values returned are NGIO_MEAS_MOTION_DETECTOR_PING, NGIO_MEAS_MOTION_DETECTOR_ECHO,
 					or NGIO_MEAS_MOTION_DETECTOR_FALSE_ECHO. A false echo is reported if no echo is detected after a ping.
-					Timestamps are returned with measurements.
 					Distance is calculated = 0.5*(echo time - previous ping time)*(speed of sound) since the delta
 					time is how long the ping audio pulse takes to travel from the detector to the object and then back
 					to the detector.
@@ -942,6 +932,12 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_ConvertToVoltage(
 								//NGIO_Device_ReadRawMeasurements().
 	gtype_int32 probeType);		//[in] See declaration of EProbeType
 
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_ConvertFromVoltage(
+	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
+	signed char channel,		//[in]
+	gtype_real32 volts,	//[in] measurement obtained from NGIO_Device_ConvertToVoltage().
+	gtype_int32 probeType);		//[in] See declaration of EProbeType
+
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_CalibrateData()
 
@@ -952,12 +948,16 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_ConvertToVoltage(
 
 				NGIO_Device_CalibrateData() gets the coefficients from NGIO_Device_DDSMem_GetActiveCalPage(),
 				and NGIO_Device_DDSMem_GetCalPage(). NGIO_Device_DDSMem_GetCalibrationEquation() must return 
-				kEquationType_Linear for NGIO_Device_CalibrateData() to work.
+				kEquationType_Linear for NGIO_Device_CalibrateData() to work. And the application program must
+				have successfully called NGIO_Device_DDSMem_ReadRecord() beforehand for this to work. If the
+				sensor plugged into the channel is not 'smart', then NGIO_Device_DDSMem_ReadRecord() fails.
 
-				If NGIO_Device_DDSMem_GetCalibrationEquation() does not return kEquationType_Linear,
-				then you must obtain the calibration coefficients using the NGIO_Device_DDSMem_ routines,
-				and then do the arithmetic yourself. NGIO_Device_CalibrateData() is not very efficient, 
-				so if performance is an issue, that is another reason to do the arithmetic yourself.
+				So what do you do if NGIO_Device_DDSMem_ReadRecord() fails? This is a thorny set of circumstances.
+				In this case, NGIO_Device_CalibrateData() just returns volts. The best place to gather instructions
+				for how to calibrate data from non-smart sensors is to run LoggerPro and bring up the Sensor Settings
+				pages for the sensor. The Sensor Info and Equation pages basically describe how to convert from volts
+				to sensor specific units.
+
 				See GSensorDDSMem.h .
 
 	Return:		calibrated measurement value
@@ -967,6 +967,11 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_CalibrateData(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	signed char channel,		//[in]
 	gtype_real32 volts);		//[in] voltage value obtained from NGIO_Device_ConvertToVoltage();
+
+NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_UncalibrateData(
+	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
+	signed char channel,		//[in]
+	gtype_real32 measurement);	//[in] calibrated measurement obtained from NGIO_Device_CalibrateData();
 
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_CalibrateData2()
@@ -1045,7 +1050,18 @@ NGIO_Device_DDSMem_* routines:
 
 The NGIO device object maintains a list of SensorDDSRecords of type GSensorDDSRec, one for each channel. 
 The fields in this record describe the sensor plugged into the channel.
-The NGIO_Device_DDSMem_* routines allow an application program to access the SensorDDSRecord.
+These SensorDDSRecords are allocated on the host computer when NGIO_Device_Open() is called. Initially, they
+do not contains much useful info - the name fields are blank, and the units field is set to "volts".
+After calling NGIO_Device_Open(), your application should call NGIO_Device_DDSMem_GetSensorNumber(sendQueryToHardwareflag=1).
+If the reported SensorNum >= kSensorIdNumber_FirstSmartSensor, then your application should call NGIO_Device_DDSMem_ReadRecord(),
+which copies the DDS record stored on the sensor into the record allocated in the NGIO device object on the host
+computer. The NGIO_DeviceCheck example code illustrates this.
+
+NGIO_Device_DDSMem_ReadRecord() copies data stored on the sensor hardware to the SensorDDSRecord allocated on the host computer.
+NGIO_Device_DDSMem_WriteRecord() copies data from the SensorDDSRecord allocated on the host computer to the sensor hardware.
+NGIO_Device_DDSMem_WriteRecord() must be used with extreme caution because it can render the sensor hardware inoperable.
+The other NGIO_Device_DDSMem_* routines allow an application program to access the SensorDDSRecord allocated on the host computer -
+they do not cause data to be sent to the device because they just operate on the record stored locally on the host computer.
 See GSensorDDSMem.h for the declaration of GSensorDDSRec.
 
 Sensors come in 3 basic flavors:
@@ -1054,26 +1070,16 @@ Sensors come in 3 basic flavors:
 3) Legacy sensors.
 
 Smart sensors store the entire 128 byte GSensorDDSRec record on the actual sensor hardware. This allows calibration
-data that is specific to a given sensor to be stored on the sensor. Smart sensors report an AutoId number
-in response to the NGIO_CMD_ID_GET_SENSOR_ID command that is >= kSensorIdNumber_FirstSmartSensor. 
+data that is specific to a given sensor to be stored on the sensor. Smart sensors report a SensorNum
+in response to the NGIO_CMD_ID_GET_SENSOR_ID command that is >= kSensorIdNumber_FirstSmartSensor. Note that setting
+sendQueryToHardwareflag=1 when calling NGIO_Device_DDSMem_GetSensorNumber() causes NGIO_CMD_ID_GET_SENSOR_ID to be sent to the device.
 
-If a sensor reports an AutoId >= kSensorIdNumber_FirstSmartSensor, then NGIO_Device_Open() will get the GSensorDDSRec 
-info from the sensor hardware and store in the NGIO sensor object's SensorDDSRecord. 
+AutoId capable sensors that are not smart report an SensorNum value > 0 and < kSensorIdNumber_FirstSmartSensor.
 
-Note that Go! Motion pretends to be smart: its id is > kSensorIdNumber_FirstSmartSensor, and NGIO_Device_Open() sets 
-up its GSensorDDSRec info with calibrations for meters and feet. However, there is no way to store a modified
-GSensorDDSRec record on the sensor permanently, which truly smart sensors do support.
-
-AutoId capable sensors that are not smart report an AutoId value > 0 and < kSensorIdNumber_FirstSmartSensor.
-
-Legacy (aka Dumb) sensors report an AutoId = 0.
+Legacy (aka Dumb) sensors report an SensorNum = 0.
 
 Non smart sensors just get default values for most of the fields in the SensorDDSRecord. The default calibration 
 parameters are configured so that NGIO_Device_CalibrateData() just reports volts.
-
-For all 3 types of sensors, SensorDDSRecord.SensorNumber = AutoId after NGIO_Device_Open(). However, for
-legacy sensors that means SensorDDSRecord.SensorNumber will be 0 which is not informative. In fact, Go! Link
-reports an AutoID of 0 even if no sensor is plugged in!
 
 All the NGIO_Device_DDSMem_* routines return 0 if successful, or a negative number if an error occurs. 
 The NGIO_Device_DDSMem_* routines that do not take a timeout parameter will not fail if hDevice is valid and owned by
@@ -1114,8 +1120,7 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_WriteRecord(
 				After the record is read from the sensor, it is unmarshalled from little endian format into processor
 				specific format.
 
-				This routine sends NGIO_CMD_ID_READ_LOCAL_NV_MEM(Go! Temp) or NGIO_CMD_ID_READ_REMOTE_NV_MEM(Go! Link)
-				commands to the device. 
+				This routine sends NGIO_CMD_ID_READ_NV_MEM commands to the device. 
 	
 	Return:		0 if successful, 
 				else if data validation fails then -2,
@@ -1124,7 +1129,7 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_WriteRecord(
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_ReadRecord(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	signed char channel,				//[in]
+	signed char channel,		//[in]
 	gtype_bool strictDDSValidationFlag,//[in] insist on exactly valid checksum if 1, else use a more lax validation test.
 	gtype_uint32 timeoutMs);//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_READ_DDSMEMBLOCK is recommended.
 						   //Note that NGIO_TIMEOUT_MS_READ_DDSMEMBLOCK is much longer than the typical time required which is < 500 ms.
@@ -1156,6 +1161,21 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_GetRecord(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	signed char channel,				//[in]
 	GSensorDDSRec *pRec);		//[out] ptr to dest buf to copy the SensorDDSRecord into.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_DDSMem_ClearRecord()
+	
+	Purpose:	Clear the DDS record for the specified channel. This puts default values in the record's fields.
+				The sensor name fields are set to blank. The sensor id is set to 0, and a single linear calibration is
+				set up with a gain of 1.0 and an offest of 0. The calibration units field is set to "volts".
+				The OperationType is set to imply a probe type of kProbeTypeAnalog5V.
+
+	Return:		0 if hDevice is valid, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_ClearRecord(
+	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
+	signed char channel);				//[in]
 
 /***************************************************************************************************************************
 	Function Name: NGIO_Device_DDSMem_CalculateChecksum()
@@ -1428,6 +1448,218 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_GetChecksum(
 /***************************************************************************************************************************/
 /***************************************************************************************************************************/
 /***************************************************************************************************************************/
+//API's that support buffered data collection frames. In theory, this can be useful in oscilloscope mode.
+//These routines gather measurement data in fixed duration frames that are defined by a NGIOSetCollectionParams record.
+//
+//Each frame collection starts after both the CommandTrigger and the DataTrigger are activated.
+//NGIO_CMD_ID_START_FRAME_COLLECTION activates the CommandTrigger for the first frame.
+//The CommandTrigger for the second frame is activated when the MinInterFrameDelay elapses after the first frame DataTrigger.
+//The DataTrigger is a standard trigger described in the NGIOSetCollectionParams.
+//NGIO_NOTIFY_TYPE_FRAME_CAPTURED notifications will be sent via the NGIO_RegisterCallbackForDeviceNotifications callback 
+//mechanism when each frame completes.
+//
+//
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_AllocateCollectionFrames()
+	
+	Purpose:	Allocate buffers for a specified number of collection frames, each of which is described by the 
+				NGIOSetCollectionParams.
+
+				In addition to allocating buffers, this routine sends NGIO_CMD_ID_SET_COLLECTION_PARAMS to the device
+				with the specified NGIOSetCollectionParams.
+
+				Framed data collection is a 'special' collection mode that restricts what commands can be sent to the
+				device. Calling NGIO_Device_Frm_AllocateCollectionFrames() puts the device in framed collection mode, 
+				even though actual data collection does not begin until the client app calls 
+				NGIO_Device_SendCmdAndGetResponse(NGIO_CMD_ID_START_FRAME_COLLECTION).
+
+				Once the device is in framed collection mode, the following restrictions apply:
+					App cannot send NGIO_CMD_ID_START_MEASUREMENTS, use NGIO_CMD_ID_START_FRAME_COLLECTION instead.
+					App cannot send NGIO_CMD_ID_STOP_MEASUREMENTS, use NGIO_CMD_ID_STOP_FRAME_COLLECTION instead.
+					App cannot send NGIO_CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK.
+					App cannot send NGIO_CMD_ID_SET_MEASUREMENT_PERIOD(channel = -1), but the app can send this command
+						with the channel >= 0. In other words, the base sampling period cannot be changed.
+					App can send NGIO_CMD_ID_SET_COLLECTION_PARAMS, but the base sampling period, the collection duration,
+						and the channel mask cannot be changed. You can change the triggering parameters.
+					App cannot call NGIO_Device_GetNumMeasurementsAvailable(), use NGIO_Device_Frm_GetNumMeasurementsAvailable() instead.
+					App cannot call NGIO_Device_ReadRawMeasurements(), use NGIO_Device_Frm_CopyRawMeasurements() instead.
+
+				To completely exit framed data collection mode, call NGIO_Device_Frm_FreeCollectionFrames().
+
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_AllocateCollectionFrames(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint16 numFrames,			//[in] number of collection frames to allocate. This is the upper bound on the number of
+									//captured frames that NGIO_Device_Frm_GetCapturedFrameRange() can report.
+									//We recommend that numFrames be <= 50, but this is not strictly enforced.
+	NGIOSetCollectionParams *pFrameParams);//[in] params describing a single collection frame.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_FreeCollectionFrames()
+	
+	Purpose:	Free buffers allocated for collection frames, and completely shut down framed data collection mode.
+
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_FreeCollectionFrames(
+	NGIO_DEVICE_HANDLE hDevice);	//[in] handle to open device.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_GetNumCollectionFramesAllocated()
+	
+	Purpose:	Report the number of collection frames allocated. This is the upper bound on the number of
+				captured frames that NGIO_Device_Frm_GetCapturedFrameRange() can report.
+
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_GetNumCollectionFramesAllocated(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint16 *pNumFrames);		//[out] ptr to loc to store number of allocated frames.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_GetCapturedFrameRange()
+	
+	Purpose:	Report the range of id's corresponding to captured collection frames.
+
+				Once NGIO_Device_SendCmdAndGetResponse(NGIO_CMD_ID_START_FRAME_COLLECTION) is called, NGIO starts
+				capturing frames. If a frame has been allocated, but does not yet contain collection data, then when the 
+				triggering conditions for a new frame are met, measurements are copied into the frame, and the frame is 
+				assigned a captured frame id.
+	
+				Valid id's for captured frames range from FirstFrameId to (FirstFrameId + NumCapturedFrames - 1).
+				Id's roll over, so id 0 follows id 0xffffffff .
+
+				Extract data from a captured frame using NGIO_Device_Frm_GetNumMeasurementsAvailable() and
+				NGIO_Device_Frm_CopyRawMeasurements(). When you are done getting the data from a frame, call
+				NGIO_Device_Frm_RetireCapturedFrame() to make it available for reuse.
+	
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_GetCapturedFrameRange(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint32 *pFirstFrameId,	//[out] ptr to loc to store first frame id.
+	gtype_uint16 *pNumCapturedFrames);//[out] ptr to loc to store number of captured frames.
+
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_GetQuickAndDirtyCapturedFrameRange(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint32 *pFirstFrameId,	//[out] ptr to loc to store first frame id.
+	gtype_uint16 *pNumCapturedFrames);//[out] ptr to loc to store number of captured frames.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_RetireCapturedFrame()
+	
+	Purpose:	Make the buffers associated with a captured frame available for reuse so that they can store a new frame 
+				of measurements. Calling NGIO_Device_Frm_RetireCapturedFrame(frameId) removes frameId from the list of
+				captured frames reported by NGIO_Device_Frm_GetCapturedFrameRange(). Captured frames MUST be retired in
+				order, so <frameId> must be retired prior to <frameId+1>. 
+				
+				A retired frame does not contain any valid measurement data, but it is still in the pool of allocated frames, 
+				so it is available for new measurement data.
+
+				The basic idea is that the client application should suck the data out of the captured frames and then
+				retire the frames fast enough so the number of currently captured frames never reaches the number of
+				allocated frames. If so, then data collection can proceed indefinitely without losing data.
+	
+				If a frame has been allocated, but does not yet contain collection data, then when the triggering conditions 
+				for a new frame are met, measurements are copied into the frame, and the frame is assigned a captured frame 
+				id.
+
+				Valid id's for captured frames range from FirstFrameId to (FirstFrameId + NumCapturedFrames - 1).
+				Id's roll over, so id 0 follows id 0xffffffff .
+
+				Extract data from a captured frame using NGIO_Device_Frm_GetNumMeasurementsAvailable() and
+				NGIO_Device_Frm_CopyRawMeasurements(). When you are done getting the data from a frame, call
+				NGIO_Device_Frm_RetireCapturedFrame() to make it available for reuse.
+	
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_RetireCapturedFrame(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint32 frameId);			//[in] id of frame to retire.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_GetInterframeDelay()
+	
+	Purpose:	Report the elapsed time in Ticks between the Data Triggers for two specified frames.
+				if (firstFrameId == secondFrameId) then report the elapsed time in Ticks between receiving  
+				NGIO_CMD_ID_START_FRAME_COLLECTION and the Data Trigger for firstFrameId.
+
+				Also report the specified minimum delay in Ticks between successive frame Data Triggers.
+				If the specified minimum delay is < the collection duration, then effectively the minimum
+				interFrame delay = the collection duration.
+	
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_GetInterframeDelay(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint32 firstFrameId,		//[in]
+	gtype_uint32 secondFrameId,		//[in]
+	gtype_int64 *pInterFrameDelay,	//[out] ptr to loc to store delay in Ticks between Data Triggers for specified frames.
+	gtype_int64 *pMinInterFrameDelay);//[out] ptr to loc to store minimum delay in Ticks between successive frame Data Triggers.
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_GetNumMeasurementsAvailable()
+	
+	Purpose:	Report the number of measurements available for a specified channel in a specified collection
+				frame. Usually, the number of measurements available in each channel is the same. Typically, this
+				count = (collection duration)/measurement period). However, even though the base measurement period is
+				shared by all channels, the measurement period on each channel may vary, so the number of measurements may
+				vary from channel to channel.
+	
+	Return:		number of measurements if successful,
+				else -1.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_GetNumMeasurementsAvailable(
+	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
+	gtype_uint32 frameId,			//[in]
+	signed char channel);			//[in]
+
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_Frm_CopyRawMeasurements()
+	
+	Purpose:	See NGIO_Device_ReadRawMeasurements(). This routine is similar, except that instead of retrieving
+				measurements from a NGIO Measurement Buffer for a channel, this routine copies measurements from
+				a captured frame buffer for a channel. Note that after the measurements are copied they remain in the 
+				captured frame buffer until NGIO_Device_Frm_RetireCapturedFrame() is called for the frame.
+
+				When framed data collection is being setup, it is usually not necessary to call NGIO_Device_SetMeasurementPeriod()
+				because the base sampling period is setup by the NGIO_CMD_ID_SET_COLLECTION_PARAMS command sent by the
+				NGIO_Device_Frm_AllocateCollectionFrames() routine. Similary it is not necessary to send
+				NGIO_CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK because NGIO_CMD_ID_SET_COLLECTION_PARAMS sets the channel mask.
+				However, NGIO_CMD_ID_SET_COLLECTION_PARAMS does not specify the sampling mode for each channel, so you
+				must send NGIO_CMD_ID_SET_SAMPLING_MODE for the channels prior to sending NGIO_CMD_ID_START_FRAME_COLLECTION.
+
+				If any channels are to be sampled periodically at a rate different from the base sampling period, then
+				NGIO_Device_SetMeasurementPeriod(channel >= 0, period) must be called prior to sending NGIO_CMD_ID_START_FRAME_COLLECTION.
+	
+	Return:		number of measurements copied if successful,
+				else -1. If not enough measurements are available, return may be > 0 but < maxNumMeasurements.
+
+****************************************************************************************************************************/
+NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_Frm_CopyRawMeasurements(
+	NGIO_DEVICE_HANDLE hDevice,			//[in] handle to open device.
+	gtype_uint32 frameId,				//[in]
+	signed char channel,				//[in]
+	gtype_uint32 firstMeasurementIndex,	//[in] index identifying which measurement in the frame is copied first. 
+										//0 => start copying at first measurement in the frame.
+										//May legally range from 0 to (NGIO_Device_Frm_GetNumMeasurementsAvailable() - 1).
+	gtype_int32 *pMeasurementsBuf,		//[out] ptr to loc to store measurements.
+	gtype_int64 *pTimeStamps,			//[out] ptr to loc to store 'tick' resolution timestamps.
+										//Timestamp is 0 at time of trigger.
+	gtype_uint32 maxNumMeasurements);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
+
+
+/***************************************************************************************************************************/
+/***************************************************************************************************************************/
+/***************************************************************************************************************************/
 /* 'Advanced' API's:								*/
 typedef void *NGIO_DEVICE_STREAM_HANDLE;
 
@@ -1488,17 +1720,5 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_ReadOutputTraceBytes(
 	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
 	unsigned char *pOutputTraceBuf,	//[out] ptr to loc to store trace info.
 	gtype_int32 maxCount);	//[in] maximum number of bytes to copy into pOutputTraceBuf.
-
-#define NGIO_TRACE_SEVERITY_LOWEST 1
-#define NGIO_TRACE_SEVERITY_LOW 10
-#define NGIO_TRACE_SEVERITY_MEDIUM 50
-#define NGIO_TRACE_SEVERITY_HIGH 100
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_SetDebugTraceThreshold(
-	NGIO_LIBRARY_HANDLE hLib,
-	gtype_int32 threshold);//[in] Only trace messages marked with a severity >= threshold are actually sent to the debug output.
-
-NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_GetDebugTraceThreshold(
-	NGIO_LIBRARY_HANDLE hLib,
-	gtype_int32 *pThreshold);//[out]
 
 #endif //_NGIO_LIB_INTERFACE_H_

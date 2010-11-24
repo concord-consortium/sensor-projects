@@ -37,12 +37,21 @@
 #define NGIO_CMD_ID_SET_DIGITAL_COUNTER 0x32
 #define NGIO_CMD_ID_GET_DIGITAL_COUNTER 0x33
 #define NGIO_CMD_ID_CLEAR_ERROR_FLAGS 0x34
+#define NGIO_CMD_ID_ENABLE_SENSOR_ID_NOTIFICATIONS 0x35
+#define NGIO_CMD_ID_DISABLE_SENSOR_ID_NOTIFICATIONS 0x36
+#define NGIO_CMD_ID_WRITE_IO_CONFIG 0x37
+#define NGIO_CMD_ID_READ_IO_CONFIG 0x38
+#define NGIO_CMD_ID_WRITE_IO 0x39
+#define NGIO_CMD_ID_READ_IO 0x3A
+#define NGIO_CMD_ID_START_FRAME_COLLECTION 0x3B
+#define NGIO_CMD_ID_STOP_FRAME_COLLECTION 0x3C
 
 /***************************************************************************************************/
 
-#define NGIO_DEFAULT_CMD_RESPONSE_TIMEOUT_MS 1000
-#define NGIO_INIT_CMD_RESPONSE_TIMEOUT_MS 2000
+//#define NGIO_DEFAULT_CMD_RESPONSE_TIMEOUT_MS 2000
 
+//LabQuest supports NGIO_CHANNEL_ID_ANALOG1 thru NGIO_CHANNEL_ID_BUILT_IN_TEMP.
+//LabQuest Mini supports the same channels as LabQuest, except that NGIO_CHANNEL_ID_ANALOG4 and NGIO_CHANNEL_ID_BUILT_IN_TEMP are not supported.
 #define NGIO_CHANNEL_ID_TIME 0
 #define NGIO_CHANNEL_ID_ANALOG1 1
 #define NGIO_CHANNEL_ID_ANALOG2 2
@@ -54,8 +63,9 @@
 #define NGIO_CHANNEL_ID_ANALOG_EXT1 8
 #define NGIO_CHANNEL_ID_ANALOG_EXT2 9
 
-//#define NGIO_MAX_NUM_CHANNELS 10
 #define NGIO_MAX_NUM_CHANNELS 8
+#define NGIO_MAX_NUM_CHANNELS_LQ 8
+#define NGIO_MAX_NUM_CHANNELS_LQ_MINI 7
 
 #define NGIO_MAX_NUM_DIGITAL_CHANNELS 2
 
@@ -73,25 +83,27 @@
 #define NGIO_CHANNEL_MASK_ALL_NORMAL_ANALOG_SENSORS 0x1e
 
 //Following values are used with NGIO_CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK msbyteLsword_EnableSensorChannels:
-#define NGIO_CHANNEL_MASK_ANALOG_EXT1 0x100
-#define NGIO_CHANNEL_MASK_ANALOG_EXT2 0x200
+#define NGIO_CHANNEL_MASK_ANALOG_EXT1 0x1
+#define NGIO_CHANNEL_MASK_ANALOG_EXT2 0x2
 
 //
 /***************************************************************************************************/
 //
-// NGIO_DEVTYPE_LABPRO2_AUDIO devices use the following channels:
+// NGIO_DEVTYPE_LABQUEST_AUDIO devices use the following channels:
 
 #define NGIO_CHANNEL_ID_AUDIO_INTERNAL 1
+//NGIO_CHANNEL_ID_AUDIO_EXTERNAL_LEFT and NGIO_CHANNEL_ID_AUDIO_EXTERNAL_RIGHT are not supported yet.
 #define NGIO_CHANNEL_ID_AUDIO_EXTERNAL_LEFT 2
 #define NGIO_CHANNEL_ID_AUDIO_EXTERNAL_RIGHT 3
 
 #define NGIO_MAX_NUM_AUDIO_CHANNELS 4
 
 #define NGIO_CHANNEL_ID_MASK_AUDIO_INTERNAL 2
+//NGIO_CHANNEL_ID_AUDIO_EXTERNAL_LEFT and NGIO_CHANNEL_ID_AUDIO_EXTERNAL_RIGHT are not supported yet.
 #define NGIO_CHANNEL_ID_MASK_AUDIO_EXTERNAL_LEFT 4
 #define NGIO_CHANNEL_ID_MASK_AUDIO_EXTERNAL_RIGHT 8
 
-// NGIO_DEVTYPE_LABPRO2_AUDIO devices support the following commands:
+// NGIO_DEVTYPE_LABQUEST_AUDIO devices support the following commands:
 //NGIO_CMD_ID_GET_STATUS
 //NGIO_CMD_ID_START_MEASUREMENTS
 //NGIO_CMD_ID_STOP_MEASUREMENTS
@@ -155,6 +167,8 @@
 #define NGIO_STATUS_ERROR_OP_NOT_SUPPORTED_IN_CURRENT_MODE 0x3B
 #define NGIO_STATUS_ERROR_AUDIO_CONTROL_FAILURE 0x3C
 #define NGIO_STATUS_ERROR_AUDIO_STREAM_FAILURE 0x3D
+#define NGIO_STATUS_ERROR_CANNOT_REALLOCATE_FRAME_BUFFERS 0x3E
+#define NGIO_STATUS_ERROR_COMMUNICATION 0x41
 
 //If SendCmdAndGetResponse() returns kResponse_Error and (1 == *pnRespBytes), then *pRespBuf contains
 //NGIODefaultCmdResponse, even if a different response structure is defined for the command.
@@ -165,37 +179,6 @@ struct tagNGIODefaultCmdResponse
 	unsigned char status;//NGIO_STATUS_...
 } _XPACK1;
 typedef struct tagNGIODefaultCmdResponse NGIODefaultCmdResponse;
-
-/***************************************************************************************************/
-//Parameter block for the NGIO_CMD_ID_START_MEASUREMENTS command:
-//This parameter block is optional for NGIO_CMD_ID_START_MEASUREMENTS. If the SendCmdAndGetResponse
-//parameter block ptr is NULL, then the device should use defaults. Typically, this means real time
-//data collection is triggered immediately.
-
-struct tagNGIOStartMeasurementsParams
-{
-	unsigned char lsbyteLswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
-	unsigned char msbyteLswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
-	unsigned char lsbyteMswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
-	unsigned char msbyteMswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
-	unsigned char lsbyteLswordLsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char msbyteLswordLsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char lsbyteMswordLsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char msbyteMswordLsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char lsbyteLswordMsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char msbyteLswordMsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char lsbyteMswordMsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char msbyteMswordMsdwordCollectionDuration;	/* Length of time in 'ticks' to report before stopping, only used for archived runs.	*/
-	unsigned char lsbyteLswordLsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char msbyteLswordLsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char lsbyteMswordLsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char msbyteMswordLsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char lsbyteLswordMsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char msbyteLswordMsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char lsbyteMswordMsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-	unsigned char msbyteMswordMsdwordCollectionOffset;	/* Offset in 'ticks' of next measurement to report, only used for archived runs.	*/
-} _XPACK1; 
-typedef struct tagNGIOStartMeasurementsParams NGIOStartMeasurementsParams;
 
 /***************************************************************************************************/
 //NGIO_CMD_ID_SET_MEASUREMENT_PERIOD:
@@ -230,7 +213,8 @@ typedef NGIOSetMeasurementPeriodParams NGIOGetMeasurementPeriodCmdResponsePayloa
 																					//after sending NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
 
 /***************************************************************************************************/
-//NGIO_CMD_ID_SET_LED_STATE:
+// The LED commands are supported by the LabQuest Mini, but not the LabQuest.
+//NGIO_CMD_ID_SET_LED_STATE:	
 //NGIO_CMD_ID_GET_LED_STATE:
 
 #define NGIO_LED_COLOR_BLACK 0xC0
@@ -239,10 +223,12 @@ typedef NGIOSetMeasurementPeriodParams NGIOGetMeasurementPeriodCmdResponsePayloa
 #define NGIO_LED_COLOR_RED_GREEN 0
 #define NGIO_LED_BRIGHTNESS_MIN 0
 #define NGIO_LED_BRIGHTNESS_MAX 0x10
+#define NGIO_LED_COLOR_ORANGE NGIO_LED_COLOR_RED_GREEN
+#define NGIO_LED_BRIGHTNESS_ORANGE 4
 
 struct tagNGIOSetLedStateParams
 {
-	unsigned char LEDchannel;
+	unsigned char LEDchannel;		//This parameter is ignored by the LabQuest Mini.
 	unsigned char color;
 	unsigned char brightness;
 } _XPACK1; //Parameter block passed into SendCmd() with NGIO_CMD_ID_SET_LED_STATE.
@@ -260,23 +246,14 @@ typedef NGIOSetLedStateParams NGIOGetLedStateCmdResponsePayload; //This is the r
 //NGIO_CMD_ID_GET_STATUS:
 #define NGIO_MASK_STATUS_ERROR_CMD_NOT_RECOGNIZED 1
 #define NGIO_MASK_STATUS_ERROR_CMD_IGNORED 2
-//bits 2 & 3 unused
+#define NGIO_MASK_STATUS_ADC_UNCALIBRATED 4
+#define NGIO_MASK_STATUS_AUTOID_UNCALIBRATED 8
 #define NGIO_MASK_STATUS_ERROR_INTERNAL_ERROR1 0X10
 #define NGIO_MASK_STATUS_ERROR_AUDIO_CONTROL_FAILURE 0X10
 #define NGIO_MASK_STATUS_ERROR_INTERNAL_ERROR2 0X20
 #define NGIO_MASK_STATUS_ERROR_AUDIO_STREAM_FAILURE 0X20
 #define NGIO_MASK_STATUS_ERROR_MASTER_FIFO_OVERFLOW 0X40
 #define NGIO_MASK_STATUS_ERROR_DIGITAL_TRANSITION_LOST 0X80
-
-//((system_status & NGIO_MASK_STATUS_BATTERY_STATE) == NGIO_MASK_STATUS_BATTERY_STATE_GOOD) => good batteries.
-//((system_status & NGIO_MASK_STATUS_BATTERY_STATE) == NGIO_MASK_STATUS_BATTERY_STATE_LOW_WHILE_SAMPLING) => marginal batteries.
-//((system_status & NGIO_MASK_STATUS_BATTERY_STATE) == NGIO_MASK_STATUS_BATTERY_STATE_LOW_ALWAYS) => bad batteries.
-//((system_status & NGIO_MASK_STATUS_BATTERY_STATE) == NGIO_MASK_STATUS_BATTERY_STATE_MISSING) => no batteries.present.
-#define NGIO_MASK_STATUS_BATTERY_STATE 0X0C
-#define NGIO_MASK_STATUS_BATTERY_STATE_GOOD 0
-#define NGIO_MASK_STATUS_BATTERY_STATE_LOW_WHILE_SAMPLING 4
-#define NGIO_MASK_STATUS_BATTERY_STATE_LOW_ALWAYS 8
-#define NGIO_MASK_STATUS_BATTERY_STATE_MISSING 0X0C
 
 struct tagNGIOGetStatusCmdResponsePayload
 {
@@ -394,6 +371,31 @@ struct tagNGIOGetSensorIdCmdResponsePayload
 
 typedef struct tagNGIOGetSensorIdCmdResponsePayload NGIOGetSensorIdCmdResponsePayload;
 
+struct tagNGIOGetSensorIdCmdResponseExtPayload
+{
+	unsigned char lsbyteLswordSensorId;
+	unsigned char msbyteLswordSensorId;
+	unsigned char lsbyteMswordSensorId;
+	unsigned char msbyteMswordSensorId;
+	unsigned char lsbyteLswordSIDSignature;//This increments every time the Sensor Id for the specified channel changes.
+	unsigned char msbyteLswordSIDSignature;
+	unsigned char lsbyteMswordSIDSignature;
+	unsigned char msbyteMswordSIDSignature;
+} _XPACK1; //This is the response payload returned by GetNextResponse() after sending NGIO_CMD_ID_GET_SENSOR_ID.
+
+//NGIOGetSensorIdCmdResponsePayloadExt is only supported in DAQ firmware versions >= 1.26 .
+typedef struct tagNGIOGetSensorIdCmdResponseExtPayload NGIOGetSensorIdCmdResponseExtPayload;
+
+struct tagNGIOGetSensorIdCmdResponseExtListPayload
+{
+	NGIOGetSensorIdCmdResponseExtPayload sensorElement[NGIO_CHANNEL_ID_DIGITAL2 + 1];
+} _XPACK1; //This is the response payload returned by GetNextResponse() after sending NGIO_CMD_ID_GET_SENSOR_ID with channel param == -1.
+
+//NGIOGetSensorIdCmdResponsePayloadExtList is only supported in DAQ firmware versions >= 1.26 .
+//NGIOGetSensorIdCmdResponseExtListPayload.sensorElement[0] is unused.
+//NGIOGetSensorIdCmdResponseExtListPayload.sensorElement[NGIO_CHANNEL_ID_ANALOG1] is the first element with useful info.
+typedef struct tagNGIOGetSensorIdCmdResponseExtListPayload NGIOGetSensorIdCmdResponseExtListPayload;
+
 /***************************************************************************************************/
 //NGIO_CMD_ID_SET_ANALOG_INPUT:
 //NGIO_CMD_ID_GET_ANALOG_INPUT:
@@ -428,6 +430,8 @@ typedef NGIOSetAnalogInputParams NGIOGetAnalogInputCmdResponsePayload;
 #define NGIO_SAMPLING_MODE_PERIODIC_MOTION_DETECT 3
 #define NGIO_SAMPLING_MODE_PERIODIC_ROTATION_COUNTER 4
 #define NGIO_SAMPLING_MODE_PERIODIC_ROTATION_COUNTER_X4 5
+#define NGIO_SAMPLING_MODE_CUSTOM 6
+//Note that on the LabQuest NGIO_CMD_ID_WRITE_IO_CONFIG and NGIO_CMD_ID_WRITE_IO are disabled unless sampling mode is NGIO_SAMPLING_MODE_CUSTOM.
 
 struct tagNGIOSetSamplingModeParams
 {
@@ -459,6 +463,8 @@ typedef NGIOSetSensorChannelEnableMaskParams NGIOGetSensorChannelEnableMaskCmdRe
 /***************************************************************************************************/
 //NGIO_CMD_ID_SET_DIGITAL_COUNTER:
 //NGIO_CMD_ID_GET_DIGITAL_COUNTER:
+//These commands only work when the sampling mode for the channel is set to NGIO_SAMPLING_MODE_PERIODIC_PULSE_COUNT,
+//NGIO_SAMPLING_MODE_PERIODIC_ROTATION_COUNTER, or NGIO_SAMPLING_MODE_PERIODIC_ROTATION_COUNTER_X4.
 
 struct tagNGIOSetDigitalCounterParams
 {
@@ -467,30 +473,69 @@ struct tagNGIOSetDigitalCounterParams
 	unsigned char msbyteLsword_counter;
 	unsigned char lsbyteMsword_counter;
 	unsigned char msbyteMsword_counter;
-} _XPACK1;	//Parameter block passed into SendCmd() with NGIO_CMD_ID_SET_SAMPLING_MODE.
+} _XPACK1;	//Parameter block passed into SendCmd() with NGIO_CMD_ID_SET_DIGITAL_COUNTER.
 typedef struct tagNGIOSetDigitalCounterParams NGIOSetDigitalCounterParams;
 
 typedef NGIOGetSensorIdParams NGIOGetDigitalCounterParams;
 typedef NGIOSetDigitalCounterParams NGIOGetDigitalCounterCmdResponsePayload;
 
 /***************************************************************************************************/
+//NGIO_CMD_ID_WRITE_IO_CONFIG:
+//NGIO_CMD_ID_READ_IO_CONFIG:
+//Note that on the LabQuest NGIO_CMD_ID_WRITE_IO_CONFIG and NGIO_CMD_ID_WRITE_IO are disabled unless sampling mode is NGIO_SAMPLING_MODE_CUSTOM.
+//When sampling mode is configured as NGIO_SAMPLING_MODE_CUSTOM, all the IO lines are initially configured as inputs.
+//Before configuring an IO line as an output with NGIO_CMD_ID_WRITE_IO_CONFIG, it is recommended that you first send
+//a NGIO_CMD_ID_WRITE_IO command to set the state of the output to the level specified in the outputLatch parameter.
+#define NGIO_MASK_DGX_LINE1 1
+#define NGIO_MASK_DGX_LINE2 2
+#define NGIO_MASK_DGX_LINE3 4
+#define NGIO_MASK_DGX_LINE4 8
+
+struct tagNGIOWriteIOConfigParams
+{
+	signed char channel;	//NGIO_CHANNEL_ID_DIGITAL1 or NGIO_CHANNEL_ID_DIGITAL2
+	unsigned char mask;		//[NGIO_MASK_DGX_LINE1] | .. | [NGIO_MASK_DGX_LINE4]. Only configure line n if NGIO_MASK_DGX_LINEn set in mask.
+	unsigned char IO;		//NGIO_MASK_DGX_LINEn bit set => line n is an input, else line n is an output.
+	unsigned char open_collector;	//NGIO_MASK_DGX_LINEn bit set here => open collector if line is also configured as output.
+} _XPACK1;	//Parameter block passed into SendCmd() with NGIO_CMD_ID_WRITE_IO_CONFIG.
+typedef struct tagNGIOWriteIOConfigParams NGIOWriteIOConfigParams;
+
+typedef NGIOGetSensorIdParams NGIOReadIOConfigParams;	//Use with NGIO_CMD_ID_READ_IO_CONFIG.
+typedef NGIOWriteIOConfigParams NGIOReadIOConfigCmdResponsePayload;//All mask bits are always set when used with NGIO_CMD_ID_READ_IO_CONFIG.
+
+/***************************************************************************************************/
+//#define NGIO_CMD_ID_WRITE_IO:
+//#define NGIO_CMD_ID_READ_IO:
+
+struct tagNGIOWriteIOParams
+{
+	signed char channel;	//NGIO_CHANNEL_ID_DIGITAL1 or NGIO_CHANNEL_ID_DIGITAL2
+	unsigned char mask;		//[NGIO_MASK_DGX_LINE1] | .. | [NGIO_MASK_DGX_LINE4]. Only modify line n if NGIO_MASK_DGX_LINEn set in mask.
+	unsigned char outputLatch;	//This contains the logical output levels.
+	unsigned char IOLive;	//This contains the actual level on the IO pin. Use this to read input levels. NGIO_CMD_ID_WRITE_IO ignores this param.
+} _XPACK1;	//Parameter block passed into SendCmd() with NGIO_CMD_ID_WRITE_IO, response block for NGIO_CMD_ID_READ_IO.
+typedef struct tagNGIOWriteIOParams NGIOWriteIOParams;
+
+typedef NGIOGetSensorIdParams NGIOReadIOParams;	//Use with NGIO_CMD_ID_READ_IO.
+typedef NGIOWriteIOParams NGIOReadIOCmdResponsePayload;//All mask bits are always set when used with NGIO_CMD_ID_READ_IO.
+
+/***************************************************************************************************/
 //NGIO_CMD_ID_SET_COLLECTION_PARAMS:
+//This command is currently only supported with framed collection. See NGIO_Device_Frm_AllocateCollectionFrames().
 
 #define NGIO_TRIGGER_MASK_BUTTON 1
 #define NGIO_TRIGGER_MASK_CHANNEL 2
+#define NGIO_TRIGGER_MASK_IMMEDIATE 4
 
 #define NGIO_TRIGGER_CHAN_MODE_MEAS_ABOVE_THRESHOLD 0
 #define NGIO_TRIGGER_CHAN_MODE_MEAS_BELOW_THRESHOLD 1
 #define NGIO_TRIGGER_CHAN_MODE_LO_TO_HI_MEAS 2
 #define NGIO_TRIGGER_CHAN_MODE_HI_TO_LO_MEAS 3
 
-#define NGIO_COLLECTION_FLAGS_MASK_IGNORE_STOP_BUTTON 1 // if (flags & 1) then the WDSS start/stop button is disabled during remote collection (to prevent accidental stop of remote collections)
-#define NGIO_COLLECTION_FLAGS_MASK_REMOTE_TRIGGER_DELTA 2 // if (flags & 2) then remote trigger is a delta from the 1st collected value ==> e.g. with an altimeter (ver 1.08 and above)
-
 #define NGIO_COLLECTION_FLAGS_MASK_MULTIPLE_PERIODS 4 // not all channels collect data at the same rate.
 
 /*	The unit used for measurement periods and collection durations is a 'tick'. Each class of of hardware may define
-	the meaning of a tick differently. For NGI, a 'tick' is one microsecond.										*/
+	the meaning of a tick differently. For LabQuest and LabQuest Mini, a 'tick' is one microsecond.										*/
 
 struct tagNGIOSetCollectionParams
 {
@@ -498,7 +543,7 @@ struct tagNGIOSetCollectionParams
 	unsigned char msbyteLswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
 	unsigned char lsbyteMswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
 	unsigned char msbyteMswordDataRunId;	/* ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.	*/
-	unsigned char triggerMask;				/* NGIO_TRIGGER_MASK_BUTTON | NGIO_TRIGGER_MASK_CHANNEL	*/
+	unsigned char triggerMask;				/* NGIO_TRIGGER_MASK_BUTTON | NGIO_TRIGGER_MASK_CHANNEL	... */
 	unsigned char triggerChannelMode;		/* NGIO_TRIGGER_CHAN_MODE_...	*/
 	unsigned char triggerChannel;			/* Used if NGIO_TRIGGER_MASK_CHANNEL is set in triggerMask.	*/
 	unsigned char flags;					/* NGIO_COLLECTION_FLAGS_MASK_...	*/
@@ -506,6 +551,18 @@ struct tagNGIOSetCollectionParams
 	unsigned char msbyteLswordTriggerThreshold;
 	unsigned char lsbyteMswordTriggerThreshold;
 	unsigned char msbyteMswordTriggerThreshold;
+	unsigned char lsbyteLswordTriggerHysteresis;//NGIO_TRIGGER_CHAN_MODE_LO_TO_HI_MEAS => signal must be < (threshold - hysteresis) before
+	unsigned char msbyteLswordTriggerHysteresis;//	testing against threshold.
+	unsigned char lsbyteMswordTriggerHysteresis;//NGIO_TRIGGER_CHAN_MODE_HI_TO_LO_MEAS => signal must be > (threshold + hysteresis) before
+	unsigned char msbyteMswordTriggerHysteresis;//	testing against threshold.
+	unsigned char lsbyteLswordLsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char msbyteLswordLsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char lsbyteMswordLsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char msbyteMswordLsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char lsbyteLswordMsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char msbyteLswordMsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char lsbyteMswordMsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
+	unsigned char msbyteMswordMsdwordMinInterframeDelay;	/* Min time between successive frame triggers in 'ticks'. */
 	unsigned char lsbyteLswordLsdwordCollectionDuration;	/* Length of collection in 'ticks'.	*/
 	unsigned char msbyteLswordLsdwordCollectionDuration;	/* Length of collection in 'ticks'.	*/
 	unsigned char lsbyteMswordLsdwordCollectionDuration;	/* Length of collection in 'ticks'.	*/
@@ -531,14 +588,13 @@ struct tagNGIOSetCollectionParams
 	unsigned char lsbyteMswordMeasurementPeriod;		/* NGIO_COLLECTION_FLAGS_MASK_MULTIPLE_PERIODS set when */
 	unsigned char msbyteMswordMeasurementPeriod;		/* different periods used - all periods are multiple of base period.*/
 														/* Use NGIO_CMD_ID_GET_MEASUREMENT_PERIOD to determine periods when NGIO_COLLECTION_FLAGS_MASK_MULTIPLE_PERIODS set.*/
-	unsigned char hostDatum0;
-	unsigned char hostDatum1;
-	unsigned char hostDatum2;
-	unsigned char hostDatum3;
+	unsigned char spare1;
+	unsigned char spare2;
+	unsigned char spare3;
+	unsigned char spare4;
 } _XPACK1;	/* Parameter block passed into SendCmd() with NGIO_CMD_ID_SET_COLLECTION_PARAMS.	*/
 
-// **************** NGIO_CMD_ID_SET_COLLECTION_PARAMS is not currently supported. ***************************************
-//typedef struct tagNGIOSetCollectionParams NGIOSetCollectionParams;
+typedef struct tagNGIOSetCollectionParams NGIOSetCollectionParams;
 
 struct tagNGIOGetCollectionParams
 {
@@ -547,48 +603,10 @@ struct tagNGIOGetCollectionParams
 	unsigned char lsbyteMswordDataRunId;//ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.
 	unsigned char msbyteMswordDataRunId;//ffffffffh => next non RealTime data run, 0 => RealTime, else id's archived run.
 } _XPACK1; //Parameter block passed into SendCmd() with NGIO_CMD_ID_GET_COLLECTION_PARAMS.
-// **************** NGIO_CMD_ID_GET_COLLECTION_PARAMS is not currently supported. ***************************************
-//typedef struct tagNGIOGetCollectionParams NGIOGetCollectionParams;
+typedef struct tagNGIOGetCollectionParams NGIOGetCollectionParams;
 
-// **************** NGIO_CMD_ID_GET_COLLECTION_PARAMS is not currently supported. ***************************************
-//typedef NGIOSetCollectionParams NGIOGetCollectionParamsCmdResponsePayload;//This is the response payload returned by GetNextResponse() 
+typedef NGIOSetCollectionParams NGIOGetCollectionParamsCmdResponsePayload;//This is the response payload returned by GetNextResponse() 
 																	//after sending NGIO_CMD_ID_GET_COLLECTION_PARAMS.
-
-/***************************************************************************************************/
-//NGIO_CMD_ID_GET_ARCHIVED_RUN_IDS:
-
-struct tagNGIOGetArchivedRunIdsParams
-{
-	unsigned char firstRunIndex;	//Retrieve id's for firstRunIndex'th run thru the (firstRunIndex + numRuns -1 )'th run.
-	unsigned char numRuns;
-} _XPACK1;
-typedef struct tagNGIOGetArchivedRunIdsParams NGIOGetArchivedRunIdsParams;
-
-struct tagNGIOGetArchivedRunIdsCmdResponsePayload
-{
-	unsigned char numRuns;		//Can never exceed NGIOGetArchivedRunIdsParams.numRuns. 
-								//If NGIOGetArchivedRunIdsCmdResponsePayload.numRuns < NGIOGetArchivedRunIdsParams.numRuns,
-								//then total number of runs stored is 
-								//NGIOGetArchivedRunIdsParams.firstRunIndex + NGIOGetArchivedRunIdsCmdResponsePayload.numRuns.
-	unsigned char lsbyteLswordDataRunIdA;
-	unsigned char msbyteLswordDataRunIdA;
-	unsigned char lsbyteMswordDataRunIdA;
-	unsigned char msbyteMswordDataRunIdA;
-//	unsigned char lsbyteLswordDataRunIdB;
-//	unsigned char msbyteLswordDataRunIdB;
-//	unsigned char lsbyteMswordDataRunIdB;
-//	unsigned char msbyteMswordDataRunIdB;
-//   ...
-} _XPACK1;
-typedef struct tagNGIOGetArchivedRunIdsCmdResponsePayload NGIOGetArchivedRunIdsCmdResponsePayload;
-
-/***************************************************************************************************/
-//NGIO_CMD_ID_DELETE_ARCHIVED_RUNS:
-
-typedef NGIOGetArchivedRunIdsCmdResponsePayload NGIODeleteArchivedRunsParams;
-//(NGIODeleteArchivedRunsParams.numRuns == 0xff) => delete all archived runs.
-
-/***************************************************************************************************/
 
 #if defined (TARGET_OS_WIN)
 #pragma pack(pop)

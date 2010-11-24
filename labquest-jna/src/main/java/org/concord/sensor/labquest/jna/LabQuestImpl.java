@@ -17,6 +17,7 @@ public class LabQuestImpl implements LabQuest
 
 	private NGIOLibrary ngio;
 	private Pointer hDevice;
+	private int deviceType;
 
 	LabQuestImpl(NGIOLibrary ngio) {
 		this.ngio = ngio;
@@ -32,6 +33,13 @@ public class LabQuestImpl implements LabQuest
 		if(hDevice == null){
 			throw new LabQuestException();
 		}
+		
+		IntByReference pDeviceType = new IntByReference();		
+		int ret = ngio.getDeviceTypeFromDeviceName(deviceName, pDeviceType);
+		if(ret != 0){
+			throw new LabQuestException();
+		}
+		deviceType = pDeviceType.getValue();
 	}
 
 	
@@ -56,6 +64,10 @@ public class LabQuestImpl implements LabQuest
 	 */
 	public boolean isRemoteCollectionActive() throws LabQuestException
 	{
+		if(deviceType == NGIOLibrary.DEVTYPE_LABQUEST_MINI){
+			return false;
+		}
+		
 		ByteByReference remoteCollectionActive = new ByteByReference();
 		int ret = ngio.device_IsRemoteCollectionActive(hDevice, remoteCollectionActive, 
 				NGIOLibrary.TIMEOUT_MS_DEFAULT);
@@ -70,6 +82,10 @@ public class LabQuestImpl implements LabQuest
 	 */
 	public void acquireExclusiveOwnership() throws LabQuestException
 	{
+		if(deviceType == NGIOLibrary.DEVTYPE_LABQUEST_MINI){
+			return;
+		}
+		
 		int ret = ngio.device_AcquireExclusiveOwnership(hDevice, NGIOLibrary.GRAB_DAQ_TIMEOUT);
 		if(ret != 0){
 			throw new LabQuestException();

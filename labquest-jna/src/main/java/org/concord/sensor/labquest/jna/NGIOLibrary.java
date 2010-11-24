@@ -22,12 +22,14 @@ public interface NGIOLibrary extends Library {
 	public final static int DEVTYPE_GO_TEMP = 2;
 	public final static int DEVTYPE_GO_LINK = 3;
 	public final static int DEVTYPE_GO_MOTION = 4;
-	public final static int DEVTYPE_LABPRO2 = 5;
+	public final static int DEVTYPE_LABQUEST = 5;
 	public final static int DEVTYPE_WDSS = 6;
 	public final static int DEVTYPE_NI_SENSORDAQ = 7;
-	public final static int DEVTYPE_LABPRO2_FILE_SERVER = 8;
-	public final static int DEVTYPE_LABPRO2_AUDIO = 9;
+	public final static int DEVTYPE_LABQUEST_FILE_SERVER = 8;
+	public final static int DEVTYPE_LABQUEST_AUDIO = 9;
 	public final static int DEVTYPE_DAISYCHAIN_TEST = 10;
+	public final static int DEVTYPE_LABQUEST_FUNC_GENERATOR = 11;
+	public final static int DEVTYPE_LABQUEST_MINI = 12;
 
 	public final static int MAX_SIZE_DEVICE_NAME = 220;
 	public final static int GRAB_DAQ_TIMEOUT = 12000;
@@ -66,6 +68,10 @@ public interface NGIOLibrary extends Library {
 			int n, byte [] devNameBuf, int bufSize,
 			IntByReference pDeviceStatusMask);
 
+	int getDeviceTypeFromDeviceName(
+			String deviceName,
+			IntByReference pDeviceType);
+	
 	Pointer device_Open(Pointer libHandle, String deviceName,
 			byte bDemandExclusiveOwnership);
 	

@@ -101,26 +101,45 @@ public class LabQuestLibrary
 	public void searchForDevices() throws LabQuestException 
 	{
 		IntByReference listSig = new IntByReference();
-		int ret = ngio.searchForDevices(hLibrary, NGIOLibrary.DEVTYPE_LABPRO2, 
+		int ret = -1;
+		ret = ngio.searchForDevices(hLibrary, NGIOLibrary.DEVTYPE_LABQUEST, 
+				NGIOLibrary.COMM_TRANSPORT_USB, null, listSig);
+		if(ret != 0){
+			throw new LabQuestException();
+		}
+		
+		ret = ngio.searchForDevices(hLibrary, NGIOLibrary.DEVTYPE_LABQUEST_MINI, 
 				NGIOLibrary.COMM_TRANSPORT_USB, null, listSig);
 		if(ret != 0){
 			throw new LabQuestException();
 		}
 	}
 	
-	public void printListOfDevices() 
+	public void printListOfDevices() throws LabQuestException 
+	{
+		
+		// print labquest devices
+		printDeviceListSnapshot(NGIOLibrary.DEVTYPE_LABQUEST, "labquest");
+		
+		// print labquest mini devices
+		printDeviceListSnapshot(NGIOLibrary.DEVTYPE_LABQUEST_MINI, "labquest_mini");
+	}
+
+	private void printDeviceListSnapshot(int deviceType, String deviceTypeName) throws LabQuestException
 	{
 		IntByReference listSig = new IntByReference();
 		IntByReference numDevices = new IntByReference();
+		
+		// print labquest devices
 		Pointer openDeviceListSnapshotHandle = ngio.openDeviceListSnapshot(hLibrary, 
-				NGIOLibrary.DEVTYPE_LABPRO2, 
+				deviceType, 
 				numDevices, listSig);
 		if(openDeviceListSnapshotHandle == null){
 			System.err.println("got a null snapshot handle");
 			return;
 		}
 		
-		System.out.println("labpro2 num devices: " + numDevices.getValue() + 
+		System.out.println(deviceTypeName + " num devices: " + numDevices.getValue() + 
 				" list sig: " + listSig.getValue());
 	
 		byte [] devNameBuf = new byte[NGIOLibrary.MAX_SIZE_DEVICE_NAME];
@@ -130,37 +149,55 @@ public class LabQuestLibrary
 			ngio.deviceListSnapshot_GetNthEntry(openDeviceListSnapshotHandle, i, 
 					devNameBuf, devNameBuf.length, deviceStatusMask);
 			String devName = Native.toString(devNameBuf);
-			System.out.println("dev name: " + devName);
-		}
-		ngio.closeDeviceListSnapshot(openDeviceListSnapshotHandle);
+			System.out.println("  dev name: " + devName);
+		}		
+		closeDeviceListSnapshot(openDeviceListSnapshotHandle);
 	}
-
+	
+	private void closeDeviceListSnapshot(Pointer deviceListSnapshotHandle) throws LabQuestException
+	{
+		int ret = ngio.closeDeviceListSnapshot(deviceListSnapshotHandle);
+		if(ret != 0){
+			throw new LabQuestException();
+		}		
+	}
+	
 	public String getFirstDeviceName() throws LabQuestException 
 	{
 		searchForDevices();
+		
+		String ret = getFirstDeviceName(NGIOLibrary.DEVTYPE_LABQUEST);
+		if(ret != null) {
+			return ret;
+		}
+		
+		ret = getFirstDeviceName(NGIOLibrary.DEVTYPE_LABQUEST_MINI);
+		return ret;
+	}
+	
+	private String getFirstDeviceName(int deviceType) throws LabQuestException{
 		IntByReference listSig = new IntByReference();
 		IntByReference numDevices = new IntByReference();
+		int ret;
 		Pointer openDeviceListSnapshotHandle = 
-			ngio.openDeviceListSnapshot(hLibrary, NGIOLibrary.DEVTYPE_LABPRO2, 
+			ngio.openDeviceListSnapshot(hLibrary, deviceType, 
 				numDevices, listSig);
 		
 		int num = numDevices.getValue();
 		if(num <= 0){
+			closeDeviceListSnapshot(openDeviceListSnapshotHandle);
 			return null;
 		}
 		
 		byte [] devNameBuf = new byte[NGIOLibrary.MAX_SIZE_DEVICE_NAME];
 		IntByReference deviceStatusMask = new IntByReference();
-		int ret = ngio.deviceListSnapshot_GetNthEntry(openDeviceListSnapshotHandle, 0, 
+		ret = ngio.deviceListSnapshot_GetNthEntry(openDeviceListSnapshotHandle, 0, 
 				devNameBuf, devNameBuf.length, deviceStatusMask);
 		if(ret != 0){
 			throw new LabQuestException();
 		}
 		
-		ret = ngio.closeDeviceListSnapshot(openDeviceListSnapshotHandle);
-		if(ret != 0){
-			throw new LabQuestException();
-		}
+		closeDeviceListSnapshot(openDeviceListSnapshotHandle);
 
 		return Native.toString(devNameBuf);
 	}

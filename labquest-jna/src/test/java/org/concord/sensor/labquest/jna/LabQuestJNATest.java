@@ -2,10 +2,12 @@ package org.concord.sensor.labquest.jna;
 
 import java.io.IOException;
 
+import org.junit.Test;
+
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
-public class Main {
+public class LabQuestJNATest {
 	private static LabQuestLibrary labQuestLib;
 	
 	private static NGIOLibrary ngio;
@@ -14,6 +16,11 @@ public class Main {
 
 	private static LabQuest labQuest;
 
+	@Test
+	public void generalTest() throws IOException{
+		main(null);
+	}
+	
 	public static void main(String[] args) throws IOException {
 		labQuestLib = new LabQuestLibrary();
 		labQuestLib.init();

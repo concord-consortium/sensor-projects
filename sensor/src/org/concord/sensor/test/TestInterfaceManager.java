@@ -58,13 +58,16 @@ public class TestInterfaceManager
 {
 	public static void main(String[] args) 
 	{
+		testTemperature(JavaDeviceFactory.VERNIER_LAB_QUEST);
+	}
+	
+	public static void testTemperature(int deviceId){
 		UserMessageHandler messenger = new PrintUserMessageHandler();
 		SensorDataManager  sdManager = new InterfaceManager(messenger);
 		
-		// This should be loaded from the OTrunk.  Each computer
-		// might have a different set of devices configured.
+		// setup a single config for the passed in device
 		DeviceConfig [] dConfigs = new DeviceConfig[1];
-		dConfigs[0] = new DeviceConfigImpl(JavaDeviceFactory.VERNIER_LAB_QUEST, null);		
+		dConfigs[0] = new DeviceConfigImpl(deviceId, null);		
 		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
 				
 		// Check what is attached, this isn't necessary if you know what you want
@@ -138,6 +141,6 @@ public class TestInterfaceManager
 		
 		sDataProducer.close();
 		
-		System.exit(0);
+		System.exit(0);		
 	}
 }

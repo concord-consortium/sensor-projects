@@ -37,12 +37,21 @@ import org.concord.sensor.ExperimentRequest;
 
 
 /**
- * SensorDevice
- * Class name and description
+ * Interface to sensor interface devices.  Typical usage is to call the methods in this order:
+ * <ol>
+ * <li>open</li>
+ * <li>isAttached</li>
+ * <li>getCurrentConfig</li>
+ * <li>configure</li>
+ * <li>start</li>
+ * <li>read, read, ...</li>
+ * <li>stop</li>
+ * <li>close</li>
+ * </ol>  
  *
- * Date created: Dec 24, 2004
+ * <p>Date created: Dec 24, 2004</p>
  *
- * @author scott<p>
+ * @author scytacki<p>
  *
  */
 public interface SensorDevice
@@ -63,7 +72,7 @@ public interface SensorDevice
 	public String getVendorName();
 	
 	/**
-	 * Return the name of this device.  The goal is to provide a userful name
+	 * Return the name of this device.  The goal is to provide a useful name
 	 * to the user.
 	 * 
 	 * This can be called at any time.  If the implementation can handle
@@ -82,10 +91,10 @@ public interface SensorDevice
 	 * This is the first method called in the life cycle of this object.
 	 * The passed in string can contain whatever configuration information
 	 * this device needs.  For a serial port device it probably needs to 
-	 * contain the port name.  For a usb device this might not be necessary.
+	 * contain the port name.  For a USB device this might not be necessary.
      * 
-     * For the serial devices a speical string _auto_ is supported.  This will
-     * cycle through the avaiable serial ports and try each one.  This testing
+     * For the serial devices a special string _auto_ is supported.  This will
+     * cycle through the available serial ports and try each one.  This testing
      * might not happen until isAttached is called.
      * 
 	 * @param openString
@@ -95,7 +104,7 @@ public interface SensorDevice
 	/**
 	 * This is the last method called in the life cycle of this object.  
 	 * The object should release any resources it is holding.  It should
-	 * close serial ports, usb ports, or expansion card handles.   
+	 * close serial ports, USB ports, or expansion card handles.   
 	 * The object will not be used again after this is called,  A new 
 	 * object will be created instead.
 	 */
@@ -209,8 +218,7 @@ public interface SensorDevice
 	 * This will be called to figure out the setup of the current device
 	 * If the device cannot detect sensors then it should just fill
 	 * out the ExperimentConfig with the device name and null for the 
-	 * sensorConfigs.  Waba cannot handle zero length arrays this why the 
-	 * sensorConfigs needs to be null.
+	 * sensorConfigs.  Waba could not handle zero length arrays this why null. 
 	 * 
 	 * @return
 	 */

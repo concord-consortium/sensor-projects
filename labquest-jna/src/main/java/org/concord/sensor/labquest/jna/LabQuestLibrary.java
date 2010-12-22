@@ -253,9 +253,13 @@ public class LabQuestLibrary
             
             FileOutputStream fos = null;
             try {
-                // Suffix is required on windows, or library fails to load
-                // Let Java pick the suffix
-                lib = File.createTempFile("jna", null);
+            	if (Platform.isWindows()){
+                    // Suffix is required on windows, or library fails to load
+                    lib = File.createTempFile("jna", "dll");            		            		
+            	} else {
+                    // Let Java pick the suffix
+                    lib = File.createTempFile("jna", null);            		
+            	}
                 lib.deleteOnExit();
                 if (Platform.deleteNativeLibraryAfterVMExit()) {
                     Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(lib));

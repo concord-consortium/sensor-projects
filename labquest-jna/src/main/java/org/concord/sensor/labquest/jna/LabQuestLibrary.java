@@ -255,7 +255,7 @@ public class LabQuestLibrary
             try {
             	if (Platform.isWindows()){
                     // Suffix is required on windows, or library fails to load
-                    lib = File.createTempFile("jna", "dll");            		            		
+                    lib = File.createTempFile("jna", ".dll");            		            		
             	} else {
                     // Let Java pick the suffix
                     lib = File.createTempFile("jna", null);            		

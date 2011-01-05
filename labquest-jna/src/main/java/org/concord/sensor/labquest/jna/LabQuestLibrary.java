@@ -1,6 +1,7 @@
 package org.concord.sensor.labquest.jna;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,7 @@ public class LabQuestLibrary
 	private NGIOLibrary ngio;
 	private Pointer hLibrary;
 
-	public void init()
+	public void init() throws IOException, InterruptedException
 	{
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
@@ -55,11 +56,7 @@ public class LabQuestLibrary
 
 		// This is necessary on windows, before calling certain methods the device needs 
 		// some time to wake up.
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Thread.sleep(100);
 	}
 
 	public void cleanup()
@@ -230,20 +227,62 @@ public class LabQuestLibrary
 		return labQuest2;		
 	}
 	
-    private static File getNativeLibraryFromJar() {
-        String libname = getNativeLibraryName();
-        String resourceName = getNativeLibraryResourcePath() + "/" + libname;
+    static File getNativeLibraryFromJar() throws IOException, InterruptedException {
+    	if(Platform.isWindows()){
+    		return getNativeLibraryFromJarWindows();
+    	} else if (Platform.isMac()){
+    		return getNativeLibraryFromJarMac(); 
+    	} else {
+    		return null;
+    	}
+    }
+    
+    static File getNativeLibraryFromJarWindows() throws IOException, InterruptedException {
+        String ngioDll = getNativeLibraryResourcePath() + "/NGIO_lib.dll";
+        String copyExec = getNativeLibraryResourcePath() + "/copy_win32_wdapi_dll.exe";
+        String wdapiOS32 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS32.dll";
+        String wdapiOS64 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS64.dll";
+
+        File directory = createTmpDirectory();
+        File copyExecFile = extractResource(copyExec, directory);
+        extractResource(wdapiOS32, directory);
+        extractResource(wdapiOS64, directory);
+
+        // run the copyExec
+        Process exec = Runtime.getRuntime().exec(new String[] {"copy_win32_wdapi_dll.exe"}, 
+        		null, copyExecFile.getParentFile());
+
+        exec.waitFor();
+
+        return extractResource(ngioDll, directory);        
+    }
+    
+    private static File getNativeLibraryFromJarMac() throws IOException {
+		String resourceName = getNativeLibraryResourcePath() + "/libNGIO.dylib";
+		File directory = createTmpDirectory();
+		return extractResource(resourceName, directory);
+    }
+
+    static File createTmpDirectory() throws IOException {
+		File directory = File.createTempFile("jna", "");
+		directory.delete();
+		directory.mkdir();
+		return directory;
+    }
+    
+    
+	static File extractResource(String resourceName, File directory)
+			throws Error, FileNotFoundException {
         URL url = LabQuestLibrary.class.getResource(resourceName);
                 
         if (url == null) {
-            throw new UnsatisfiedLinkError("NGIO (" + resourceName 
-                                           + ") not found in resource path");
+            throw new FileNotFoundException(resourceName + " not found in resource path");
         }
     
-        File lib = null;
+        File resourceFile = null;
         if (url.getProtocol().toLowerCase().equals("file")) {
             // NOTE: use older API for 1.3 compatibility
-            lib = new File(URLDecoder.decode(url.getPath()));
+            resourceFile = new File(URLDecoder.decode(url.getPath()));
         }
         else {
             InputStream is = Native.class.getResourceAsStream(resourceName);
@@ -253,18 +292,13 @@ public class LabQuestLibrary
             
             FileOutputStream fos = null;
             try {
-            	if (Platform.isWindows()){
-                    // Suffix is required on windows, or library fails to load
-                    lib = File.createTempFile("jna", ".dll");            		            		
-            	} else {
-                    // Let Java pick the suffix
-                    lib = File.createTempFile("jna", null);            		
-            	}
-                lib.deleteOnExit();
+            	String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
+            	resourceFile = new File(directory, fileName);
+                resourceFile.deleteOnExit();
                 if (Platform.deleteNativeLibraryAfterVMExit()) {
-                    Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(lib));
+                    Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(resourceFile));
                 }
-                fos = new FileOutputStream(lib);
+                fos = new FileOutputStream(resourceFile);
                 int count;
                 byte[] buf = new byte[1024];
                 while ((count = is.read(buf, 0, buf.length)) > 0) {
@@ -272,7 +306,7 @@ public class LabQuestLibrary
                 }
             }
             catch(IOException e) {
-                throw new Error("Failed to create temporary file for jnidispatch library: " + e);
+                throw new Error("Failed to create temporary file: " + e);
             }
             finally {
                 try { is.close(); } catch(IOException e) { }
@@ -281,18 +315,8 @@ public class LabQuestLibrary
                 }
             }
         }
-        return lib;
-    }
-
-    private static String getNativeLibraryName() {
-        if (Platform.isWindows()) {
-        	return "NGIO_lib.dll";
-        }
-        else if (Platform.isMac()) {
-        	return "libNGIO.dylib";
-        }
-        return null;
-    }
+        return resourceFile;
+	}
 
     private static String getNativeLibraryResourcePath() {
         String arch = System.getProperty("os.arch").toLowerCase();

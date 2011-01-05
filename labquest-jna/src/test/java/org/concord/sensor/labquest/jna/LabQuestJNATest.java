@@ -23,32 +23,33 @@ public class LabQuestJNATest {
 	
 	public static void main(String[] args) throws IOException {
 		labQuestLib = new LabQuestLibrary();
-		labQuestLib.init();
-		
-		// This doesn't work unfortunately because it won't be called on the 
-		// same thread that called all of the other things.  So it would be 
-		// better if even this code could work by calling things on its own thread
-		// that is supported right now only in the sensor-vernier project which uses 
-		// this project.
-		/*
-    	Runtime.getRuntime().addShutdownHook(new Thread(){
-			public void run() {
-				System.err.println("Closing LabQuestLibrary.");
-
-				if(labQuest != null){
-					try {
-						labQuest.close();
-					} catch (LabQuestException e) {
-						e.printStackTrace();
-					}
-				}
-				
-				labQuestLib.cleanup();				
-			}
-		});
-		*/    	
 
 		try {
+			labQuestLib.init();
+			
+			// This doesn't work unfortunately because it won't be called on the 
+			// same thread that called all of the other things.  So it would be 
+			// better if even this code could work by calling things on its own thread
+			// that is supported right now only in the sensor-vernier project which uses 
+			// this project.
+			/*
+	    	Runtime.getRuntime().addShutdownHook(new Thread(){
+				public void run() {
+					System.err.println("Closing LabQuestLibrary.");
+
+					if(labQuest != null){
+						try {
+							labQuest.close();
+						} catch (LabQuestException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					labQuestLib.cleanup();				
+				}
+			});
+			*/    	
+
 			short[] version = labQuestLib.getDLLVersion();
 			System.out.println("major: " + version[0] + 
 					" minor: " + version[1]);

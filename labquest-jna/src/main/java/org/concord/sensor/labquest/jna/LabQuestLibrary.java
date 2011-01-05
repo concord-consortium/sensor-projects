@@ -249,7 +249,8 @@ public class LabQuestLibrary
         extractResource(wdapiOS64, directory);
 
         // run the copyExec
-        Process exec = Runtime.getRuntime().exec(new String[] {"copy_win32_wdapi_dll.exe"}, 
+        // it seems the executive needs the full path it isn't relative to the working directory.
+        Process exec = Runtime.getRuntime().exec(new String[] {copyExecFile.getCanonicalPath()}, 
         		null, copyExecFile.getParentFile());
 
         exec.waitFor();

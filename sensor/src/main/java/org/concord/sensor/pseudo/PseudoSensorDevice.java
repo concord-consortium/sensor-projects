@@ -31,6 +31,7 @@ import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
+import org.concord.sensor.device.DeviceIdAware;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.device.impl.SerialPortParams;
@@ -42,10 +43,12 @@ import org.concord.sensor.impl.SensorUnit;
  * @author scott
  *
  */
-public class PseudoSensorDevice extends AbstractSensorDevice 
+public class PseudoSensorDevice extends AbstractSensorDevice
+	implements DeviceIdAware
 {   
     PseudoSensorConfig [] sensConfigs; 
 	float time = 0;
+	private int deviceId = -1;
 	
 	public String getVendorName()
 	{
@@ -54,7 +57,12 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 	
 	public String getDeviceName()
 	{
-		return "Simulated Data";
+		if(deviceId == -1){
+			return "Simulated Data";
+		} else {
+			// This is useful for illustrating how a single device class can handle multiple hardware types
+			return "Simulated Data (id:" + deviceId + ")";
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -204,5 +212,9 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 	protected boolean initializeOpenPort(String portName)
 	{
 		return true;
+	}
+
+	public void setDeviceId(int id) {
+		deviceId = id;		
 	}
 }

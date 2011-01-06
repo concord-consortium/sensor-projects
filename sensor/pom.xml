@@ -36,22 +36,36 @@
   </dependencies>
 
   <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<configuration>
-                <source>1.5</source>
-                <target>1.5</target>
-  				<excludes>
-  					<exclude>org/concord/sensor/meld/**</exclude>
-  					<exclude>
-  						org/concord/sensor/transformers/**
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <excludes>
+            <exclude>org/concord/sensor/meld/**</exclude>
+            <exclude>
+              org/concord/sensor/transformers/**
   					</exclude>
-  				</excludes>
-  			</configuration>
-  		</plugin>
-  	</plugins>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <!--  this is required to build a jar containing the shared test  see this page 
+        for more info: http://maven.apache.org/guides/mini/guide-attached-tests.html -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <!--this is required to find the parent pom -->

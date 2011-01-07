@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.concord.project-groups</groupId>
+    <artifactId>sensor</artifactId>
+    <version>4.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>org.concord.sensor</groupId>
+  <artifactId>goio-jna</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>GoIO JNA</name>
+  <description>
+     GoIO JNA Java library which uses the Vernier GoIO SDK 
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.concord.external.jna</groupId>
+      <artifactId>jna-jws-crossplatform</artifactId>
+      <version>3.0.9</version>
+      <scope>compile</scope>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.concord.external.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>3.0.9</version>
+      <scope>test</scope>
+     </dependency>
+  </dependencies>
+  
+  <build>
+    <!--  reset this back to the default -->
+  <resources>
+     <resource>
+        <directory>src/main/resources</directory>
+     </resource>
+  </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <!-- don't run any of the tests automatically because they require the correct hardware to be attached -->
+            <exclude>org/concord/sensor/goio/jna/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+  </plugins>
+  </build>
+    
+  <!--this is required to find out parent pom you should-->
+  <repositories>
+    <repository>
+      <id>cc-repo-internal-snapshot</id>
+      <name>Concord Consortium Internal</name>
+      <url>http://source.concord.org/maven2/internal_snapshot</url>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
+
+</project>

@@ -2,7 +2,8 @@ package org.concord.sensor.goio.jna.test;
 
 import java.io.IOException;
 
-import org.concord.sensor.goio.jna.*;
+import org.concord.sensor.goio.jna.GoIOJNALibrary;
+import org.concord.sensor.goio.jna.GoIOLibrary;
 
 
 //Test GoIO
@@ -14,17 +15,16 @@ public class Main {
 		
 		boolean sweet = false;
 		boolean isthere = false;
-		GoIOInterface goIOInterface;
+		GoIOLibrary goIOLibrary;
 		
-		goIOInterface = new GoIOInterface();
+		goIOLibrary = new GoIOLibrary();
 		
 		System.out.println("start main");
 		
-		sweet = goIOInterface.init();
+		sweet = goIOLibrary.init();
 		
 
-		GoIOInterface.GoIOSensor sensor 
-		= goIOInterface.mkSensor();
+		GoIOLibrary.GoIOSensor sensor = goIOLibrary.mkSensor();
 		
 		if(!sweet)
 		{
@@ -33,19 +33,19 @@ public class Main {
 		}
 
 
-		isthere = goIOInterface.isGolinkAttached();
+		isthere = goIOLibrary.isGolinkAttached();
 		System.out.println("Is golink there: "+isthere);		
 	
-		isthere = goIOInterface.getDeviceName(sensor);
+		isthere = goIOLibrary.getDeviceName(sensor);
 		System.out.println("Got device name: "+isthere);
 		
-		goIOInterface.sensorOpen(sensor);
+		goIOLibrary.sensorOpen(sensor);
 
-		sweet = goIOInterface.sensorSetMeasurementPeriod(sensor,0.040, GoIOLibrary.SKIP_TIMEOUT_MS_DEFAULT);
+		sweet = goIOLibrary.sensorSetMeasurementPeriod(sensor,0.040, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		System.out.println("sensorSetMeasurementPeriod: "+sweet);
 		
 
-		goIOInterface.sensorStartCollectingData(sensor);
+		goIOLibrary.sensorStartCollectingData(sensor);
 		
 		System.out.println("sensorStartCollectingData: "+sweet);
 		
@@ -59,7 +59,7 @@ public class Main {
 		
 		//Read from sensor:
 		int MAX_NUM_MEASUREMENTS = 100;
-	    int []ret = goIOInterface.sensorReadRawMeasuements(sensor,MAX_NUM_MEASUREMENTS);	
+	    int []ret = goIOLibrary.sensorReadRawMeasuements(sensor,MAX_NUM_MEASUREMENTS);	
 	    
 	    System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret.length);
 		
@@ -73,7 +73,7 @@ public class Main {
 		
 		
 		//end
-		goIOInterface.cleanup();
+		goIOLibrary.cleanup();
 		
 		System.out.println("end  main");
 	};//end main

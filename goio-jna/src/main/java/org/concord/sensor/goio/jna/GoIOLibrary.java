@@ -30,8 +30,6 @@ import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Native.DeleteNativeLibrary;
-//import com.sun.jna.ptr.IntByReference;
-//import com.sun.jna.ptr.ShortByReference;
 
 public class GoIOLibrary
 {
@@ -60,7 +58,7 @@ public class GoIOLibrary
 	
 	
 	@SuppressWarnings("unchecked")
-	public boolean init()
+	public boolean initLibrary()
 	{
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
@@ -81,27 +79,45 @@ public class GoIOLibrary
 		options.put(Library.OPTION_STRUCTURE_ALIGNMENT, Structure.ALIGN_NONE);
 		goIOLibrary = (GoIOJNALibrary) Native.loadLibrary(nativeLibPath, 
 				GoIOJNALibrary.class, options);
-		
-		int ret = goIOLibrary.GoIO_Init();
-		
-		return 0 == ret;
-		
+
+		return goIOLibrary != null;		
 	};
 
 	
-	public void cleanup()
+	public int uninit()
 	{
 		//System.err.println("GoIOInterface: cleaning up");
 		
 		int ret = goIOLibrary.GoIO_Uninit();
-
-		if(ret != 0){
-			System.err.println("GoIOInterface  GoIO_Uninit() failed");
-		}
-
 		goIOLibrary = null;
+		return ret;
 	}
 		
+
+	public int init(){		
+		return goIOLibrary.GoIO_Init();
+	}
+	
+	public int updateListOfAvailableGoTemp() {
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
+				GoIOJNALibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID
+				);
+	}
+
+	public int updateListOfAvailableGoLinks() {
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
+				GoIOJNALibrary.SKIP_DEFAULT_PRODUCT_ID
+				);
+	}
+	
+	public int updateListOfAvailableGoMotion() {
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
+				GoIOJNALibrary.CYCLOPS_DEFAULT_PRODUCT_ID
+				);
+	}
 
 	public boolean isGolinkAttached() {
 

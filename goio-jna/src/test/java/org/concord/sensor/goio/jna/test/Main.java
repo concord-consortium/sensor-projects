@@ -15,37 +15,41 @@ public class Main {
 		
 		boolean sweet = false;
 		boolean isthere = false;
-		GoIOLibrary goIOLibrary;
+		GoIOLibrary goio;
 		
-		goIOLibrary = new GoIOLibrary();
+		goio = new GoIOLibrary();
 		
 		System.out.println("start main");
 		
-		sweet = goIOLibrary.init();
-		
-
-		GoIOLibrary.GoIOSensor sensor = goIOLibrary.mkSensor();
-		
-		if(!sweet)
+		if(!goio.initLibrary())
 		{
-			System.out.println("goIOInterface.init() failed --bye");
+			System.out.println("goIOInterface.initLibrary() failed --bye");
 			return;
 		}
+		
+		if(goio.init() != 0)
+		{
+			System.out.println("goIOInterface.init() failed --bye");
+			return;			
+		}
+		
+		GoIOLibrary.GoIOSensor sensor = goio.mkSensor();
+		
 
 
-		isthere = goIOLibrary.isGolinkAttached();
+		isthere = goio.isGolinkAttached();
 		System.out.println("Is golink there: "+isthere);		
 	
-		isthere = goIOLibrary.getDeviceName(sensor);
+		isthere = goio.getDeviceName(sensor);
 		System.out.println("Got device name: "+isthere);
 		
-		goIOLibrary.sensorOpen(sensor);
+		goio.sensorOpen(sensor);
 
-		sweet = goIOLibrary.sensorSetMeasurementPeriod(sensor,0.040, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
+		sweet = goio.sensorSetMeasurementPeriod(sensor,0.040, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		System.out.println("sensorSetMeasurementPeriod: "+sweet);
 		
 
-		goIOLibrary.sensorStartCollectingData(sensor);
+		goio.sensorStartCollectingData(sensor);
 		
 		System.out.println("sensorStartCollectingData: "+sweet);
 		
@@ -59,7 +63,7 @@ public class Main {
 		
 		//Read from sensor:
 		int MAX_NUM_MEASUREMENTS = 100;
-	    int []ret = goIOLibrary.sensorReadRawMeasuements(sensor,MAX_NUM_MEASUREMENTS);	
+	    int []ret = goio.sensorReadRawMeasuements(sensor,MAX_NUM_MEASUREMENTS);	
 	    
 	    System.out.println("sensorReadRawMeasuements: number of bytes read: "+ret.length);
 		
@@ -73,7 +77,7 @@ public class Main {
 		
 		
 		//end
-		goIOLibrary.cleanup();
+		goio.uninit();
 		
 		System.out.println("end  main");
 	};//end main

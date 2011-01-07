@@ -51,6 +51,10 @@ public class GoIOSensor {
 		openedSensorId = getAttachedSensorId();  
 	}
 	
+	public void close() {
+		goIOLibrary.GoIO_Sensor_Close(hDevice);			
+	}
+	
 	public int getAttachedSensorId() {
 		byte [] sensorId = new byte[1];
 		int ret = goIOLibrary.GoIO_Sensor_DDSMem_GetSensorNumber(hDevice, sensorId, 1, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
@@ -97,4 +101,5 @@ public class GoIOSensor {
 	public boolean isMiniGasChromatograph(){
 		return productId == GoIOJNALibrary.MINI_GC_DEFAULT_PRODUCT_ID;
 	}
+
 }

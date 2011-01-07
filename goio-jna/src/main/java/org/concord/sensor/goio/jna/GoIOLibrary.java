@@ -65,9 +65,13 @@ public class GoIOLibrary
 		
 		FunctionMapper functMapper = new FunctionMapper(){
 
+			// This actually isn't necessary because the function names are the same
+			// but in the future we might want to reduce reduancy and map:
+			// abcd  to GoIO_Abcd
 			public String getFunctionName(NativeLibrary library, Method method) {
-				return method.getName().substring(0,1).toUpperCase() + 
-				method.getName().substring(1);
+				return method.getName();
+				// return "GoIO_" + method.getName().substring(0,1).toUpperCase() + 
+				// method.getName().substring(1);
 			}
 			
 		};

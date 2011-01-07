@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.concord.sensor.goio.jna.GoIOJNALibrary;
 import org.concord.sensor.goio.jna.GoIOLibrary;
+import org.concord.sensor.goio.jna.GoIOSensor;
 
 
 //Test GoIO
@@ -33,17 +34,10 @@ public class Main {
 			return;			
 		}
 		
-		GoIOLibrary.GoIOSensor sensor = goio.mkSensor();
-		
-
-
-		isthere = goio.isGolinkAttached();
-		System.out.println("Is golink there: "+isthere);		
-	
-		isthere = goio.getDeviceName(sensor);
-		System.out.println("Got device name: "+isthere);
-		
-		goio.sensorOpen(sensor);
+		GoIOSensor sensor = goio.getFirstSensor(); 
+		System.out.println("Found goio: " + sensor);		
+			
+		sensor.open();
 
 		sweet = goio.sensorSetMeasurementPeriod(sensor,0.040, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		System.out.println("sensorSetMeasurementPeriod: "+sweet);

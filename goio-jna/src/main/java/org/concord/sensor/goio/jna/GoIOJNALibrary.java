@@ -3,12 +3,6 @@ package org.concord.sensor.goio.jna;
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
-/*
-import com.sun.jna.ptr.ByteByReference;
-import com.sun.jna.ptr.DoubleByReference;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.ShortByReference;
-*/
 
 
 
@@ -406,6 +400,18 @@ public interface GoIOJNALibrary extends Library {
 
 
 	/***************************************************************************************************************************
+	Function Name: GoIO_Sensor_GetMeasurementPeriod()
+
+	Purpose:	This routine sends SKIP_CMD_ID_GET_MEASUREMENT_PERIOD to the sensor.
+	
+	Return:		1000000.0 if not successful, else the measurement period in seconds.
+
+    ****************************************************************************************************************************/
+    double GoIO_Sensor_GetMeasurementPeriod(
+			Pointer hSensor,	//[in] handle to open sensor.
+			int timeoutMs);		//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.
+
+	/***************************************************************************************************************************
 		Function Name: GoIO_Sensor_GetNumMeasurementsAvailable()
 		
 		Purpose:	Report the number of measurements currently stored in the GoIO Measurement Buffer. 
@@ -590,13 +596,33 @@ public interface GoIOJNALibrary extends Library {
 	int GoIO_Sensor_GetProbeType(
 									Pointer hSensor);//[in] handle to open sensor.
 
-
 	/*
 	 * READ THIS:
-	 * The bottom of the GoIO_DLL_interface.h.file (line 604 and below) has DMM functions that can be added if needed.
-	 * (IE they are NOT here yet.)
+	 * The bottom of the GoIO_DLL_interface.h.file (line 604 and below) has DMM functions some are added here
+	 * (IE they are NOT all here yet.)
 	 */
-	 
-	 
-	 
+
+	
+	/***************************************************************************************************************************
+	Function Name: GoIO_Sensor_DDSMem_GetSensorNumber()
+	
+	Purpose:	Retrieve SensorDDSRecord.SensorNumber. 
+	
+				If sendQueryToHardwareflag != 0, then send a SKIP_CMD_ID_GET_SENSOR_ID to the sensor hardware
+				 - sendQueryToHardwareflag is ignored for Go! Temp.
+
+				If the sensor hardware reports a new SensorNumber, then a user has probably changed what sensor is
+				plugged into a Go! Link. The simplest course of action in this case is to call
+				GoIO_Sensor_GetOpenDeviceName() to get the device id, call GoIO_Sensor_Close(), and then
+				call GoIO_Sensor_Open() with the values obtained from GoIO_Sensor_GetOpenDeviceName() to reopen the
+				device. This will cause the GoIO_Sensor object to be properly configured for the new sensor.
+
+	Return:		0 if successful, else -1.
+
+    ****************************************************************************************************************************/
+	int GoIO_Sensor_DDSMem_GetSensorNumber(
+			Pointer hSensor,		//[in] handle to open sensor. 
+			byte [] pSensorNumber,	//[out] ptr to SensorNumber.
+			int sendQueryToHardwareflag,//[in] If sendQueryToHardwareflag != 0, then send a SKIP_CMD_ID_GET_SENSOR_ID to the sensor hardware. 
+			int timeoutMs);//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.	 
 }

@@ -33,30 +33,16 @@ import com.sun.jna.Native.DeleteNativeLibrary;
 
 public class GoIOLibrary
 {
+	static int [] GO_DEVICES = {
+			GoIOJNALibrary.SKIP_DEFAULT_PRODUCT_ID,  // GoLink
+			GoIOJNALibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID, // GoTemp
+ 			GoIOJNALibrary.CYCLOPS_DEFAULT_PRODUCT_ID, // GoMotion
+			GoIOJNALibrary.MINI_GC_DEFAULT_PRODUCT_ID  // MiniGasChromatograph
+			}; 
+	
 
 	protected GoIOJNALibrary goIOLibrary;
 
-	public class GoIOSensor {
-		
-		public 
-		char []deviceName = new char[GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME];
-		int []pVendorId = new int[1];
-		int []pProductId = new int[1];
-		public Pointer hDevice = null;
-		
-		public GoIOSensor() {
-			
-		}
-		
-	}
-	
-	public GoIOSensor mkSensor() {
-		
-		return new GoIOSensor();
-		
-	}
-	
-	
 	@SuppressWarnings("unchecked")
 	public boolean initLibrary()
 	{
@@ -102,52 +88,43 @@ public class GoIOLibrary
 		return goIOLibrary.GoIO_Init();
 	}
 	
-	public int updateListOfAvailableGoTemp() {
-		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
-				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
-				GoIOJNALibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID
-				);
-	}
-
-	public int updateListOfAvailableGoLinks() {
-		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
-				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
-				GoIOJNALibrary.SKIP_DEFAULT_PRODUCT_ID
-				);
-	}
-	
-	public int updateListOfAvailableGoMotion() {
-		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(
-				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
-				GoIOJNALibrary.CYCLOPS_DEFAULT_PRODUCT_ID
-				);
-	}
-
-	public boolean isGolinkAttached() {
-
-		int numDevices = 
-			goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+	public boolean isGoDeviceAttached() {
+		for (int i=0; i<GO_DEVICES.length; i++) {
+			int number = goIOLibrary.GoIO_UpdateListOfAvailableDevices(
 					GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
-					GoIOJNALibrary.SKIP_DEFAULT_PRODUCT_ID
+					GO_DEVICES[i]
 					);
-
-		return numDevices>0;
+			if(number > 0){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
-
-	public boolean sensorOpen(GoIOSensor sensor)
-	{
+	public GoIOSensor getSensor(int productId, int index){
+		int number = goIOLibrary.GoIO_UpdateListOfAvailableDevices(
+				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
+				productId
+				);
+		if(number <= index){
+			return null;
+		}
 		
-		sensor.hDevice = goIOLibrary.GoIO_Sensor_Open(sensor.deviceName, sensor.pVendorId[0], sensor.pProductId[0], 0); //last arg 0 in all examples...		
-	
-		return (null != sensor.hDevice);
+		GoIOSensor sensor = new GoIOSensor(goIOLibrary);
+		sensor.init(productId, index);
+		return sensor;					
 	}
-	
-	public boolean getDeviceName(GoIOSensor sensor)
-	{
-		
-		return getDeviceName(sensor.deviceName, GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME, sensor.pVendorId, sensor.pProductId);
 
+	public GoIOSensor getFirstSensor() {
+		for(int i=0; i<GO_DEVICES.length; i++){			
+			GoIOSensor sensor = getSensor(GO_DEVICES[i], 0);
+			if(sensor != null) {
+				return sensor;
+			}
+		}
+		
+		return null;
 	}
 	
 	public boolean sensorSetMeasurementPeriod(GoIOSensor sensor,double desiredPeriod, int timeoutMs)

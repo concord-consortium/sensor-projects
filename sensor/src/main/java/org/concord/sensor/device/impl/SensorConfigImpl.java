@@ -44,7 +44,7 @@ public class SensorConfigImpl
 {
     private boolean confirmed;
     private int port;
-    private int type;
+    private int type = QUANTITY_UNKNOWN;
     private String name;
     private String portName;
     private float stepSize;

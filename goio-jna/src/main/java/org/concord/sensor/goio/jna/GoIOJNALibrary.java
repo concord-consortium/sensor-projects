@@ -13,46 +13,56 @@ public interface GoIOJNALibrary extends Library {
 	
 	//Some stuff from GSkipCommExt.h
 	
+	public final static byte SKIP_CMD_ID_GET_STATUS = 0x10;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_1BYTE = 0x11;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_2BYTES = 0x12;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_3BYTES = 0x13;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_4BYTES = 0x14;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_5BYTES = 0x15;
+	public final static byte SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_6BYTES = 0x16;
+	public final static byte SKIP_CMD_ID_READ_LOCAL_NV_MEM = 0x17;
+	public final static byte SKIP_CMD_ID_START_MEASUREMENTS = 0x18;
+	public final static byte SKIP_CMD_ID_STOP_MEASUREMENTS = 0x19;
+	public final static byte SKIP_CMD_ID_INIT = 0x1A;
+	public final static byte SKIP_CMD_ID_SET_MEASUREMENT_PERIOD = 0x1B;
+	public final static byte SKIP_CMD_ID_GET_MEASUREMENT_PERIOD = 0x1C;
+	public final static byte SKIP_CMD_ID_SET_LED_STATE = 0x1D;
+	public final static byte SKIP_CMD_ID_GET_LED_STATE = 0x1E;
+	public final static byte SKIP_CMD_ID_GET_SERIAL_NUMBER = 0x20;
+
+	//Commands defined above are supported by Skip, Jonah, and Cyclops, except that Cyclops does not support the serial # or the NV_MEM cmds.
+
+	//Skip extensions:
+	public final static byte SKIP_CMD_ID_SET_VIN_OFFSET_DAC = 0x1F;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_1BYTE = 0x21;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_2BYTES = 0x22;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_3BYTES = 0x23;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_4BYTES = 0x24;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_5BYTES = 0x25;
+	public final static byte SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_6BYTES = 0x26;
+	public final static byte SKIP_CMD_ID_READ_REMOTE_NV_MEM = 0x27;
+	public final static byte SKIP_CMD_ID_GET_SENSOR_ID = 0x28;
+	public final static byte SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL = 0x29;
+	public final static byte SKIP_CMD_ID_GET_ANALOG_INPUT_CHANNEL = 0x2A;
+	public final static byte SKIP_CMD_ID_GET_VIN_OFFSET_DAC = 0x2B;
+	public final static byte SKIP_CMD_ID_SPARE1 = 0x2C;
+	public final static byte SKIP_CMD_ID_SPARE2 = 0x2D;
+	public final static byte SKIP_CMD_ID_SPARE3 = 0x2E;
+	public final static byte SKIP_CMD_ID_SPARE4 = 0x2F;
+	public final static byte FIRST_SKIP_CMD_ID = SKIP_CMD_ID_GET_STATUS;
+	public final static byte LAST_SKIP_CMD_ID = SKIP_CMD_ID_SPARE4;
+
+	//
+	//SKIP_ANALOG_INPUT_CHANNEL_VIN is used for +/- 10 volt probes.
+	//SKIP_ANALOG_INPUT_CHANNEL_VIN_LOW is used for 5 volt probes.
+	public final static byte SKIP_ANALOG_INPUT_CHANNEL_VOFF = 0;
+	public final static byte SKIP_ANALOG_INPUT_CHANNEL_VIN  = 1;
+	public final static byte SKIP_ANALOG_INPUT_CHANNEL_VIN_LOW = 2;
+	public final static byte SKIP_ANALOG_INPUT_CHANNEL_VID  = 3;
+	
 	//
 	/*
-	#define SKIP_CMD_ID_GET_STATUS 0x10
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_1BYTE 0x11
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_2BYTES 0x12
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_3BYTES 0x13
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_4BYTES 0x14
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_5BYTES 0x15
-	#define SKIP_CMD_ID_WRITE_LOCAL_NV_MEM_6BYTES 0x16
-	#define SKIP_CMD_ID_READ_LOCAL_NV_MEM 0x17
-	#define SKIP_CMD_ID_START_MEASUREMENTS 0x18
-	#define SKIP_CMD_ID_STOP_MEASUREMENTS 0x19
-	#define SKIP_CMD_ID_INIT 0x1A
-	#define SKIP_CMD_ID_SET_MEASUREMENT_PERIOD 0x1B
-	#define SKIP_CMD_ID_GET_MEASUREMENT_PERIOD 0x1C
-	#define SKIP_CMD_ID_SET_LED_STATE 0x1D
-	#define SKIP_CMD_ID_GET_LED_STATE 0x1E
-	#define SKIP_CMD_ID_GET_SERIAL_NUMBER 0x20
-	//Commands defined above are supported by Skip, Jonah, and Cyclops, except that Cyclops does not support the serial # or the NV_MEM cmds.
-	//Skip extensions:
-	#define SKIP_CMD_ID_SET_VIN_OFFSET_DAC 0x1F
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_1BYTE 0x21
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_2BYTES 0x22
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_3BYTES 0x23
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_4BYTES 0x24
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_5BYTES 0x25
-	#define SKIP_CMD_ID_WRITE_REMOTE_NV_MEM_6BYTES 0x26
-	#define SKIP_CMD_ID_READ_REMOTE_NV_MEM 0x27
-	#define SKIP_CMD_ID_GET_SENSOR_ID 0x28
-	#define SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL 0x29
-	#define SKIP_CMD_ID_GET_ANALOG_INPUT_CHANNEL 0x2A
-	#define SKIP_CMD_ID_GET_VIN_OFFSET_DAC 0x2B
-	#define SKIP_CMD_ID_SPARE1 0x2C
-	#define SKIP_CMD_ID_SPARE2 0x2D
-	#define SKIP_CMD_ID_SPARE3 0x2E
-	#define SKIP_CMD_ID_SPARE4 0x2F
-	#define FIRST_SKIP_CMD_ID SKIP_CMD_ID_GET_STATUS
-	#define LAST_SKIP_CMD_ID SKIP_CMD_ID_SPARE4
 */
-	public final static byte SKIP_CMD_ID_START_MEASUREMENTS = 0x18; 
 	
 	//Some stuff from GVernierUSB.h
 	//Constants used by the USB protocol to identify our devices:
@@ -242,7 +252,7 @@ public interface GoIOJNALibrary extends Library {
 	Return:		0 if successful, else -1.
 
 	****************************************************************************************************************************/
-	int	Sensor_Unlock(
+	int	GoIO_Sensor_Unlock(
 						Pointer hSensor);//[in] handle to open sensor.
 	
 	/***************************************************************************************************************************
@@ -279,7 +289,7 @@ public interface GoIOJNALibrary extends Library {
 	int GoIO_Sensor_SendCmdAndGetResponse(
 											Pointer hSensor,	//[in] handle to open sensor.
 											byte cmd,		//[in] command code. See SKIP_CMD_ID_* in GSkipCommExt.h.
-											Pointer pParams,			//[in] ptr to cmd specific parameter block, may be NULL. See GSkipCommExt.h.
+											byte [] pParams,			//[in] ptr to cmd specific parameter block, may be NULL. See GSkipCommExt.h.
 											int nParamBytes,//[in] # of bytes in (*pParams).
 											Pointer pRespBuf,			//[out] ptr to destination buffer, may be NULL. See GSkipCommExt.h.
 											int []pnRespBytes,//[in, out] ptr to size of of pRespBuf buffer on input, size of response on output, may be NULL if pRespBuf is NULL.
@@ -624,5 +634,10 @@ public interface GoIOJNALibrary extends Library {
 			Pointer hSensor,		//[in] handle to open sensor. 
 			byte [] pSensorNumber,	//[out] ptr to SensorNumber.
 			int sendQueryToHardwareflag,//[in] If sendQueryToHardwareflag != 0, then send a SKIP_CMD_ID_GET_SENSOR_ID to the sensor hardware. 
-			int timeoutMs);//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.	 
+			int timeoutMs);//[in] # of milliseconds to wait for a reply before giving up. SKIP_TIMEOUT_MS_DEFAULT is recommended.
+	
+	int GoIO_Sensor_DDSMem_GetChecksum(
+			Pointer hSensor,
+			byte [] pChecksum);
+
 }

@@ -138,7 +138,7 @@ public class GoIOLibrary
 	public boolean sensorSendCmd(
 			GoIOSensor sensor,	
 			byte cmd,		
-			Pointer pParams,			
+			byte [] pParams,			
 			int nParamBytes,
 			Pointer pRespBuf,			
 			int []pnRespBytes,
@@ -165,7 +165,7 @@ public class GoIOLibrary
 	{
 		boolean ret = false;
 		
-		Pointer pParams = null;
+		byte [] pParams = null;
 		Pointer pRespBuf =null;
 		int []pnRespBytes = null;
 		

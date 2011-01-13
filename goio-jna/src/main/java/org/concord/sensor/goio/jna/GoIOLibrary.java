@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -195,7 +194,7 @@ public class GoIOLibrary
 					maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf. See warning above.
 
 		int [] retbuf = new int [ngot];
-		retbuf = Arrays.copyOfRange(pMeasurementsBuf, 0,ngot);
+		System.arraycopy(pMeasurementsBuf, 0, retbuf, 0, ngot);
 		return retbuf;	
 	}
 	

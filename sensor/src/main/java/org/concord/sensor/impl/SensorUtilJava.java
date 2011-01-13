@@ -45,7 +45,7 @@ public class SensorUtilJava {
 			try {
 				fieldValue = field.getInt(null);
 				if(fieldValue == type){
-					return name;
+					return name.substring("QUANTITY_".length());
 				}
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block

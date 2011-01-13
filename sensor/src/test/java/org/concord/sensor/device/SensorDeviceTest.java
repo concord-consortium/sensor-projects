@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import javax.swing.JOptionPane;
 
+import junit.framework.Assert;
+
 import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
@@ -25,6 +27,9 @@ public abstract class SensorDeviceTest {
 	// This is passed to the open method on the device
 	// several devices don't use this
 	protected String openString = null;
+	
+	// This is to catch exceptions on second threads
+	Throwable otherThreadException = null;;
 	
 	@Test
 	public void testDeviceCreated() {
@@ -127,10 +132,87 @@ public abstract class SensorDeviceTest {
 		
 		
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
-		
+		assertNotNull("Non null experiment config", experimentConfig);
 		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
 	}
 	
+	@Test
+	public void testConfigureRawVoltage1(){
+		// This might not be supported by all devices.  The raw voltage configuration has
+		// 2 goals: 
+		// -- allow people to build their own sensors
+		// -- debugging calibrations of production sensors 
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+			" and a raw voltage compatible sensor");
+
+		prepareDevice();
+		
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_RAW_VOLTAGE_1);
+		
+		
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		
+		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
+		Assert.assertEquals("First sensor is raw voltage 1", SensorConfig.QUANTITY_RAW_VOLTAGE_1, 
+				experimentConfig.getSensorConfigs()[0].getType());
+	}
+	
+	@Test
+	public void testConfigureRawVoltage2(){
+		// This might not be supported by all devices.  The raw voltage configuration has
+		// 2 goals: 
+		// -- allow people to build their own sensors
+		// -- debugging calibrations of production sensors 
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+			" and a raw voltage compatible sensor");
+
+		prepareDevice();
+		
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_RAW_VOLTAGE_2);
+		
+		
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		
+		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
+		Assert.assertEquals("First sensor is raw voltage 1", SensorConfig.QUANTITY_RAW_VOLTAGE_2, 
+				experimentConfig.getSensorConfigs()[0].getType());
+	}
+
+	@Test
+	public void testRepeatConfiguration(){
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+			" and a sensor which is NOT temperature");
+
+		prepareDevice();
+		
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_TEMPERATURE);
+				
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly didn't find a temperature sensor", !experimentConfig.isValid());
+		
+		experimentConfig = null;
+		
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		" and a temperature sensor");
+
+		experimentConfig = device.configure(experimentRequest);		
+		
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
+	}
+		
 	@Test
 	public void testStartStop(){
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
@@ -144,6 +226,7 @@ public abstract class SensorDeviceTest {
 		sensorRequest.setType(SensorConfig.QUANTITY_TEMPERATURE);
 
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
 		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
 
 		assertTrue("Device started correctly", device.start());
@@ -165,6 +248,7 @@ public abstract class SensorDeviceTest {
 		sensorRequest.setType(SensorConfig.QUANTITY_TEMPERATURE);
 
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
 		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
 
 		assertTrue("Device started correctly", device.start());
@@ -182,6 +266,92 @@ public abstract class SensorDeviceTest {
 	}
 	
 	@Test
+	public void testRawVoltage1Collection() throws InterruptedException{
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		" and a raw voltage compatible sensor reading between 0 and 5 Volts");
+
+		prepareDevice();
+
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();
+		experimentRequest.setPeriod(0.1f);
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_RAW_VOLTAGE_1);
+
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly configured a raw voltage sensor", experimentConfig.isValid());
+
+		assertTrue("Device started correctly", device.start());
+		
+		float[] values = new float[10000];		
+		int count = device.read(values, 0, 1, null);
+		assertTrue("Read doesn't return error", count >=0);
+
+		Thread.sleep(500);
+		count = device.read(values, 0, 1, null);
+		assertTrue("Read got some valid values", count > 0);
+		assertTrue("Voltage value is sane", values[0] >= 0 && values[0] <= 5);
+				
+		device.stop(true);				
+	}
+
+	
+	@Test
+	public void testThreadedCollection() throws Throwable{
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		" and a temperature sensor between 10 and 40 C (50 - 104 F)");
+
+		prepareDevice();
+
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();
+		experimentRequest.setPeriod(0.1f);
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_TEMPERATURE);
+
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
+
+		assertTrue("Device started correctly", device.start());
+		
+		Thread thread = new Thread(){
+			public void run() {
+				float[] values = new float[10000];		
+				int count = device.read(values, 0, 1, null);
+				assertTrue("Read doesn't return error", count >=0);				
+
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					assertTrue("Should not throw an exception while waiting", false);
+				}
+				count = device.read(values, 0, 1, null);
+				assertTrue("Read got some valid values", count > 0);
+				assertTrue("Temp value is sane", values[0] > 10 && values[0] < 40);
+			}
+		};
+
+		otherThreadException = null;
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {			
+			public void uncaughtException(Thread t, Throwable e) {
+				otherThreadException = e;
+				
+			}
+		});
+		thread.start();
+		
+		thread.join();
+		
+		if(otherThreadException != null){
+			throw otherThreadException;
+		}
+		
+		device.stop(true);				
+	}
+
+	@Test
 	public void testConfigureInvalid(){
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
 			" with NO temperature sensor");
@@ -195,8 +365,9 @@ public abstract class SensorDeviceTest {
 		
 		
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
 		
-		assertTrue("Correctly configured a temperature sensor", !experimentConfig.isValid());
+		assertTrue("Correctly didn't find a temperature sensor", !experimentConfig.isValid());
 	}
 
 	@Test
@@ -222,7 +393,7 @@ public abstract class SensorDeviceTest {
 		device = null;
 	}
 	
-	void prepareDevice() {
+	protected void prepareDevice() {
 		if(device instanceof DeviceIdAware){
 			((DeviceIdAware)device).setDeviceId(deviceId);
 		}
@@ -252,7 +423,7 @@ public abstract class SensorDeviceTest {
 		device.open(openString);
 	}
 	
-	String getDeviceLabel(){
+	protected String getDeviceLabel(){
 		return device.getVendorName() + " " + device.getDeviceName();
 	}
 	

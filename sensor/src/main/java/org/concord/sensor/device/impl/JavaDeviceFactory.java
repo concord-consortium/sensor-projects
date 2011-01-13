@@ -123,6 +123,9 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case VERNIER_LAB_QUEST:
 				className = "org.concord.sensor.vernier.labquest.LabQuestSensorDevice";
 				break;
+			case VERNIER_GO_LINK_JNA:
+				className = "org.concord.sensor.vernier.goio.GoIOSensorDevice";
+				break;
 			case TI_CONNECT:
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
 				break;				

@@ -235,7 +235,7 @@ public abstract class SensorDeviceTest {
 	}
 	
 	@Test
-	public void testCollection() throws InterruptedException{
+	public void testTemperatureCollection() throws InterruptedException{
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
 		" and a temperature sensor between 10 and 40 C (50 - 104 F)");
 
@@ -265,6 +265,37 @@ public abstract class SensorDeviceTest {
 		device.stop(true);				
 	}
 	
+	@Test
+	public void testMotionCollection() throws InterruptedException{
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		" and a motion sensor between 0 and 1 meter");
+
+		prepareDevice();
+
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();
+		experimentRequest.setPeriod(0.1f);
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_DISTANCE);
+
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly configured a motion sensor", experimentConfig.isValid());
+
+		assertTrue("Device started correctly", device.start());
+		
+		float[] values = new float[10000];		
+		int count = device.read(values, 0, 1, null);
+		assertTrue("Read doesn't return error", count >=0);
+
+		Thread.sleep(500);
+		count = device.read(values, 0, 1, null);
+		assertTrue("Read got some valid values", count > 0);
+		assertTrue("Temp value is sane", values[0] > 0f && values[0] < 1f);
+				
+		device.stop(true);				
+	}
+
 	@Test
 	public void testRawVoltage1Collection() throws InterruptedException{
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +

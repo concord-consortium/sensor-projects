@@ -32,8 +32,6 @@ package org.concord.sensor.pasco;
 
 import java.util.logging.Logger;
 
-import org.concord.sensor.device.DeviceService;
-
 
 /**
  * @author scott
@@ -48,7 +46,6 @@ public class ByteBufferStreamReversed
     int offset;
     int endOffset;
     boolean lowNibble = false;
-    DeviceService devService;
     
     /*
     public static final float readFloat(byte [] inBuf, int offset)
@@ -138,13 +135,11 @@ public class ByteBufferStreamReversed
 		return sb.toString();
 	}
 
-    public ByteBufferStreamReversed(byte [] buffer, int offset, int length,
-            DeviceService devService)
+    public ByteBufferStreamReversed(byte [] buffer, int offset, int length)
     {
         inBuf = buffer;
         this.offset = offset;
         this.endOffset = offset+length;
-        this.devService = devService;
     }
     
     /*
@@ -266,11 +261,7 @@ public class ByteBufferStreamReversed
             	returnStr += "+/-";
             } else if((currChar & 0xFF) > 127) {
             	// got unknown unit char:
-            	if (devService != null) {
-            		devService.log("got unknown unit char: " + currChar);
-            	} else {
-            		logger.warning("got unknown unit char: " + currChar);
-            	}
+            	logger.warning("got unknown unit char: " + currChar);
             	returnStr += (char)currChar;
             } else {
             	returnStr += (char)currChar;

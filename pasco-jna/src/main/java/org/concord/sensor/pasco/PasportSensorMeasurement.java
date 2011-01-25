@@ -1,12 +1,8 @@
 package org.concord.sensor.pasco;
 
-import org.concord.sensor.SensorConfig;
-import org.concord.sensor.SensorRequest;
-import org.concord.sensor.device.impl.SensorConfigImpl;
-import org.concord.sensor.impl.SensorUnit;
 
 
-public class PasportSensorMeasurement extends SensorConfigImpl
+public class PasportSensorMeasurement
 {
 	PasportSensorDataSheet dataSheet = null;
 	
@@ -96,53 +92,7 @@ public class PasportSensorMeasurement extends SensorConfigImpl
 		typicalMin = bb.readFixed();
 		
 		// fixed - typical highest value
-		typicalMax = bb.readFixed();		
-		
-		////////////////////////
-	    // configure the Sensor settings
-		////////////////////////
-		
-		setPort(id);
-		setName(name);
-		setStepSize(accuracy);
-		SensorUnit unit = new SensorUnit(unitStr);
-		setUnit(unit);
-		setConfirmed(true);
-		
-		// this is the hard part we have to figure out what type
-		// of sensor this is. It seems the only way is to check
-		// the name
-		if((name.indexOf("Temperature") >= 0) && 
-				(unitStr.indexOf("C") > 0)) {
-			if(name.indexOf("Probe") >= 0) {
-				setType(SensorConfig.QUANTITY_TEMPERATURE_WAND);				
-			} else {
-				setType(SensorConfig.QUANTITY_TEMPERATURE);	
-			} 
-		} else if(name.indexOf("Position") >= 0) {
-			setType(SensorConfig.QUANTITY_DISTANCE);
-		} else if(name.indexOf("Light") >= 0) {
-			setType(SensorConfig.QUANTITY_LIGHT);			
-		} else if(name.indexOf("Humidity") >=0) {
-			setType(SensorConfig.QUANTITY_RELATIVE_HUMIDITY); 				
-		} else if((name.indexOf("Force") >= 0) &&
-				(unitStr.indexOf("N") >= 0)){
-			// need to choose the reversed measurement
-			setType(SensorConfig.QUANTITY_FORCE);
-		} else if((name.indexOf("Voltage") >= 0) &&
-				(unitStr.indexOf("V") >= 0)) {
-			setType(SensorConfig.QUANTITY_VOLTAGE);
-		} else if((name.indexOf("Current") >= 0) &&
-				(unitStr.indexOf("A") >= 0)) {
-			setType(SensorConfig.QUANTITY_CURRENT);
-		} else if((name.indexOf("Pressure") >=0) &&
-				(unitStr.indexOf("kPa") >= 0)){
-			setType(SensorConfig.QUANTITY_GAS_PRESSURE);
-		} else if(name.indexOf("Sound") >=0){
-			setType(SensorConfig.QUANTITY_SOUND_INTENSITY);
-		} else {
-			setType(SensorConfig.QUANTITY_UNKNOWN);
-		}
+		typicalMax = bb.readFixed();				
 	}
 	
 	protected int getSampleSize()
@@ -207,44 +157,6 @@ public class PasportSensorMeasurement extends SensorConfigImpl
 	protected boolean isVisible()
 	{
 		return (visible & 0x2) == 0;
-	}
-	
-	/**
-	 * return a score 0 to 100
-	 * this should be moved to a more abstract class
-	 * perhaps it can be moved totally outside of this
-	 * class altogether.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	protected int matches(SensorRequest request)
-	{
-		if((visible & 0x2) != 0) {
-			// this measurement isn't visible
-			return 0;
-		}
-        if(request.getType() == SensorConfig.QUANTITY_TEMPERATURE){
-        	if(getType() == SensorConfig.QUANTITY_TEMPERATURE) {
-        		return 75;
-        	}
-        	if(getType() == SensorConfig.QUANTITY_TEMPERATURE_WAND) {
-        		return 100;
-        	}
-        } 
-        
-        if(getType() == SensorConfig.QUANTITY_DISTANCE) {
-        	if(request.getType() == SensorConfig.QUANTITY_DISTANCE ||
-                    request.getType() == SensorConfig.QUANTITY_VELOCITY) {
-        		return 100;
-        	}
-        }
-
-        if(getType() == request.getType()) {
-        	return 100;
-        }
-        
-		return 0;
 	}
 	
 	protected String getStringView()

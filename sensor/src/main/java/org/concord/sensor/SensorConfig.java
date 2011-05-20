@@ -126,6 +126,9 @@ public interface SensorConfig
 	public static int QUANTITY_DISSOLVED_OXYGEN=    32;
 	public static int QUANTITY_COLORIMETER=         33;
 	public static int QUANTITY_HAND_DYNAMOMETER=    34;
+	public static int QUANTITY_UVA_INTENSITY=       35;
+	public static int QUANTITY_UVB_INTENSITY=       36;
+	
 	
 	
 	/**

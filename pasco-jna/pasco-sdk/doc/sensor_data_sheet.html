@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<!--This file was converted to xhtml by OpenOffice.org - see http://xml.openoffice.org/odf2xhtml for more info.-->
+	<head>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+		<title xml:lang="en-US" lang="en-US">
+			- no title specified
+		</title>
+	</head>
+	<body dir="ltr">
+		<h1>
+			Sensor Data Sheet
+		</h1>
+		<p>
+			Associated with each sensor is a data sheet that is the accessed through the inquiry command. It is a structure of information about the sensor. The information includes general information about the entire sensor and specific information about sensor measurements. The data sheet provides all of the information that is required to collect and display sampled data and control the sensor or actuator. If a particular
+		</p>
+		<h2>
+			General Sensor Information
+		</h2>
+		<p>
+			Every sensor will contain at a minimum the following data sheet information. Note that the first 58 bytes are fixed-length.
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>ID</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>Unique number assigned to each sensor type.</td>
+			</tr>
+			<tr>
+				<td>Maximum Data Sheet</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>The maximum memory available in the sensor for data sheet information. The sensor may not use the entire memory. A client should validate this field before attempting to write to sensor data sheet memory.</td>
+			</tr>
+			<tr>
+				<td>
+					<p>
+						Data Sheet Length
+					</p>
+					<p>
+						(Standard)
+					</p>
+				</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>The number of bytes actually used for data sheet information. This count includes this header, all measurements, and the checksum. A client need only read this amount to retrieve the sensor’s entire data sheet.</td>
+			</tr>
+			<tr>
+				<td>
+					<p>
+						(V1.x) Reserved
+					</p>
+					<p>
+						(V2.x) Extended Data Sheet Length
+					</p>
+				</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>Additional data sheet length beyond the checksum at the end of the standard data sheet.</td>
+			</tr>
+			<tr>
+				<td>Class Code</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>This number groups certain sensors that need special treatment. Two motion sensors must alternate triggers to avoid interaction. Electrodes in a common solution may need to be power cycled to avoid electrical interaction.</td>
+			</tr>
+			<tr>
+				<td>Version</td>
+				<td>ASCII</td>
+				<td>4 bytes</td>
+				<td>
+					<p>
+						Data sheet version number e.g. “1.0 ”
+					</p>
+					<p>
+						(must be at least 2.0 for this specification)
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Model Number</td>
+				<td>ASCII</td>
+				<td>10 bytes</td>
+				<td>PASCO model number for sensor (i.e. CI-6505A)</td>
+			</tr>
+			<tr>
+				<td>Measurement Count</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>The count of measurement records that follows the general sensor information.</td>
+			</tr>
+			<tr>
+				<td>Icon</td>
+				<td>U INT</td>
+				<td>32 bytes</td>
+				<td>Sensor icon bitmap, 2 bytes per row.</td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td>ASCII (T)</td>
+				<td>Variable</td>
+				<td>The sensor’s name. Documentation for the user.</td>
+			</tr>
+			<tr>
+				<td>Minimum Rate</td>
+				<td>
+					<p>
+						U INT
+					</p>
+					<p>
+						MSB Flag
+					</p>
+					<p>
+						0 = Hz
+					</p>
+					<p>
+						1 = Sec
+					</p>
+				</td>
+				<td>4 bytes</td>
+				<td>The slowest reasonable sample rate. Zero indicates that there is no minimum. If a sensor knows that the data it will collect requires a minimum rate to be viewed (such as EKG), then it specifies the rate.</td>
+			</tr>
+			<tr>
+				<td>Maximum Rate</td>
+				<td>
+					<p>
+						U INT
+					</p>
+					<p>
+						MSB Flag
+					</p>
+					<p>
+						0 = Hz
+					</p>
+					<p>
+						1 = Sec
+					</p>
+				</td>
+				<td>4 bytes</td>
+				<td>The highest rate at which the sensor can sample and process data.</td>
+			</tr>
+			<tr>
+				<td>Default Rate</td>
+				<td>
+					<p>
+						U INT
+					</p>
+					<p>
+						MSB Flag
+					</p>
+					<p>
+						0 = Hz
+					</p>
+					<p>
+						1 = Sec
+					</p>
+				</td>
+				<td>4 bytes</td>
+				<td>The sensor’s preferred sample rate. The rate at which the best data can be obtained from the sensor.</td>
+			</tr>
+			<tr>
+				<td>Latency</td>
+				<td>U INT</td>
+				<td>4 bytes</td>
+				<td>
+					<p>
+						The maximum time delay in us (10<sup>-6</sup> sec) between the receipt of a sample command and the availability of the result. A value of zero indicates that the latency is unknown.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Warm Up</td>
+				<td>U INT</td>
+				<td>4 bytes</td>
+				<td>The time in ms from the application of sensor power until the sensor is ready to sample data. Some transducers require some time until they stabilize.</td>
+			</tr>
+		</table>
+		<h2>
+			Measurement Information
+		</h2>
+		<p>
+			The sensor specifies one or more measurements with the following record format. Some of these measurements, the sensor can directly produce. Other measurement records provide information for a sensor client to further process another direct measurement into the correct measurement value.
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>ID</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>A unique number within the sensor. A device can use this ID to uniquely identify a measurement in a sensor. DataStudio may use an ASCII version of this number in calculations.</td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td>ASCII (T)</td>
+				<td>Variable</td>
+				<td>
+					<p>
+						The name of the measurement, excluding units.
+					</p>
+					<p>
+						Example: Temperature
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Units</td>
+				<td>ASCII (T)</td>
+				<td>Variable</td>
+				<td>
+					<p>
+						The displayable units for the measurement.
+					</p>
+					<p>
+						Example: deg C
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Type</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>
+					<p>
+						0 = Direct Value
+					</p>
+					<p>
+						1 = Raw Analog ADC Value
+					</p>
+					<p>
+						2 = Raw Digital Word
+					</p>
+					<p>
+						3 = Simple Calibration (2-Point Linear)
+					</p>
+					<p>
+						4 = Macro Calculation
+					</p>
+					<p>
+						5 = Table Calibrated Value (N-Points)
+					</p>
+					<p>
+						6 = Equation Calculated Value
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Type Descriptor Length</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>Number of bytes of type description to follow. May be zero.</td>
+			</tr>
+			<tr>
+				<td>Type Descriptor</td>
+				<td></td>
+				<td>Variable</td>
+				<td>Variable length and format based on type. May not be present if length is zero.</td>
+			</tr>
+			<tr>
+				<td>Visible</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>
+					<p>
+						(V1.x)
+					</p>
+					<p>
+						Bit 0: 1 = visible to user by default.
+					</p>
+					<p>
+						(V2.x)
+					</p>
+					<p>
+						Bit 1: 1 = internal measurement, always hide from user.
+					</p>
+					<p>
+						Bit 2: 1 = choose this measurement for default display if only 1 measurement can be displayed
+					</p>
+					<p>
+						Bit 3: 1 = applicable for digital readout
+					</p>
+					<p>
+						Bit 4, 5: Reserved
+					</p>
+					<p>
+						Bit 6: 1 = measurement is an accumulator that is zeroed when read
+					</p>
+					<p>
+						Bit 7: 1 = measurement should be zeroed in software by reading an initial value and offsetting all other values.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Accuracy</td>
+				<td>FIXED</td>
+				<td>4 bytes</td>
+				<td>This defines the measurement’s repeatability or the width of the window in which repeated measurements fall. The units of this number are the same as the measurement. A graph would use this as a default limit on zooming.</td>
+			</tr>
+			<tr>
+				<td>Precision</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>Number of digits to the right of the decimal point when this measurement is displayed as a decimal number.</td>
+			</tr>
+			<tr>
+				<td>Display Format</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>
+					<p>
+						0 = no preference
+					</p>
+					<p>
+						1 = digital readout
+					</p>
+					<p>
+						2 = graph
+					</p>
+					<p>
+						3 = table
+					</p>
+					<p>
+						4 = meter
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Minimum Value</td>
+				<td>FIXED</td>
+				<td>4 bytes</td>
+				<td>The lowest possible value for the measurement.</td>
+			</tr>
+			<tr>
+				<td>Maximum Value</td>
+				<td>FIXED</td>
+				<td>4 bytes</td>
+				<td>The highest possible value for the measurement.</td>
+			</tr>
+			<tr>
+				<td>Typical Minimum</td>
+				<td>FIXED</td>
+				<td>4 bytes</td>
+				<td>The lowest typical value for the measurement Useful for setting default display scales.</td>
+			</tr>
+			<tr>
+				<td>Typical Maximum</td>
+				<td>FIXED</td>
+				<td>4 bytes</td>
+				<td>The highest typical value for the measurement. Useful for setting default display scales.</td>
+			</tr>
+		</table>
+		<h2>
+			Checksum Information
+		</h2>
+		<p>
+			Following the general sensor and measurement blocks is a data sheet checksum.
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>Checksum</td>
+				<td>U INT</td>
+				<td>4 bytes</td>
+				<td>The sum of all bytes in the data sheet.</td>
+			</tr>
+		</table>
+		<h2>
+			Measurement Types
+		</h2>
+		<p>
+			The measurement type provides the sensor client with information as to the length and format of data for a specific measurement, or what additional processing is required to obtain values for the measurement. Note that only the first 3 measurement types result in the sensor actually producing a value. All other types must be computed by the sensor client based on values returned for other measurements.
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="146" />
+				<col width="49" />
+				<col width="250" />
+				<col width="230" />
+			</colgroup>
+			<tr>
+				<td>Type</td>
+				<td>Code</td>
+				<td>Descriptor</td>
+				<td>Data Length &amp; Format</td>
+			</tr>
+			<tr>
+				<td>Direct Value</td>
+				<td>0</td>
+				<td>None</td>
+				<td>FIXED (4 bytes)</td>
+			</tr>
+			<tr>
+				<td>Raw Analog ADC Count</td>
+				<td>1</td>
+				<td>1 byte indicating ADC word size (1, 2, 4 bytes)</td>
+				<td>
+					<p>
+						INT analog converter value.
+					</p>
+					<p>
+						1 byte word represents 0-5 V
+					</p>
+					<p>
+						2 byte word represents +/- 10 V
+					</p>
+					<p>
+						4 byte word represents +/- 20V
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Raw Digital Word</td>
+				<td>2</td>
+				<td>1 byte indicating word length</td>
+				<td>U INT</td>
+			</tr>
+			<tr>
+				<td>Simple Calibration</td>
+				<td>3</td>
+				<td>
+					<p>
+						2 byte U INT for input meas. ID
+					</p>
+					<p>
+						+ 4 FIXED values, as follows:
+					</p>
+					<p>
+						Input Value 1, Output Value 1
+					</p>
+					<p>
+						Input Value 2, Output Value 2
+					</p>
+				</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the calibration values.</td>
+			</tr>
+			<tr>
+				<td>Macro Calculation</td>
+				<td>4</td>
+				<td>
+					<p>
+						2 byte U INT for input meas. ID
+					</p>
+					<p>
+						+ 1 byte UINT for macro type
+					</p>
+					<p>
+						+ variable number of FIXED parameters
+					</p>
+				</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the macro type.</td>
+			</tr>
+			<tr>
+				<td>Table Calibrated</td>
+				<td>5</td>
+				<td>
+					<p>
+						2 byte U INT for input meas. ID
+					</p>
+					<p>
+						+ 2 FIXED values per point
+					</p>
+					<p>
+						(Input Value, Output Value)
+					</p>
+				</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the calibration table.</td>
+			</tr>
+			<tr>
+				<td>Equation Calculated</td>
+				<td>6</td>
+				<td>ASCII string containing a DataStudio format expression. The expression should refer to other measurement IDs with the syntax “#nnnn”.</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the expression.</td>
+			</tr>
+			<tr>
+				<td>User Calibration</td>
+				<td>7</td>
+				<td>
+					<p>
+						2 byte U INT for input meas. ID
+					</p>
+					<p>
+						+ 4 FIXED values, as follows:
+					</p>
+					<p>
+						Input Value 1, Output Value 1
+					</p>
+					<p>
+						Input Value 2, Output Value 2
+					</p>
+				</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the calibration values.</td>
+			</tr>
+			<tr>
+				<td>N-Input Macro Calculation</td>
+				<td>8</td>
+				<td>
+					<p>
+						1 byte UINT for # of inputs
+					</p>
+					<p>
+						+ 1 byte UINT for each input meas. ID
+					</p>
+					<p>
+						+ 1 byte UINT macro type
+					</p>
+					<p>
+						optionally:
+					</p>
+					<p>
+						+ 4 FIXED values, as follows for Two-Input Combination macro type only:
+					</p>
+					<p>
+						Product Scale, Input 1 Scale,
+					</p>
+					<p>
+						Input 2 Scale, Absolute Value
+					</p>
+					<p>
+						Flag (1 = take Abs. Value)
+					</p>
+				</td>
+				<td>This measurement type does not produce values in the sensor. The client must compute a value from another measurement’s value using the macro type (and, optionally the parameters).</td>
+			</tr>
+		</table>
+		<h2>
+			Macro Types
+		</h2>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="139" />
+				<col width="56" />
+				<col width="160" />
+				<col width="320" />
+			</colgroup>
+			<tr>
+				<td>Macro</td>
+				<td>Code</td>
+				<td>Parameters</td>
+				<td>
+					<p>
+						Definition
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Smooth</td>
+				<td>1</td>
+				<td>N = number of Points</td>
+				<td>Not currently supported.</td>
+			</tr>
+			<tr>
+				<td>Rate Average</td>
+				<td>2</td>
+				<td>
+					<p>
+						T = time average window (in seconds)
+					</p>
+					<p>
+						S = scale factor
+					</p>
+				</td>
+				<td>Reduces T seconds of input values to a single value by summing and dividing by the number of values, then multiplies by the scale factor.</td>
+			</tr>
+			<tr>
+				<td>Ultrasound Position</td>
+				<td>3</td>
+				<td>S = speed of sound</td>
+				<td>
+					<p>
+						S * input / 2000000.0
+					</p>
+					<p>
+						(assumes input is ping/echo timer in usec)
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Rotary Position Change</td>
+				<td>4</td>
+				<td>
+					<p>
+						M = position scale for 1 revolution (linear or angular)
+					</p>
+					<p>
+						R = number of count units per revolution
+					</p>
+				</td>
+				<td>M * input / R</td>
+			</tr>
+			<tr>
+				<td>Derivative</td>
+				<td>5</td>
+				<td>None</td>
+				<td>Produces a rate of change value for each pair of input points (dy/dx).</td>
+			</tr>
+			<tr>
+				<td>Absorbance</td>
+				<td>6</td>
+				<td>None</td>
+				<td>2.0 – log( limit( 0.1, 100, input ) )</td>
+			</tr>
+			<tr>
+				<td>Linear Conversion</td>
+				<td>7</td>
+				<td>
+					<p>
+						S = Scale Factor
+					</p>
+					<p>
+						O = Offset
+					</p>
+				</td>
+				<td>input * S + O</td>
+			</tr>
+			<tr>
+				<td>(V2.x)Two-Input Combination</td>
+				<td>8</td>
+				<td>
+					<p>
+						M = Multiplication Scale
+					</p>
+					<p>
+						A1 = Addition Scale for input 1
+					</p>
+					<p>
+						A2 = Addition scale for input 2
+					</p>
+					<p>
+						Input 2 = second input index
+					</p>
+				</td>
+				<td>Input * Input2 * M + Input * A1 + Input2 * A2</td>
+			</tr>
+			<tr>
+				<td>(V2.x) Two-Input Vector Sum</td>
+				<td>9</td>
+				<td>None</td>
+				<td>Sqrt( Input^2 + Input2^2 )</td>
+			</tr>
+			<tr>
+				<td>(V2.x) Three-Input Vector Sum</td>
+				<td>10</td>
+				<td>None</td>
+				<td>Sqrt( Input^2 + Input2^2 + Input3^2 )</td>
+			</tr>
+		</table>
+		<h2>
+			Extended Data Sheet (V2.x)
+		</h2>
+		<p>
+			If the standard data sheet has a non-zero value in the extended data sheet field, then the sensor has extended data sheet information. The total data sheet length available in the sensor is the sum of the Data Sheet Length and the Extended Data Sheet Length. The extended data sheet contains one or more consecutive blocks of data of the following type.
+		<p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>tag</td>
+				<td>UINT</td>
+				<td>1 byte</td>
+				<td>Determines what type of data follows</td>
+			</tr>
+			<tr>
+				<td>length</td>
+				<td>UINT</td>
+				<td>2 bytes</td>
+				<td>Determines how many bytes of data follow</td>
+			</tr>
+			<tr>
+				<td>data</td>
+				<td>variable</td>
+				<td>variable</td>
+				<td></td>
+			</tr>
+		</table>
+		<h3>
+			The possible data type tags are as follows:
+		</h3>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="49" />
+				<col width="681" />
+			</colgroup>
+			<tr>
+				<td>Tag</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>Sensor Command Support Extension</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>Localized Language String Extension</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>English Short Name Extension</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td></td>
+			</tr>
+		</table>
+		<h2>
+			Sensor Command Support Extension Format:
+		</h2>
+		<p>
+			All sensors are assumed to support NOP, Read Data Sheet, Write Data Sheet, and Sample Selected Measurements. Some sensors also implement additional commands in their firmware. This blocks defines which additional commands are implemented.
+		</p>
+		<p>
+			(Repeat for each extended sensor command supported by the sensor firmware.)
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>Command Byte</td>
+				<td>U INT</td>
+				<td>1 byte</td>
+				<td>The extended command supported by the sensor.</td>
+			</tr>
+			<tr>
+				<td>Data Length</td>
+				<td>UINT</td>
+				<td>1 byte</td>
+				<td>The number of data bytes which are transferred to or from the sensor after this command. (The number of operand bytes and direction of data bytes is assumed based on the command byte.)</td>
+			</tr>
+		</table>
+		<h2>
+			English Short Name Extension Format:
+		</h2>
+		<p>
+			Short names are used on some PASPORT interfaces with restricted display space. They were not defined as part of the original data sheet format.
+		</p>
+		<p>
+			(Repeat for each sensor measurement with a defined short name.)
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="83" />
+				<col width="83" />
+				<col width="396" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>measurement ID</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>The measurement ID for which the short name is defined.</td>
+			</tr>
+			<tr>
+				<td>Short Name</td>
+				<td>ASCII (T)</td>
+				<td>variable</td>
+				<td>The English name to display when space is limited.</td>
+			</tr>
+		</table>
+		<h2>
+			Localized Language String Extension Format:
+		</h2>
+		<p>
+			The original data sheet format specified only Enlgish ASCII strings. This block allows Unicode strings in English or some other language to be specified as part of the sensor data sheet.
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="104" />
+				<col width="90" />
+				<col width="368" />
+			</colgroup>
+			<tr>
+				<td>Field</td>
+				<td>Format</td>
+				<td>Length</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>Language ID</td>
+				<td>U INT</td>
+				<td>2 bytes</td>
+				<td>The language ID for all strings in this localization block.</td>
+			</tr>
+			<tr>
+				<td>Sensor Name</td>
+				<td>UCODE (T)</td>
+				<td>Variable</td>
+				<td>Unicode replacement for the sensor name.</td>
+			</tr>
+		</table>
+		<p>
+			(Repeat for each sensor measurement with localized strings.)
+		</p>
+		<table border="1" cellspacing="0" cellpadding="0">
+			<colgroup>
+				<col width="167" />
+				<col width="104" />
+				<col width="90" />
+				<col width="368" />
+			</colgroup>
+			<tr>
+				<td>Measurement ID</td>
+				<td>UINT</td>
+				<td>2 bytes</td>
+				<td>Measurement ID these strings apply to.</td>
+			</tr>
+			<tr>
+				<td>Measurement Name</td>
+				<td>UCODE (T)</td>
+				<td>Variable</td>
+				<td>Unicode replacement for the ASCII measurement name.</td>
+			</tr>
+			<tr>
+				<td>Unit Name</td>
+				<td>UCODE (T)</td>
+				<td>Variable</td>
+				<td>Unicode replacement for the ASCII unit name.</td>
+			</tr>
+			<tr>
+				<td>ShortName</td>
+				<td>UCODE (T)</td>
+				<td>Variable</td>
+				<td>Unicode replacement for the ASCII short name.</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,5 @@
+build/
+XCodePascoAPITest.xcodeproj/*.pbxuser
+# scytacki: I'm not sure if any mode1v3 files will need be checked in but so far
+# they have only been user specfic
+XCodePascoAPITest.xcodeproj/*.mode1v3

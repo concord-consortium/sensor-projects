@@ -1,0 +1,692 @@
+id: 153
+maxDataSheetSize: 8192
+dataSheetLength: 360
+extendedDataSheetLength: 484
+classCode: 0
+version: 2.1 
+modelNumber: PS-2124   
+numberMeasurements: 6
+name: Humidity Sensor
+maxPeriod: 1.0
+minPeriod: 0.1
+defaultPeriod: 0.5
+latency: 100
+warmUp: 1
+  SensorMeasurement
+    id: 0
+    name: Temperature
+    units: degC
+    type: 0
+    typeDescriptorLength: 0
+    visible: 9
+    accuracy: 0.5000076
+    precision: 1
+    displayFormat: 1
+    minValue: -20.0
+    maxVale: 55.0
+    typicalMin: -15.0
+    typicalMax: 40.0
+  SensorMeasurement
+    id: 1
+    name: Temperature
+    units: degF
+    type: 0
+    typeDescriptorLength: 0
+    visible: 8
+    accuracy: 1.0
+    precision: 1
+    displayFormat: 1
+    minValue: -4.0
+    maxVale: 131.0
+    typicalMin: 5.0
+    typicalMax: 104.0
+  SensorMeasurement
+    id: 2
+    name: Relative Humidity
+    units: %
+    type: 0
+    typeDescriptorLength: 0
+    visible: 13
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 100.0
+    typicalMin: 15.0
+    typicalMax: 85.0
+  SensorMeasurement
+    id: 3
+    name: Dew Point
+    units: degC
+    type: 0
+    typeDescriptorLength: 0
+    visible: 9
+    accuracy: 2.0
+    precision: 1
+    displayFormat: 1
+    minValue: -50.0
+    maxVale: 55.0
+    typicalMin: -35.0
+    typicalMax: 35.0
+  SensorMeasurement
+    id: 4
+    name: Dew Point
+    units: degF
+    type: 0
+    typeDescriptorLength: 0
+    visible: 8
+    accuracy: 4.0
+    precision: 1
+    displayFormat: 1
+    minValue: -58.0
+    maxVale: 125.0
+    typicalMin: -30.0
+    typicalMax: 95.0
+  SensorMeasurement
+    id: 5
+    name: Absolute Humidity
+    units: g/m^3
+    type: 0
+    typeDescriptorLength: 0
+    visible: 9
+    accuracy: 0.09999237
+    precision: 1
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 100.0
+    typicalMin: 0.0
+    typicalMax: 25.0
+    
+id: 1130
+maxDataSheetSize: 2048
+dataSheetLength: 282
+extendedDataSheetLength: 86
+classCode: 1
+version: 2.2 
+modelNumber: PS-2103   
+numberMeasurements: 4
+name: Motion Sensor
+maxPeriod: 1.0
+minPeriod: 0.02
+defaultPeriod: 0.1
+latency: 100000
+warmUp: 1
+  SensorMeasurement
+    id: 0
+    name: Echo Time
+    units: us
+    type: 2
+    typeDescriptorLength: 1
+    typeDescriptor[0]:2
+    visible: 10
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 2
+    minValue: 0.0
+    maxVale: 20000.0
+    typicalMin: 0.0
+    typicalMax: 10000.0
+  SensorMeasurement
+    id: 1
+    name: Position
+    units: m
+    type: 4
+    typeDescriptorLength: 7
+    MacroCalculation
+      input: 0
+      type: 3
+      args: 344.0 
+    visible: 13
+    accuracy: 9.918364E-4
+    precision: 3
+    displayFormat: 2
+    minValue: 0.014999619
+    maxVale: 8.0
+    typicalMin: 0.0
+    typicalMax: 2.0
+  SensorMeasurement
+    id: 2
+    name: Velocity
+    units: m/s
+    type: 4
+    typeDescriptorLength: 7
+    MacroCalculation
+      input: 1
+      type: 5
+      args: 2.0 
+    visible: 8
+    accuracy: 0.00999466
+    precision: 2
+    displayFormat: 2
+    minValue: -2.0
+    maxVale: 2.0
+    typicalMin: -0.49999237
+    typicalMax: 0.5000076
+  SensorMeasurement
+    id: 3
+    name: Acceleration
+    units: m/s/s
+    type: 4
+    typeDescriptorLength: 7
+    MacroCalculation
+      input: 2
+      type: 5
+      args: 2.0 
+    visible: 8
+    accuracy: 0.09999237
+    precision: 1
+    displayFormat: 2
+    minValue: -10.0
+    maxVale: 10.0
+    typicalMin: -2.0
+    typicalMax: 2.0
+    
+id: 230
+maxDataSheetSize: 8192
+dataSheetLength: 558
+extendedDataSheetLength: 200
+classCode: 0
+version: 2.83
+modelNumber: PS-2168   
+numberMeasurements: 9
+name: General Science
+maxPeriod: 10.0
+minPeriod: 0.0050
+defaultPeriod: 0.5
+latency: 100
+warmUp: 1
+  SensorMeasurement
+    id: 0
+    name: Direct Temp 
+    units: DegC
+    type: 0
+    typeDescriptorLength: 0
+    visible: 2
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 0
+    minValue: -50.0
+    maxVale: 150.0
+    typicalMin: 20.0
+    typicalMax: 30.0
+  SensorMeasurement
+    id: 1
+    name: Voltage ADC
+    units: Volts
+    type: 0
+    typeDescriptorLength: 0
+    visible: 2
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 0
+    minValue: -24.0
+    maxVale: 24.0
+    typicalMin: -10.0
+    typicalMax: 10.0
+  SensorMeasurement
+    id: 2
+    name: Raw Light Intensity
+    units: 
+    type: 0
+    typeDescriptorLength: 0
+    visible: 2
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 0
+    minValue: 0.0
+    maxVale: 30000.0
+    typicalMin: 0.0
+    typicalMax: 50.0
+  SensorMeasurement
+    id: 3
+    name: Sound Level
+    units: dBA
+    type: 0
+    typeDescriptorLength: 0
+    visible: 9
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 1
+    minValue: 40.0
+    maxVale: 120.0
+    typicalMin: 65.0
+    typicalMax: 90.0
+  SensorMeasurement
+    id: 4
+    name: Voltage
+    units: V
+    type: 3
+    typeDescriptorLength: 18
+    SimpleCalibration
+      input: 1
+      slope: 0.0015945466
+      intersect: -26.291882
+    visible: 9
+    accuracy: 0.00999466
+    precision: 2
+    displayFormat: 1
+    minValue: -24.0
+    maxVale: 24.0
+    typicalMin: -10.0
+    typicalMax: 10.0
+  SensorMeasurement
+    id: 5
+    name: Temperature
+    units: degC
+    type: 7
+    typeDescriptorLength: 19
+    SimpleCalibration
+      input: 0
+      slope: 1.0
+      intersect: -2.2888533E-4
+    visible: 8
+    accuracy: 1.0
+    precision: 1
+    displayFormat: 1
+    minValue: -35.0
+    maxVale: 135.0
+    typicalMin: 15.0
+    typicalMax: 35.0
+  SensorMeasurement
+    id: 6
+    name: Temperature
+    units: degF
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 5
+      type: 7
+      args: 1.8 32.0 
+    visible: 8
+    accuracy: 1.0
+    precision: 1
+    displayFormat: 1
+    minValue: -31.0
+    maxVale: 275.0
+    typicalMin: 60.0
+    typicalMax: 95.0
+  SensorMeasurement
+    id: 7
+    name: Temperature
+    units: K
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 5
+      type: 7
+      args: 1.0 273.15 
+    visible: 8
+    accuracy: 1.0
+    precision: 1
+    displayFormat: 1
+    minValue: 238.0
+    maxVale: 373.0
+    typicalMin: 288.0
+    typicalMax: 308.0
+  SensorMeasurement
+    id: 8
+    name: Light Intensity
+    units: Lux
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 2
+      type: 7
+      args: 32.70001 0.0 
+    visible: 9
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 30000.0
+    typicalMin: 0.0
+    typicalMax: 50.0
+
+id: 135
+maxDataSheetSize: 2048
+dataSheetLength: 384
+extendedDataSheetLength: 114
+classCode: 0
+version: 2.6
+modelNumber: PS-2115   
+numberMeasurements: 5
+name: Voltage-Current Sensor
+maxPeriod: 0.2
+minPeriod: 0.0010
+defaultPeriod: 0.1
+latency: 100
+warmUp: 1
+  SensorMeasurement
+    id: 0
+    name: Uncalibrated Current
+    units: Counts
+    type: 2
+    typeDescriptorLength: 1
+    typeDescriptor[0]:2
+    visible: 10
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 0
+    minValue: 0.0
+    maxVale: 4095.0
+    typicalMin: 0.0
+    typicalMax: 4095.0
+  SensorMeasurement
+    id: 1
+    name: Uncalibrated Voltage
+    units: Counts
+    type: 2
+    typeDescriptorLength: 1
+    typeDescriptor[0]:2
+    visible: 10
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 0
+    minValue: 0.0
+    maxVale: 4095.0
+    typicalMin: 0.0
+    typicalMax: 4095.0
+  SensorMeasurement
+    id: 2
+    name: Current
+    units: A
+    type: 3
+    typeDescriptorLength: 18
+    SimpleCalibration
+      input: 0
+      slope: 5.299417E-4
+      intersect: -1.0826709
+    visible: 9
+    accuracy: 0.00999466
+    precision: 2
+    displayFormat: 1
+    minValue: -1.0
+    maxVale: 1.0
+    typicalMin: -1.0
+    typicalMax: 1.0
+  SensorMeasurement
+    id: 3
+    name: Voltage
+    units: V
+    type: 3
+    typeDescriptorLength: 18
+    SimpleCalibration
+      input: 1
+      slope: 0.0051894137
+      intersect: -10.581215
+    visible: 13
+    accuracy: 0.00999466
+    precision: 2
+    displayFormat: 1
+    minValue: -10.0
+    maxVale: 10.0
+    typicalMin: -10.0
+    typicalMax: 10.0
+  SensorMeasurement
+    id: 4
+    name: Power
+    units: W
+    type: 8
+    typeDescriptorLength: 22
+    typeDescriptor[0]:2
+    visible: 8
+    accuracy: 0.00999466
+    precision: 2
+    displayFormat: 0
+    minValue: 0.0
+    maxVale: 10.0
+    typicalMin: 0.0
+    typicalMax: 10.0
+    
+id: 216
+maxDataSheetSize: 8192
+dataSheetLength: 688
+extendedDataSheetLength: 793
+classCode: 0
+version: 2.8
+modelNumber: PS-2146   
+numberMeasurements: 10
+name: Absolute Pressure Temperature Sensor
+maxPeriod: 1.0
+minPeriod: 0.01
+defaultPeriod: 0.1
+latency: 45000
+warmUp: 20
+  SensorMeasurement
+    id: 0
+    name: un cal Pressure
+    units: 
+    type: 0
+    typeDescriptorLength: 0
+    visible: 2
+    accuracy: 1.5259022E-5
+    precision: 5
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 14.0
+    typicalMin: 0.0
+    typicalMax: 14.0
+  SensorMeasurement
+    id: 1
+    name: Absolute Pressure
+    units: psi
+    type: 3
+    typeDescriptorLength: 18
+    SimpleCalibration
+      input: 0
+      slope: 0.006854564
+      intersect: -4.3694563
+    visible: 8
+    accuracy: 0.09999237
+    precision: 3
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 100.0
+    typicalMin: 0.0
+    typicalMax: 100.0
+  SensorMeasurement
+    id: 2
+    name: Absolute Pressure
+    units: N/m^2
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 1
+      type: 7
+      args: 6897.5 0.0 
+    visible: 8
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 32767.0
+    typicalMin: 0.0
+    typicalMax: 32767.0
+  SensorMeasurement
+    id: 3
+    name: Absolute Pressure
+    units: kPa
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 1
+      type: 7
+      args: 6.897902 0.0 
+    visible: 9
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 700.0
+    typicalMin: 0.0
+    typicalMax: 700.0
+  SensorMeasurement
+    id: 4
+    name: un cal Temperature
+    units: +/-C
+    type: 0
+    typeDescriptorLength: 0
+    visible: 2
+    accuracy: 1.0
+    precision: 1
+    displayFormat: 2
+    minValue: 238.0
+    maxVale: 408.0
+    typicalMin: 273.0
+    typicalMax: 373.0
+  SensorMeasurement
+    id: 5
+    name: Temperature
+    units: degC
+    type: 7
+    typeDescriptorLength: 19
+    SimpleCalibration
+      input: 4
+      slope: 1.0
+      intersect: -2.2888533E-4
+    visible: 8
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 1
+    minValue: -35.0
+    maxVale: 135.0
+    typicalMin: 15.0
+    typicalMax: 35.0
+  SensorMeasurement
+    id: 6
+    name: Temperature
+    units: K
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 5
+      type: 7
+      args: 1.0 273.15 
+    visible: 12
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 1
+    minValue: 238.0
+    maxVale: 408.0
+    typicalMin: 288.0
+    typicalMax: 308.0
+  SensorMeasurement
+    id: 7
+    name: Temperature
+    units: degF
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 5
+      type: 7
+      args: 1.8 32.0 
+    visible: 8
+    accuracy: 1.0
+    precision: 2
+    displayFormat: 1
+    minValue: -31.0
+    maxVale: 275.0
+    typicalMin: 60.0
+    typicalMax: 95.0
+  SensorMeasurement
+    id: 8
+    name: Absolute Pressure
+    units: atm
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 3
+      type: 7
+      args: 0.009857329 0.0 
+    visible: 8
+    accuracy: 0.00999466
+    precision: 4
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 7.0
+    typicalMin: 0.0
+    typicalMax: 7.0
+  SensorMeasurement
+    id: 9
+    name: Absolute Pressure
+    units: torr
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 3
+      type: 7
+      args: 7.500618 0.0 
+    visible: 8
+    accuracy: 7.0
+    precision: 1
+    displayFormat: 1
+    minValue: 0.0
+    maxVale: 4900.0
+    typicalMin: 0.0
+    typicalMax: 4900.0
+    
+id: 130
+maxDataSheetSize: 2048
+dataSheetLength: 266
+extendedDataSheetLength: 73
+classCode: 0
+version: 2.3 
+modelNumber: PS-2104   
+numberMeasurements: 3
+name: Force Sensor
+maxPeriod: 0.1
+minPeriod: 2.0E-4
+defaultPeriod: 0.1
+latency: 100
+warmUp: 1
+  SensorMeasurement
+    id: 0
+    name: Force Counts
+    units: 
+    type: 2
+    typeDescriptorLength: 1
+    typeDescriptor[0]:2
+    visible: 10
+    accuracy: 1.0
+    precision: 0
+    displayFormat: 0
+    minValue: 0.0
+    maxVale: 32767.0
+    typicalMin: 0.0
+    typicalMax: 32767.0
+  SensorMeasurement
+    id: 1
+    name: Force, push positive
+    units: N
+    type: 3
+    typeDescriptorLength: 18
+    SimpleCalibration
+      input: 0
+      slope: 0.029886432
+      intersect: -61.207413
+    visible: 13
+    accuracy: 0.09999237
+    precision: 1
+    displayFormat: 2
+    minValue: -50.0
+    maxVale: 50.0
+    typicalMin: -5.0
+    typicalMax: 5.0
+  SensorMeasurement
+    id: 2
+    name: Force, pull positive
+    units: N
+    type: 4
+    typeDescriptorLength: 11
+    MacroCalculation
+      input: 1
+      type: 7
+      args: -1.0 0.0 
+    visible: 8
+    accuracy: 0.09999237
+    precision: 1
+    displayFormat: 2
+    minValue: -50.0
+    maxVale: 50.0
+    typicalMin: -5.0
+    typicalMax: 5.0

@@ -148,6 +148,8 @@ PASCO_API	int PasGetSampleSize(int handle, int device, int channel);
 
 	Get sample rates for a channel (sensor) 
 	Returns rate 0-N samples per second. 
+	MSB Flag: 0 = Hz; 1 = Sec
+
 	-1 if no sensor (channel) attached (to a round port on the HW).
 	-2 if error
 	*/
@@ -220,7 +222,7 @@ PASCO_API	int PasStartContinuousSampling(int handle, int device, int channel,int
 
 	/**
 	Get samples.
-	Returns  --number of samples 0-N
+	Returns  --number of bytes read
 	-1 if no sensor attached
 
 	Input:

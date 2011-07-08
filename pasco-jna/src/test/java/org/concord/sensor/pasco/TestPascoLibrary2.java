@@ -3,13 +3,17 @@ package org.concord.sensor.pasco;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.concord.sensor.pasco.datasheet.ByteBufferStreamReversed;
+import org.concord.sensor.pasco.datasheet.PasportSensorDataSheet;
+import org.concord.sensor.pasco.datasheet.Printer;
 import org.concord.sensor.pasco.jna2.PascoChannel;
 import org.concord.sensor.pasco.jna2.PascoDevice;
 import org.concord.sensor.pasco.jna2.PascoException;
 import org.concord.sensor.pasco.jna2.PascoLibrary;
 
+
 public class TestPascoLibrary2 {
-	private static final Logger logger = Logger.getLogger(TestPascoLibrary.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(TestPascoLibrary2.class.getCanonicalName());
 
 
 	/**
@@ -65,20 +69,28 @@ public class TestPascoLibrary2 {
 					pascoChannel.readSensorDataSheet(dataSheetBuf, dataSheetBuf.length);
 					PasportSensorDataSheet dataSheet = new PasportSensorDataSheet(new ByteBufferStreamReversed(dataSheetBuf, 0, dataSheetBuf.length));
 					System.out.println("    datasheet:");
-					printDataSheet(dataSheet, "      ");
+					Printer dsPrinter = new Printer("      ");
+					dataSheet.print(dsPrinter);
+					dsPrinter.printToSysout();
 					// dumpBuffer(dataSheetBuf, dataSheetBuf.length);
 					byte [] sample = new byte[sampleSize];
 					pascoChannel.getOneSample(sample);
 					System.out.println("    one sample:");
-					dumpBuffer(sample, sample.length);
+					dataSheet.printSample(sample, 0, "      ");
+
 					int msPeriod = (int)(PascoChannel.convertRate(pascoChannel.getSampleRateDefault())*100);
 					sampleSize = pascoChannel.startContinuousSampling(msPeriod);
 					System.out.println("    started sampling, sample size: " + sampleSize);
 					byte [] samples = new byte[sampleSize*100];
 					for(int k=0; k<25; k++){
-						int numSamples = pascoChannel.getSampleData(sampleSize, samples, 100);
-						System.out.println("    sampleData " + numSamples + " bytes");
-						dumpBuffer(samples, numSamples);
+						int bytesRead = pascoChannel.getSampleData(sampleSize, samples, 100);
+						System.out.println("    sampleData " + bytesRead + " bytes");
+						int numSamples = bytesRead / sampleSize;
+						int offset = 0;
+						for(int l=0; l<numSamples; l++){
+							dataSheet.printSample(samples, offset, "      ");
+							offset += sampleSize;
+						}
 						Thread.sleep(msPeriod);
 					}
 					pascoChannel.stopContinuousSampling();
@@ -223,17 +235,4 @@ public class TestPascoLibrary2 {
 	    }
 	}
 	
-	static void printDataSheet(PasportSensorDataSheet pSens, String indent)
-	{
-		Printer p = new Printer(indent);
-		pSens.print(p);
-		p.printToSysout();
-		
-		for(int i=0; i<pSens.measurements.length; i++) {
-			Printer pMeas = new Printer(indent + "  ");
-			pSens.measurements[i].print(pMeas);
-			pMeas.printToSysout();
-		}
-		
-	}	
 }

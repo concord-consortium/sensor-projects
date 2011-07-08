@@ -1,4 +1,4 @@
-package org.concord.sensor.pasco;
+package org.concord.sensor.pasco.datasheet;
 
 
 

@@ -1,22 +1,22 @@
 /**
  * 
  */
-package org.concord.sensor.pasco;
+package org.concord.sensor.pasco.datasheet;
 
-class Printer {
+public class Printer {
 	String result = "";
 	String indent;
 	private Printer parent;
-	Printer(String indent) {
+	public Printer(String indent) {
 		this.indent = indent;
 	}
 	
-	Printer(String indent, Printer parent) {
+	public Printer(String indent, Printer parent) {
 		this.indent = indent;
 		this.parent = parent;
 	}
 
-	void puts(String line) {
+	public void puts(String line) {
 		if(parent != null){
 			parent.puts(indent + line);
 		} else {
@@ -24,7 +24,7 @@ class Printer {
 		}
 	}
 	
-	void printToSysout(){
+	public void printToSysout(){
 		System.out.print(result);
 	}
 	

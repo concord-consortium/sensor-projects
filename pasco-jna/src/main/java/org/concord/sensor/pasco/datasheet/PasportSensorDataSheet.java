@@ -1,4 +1,6 @@
-package org.concord.sensor.pasco;
+package org.concord.sensor.pasco.datasheet;
+
+import java.util.ArrayList;
 
 
 
@@ -130,7 +132,7 @@ public class PasportSensorDataSheet
 		return sampleDataSize;
 	}
 		
-	protected void print(Printer p)
+	public void print(Printer p)
 	{
 		p.puts("id: " + id);
 		p.puts("maxDataSheetSize: " + maxDataSheetSize);
@@ -146,5 +148,33 @@ public class PasportSensorDataSheet
 		p.puts("defaultPeriod: " + defaultPeriod);
 		p.puts("latency: " + latency);
 		p.puts("warmUp: " + warmUp);
+
+		for(int i=0; i<measurements.length; i++) {
+			Printer pMeas = new Printer("  ", p);
+			measurements[i].print(pMeas);
+		}
+	}
+		
+	public void printSample(byte [] buffer, int offset, String indent)
+	{
+		ArrayList<StringBuffer> lines = new ArrayList<StringBuffer>();
+		StringBuffer line = new StringBuffer();
+		lines.add(line);
+		for (PasportSensorMeasurement m : measurements) {
+			line.append(m.name + ": " + m.readSample(buffer, offset) + "(" + m.unitStr + "), ");
+			if(line.length() > 80){
+				line = new StringBuffer();
+				lines.add(line);
+			}
+		}
+		if(line.length() > 0 || lines.size() > 1){
+			for (StringBuffer stringBuffer : lines) {
+				if(stringBuffer.length() == 0){
+					continue;
+				}
+				String out = stringBuffer.substring(0, stringBuffer.length() - 2);
+				System.out.println(indent + out);
+			}
+		}
 	}
 }

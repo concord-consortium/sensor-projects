@@ -1,6 +1,7 @@
 package org.concord.sensor.pasco.jna;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.net.URLDecoder;
 
 import org.concord.sensor.pasco.ByteBufferStreamReversed;
 
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Native.DeleteNativeLibrary;
@@ -22,7 +24,8 @@ public class PascoUSBDirectLibrary implements PascoUSBLibraryExtended {
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
 		
-		Native.register(nativeLibPath);
+		// commented out to avoid error
+//		Native.register(nativeLibPath);
 		System.out.println("Registered library: " + nativeLibPath);
 		
 		try {
@@ -189,4 +192,65 @@ public class PascoUSBDirectLibrary implements PascoUSBLibraryExtended {
         }
         return "/org/concord/sensor/pasco/jna/" + osPrefix;
     }
+    
+    static File createTmpDirectory() throws IOException {
+		File directory = File.createTempFile("jna", "");
+		directory.delete();
+		directory.mkdir();
+		return directory;
+    }
+
+    static File extractResource(String resourceName, File directory)
+    throws Error, FileNotFoundException {
+    	URL url = PascoUSBDirectLibrary.class.getResource(resourceName);
+
+    	if (url == null) {
+    		throw new FileNotFoundException(resourceName + " not found in resource path");
+    	}
+
+    	File resourceFile = null;
+    	InputStream is = Native.class.getResourceAsStream(resourceName);
+    	if (is == null) {
+    		throw new Error("Can't obtain jnidispatch InputStream");
+    	}
+
+    	FileOutputStream fos = null;
+    	try {
+    		String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
+    		resourceFile = new File(directory, fileName);
+    		resourceFile.deleteOnExit();
+    		if (Platform.deleteNativeLibraryAfterVMExit()) {
+    			Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(resourceFile));
+    		}
+    		fos = new FileOutputStream(resourceFile);
+    		int count;
+    		byte[] buf = new byte[1024];
+    		while ((count = is.read(buf, 0, buf.length)) > 0) {
+    			fos.write(buf, 0, count);
+    		}
+    	}
+    	catch(IOException e) {
+    		throw new Error("Failed to create temporary file: " + e);
+    	}
+    	finally {
+    		try { is.close(); } catch(IOException e) { }
+    		if (fos != null) {
+    			try { fos.close(); } catch(IOException e) { }
+    		}
+    	}
+    	return resourceFile;
+    }
+	public int PasReadDatasheet(Memory data, int count) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public int PasReadOneSample(Memory data, int sampleSize) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public int PasReadSampleData(Memory data, int count, IntByReference actual) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

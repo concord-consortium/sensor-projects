@@ -85,7 +85,7 @@ public class PasportSensorDataSheet
 		for(int i=0; i<numberMeasurements; i++) {
 			measurements[i] = new PasportSensorMeasurement(this, bb);		
 			
-			if(measurements[i].measTypeId <= 2) {
+			if(measurements[i].type <= 2) {
 				measurements[i].offsetInSample = sampleDataSize;
 				sampleDataSize += measurements[i].getSampleSize();
 			}
@@ -130,24 +130,21 @@ public class PasportSensorDataSheet
 		return sampleDataSize;
 	}
 		
-	protected String getStringView()
+	protected void print(Printer p)
 	{
-		String ret = "";
-		ret += "id: " + id + "\n";
-		ret += "maxDataSheetSize: " + maxDataSheetSize + "\n";
-		ret += "dataSheetLength: " + dataSheetLength + "\n"; 
-		ret += "extendedDataSheetLength: " + extendedDataSheetLength + "\n";
-		ret += "classCode: " + classCode + "\n";
-		ret += "version: " + version + "\n";
-		ret += "modelNumber: " + modelNumber + "\n";
-		ret += "numberMeasurements: " + numberMeasurements + "\n";
-		ret += "name: " + name + "\n";
-		ret += "maxPeriod: " + maxPeriod + "\n";
-		ret += "minPeriod: " + minPeriod + "\n";
-		ret += "defaultPeriod: " + defaultPeriod + "\n";
-		ret += "latency: " + latency + "\n";
-		ret += "warmUp: " + warmUp + "\n";
-
-		return ret;
+		p.puts("id: " + id);
+		p.puts("maxDataSheetSize: " + maxDataSheetSize);
+		p.puts("dataSheetLength: " + dataSheetLength); 
+		p.puts("extendedDataSheetLength: " + extendedDataSheetLength);
+		p.puts("classCode: " + classCode);
+		p.puts("version: " + version);
+		p.puts("modelNumber: " + modelNumber);
+		p.puts("numberMeasurements: " + numberMeasurements);
+		p.puts("name: " + name);
+		p.puts("maxPeriod: " + maxPeriod);
+		p.puts("minPeriod: " + minPeriod);
+		p.puts("defaultPeriod: " + defaultPeriod);
+		p.puts("latency: " + latency);
+		p.puts("warmUp: " + warmUp);
 	}
 }

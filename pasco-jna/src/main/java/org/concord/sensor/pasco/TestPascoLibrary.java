@@ -49,7 +49,7 @@ public class TestPascoLibrary {
 //		System.out.println( "SensorID = " + dsHdr.sensorID + ", Max DS Size = " + dsHdr.maxSize + ", DS Size = " + dsHdr.dsSize + ", Ext DS size = " + dsHdr.extDsSize);
 		System.out.println( "SensorID = " + ds.id + ", Max DS Size = " + ds.maxDataSheetSize + ", DS Size = " + ds.dataSheetLength + ", Ext DS size = " + ds.extendedDataSheetLength);
 		// DataSheetData data = new DataSheetData();
-		System.out.println(ds.getStringView());
+		// System.out.println(ds.getStringView(""));
 		byte[] data;
 //		data = new byte[dsHdr.dsSize + dsHdr.extDsSize];
 //		success = pasco.PasReadDatasheet( data.getPointer(), dsHdr.dsSize + dsHdr.extDsSize );
@@ -201,13 +201,15 @@ public class TestPascoLibrary {
 		
 		ByteBufferStreamReversed bb = new ByteBufferStreamReversed(buf, 0, buf.length);
 		PasportSensorDataSheet pSens = new PasportSensorDataSheet(bb);
-			
-		System.out.println(pSens.getStringView());
+
+		Printer p = new Printer("");
+        pSens.print(p);
 		
 		for(int i=0; i<pSens.measurements.length; i++) {
-			String measurementStr = pSens.measurements[i].getStringView();
-			System.out.println(measurementStr);
+			pSens.measurements[i].print(p);
 		}
+
+		p.printToSysout();
 		
 		return pSens;
 	}

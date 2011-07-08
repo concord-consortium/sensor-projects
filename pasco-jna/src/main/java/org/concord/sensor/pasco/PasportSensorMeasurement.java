@@ -12,16 +12,12 @@ public class PasportSensorMeasurement
 	String name;
 	// NUL terminated var string
 	String unitStr;
-	// ubyte - this is just called type in the spec.  it is 
-	//    renamed because the sensorconfig has a type as well
-	int measTypeId;
-	
-	MeasurementType measType;
-	
+	// ubyte - type of measurement
+	int type;
 	// ubyte
-	int typeDescLength;
+	int typeDescriptorLength;
 	// variable format set of bytes
-	byte [] typeDesc;
+	byte [] typeDescriptor;
 	// ubyte - flags for visibility of measurement to user 
 	int visible;
 	// fixed - 4 byte fixed decimal
@@ -41,7 +37,9 @@ public class PasportSensorMeasurement
 	
 	// parsing helpers
 	int offsetInSample = 0;
-	
+
+	// some types are complex so they have separate objects
+	MeasurementType typeDescriptorObject;
 	
 	public PasportSensorMeasurement(PasportSensorDataSheet ds,
 			ByteBufferStreamReversed bb)
@@ -53,21 +51,21 @@ public class PasportSensorMeasurement
 		id = bb.readUShort();
 		name = bb.readNulTermString();
 		unitStr = bb.readNulTermUnitString();
-		measTypeId = bb.readUByte();
-		typeDescLength = bb.readUByte();
-		switch(measTypeId) {
+		type = bb.readUByte();
+		typeDescriptorLength = bb.readUByte();
+		switch(type) {
 			case 3:
 				// simple calibration
 			case 7:
 				// user calibration
-				measType = new SimpleMeasurementType(bb, typeDescLength);
+				typeDescriptorObject = new SimpleCalibration(bb, typeDescriptorLength);
 				break;
 			case 4:
-				measType = new MacroMeasurement(bb, typeDescLength);
+				typeDescriptorObject = new MacroCalculation(bb, typeDescriptorLength);
 				break;
 			default:
 				// typeDesc - variable format set of bytes
-				typeDesc = bb.skipAndSave(typeDescLength);
+				typeDescriptor = bb.skipAndSave(typeDescriptorLength);
 				break;
 		}
 		
@@ -97,7 +95,7 @@ public class PasportSensorMeasurement
 	
 	protected int getSampleSize()
 	{
-		switch(measTypeId) {
+		switch(type) {
 			case 0:
 				// direct value - fixed 4 bytes 
 				return 4;
@@ -109,7 +107,7 @@ public class PasportSensorMeasurement
 				// one description byte I'll assume it is less
 				// than 128 so we don't need to worry about the
 				// sign
-				return typeDesc[0];
+				return typeDescriptor[0];
 			default:
 				return 0;
 		}
@@ -124,16 +122,16 @@ public class PasportSensorMeasurement
 		 * measurements. Then measType takes care of it.  That will end up calling this method 
 		 * again but it should be on a different instance of this class.
 		 */
-		if(measType != null) {
-			return measType.getValue(dataSheet, buf, sampleStart);
+		if(typeDescriptorObject != null) {
+			return typeDescriptorObject.getValue(dataSheet, buf, sampleStart);
 		}
 		
-		switch(measTypeId) {
+		switch(type) {
 			case 0:
 				return ByteBufferStreamReversed.readFixed(buf, offset);
 			case 1:
 			case 2:
-				switch(typeDesc[0]) {
+				switch(typeDescriptor[0]) {
 					case 1:
 						return ByteBufferStreamReversed.readUByte(buf, offset);
 					case 2:
@@ -159,38 +157,29 @@ public class PasportSensorMeasurement
 		return (visible & 0x2) == 0;
 	}
 	
-	protected String getStringView()
+	protected void print(Printer p)
 	{
-		String ret = "";
-		ret += "id: " + id + "\n";
-		ret += "name: " + name + "\n";
-		ret += "units: " + unitStr + "\n";
-		ret += "type: " + measTypeId + "\n";
-		ret += "typeDescLength: " + typeDescLength + "\n";
-		if(measType != null) {
-			ret += measType.getStringView();
+		p.puts("SensorMeasurement");
+		p = new Printer("  ", p);
+		p.puts("id: " + id);
+		p.puts("name: " + name);
+		p.puts("units: " + unitStr);
+		p.puts("type: " + type);
+		p.puts("typeDescriptorLength: " + typeDescriptorLength);
+		if(typeDescriptorObject != null) {
+			typeDescriptorObject.print(p);
 		} else {
-			if(typeDesc != null) {
-				ret += "typeDesc[0]" + typeDesc[0] + "\n";
+			if(typeDescriptor != null) {
+				p.puts("typeDescriptor[0]:" + typeDescriptor[0]);
 			}
 		}
-		ret += "visible: " + visible + "\n";
-		ret += "accuracy: " + accuracy + "\n";
-
-		/*
-		// ubyte - number digits left of decimal point
-		int precision; 
-		// ubyte - flags for prefered display format
-		int displayFormat;
-		// fixed - lowest posible value of the measurement
-		float minValue;
-		// fixed - highest posible value of the measurement
-		float maxValue;
-		// fixed - typical lowest value
-		float typicalMin;
-		// fixed - typical highets value
-		float typicalMax;	
-		*/
-		return ret;
+		p.puts("visible: " + visible);
+		p.puts("accuracy: " + accuracy);
+		p.puts("precision: " + precision);
+		p.puts("displayFormat: " + displayFormat);
+		p.puts("minValue: " + minValue);
+		p.puts("maxVale: " + maxValue);
+		p.puts("typicalMin: " + typicalMin);
+		p.puts("typicalMax: " + typicalMax);
 	}
 }

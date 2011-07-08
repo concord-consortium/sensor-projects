@@ -6,6 +6,6 @@ public interface MeasurementType
 	public float getValue(PasportSensorDataSheet ds, 
 			byte [] buf, int sampleStart);
 	
-	public String getStringView();
+	public void print(Printer p);
 
 }

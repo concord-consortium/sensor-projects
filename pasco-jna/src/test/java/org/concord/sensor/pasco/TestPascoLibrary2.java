@@ -6,10 +6,10 @@ import java.util.logging.Logger;
 import org.concord.sensor.pasco.datasheet.ByteBufferStreamReversed;
 import org.concord.sensor.pasco.datasheet.PasportSensorDataSheet;
 import org.concord.sensor.pasco.datasheet.Printer;
-import org.concord.sensor.pasco.jna2.PascoChannel;
-import org.concord.sensor.pasco.jna2.PascoDevice;
-import org.concord.sensor.pasco.jna2.PascoException;
-import org.concord.sensor.pasco.jna2.PascoLibrary;
+import org.concord.sensor.pasco.jna.PascoChannel;
+import org.concord.sensor.pasco.jna.PascoDevice;
+import org.concord.sensor.pasco.jna.PascoException;
+import org.concord.sensor.pasco.jna.PascoLibrary;
 
 
 public class TestPascoLibrary2 {

@@ -1,4 +1,4 @@
-package org.concord.sensor.pasco.jna2;
+package org.concord.sensor.pasco.jna;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -2,8 +2,8 @@ package org.concord.sensor.pasco.jna;
 
 public class PascoNoSensorAttachedException extends PascoException {
 
-	public PascoNoSensorAttachedException() {
-		super("No sensor attached");
+	public PascoNoSensorAttachedException(PascoChannel channel) {
+		super("No sensor attached: " + channel.getChannel());
 	}
 
 	/**

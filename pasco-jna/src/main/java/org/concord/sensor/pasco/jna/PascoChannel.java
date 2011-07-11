@@ -45,7 +45,7 @@ public class PascoChannel {
 	public int getSampleSize() throws PascoException {
 		int size = jnaLib.PasGetSampleSize(library.getHandle(), device.getHandle(), channel);
 		if(size == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (size < -1) {
 			throwException("Error getting sample size", size);
 		} 
@@ -69,7 +69,7 @@ public class PascoChannel {
 	public int getSampleRateMinimum() throws PascoException {
 		int rate = jnaLib.PasGetSampleRateMinimum(library.getHandle(), device.getHandle(), channel);
 		if(rate == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (rate < -1 && rate > -10) {
 			throwException("Error getting sample rate", rate);
 		} 
@@ -80,7 +80,7 @@ public class PascoChannel {
 	public int getSampleRateMaximum() throws PascoException {
 		int rate = jnaLib.PasGetSampleRateMaximum(library.getHandle(), device.getHandle(), channel);
 		if(rate == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (rate < -1 && rate > -10) {
 			throwException("Error getting sample rate", rate);
 		} 
@@ -92,7 +92,7 @@ public class PascoChannel {
 	public int getSampleRateDefault() throws PascoException {
 		int rate = jnaLib.PasGetSampleRateDefault(library.getHandle(), device.getHandle(), channel);
 		if(rate == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (rate < -1 && rate > -10) {
 			throwException("Error getting sample rate", rate);
 		} 
@@ -146,7 +146,7 @@ public class PascoChannel {
 		
 		// handle errors
 		if(length == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if(length == -2){
 			// the string wasn't long enough so just return the length so we can try again
 		} else if(length < -2) {
@@ -172,7 +172,7 @@ public class PascoChannel {
 	public int getOneSample(byte []buffer) throws PascoException {
 		int size = jnaLib.PasGetOneSample(library.getHandle(), device.getHandle(), channel, buffer, buffer.length);
 		if(size == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (size == -2) {
 			return size;
 		} else if (size < -2){
@@ -208,7 +208,7 @@ public class PascoChannel {
 	public int startContinuousSampling(int period) throws PascoException{
 		int length = jnaLib.PasStartContinuousSampling(library.getHandle(), device.getHandle(), channel, period);
 		if(length == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (length < -1) {
 			throwException("Error starting sampling", length);
 		} 
@@ -235,7 +235,7 @@ public class PascoChannel {
 	  	int number = jnaLib.PasGetSampleData(library.getHandle(), device.getHandle(), channel, sampsize, buf, count);
 	  	
 		if(number == -1){
-			throw new PascoNoSensorAttachedException();
+			throw new PascoNoSensorAttachedException(this);
 		} else if (number < -1) {
 			throwException("Error getting sample data", number);
 		} 
@@ -277,5 +277,10 @@ public class PascoChannel {
 
 	private void throwException(String msg, int error) throws PascoException {
 		throw new PascoException(msg + " on channel: " + channel + ". Error code: " + error);
+	}
+
+
+	public int getChannel() {
+		return channel;
 	}
 }

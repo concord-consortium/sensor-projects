@@ -234,7 +234,7 @@ public class TestPascoLibrary2 {
 		
 		System.out.println("Starting collection on all channels with period: " + minDefaultPeriod);
 
-		int msPeriod = (int)(minDefaultPeriod*100);
+		int msPeriod = (int)(minDefaultPeriod*1000);
 		
 		// start all the channels
 		int[] sampleSizes = new int[channels.length];
@@ -259,7 +259,7 @@ public class TestPascoLibrary2 {
 				for(int k=0; k<numSamples; k++){
 					dataSheets[j].printSample(samples[j], offset, "      ");
 					offset += sampleSizes[j];
-				}				
+				}
 			}
 			Thread.sleep(msPeriod);
 		}

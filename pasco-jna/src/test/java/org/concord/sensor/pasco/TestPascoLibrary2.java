@@ -1,6 +1,7 @@
 package org.concord.sensor.pasco;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import org.concord.sensor.pasco.datasheet.ByteBufferStreamReversed;
@@ -36,14 +37,17 @@ public class TestPascoLibrary2 {
 		// On a PS-2100
 		//  This takes ~0.5 seconds once the interface is initialized with a PS-2100
 		//  if it is the first time then it takes 2.6 seconds
+		Date start = new Date();
 		for(int i=0; i<50; i++){
 			devices = library.getDevices();
-			System.out.println("Found " + devices.length + " devices after " + i*0.1 + "seconds");
 			Thread.sleep(100);
+			
 			if(devices.length > 0){
 				break;
 			}
 		}
+		System.out.println("Found " + devices.length + " devices after " + 
+				((new Date()).getTime() - start.getTime())*0.001 + "seconds");
 		
 		if(devices == null){
 			System.out.println("Unexepected state");
@@ -54,50 +58,63 @@ public class TestPascoLibrary2 {
 		for (PascoDevice pascoDevice : devices) {
 			System.out.println("Scanning Device: " + i++);
 			PascoChannel[] channels = pascoDevice.getChannels();
+			PasportSensorDataSheet[] dataSheets = new PasportSensorDataSheet [channels.length];
 			int j=0;
-			for (PascoChannel pascoChannel : channels) {
-				System.out.println("  Scanning Channel: " + j++);
-				if(pascoChannel.getExist()){
-					System.out.println("    name: " + pascoChannel.getName());
-					System.out.println("    min rate: " + PascoChannel.convertRate(pascoChannel.getSampleRateMinimum()) + " s/sample");
-					System.out.println("    max rate: " + PascoChannel.convertRate(pascoChannel.getSampleRateMaximum()) + " s/sample");
-					System.out.println("    default rate: " + PascoChannel.convertRate(pascoChannel.getSampleRateDefault()) + " s/sample");
-					int sampleSize = pascoChannel.getSampleSize();
-					System.out.println("    sample size: " + sampleSize);
-					System.out.println("    datasheet size: " + pascoChannel.getSensorDataSheetSize());
-					byte [] dataSheetBuf = new byte[pascoChannel.getSensorDataSheetSize()];
-					pascoChannel.readSensorDataSheet(dataSheetBuf, dataSheetBuf.length);
-					PasportSensorDataSheet dataSheet = new PasportSensorDataSheet(new ByteBufferStreamReversed(dataSheetBuf, 0, dataSheetBuf.length));
-					System.out.println("    datasheet:");
-					Printer dsPrinter = new Printer("      ");
-					dataSheet.print(dsPrinter);
-					dsPrinter.printToSysout();
-					// dumpBuffer(dataSheetBuf, dataSheetBuf.length);
-					byte [] sample = new byte[sampleSize];
-					pascoChannel.getOneSample(sample);
-					System.out.println("    one sample:");
-					dataSheet.printSample(sample, 0, "      ");
-
-					int msPeriod = (int)(PascoChannel.convertRate(pascoChannel.getSampleRateDefault())*100);
-					sampleSize = pascoChannel.startContinuousSampling(msPeriod);
-					System.out.println("    started sampling, sample size: " + sampleSize);
-					byte [] samples = new byte[sampleSize*100];
-					for(int k=0; k<25; k++){
-						int bytesRead = pascoChannel.getSampleData(sampleSize, samples, 100);
-						System.out.println("    sampleData " + bytesRead + " bytes");
-						int numSamples = bytesRead / sampleSize;
-						int offset = 0;
-						for(int l=0; l<numSamples; l++){
-							dataSheet.printSample(samples, offset, "      ");
-							offset += sampleSize;
-						}
-						Thread.sleep(msPeriod);
-					}
-					pascoChannel.stopContinuousSampling();
-				} else {
-					System.out.println("    no sensor attached");					
+			int attachedChannels = 0;
+			for (PascoChannel channel : channels) {
+				int channelIdx = j++;
+				System.out.println("  Scanning Channel: " + channelIdx);
+				if(!channel.getExist()) {
+					System.out.println("    no sensor attached");
+					continue;
 				}
+				
+				attachedChannels++;
+				System.out.println("    name: " + channel.getName());
+				System.out.println("    min rate: " + PascoChannel.convertRate(channel.getSampleRateMinimum()) + " s/sample");
+				System.out.println("    max rate: " + PascoChannel.convertRate(channel.getSampleRateMaximum()) + " s/sample");
+				System.out.println("    default rate: " + PascoChannel.convertRate(channel.getSampleRateDefault()) + " s/sample");
+				int sampleSize = channel.getSampleSize();
+				System.out.println("    sample size: " + sampleSize);
+				System.out.println("    datasheet size: " + channel.getSensorDataSheetSize());
+				byte [] dataSheetBuf = new byte[channel.getSensorDataSheetSize()];
+				channel.readSensorDataSheet(dataSheetBuf, dataSheetBuf.length);
+				PasportSensorDataSheet dataSheet = new PasportSensorDataSheet(new ByteBufferStreamReversed(dataSheetBuf, 0, dataSheetBuf.length));
+				dataSheets[channelIdx] = dataSheet;
+				System.out.println("    datasheet:");
+				Printer dsPrinter = new Printer("      ");
+				dataSheet.print(dsPrinter);
+				dsPrinter.printToSysout();
+				// dumpBuffer(dataSheetBuf, dataSheetBuf.length);
+				byte [] sample = new byte[sampleSize];
+				channel.getOneSample(sample);
+				System.out.println("    one sample:");
+				dataSheet.printSample(sample, 0, "      ");
+
+				int msPeriod = (int)(PascoChannel.convertRate(channel.getSampleRateDefault())*100);
+				sampleSize = channel.startContinuousSampling(msPeriod);
+				System.out.println("    started sampling, sample size: " + sampleSize);
+				byte [] samples = new byte[sampleSize*100];
+				for(int k=0; k<25; k++){
+					int bytesRead = channel.getSampleData(sampleSize, samples, 100);
+					System.out.println("    sampleData " + bytesRead + " bytes");
+					int numSamples = bytesRead / sampleSize;
+					int offset = 0;
+					for(int l=0; l<numSamples; l++){
+						dataSheet.printSample(samples, offset, "      ");
+						offset += sampleSize;
+					}
+					Thread.sleep(msPeriod);
+				}
+				channel.stopContinuousSampling();
 			}
+			
+			if(attachedChannels > 1){
+				collectAllChannels(dataSheets, channels);
+			} else {
+				System.out.println("    Not enough sensors (" + attachedChannels + ") to do a multichannel test.");
+			}
+			
 		}
 		
 //		// Connect to the sensor
@@ -174,6 +191,86 @@ public class TestPascoLibrary2 {
 		library.stop();
 		library.delete();
 
+	}
+
+	private static void collectAllChannels(PasportSensorDataSheet[] dataSheets, PascoChannel[] channels) throws PascoException, InterruptedException {
+		// try to collect from all channels at the same time
+		// find smallest default period
+		float minDefaultPeriod = Float.MAX_VALUE;
+		for(PasportSensorDataSheet dataSheet: dataSheets){
+			if(dataSheet == null){
+				continue;
+			}
+			if(dataSheet.getDefaultPeriod() < minDefaultPeriod){
+				minDefaultPeriod = dataSheet.getDefaultPeriod();
+			}
+		}
+		
+		// make sure that smallest period isn't smaller than the min period of any channel
+		for(PasportSensorDataSheet dataSheet: dataSheets){
+			if(dataSheet == null){
+				continue;
+			}
+			if(dataSheet.getMinPeriod() > minDefaultPeriod){
+				minDefaultPeriod = dataSheet.getMinPeriod();
+			}
+		}
+
+		// Finally as a sanity check make sure the minDefaultPeriod is not larger than the max of any channel
+		for(PasportSensorDataSheet dataSheet: dataSheets){
+			if(dataSheet == null){
+				continue;
+			}
+			if(minDefaultPeriod > dataSheet.getMaxPeriod()){
+				System.err.println("Can't find a default period that is in the range of all the channels");
+				minDefaultPeriod = Float.NaN;
+			}
+		}
+
+		if(Float.isNaN(minDefaultPeriod)){
+			// go on to next device
+			return;
+		}
+		
+		System.out.println("Starting collection on all channels with period: " + minDefaultPeriod);
+
+		int msPeriod = (int)(minDefaultPeriod*100);
+		
+		// start all the channels
+		int[] sampleSizes = new int[channels.length];
+		byte[][] samples = new byte[channels.length][];
+		for(int i=0; i<channels.length; i++){
+			if(dataSheets[i] == null){
+				continue;
+			}
+			sampleSizes[i] = channels[i].startContinuousSampling(msPeriod);
+			samples[i] = new byte[sampleSizes[i]*100];
+		}
+
+		for(int i=0; i<25; i++){
+			for(int j=0; j<channels.length; j++){
+				if(dataSheets[j] == null){
+					continue;
+				}
+				int bytesRead = channels[j].getSampleData(sampleSizes[j], samples[j], 100);
+				System.out.println("    sampleData " + bytesRead + " bytes");
+				int numSamples = bytesRead / sampleSizes[j];
+				int offset = 0;
+				for(int k=0; k<numSamples; k++){
+					dataSheets[j].printSample(samples[j], offset, "      ");
+					offset += sampleSizes[j];
+				}				
+			}
+			Thread.sleep(msPeriod);
+		}
+
+		// stop all channels
+		for(int i=0; i<channels.length; i++){
+			if(dataSheets[i] == null){
+				continue;
+			}
+			channels[i].stopContinuousSampling();
+		}
 	}
 	
 	private static void dumpBuffer (byte[] pvBuf, int lLen)

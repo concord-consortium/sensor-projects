@@ -7,13 +7,13 @@
   </parent>
   
   <groupId>org.concord.sensor</groupId>
-  <artifactId>pasco-pasport</artifactId>
+  <artifactId>pasco-jna</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Pasco Pasport</name>
+  <name>Pasco JNA</name>
   <description>
-     Pasco Pasport-centric Java libraries including a JNA library for the USB Connector
+     JNAL library for accessing Pasco SDK
   </description>
 
   <dependencies>
@@ -32,11 +32,6 @@
      </dependency>
    </dependencies>
   
-  <scm>
-  	<connection>scm:svn:http://svn.concord.org/svn/private_sensor/trunk/Projects/pasco-pasport</connection>
-  	<developerConnection>scm:svn:https://svn.concord.org/svn/private_sensor/trunk/Projects/pasco-pasport</developerConnection>
-  	<url>http://svn.concord.org/svn/private_sensor/trunk/Projects/pasco-pasport</url>
-  </scm>
   <build>
     <!--  reset this back to the default -->
   <resources>

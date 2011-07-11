@@ -50,9 +50,6 @@ public class PasportSensorDataSheet
 	
 	PasportSensorMeasurement [] measurements;
 	
-	PasportSensorMeasurement [] sensorMeasurements;
-	int numSensorMeasurements;
-	
 	int sampleDataSize;
 	
 	// uint - 4 byte checksum
@@ -60,8 +57,6 @@ public class PasportSensorDataSheet
 	
 	public PasportSensorDataSheet(ByteBufferStreamReversed bb)
 	{
-		
-		
 		id = bb.readUShort();
 		maxDataSheetSize = bb.readUShort();
 		dataSheetLength = bb.readUShort();
@@ -97,6 +92,55 @@ public class PasportSensorDataSheet
 		// checksum
 		// I should check it
 	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public int getMaxDataSheetSize() {
+		return maxDataSheetSize;
+	}
+
+	public int getClassCode() {
+		return classCode;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public String getModelNumber() {
+		return modelNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public float getMaxPeriod() {
+		return maxPeriod;
+	}
+
+	public float getMinPeriod() {
+		return minPeriod;
+	}
+
+	public float getDefaultPeriod() {
+		return defaultPeriod;
+	}
+
+	public int getLatency() {
+		return latency;
+	}
+
+	public int getWarmUp() {
+		return warmUp;
+	}
+
+	public PasportSensorMeasurement [] getMeasurements() {
+		return measurements;
+	}
+	
 	
 	/**
 	 * There are some values that are either secs or hz

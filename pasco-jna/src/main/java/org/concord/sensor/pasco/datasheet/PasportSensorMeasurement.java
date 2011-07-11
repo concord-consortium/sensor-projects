@@ -2,8 +2,10 @@ package org.concord.sensor.pasco.datasheet;
 
 
 
+
 public class PasportSensorMeasurement
 {
+
 	PasportSensorDataSheet dataSheet = null;
 	
 	// ushort
@@ -41,8 +43,7 @@ public class PasportSensorMeasurement
 	// some types are complex so they have separate objects
 	MeasurementType typeDescriptorObject;
 	
-	public PasportSensorMeasurement(PasportSensorDataSheet ds,
-			ByteBufferStreamReversed bb)
+	public PasportSensorMeasurement(PasportSensorDataSheet ds, ByteBufferStreamReversed bb)
 	{
 		dataSheet = ds;
 		
@@ -113,7 +114,7 @@ public class PasportSensorMeasurement
 		}
 	}
 	
-	protected float readSample(byte [] buf, int sampleStart) 
+	public float readSample(byte [] buf, int sampleStart) 
 	{
 		int offset = sampleStart + offsetInSample;
 		
@@ -152,11 +153,59 @@ public class PasportSensorMeasurement
 	 *  
 	 * @return
 	 */
-	protected boolean isVisible()
+	public boolean isVisible()
 	{
 		return (visible & 0x2) == 0;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getUnitStr() {
+		return unitStr;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public int getVisible() {
+		return visible;
+	}
+
+	public float getAccuracy() {
+		return accuracy;
+	}
+
+	public int getPrecision() {
+		return precision;
+	}
+
+	public int getDisplayFormat() {
+		return displayFormat;
+	}
+
+	public float getMinValue() {
+		return minValue;
+	}
+
+	public float getMaxValue() {
+		return maxValue;
+	}
+
+	public float getTypicalMin() {
+		return typicalMin;
+	}
+
+	public float getTypicalMax() {
+		return typicalMax;
+	}
+
 	protected void print(Printer p)
 	{
 		p.puts("SensorMeasurement");

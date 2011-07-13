@@ -92,6 +92,25 @@ public class LabQuestImpl implements LabQuest
 		}
 	}
 
+	
+	/**
+	 * @see org.concord.sensor.labquest.jna.LabQuest#getSensorName()
+	 */
+	public String getSensorName(byte channel) throws LabQuestException {
+		int sensorId = getSensorId(channel);
+		System.out.println("found sensor: " + sensorId);			
+
+		if(sensorId >= 20){
+			ddsMemReadRecord(channel, false);
+			GSensorDDSMem sensorDDSMem = ddsMemGetRecord(channel);
+
+			String name = Native.toString(sensorDDSMem.SensorLongName);
+			return name;
+		} else {
+			return "";
+		}
+	}
+
 	/**
 	 * @see org.concord.sensor.labquest.jna.LabQuest#getSensorId(byte)
 	 */

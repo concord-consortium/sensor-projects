@@ -160,6 +160,22 @@ public class LabQuestImpl implements LabQuest
 		return sensorDDSMem;
 	}
 
+
+	/**
+	 * @see org.concord.sensor.labquest.jna.LabQuest#ddsMemCalculateChecksum(byte)
+	 */
+	public byte ddsMemCalculateChecksum(byte channel)
+	{
+		ByteByReference pChecksum = new ByteByReference();
+		int ret = ngio.device_DDSMem_CalculateChecksum(hDevice, channel, pChecksum);
+		if(ret != 0){
+			return 0;
+			// throw new LabQuestException();
+		}
+		return pChecksum.getValue();
+	}
+
+
 	/**
 	 * @see org.concord.sensor.labquest.jna.LabQuest#setMeasurementPeriod(byte, double)
 	 */

@@ -24,6 +24,8 @@ public interface LabQuest {
 	
 	public int getSensorId(byte channel) throws LabQuestException;
 
+	public byte ddsMemCalculateChecksum(byte channel);
+
 	public void ddsMemReadRecord(byte channel, boolean strict)
 			throws LabQuestException;
 

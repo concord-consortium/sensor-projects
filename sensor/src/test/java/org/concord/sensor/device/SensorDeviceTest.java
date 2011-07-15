@@ -111,11 +111,23 @@ public abstract class SensorDeviceTest {
 		assertTrue("Device should return a non null config", currentConfig != null);
 		
 		SensorConfig[] sensorConfigs = currentConfig.getSensorConfigs();
-		assertTrue("Sensor configs should have one sensor", sensorConfigs.length == 1);
-		
-		assertTrue("Sensor config should be a temperature sensor", 
-				sensorConfigs[0].getType() == SensorConfig.QUANTITY_TEMPERATURE ||
-				sensorConfigs[0].getType() == SensorConfig.QUANTITY_TEMPERATURE_WAND);		
+		if(supportsAttachingSingleTemperatureSensor()){
+			assertTrue("Sensor configs should have one sensor", sensorConfigs.length == 1);
+
+			assertTrue("Sensor config should be a temperature sensor", 
+					sensorConfigs[0].getType() == SensorConfig.QUANTITY_TEMPERATURE ||
+					sensorConfigs[0].getType() == SensorConfig.QUANTITY_TEMPERATURE_WAND);		
+		} else {
+			boolean foundSensor = false;
+			for(SensorConfig config: sensorConfigs){
+				if(config.getType() == SensorConfig.QUANTITY_TEMPERATURE ||
+					config.getType() == SensorConfig.QUANTITY_TEMPERATURE_WAND){
+					foundSensor = true;
+					break;
+				}
+			}
+			assertTrue("Sensor config should have a temperature sensor", foundSensor);
+		}
 	}
 	
 	@Test
@@ -132,7 +144,7 @@ public abstract class SensorDeviceTest {
 		
 		
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
-		assertNotNull("Non null experiment config", experimentConfig);
+		assertNotNull("Non null experiment config, error: " + device.getErrorMessage(0), experimentConfig);
 		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
 	}
 	
@@ -142,9 +154,13 @@ public abstract class SensorDeviceTest {
 		// 2 goals: 
 		// -- allow people to build their own sensors
 		// -- debugging calibrations of production sensors 
-		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-			" and a raw voltage compatible sensor");
-
+		if(supportsRawValueSensors()){
+			JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		  		" and a raw voltage compatible sensor");
+		} else {
+			JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+	  		" and a temperature sensor");			
+		}
 		prepareDevice();
 		
 		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
@@ -156,9 +172,13 @@ public abstract class SensorDeviceTest {
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
 		assertNotNull("Non null experiment config", experimentConfig);
 		
-		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
-		Assert.assertEquals("First sensor is raw voltage 1", SensorConfig.QUANTITY_RAW_VOLTAGE_1, 
-				experimentConfig.getSensorConfigs()[0].getType());
+		if(supportsRawValueSensors()){
+			assertTrue("Correctly configured a raw sensor", experimentConfig.isValid());
+			Assert.assertEquals("First sensor is raw voltage 1", SensorConfig.QUANTITY_RAW_VOLTAGE_1, 
+					experimentConfig.getSensorConfigs()[0].getType());
+		} else {
+			assertTrue("Correctly invalid raw sensor", !experimentConfig.isValid());			
+		}
 	}
 	
 	@Test
@@ -167,9 +187,15 @@ public abstract class SensorDeviceTest {
 		// 2 goals: 
 		// -- allow people to build their own sensors
 		// -- debugging calibrations of production sensors 
-		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-			" and a raw voltage compatible sensor");
 
+		if(supportsRawValueSensors()){
+			JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		  		" and a raw voltage compatible sensor");
+		} else {
+			JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+	  		" and a temperature sensor");			
+		}
+		
 		prepareDevice();
 		
 		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
@@ -181,9 +207,13 @@ public abstract class SensorDeviceTest {
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
 		assertNotNull("Non null experiment config", experimentConfig);
 		
-		assertTrue("Correctly configured a temperature sensor", experimentConfig.isValid());
-		Assert.assertEquals("First sensor is raw voltage 1", SensorConfig.QUANTITY_RAW_VOLTAGE_2, 
-				experimentConfig.getSensorConfigs()[0].getType());
+		if(supportsRawValueSensors()){
+			assertTrue("Correctly configured a raw sensor", experimentConfig.isValid());
+			Assert.assertEquals("First sensor is raw voltage 2", SensorConfig.QUANTITY_RAW_VOLTAGE_2, 
+					experimentConfig.getSensorConfigs()[0].getType());
+		} else {
+			assertTrue("Correctly invalid raw sensor", !experimentConfig.isValid());			
+		}
 	}
 
 	@Test
@@ -298,6 +328,10 @@ public abstract class SensorDeviceTest {
 
 	@Test
 	public void testRawVoltage1Collection() throws InterruptedException{
+		if(!supportsRawValueSensors()) {
+			return;
+		}
+		
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
 		" and a raw voltage compatible sensor reading between 0 and 5 Volts");
 
@@ -402,12 +436,13 @@ public abstract class SensorDeviceTest {
 	}
 
 	@Test
-	public void testIsNotAttached() {
+	public void testIsNotAttached() throws Throwable {
 		JOptionPane.showMessageDialog(null, "Detach the " + getDeviceLabel());
 
 		prepareDevice();
 
-		assertTrue("Device should not be attached for this test", !device.isAttached());
+		// This fails after running the other tests with the pasco PowerLink
+		assertTrue("Device should not be attached", !device.isAttached());
 		
 	}
 	
@@ -458,4 +493,11 @@ public abstract class SensorDeviceTest {
 		return device.getVendorName() + " " + device.getDeviceName();
 	}
 	
+	protected boolean supportsAttachingSingleTemperatureSensor() {
+		return true;
+	}
+	
+	protected boolean supportsRawValueSensors() {
+		return true;
+	}
 }

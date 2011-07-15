@@ -17,7 +17,7 @@ public class PascoChannel {
 
 	
 	/**
-	Does a channel exist? (sensor plugged in)
+	Does a channel exist?
 	*/
 	public boolean getExist() throws PascoException {
 		int exists = jnaLib.PasGetExistChannel(library.getHandle(), device.getHandle(), channel);
@@ -35,6 +35,22 @@ public class PascoChannel {
 		return false;
 	}
 
+	public boolean getSensorDetected() throws PascoException {
+		int detected = jnaLib.PasGetSensorDetected(library.getHandle(), device.getHandle(), channel);
+		if(detected < 0){
+			throwException("Error checking if sensor is attached", detected);
+		}
+		if(detected == 0){
+			return false;
+		} else if (detected == 1){
+			return true;
+		} else {
+			throwException("Unexpected return value from PasGetSensorDetected", detected);
+		}
+		
+		return false;		
+	}
+	
 	/**
 	Get sample size for a channel (sensor) 
 	Returns sample size in bytes,0-N.
@@ -258,7 +274,7 @@ public class PascoChannel {
 	
 
     public int getSensorDataSheetSize() throws PascoException {
-    	int size = jnaLib.GetSensorDataSheetSize(library.getHandle(), device.getHandle(), channel);
+    	int size = jnaLib.PasGetSensorDataSheetSize(library.getHandle(), device.getHandle(), channel);
     	
     	if (size < 0){
     		throwException("Error getting sensor datasheet size", size);
@@ -268,7 +284,7 @@ public class PascoChannel {
     }
 
     public void readSensorDataSheet(byte [] dataSheetBuffer, int dataSheetSize) throws PascoException {
-		int ret = jnaLib.ReadSensorDataSheet(library.getHandle(), device.getHandle(), channel, dataSheetBuffer, dataSheetSize);
+		int ret = jnaLib.PasReadSensorDataSheet(library.getHandle(), device.getHandle(), channel, dataSheetBuffer, dataSheetSize);
 		
 		if(ret < 0){
 			throwException("Error reading sensor datasheet", ret);

@@ -99,8 +99,11 @@ static void test_print_some_good_stuff_for_all_sensors(int handle)
 	int ratemin = -1, ratedef = -1, ratemax = -1;
 	int nchan = -1;
 	int ndev = -1;
-	int i = 0, j=0;
-
+	int i = 0, j=0, k=0;
+	int nmeasurements = -1;
+	int probe_validity_return = -1;
+	char probe_validity_bits[4];
+	
 	ndev = PasGetDevices(handle, devarr, DEVARRSIZ);
 
 	if(ndev<0)
@@ -113,6 +116,8 @@ static void test_print_some_good_stuff_for_all_sensors(int handle)
 	{
 		device = devarr[i];
 
+		printf("Device # %d, ProductID %d\n", device, PasGetDeviceProductID(handle, device));
+		
 		nchan = PasGetNumChannels(handle,device);
 
 		for(j=0;j<nchan;j++)
@@ -136,19 +141,47 @@ static void test_print_some_good_stuff_for_all_sensors(int handle)
 			else
 			printf("Device # %d, Channel %d, error: %d ( if -1 == just no Sensor)\n",device,j,retcode);
 			
+			nmeasurements = PasGetNumMeasurements(handle, device, j);
+			for(k=0;k<nmeasurements;k++)
+			{
+				strbuf[0] = 0x00;
+				retcode = PasGetMeasurementName(handle, device, j, k, strbuf, STRSIZ);
+				if(retcode>-1) {
+					printf("Device # %d, Channel %d, Measurement %d, name \"%s\"\n", device, j, k, strbuf);
+				} else {
+					printf("Device # %d, Channel %d, Measurement %d, error: %d\n", device, j, k, retcode);
+				}
+			}
+			
+			probe_validity_return = PasGetSupportsProbeValidityDetection(handle, device, j);
+			printf("Device # %d, Channel %d, SupportsProbeValidity return %d\n", device, j, probe_validity_return);
+			if(probe_validity_return>0){
+				memset(probe_validity_bits, 0, 4);
+				
+				retcode = PasCheckMeasurementValidity(handle, device, j, probe_validity_return, probe_validity_bits);
+				if (retcode > -1) {
+					printf("Device # %d, Channel %d, CheckMeasurementValidity bits ", device, j);
+					DumpBuffer(probe_validity_bits, probe_validity_return);
+				} else {
+					printf("Device # %d, Channel %d, CheckMeasurementValidity error %d\n", device, j, retcode);
+				}
+			}
+			
+			printf("Device # %d, Channel %d, SensorDetected %d\n", device, j, PasGetSensorDetected(handle, device, j));
+			
 			// Read data sheet
 			{
 				int dataSheetSize = -1;
 				char *dataSheetBuffer = NULL;
 				int dataSheetReadSize = -1;
 				
-				dataSheetSize = GetSensorDataSheetSize(handle,device, j);
+				dataSheetSize = PasGetSensorDataSheetSize(handle,device, j);
 				if(dataSheetSize < 0){
 					printf("Device # %d, Channel %d, couldn't read datasheet size, error: %d\n",device,j,retcode);
 					return;
 				}
 				dataSheetBuffer =(char *) malloc(dataSheetSize);
-				dataSheetReadSize = ReadSensorDataSheet(handle, device, j, dataSheetBuffer, dataSheetSize);
+				dataSheetReadSize = PasReadSensorDataSheet(handle, device, j, dataSheetBuffer, dataSheetSize);
 				if(dataSheetReadSize < 0){
 					printf("Device # %d, Channel %d, couldn't read datasheet, error: %d\n",device,j,dataSheetReadSize);
 					return;
@@ -157,6 +190,10 @@ static void test_print_some_good_stuff_for_all_sensors(int handle)
 				printf("       DataSheet:\n");
 				DumpBuffer(dataSheetBuffer, dataSheetReadSize);
 			}
+			
+			// check which measurements are valid which indicates if the external sensor is plugged in
+			// this requires parsing the datasheet which currently isn't exposed
+			// we could add a method for returning the number of measurements
 		}
 
 	}
@@ -190,23 +227,26 @@ static void test_read_data(int handle, int ntimes)
 	while(0<ntimes--)
 		for(i=0; i < ndev ; i++)
 		{
+			printf("Reading one shot data from dev %d\n", i);
 			device = devarr[i];
 			nchan = PasGetNumChannels(handle,device);
 
 			for(j=0;j<nchan;j++)
 			{
-				if(1!=PasGetExistChannel(handle,device,j))
+				printf("Reading one shot data from dev %d channel %d\n", i, j);
+				if(1!=PasGetSensorDetected(handle,device,j))
 					continue;
 
+				printf("Found sensor on channel\n");
 				samplesize  = PasGetSampleSize(handle, device, j);
-				/*printf("Device # %d, Channel %d, sample size: %d\n",device, j, samplesize);*/
+				printf("Device # %d, Channel %d, sample size: %d\n",device, j, samplesize);
 
 				readbuf[0] = 0xFF;
 
 				readlen = PasGetOneSample(handle, device, j,readbuf,READSIZ);
 				if(readlen<0)
 				{
-					/*printf("Device # %d, Channel %d, error: %d \n",device,j,readlen);*/
+					printf("Device # %d, Channel %d, error: %d \n",device,j,readlen);
 					continue;
 				}
 				else
@@ -260,7 +300,7 @@ static void test_read_continuous_data(int handle, int ntimes)
 
 			for(j=0;j<nchan;j++)
 			{
-				if(1 != PasGetExistChannel(handle,device,j))
+				if(1 != PasGetSensorDetected(handle,device,j))
 					continue;
 
 
@@ -435,7 +475,7 @@ int main(int argc, char* argv[])
 	test_read_data(handle,2); /* 2 -- do the test twice */
 
 	printf("\n-------------- Read continous data ---------------------------------------\n");	
-	test_read_continuous_data(handle,2); /* 2 -- do the test twice */
+//	test_read_continuous_data(handle,2); /* 2 -- do the test twice */
 	
 
 	PasStop(handle);

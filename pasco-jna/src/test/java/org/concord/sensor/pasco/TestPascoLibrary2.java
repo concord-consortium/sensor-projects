@@ -11,11 +11,11 @@ import org.concord.sensor.pasco.jna.PascoChannel;
 import org.concord.sensor.pasco.jna.PascoDevice;
 import org.concord.sensor.pasco.jna.PascoException;
 import org.concord.sensor.pasco.jna.PascoLibrary;
+import org.concord.sensor.pasco.jna.PascoNoSensorAttachedException;
 
 
 public class TestPascoLibrary2 {
 	private static final Logger logger = Logger.getLogger(TestPascoLibrary2.class.getCanonicalName());
-
 
 	/**
 	 * @param args
@@ -65,11 +65,10 @@ public class TestPascoLibrary2 {
 				int channelIdx = j++;
 				System.out.println("  Scanning Channel: " + channelIdx);
 				if(!channel.getExist()) {
-					System.out.println("    no sensor attached");
+					System.out.println("    no sensor on channel");
 					continue;
 				}
 				
-				attachedChannels++;
 				System.out.println("    name: " + channel.getName());
 				System.out.println("    min rate: " + PascoChannel.convertRate(channel.getSampleRateMinimum()) + " s/sample");
 				System.out.println("    max rate: " + PascoChannel.convertRate(channel.getSampleRateMaximum()) + " s/sample");
@@ -85,11 +84,23 @@ public class TestPascoLibrary2 {
 				Printer dsPrinter = new Printer("      ");
 				dataSheet.print(dsPrinter);
 				dsPrinter.printToSysout();
+
+				if(!channel.getSensorDetected()) {
+					System.out.println("    no probe attached");
+					continue;
+				}
+				attachedChannels++;
+				
 				// dumpBuffer(dataSheetBuf, dataSheetBuf.length);
 				byte [] sample = new byte[sampleSize];
-				channel.getOneSample(sample);
-				System.out.println("    one sample:");
-				dataSheet.printSample(sample, 0, "      ");
+				try{
+					channel.getOneSample(sample);
+					System.out.println("    one sample:");
+					dataSheet.printSample(sample, 0, "      ");
+				} catch (PascoNoSensorAttachedException e){
+					System.err.println("currently getOneSample is failing for at least the internal spark sensors");
+					e.printStackTrace();
+				}
 
 				int msPeriod = (int)(PascoChannel.convertRate(channel.getSampleRateDefault())*100);
 				sampleSize = channel.startContinuousSampling(msPeriod);

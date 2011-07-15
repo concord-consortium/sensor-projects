@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D81C45013CF8A7F00F33EFC /* libqtcore4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D81C44F13CF8A7F00F33EFC /* libqtcore4.dylib */; };
+		7D81C46713CF8B3C00F33EFC /* libqtcore4.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D81C44F13CF8A7F00F33EFC /* libqtcore4.dylib */; };
 		7D930C8A1248E5C0005668F0 /* pasco_api_test_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D930C891248E5C0005668F0 /* pasco_api_test_main.c */; };
 		7D930C8F1248E602005668F0 /* pasco-sdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D930C8D1248E602005668F0 /* pasco-sdk.dylib */; };
-		7D930CE91249B7D7005668F0 /* libqtcore4d.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D930C8C1248E602005668F0 /* libqtcore4d.dylib */; };
 		7D930CEA1249B7D7005668F0 /* pasco-sdk.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D930C8D1248E602005668F0 /* pasco-sdk.dylib */; };
 /* End PBXBuildFile section */
 
@@ -20,7 +21,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				7D930CE91249B7D7005668F0 /* libqtcore4d.dylib in CopyFiles */,
+				7D81C46713CF8B3C00F33EFC /* libqtcore4.dylib in CopyFiles */,
 				7D930CEA1249B7D7005668F0 /* pasco-sdk.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -29,9 +30,9 @@
 
 /* Begin PBXFileReference section */
 		7D207FC512E8BA9F00616AF0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = SOURCE_ROOT; };
+		7D81C44F13CF8A7F00F33EFC /* libqtcore4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqtcore4.dylib; path = ../../lib/os_x/libqtcore4.dylib; sourceTree = SOURCE_ROOT; };
 		7D930C891248E5C0005668F0 /* pasco_api_test_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pasco_api_test_main.c; path = ../pasco_api_test_main.c; sourceTree = SOURCE_ROOT; };
 		7D930C8B1248E5D8005668F0 /* pasco_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pasco_api.h; path = ../../include/pasco_api.h; sourceTree = SOURCE_ROOT; };
-		7D930C8C1248E602005668F0 /* libqtcore4d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqtcore4d.dylib; path = ../../lib/os_x/libqtcore4d.dylib; sourceTree = SOURCE_ROOT; };
 		7D930C8D1248E602005668F0 /* pasco-sdk.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "pasco-sdk.dylib"; path = "../../lib/os_x/pasco-sdk.dylib"; sourceTree = SOURCE_ROOT; };
 		8DD76F6C0486A84900D96B5E /* XCodePascoAPITest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = XCodePascoAPITest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859E8B029090EE04C91782 /* XCodePascoAPITest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = XCodePascoAPITest.1; sourceTree = "<group>"; };
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D930C8F1248E602005668F0 /* pasco-sdk.dylib in Frameworks */,
+				7D81C45013CF8A7F00F33EFC /* libqtcore4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +54,7 @@
 		08FB7794FE84155DC02AAC07 /* XCodePascoAPITest */ = {
 			isa = PBXGroup;
 			children = (
-				7D930C8C1248E602005668F0 /* libqtcore4d.dylib */,
+				7D81C44F13CF8A7F00F33EFC /* libqtcore4.dylib */,
 				7D930C8D1248E602005668F0 /* pasco-sdk.dylib */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,

@@ -17,9 +17,19 @@ import com.sun.jna.Structure;
 import com.sun.jna.Native.DeleteNativeLibrary;
 
 public class PascoLibrary {
+	private static PascoLibrary instance;
 	private PascoJNALibrary jnaLib;
-	private int handle;
+	private int handle = 0;
 
+	// BUG because the native code doesn't handle multiple PasInit we need to only create one version of this class
+	public static PascoLibrary getInstance() {
+		if(instance != null){
+			return instance;
+		}
+		instance = new PascoLibrary();
+		return instance;
+	}
+	
 	public void initLibrary() throws IOException, InterruptedException
 	{
 		File nativeLibFile = getNativeLibraryFromJar();
@@ -35,7 +45,11 @@ public class PascoLibrary {
 	public void init()
 	{
 		// TODO see if this returns negative or some form of error message
-		handle = jnaLib.PasInit();
+		// BUG currently native library doesn't handle PasDelete correctly so only the first init should
+		// be called.
+		if(handle == 0){
+			handle = jnaLib.PasInit();
+		}
 	}
 	
     public void start()

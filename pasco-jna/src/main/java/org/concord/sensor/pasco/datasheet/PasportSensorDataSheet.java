@@ -157,7 +157,7 @@ public class PasportSensorDataSheet
     	int val = raw & 0x7FFFFFFF; 
     		
     	if((raw & 0x80000000) == 0) {
-    		return 1 / (float)val;
+    		return 1f / (float)val;
     	} else {
     		return val;
     	}	

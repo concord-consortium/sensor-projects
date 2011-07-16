@@ -104,7 +104,8 @@ public class PascoLibrary {
     
 	static File extractResource(String resourceName, File directory)
 	throws Error, FileNotFoundException {
-		URL url = PascoLibrary.class.getResource(getNativeLibraryResourcePath() + "/" + resourceName);
+		String resourcePath = getNativeLibraryResourcePath() + "/" + resourceName;
+		URL url = PascoLibrary.class.getResource(resourcePath);
 
 		if (url == null) {
 			throw new FileNotFoundException(resourceName + " not found in resource path");
@@ -116,9 +117,9 @@ public class PascoLibrary {
 			resourceFile = new File(URLDecoder.decode(url.getPath()));
 		}
 		else {
-			InputStream is = PascoLibrary.class.getResourceAsStream(resourceName);
+			InputStream is = PascoLibrary.class.getResourceAsStream(resourcePath);
 			if (is == null) {
-				throw new Error("Can't obtain resource InputStream, resource: " + resourceName);
+				throw new Error("Can't obtain resource InputStream, resource: " + resourcePath);
 			}
 
 			FileOutputStream fos = null;

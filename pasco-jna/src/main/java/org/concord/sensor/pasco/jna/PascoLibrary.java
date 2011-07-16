@@ -116,9 +116,9 @@ public class PascoLibrary {
 			resourceFile = new File(URLDecoder.decode(url.getPath()));
 		}
 		else {
-			InputStream is = Native.class.getResourceAsStream(resourceName);
+			InputStream is = PascoLibrary.class.getResourceAsStream(resourceName);
 			if (is == null) {
-				throw new Error("Can't obtain jnidispatch InputStream");
+				throw new Error("Can't obtain resource InputStream, resource: " + resourceName);
 			}
 
 			FileOutputStream fos = null;

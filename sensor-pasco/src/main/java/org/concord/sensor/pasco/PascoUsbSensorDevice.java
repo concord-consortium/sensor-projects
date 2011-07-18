@@ -37,13 +37,11 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 			library = PascoLibrary.getInstance();
 			try {
 				openInterface();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
+				errorMessage = "Can't load goio native library";
+				library = null;
 				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 		}
 		
 		if (! shutdownHookRegistered) {
@@ -51,8 +49,10 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 				public void run() {
 					logger.finer("Closing Pasco USB Sensor Device.");
 					
-					// Try to make sure the usb is closed
-					// FIXME need to also stop sampling if it is started
+					if(manager != null){
+						manager.stopChannels();
+					}
+					
 					library.stop();
 					library.delete();
 				}
@@ -83,16 +83,14 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 	}
 	
 	/**
-	 * Because we are using a api that abstracts the usb and/or serial port connection
-	 * we override this to initialize the api instead of opening the port. 
-	 * 
+	 * We don't have a port, but openPort is called by the open and the auto configure code.
 	 * 
 	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#openPort()
 	 */
-	@Override
-	public void open(String portParams) {
+	protected boolean openPort()
+	{
 		if(library == null){
-			return;
+			return false;
 		}
 		
 		try {
@@ -106,32 +104,21 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 			}
 			if(devices.length == 0){
 				errorMessage = "Can't find an attached Pasco USB device";
-				return;
+				return false;
 			}
 
 			// right now we just will take the first device found
 			device = devices[0];
 			
 			deviceName = device.getDeviceName();
-		} catch (PascoException e) {
+			return true;
+		} catch (Exception e) {
 			e.printStackTrace();
 			errorMessage = "Error looking for attached Pasco USB device:\n" + 
 			  "  " + e.getMessage();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	
-	/**
-	 * We don't have a port, but openPort is called by the auto configure code.
-	 * 
-	 * @see org.concord.sensor.device.impl.AbstractSensorDevice#openPort()
-	 */
-	protected boolean openPort()
-	{
-		return device != null;
+		} 
+		
+		return false;
 	}
 		
 	public boolean canDetectSensors() {
@@ -139,8 +126,6 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 	}
 
 	public String getDeviceName() {
-		// FIXME the Pasco SDK should be updated to provide information about the attached device
-		// so we can report which device we have found
 		return deviceName;
 	}
 
@@ -154,13 +139,16 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 			return false;
 		}
 		
-		// FIXME we should use library.getDevices here instead
 		try {
-			device.getChannels();
+			PascoDevice[] devices = library.getDevices();
+			for(PascoDevice d: devices){
+				if(device.equals(d)){
+					return true;
+				}
+			}
 		} catch (PascoException e) {
-			return false;
 		}
-		return true;
+		return false;
 	}
 
 	public ExperimentConfig getCurrentConfig() {
@@ -175,8 +163,8 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 			PascoChannel[] channels = device.getChannels();
 			ArrayList<PasportSensor> sensorConfigList = new ArrayList<PasportSensor>();
 			
-			// TODO see about properly reseting the device
 			manager.clearSensors();
+			manager.clearMeasurements();
 			
 			for (PascoChannel channel : channels) {
 				if(!channel.getExist()){
@@ -219,8 +207,10 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 		    expConfig.setPeriod(minDefaultPeriod);
 		    expConfig.setPeriodRange(new Range(manager.getMinPeriod(), manager.getMaxPeriod()));
 		} catch (PascoException e) {
-			// TODO Auto-generated catch block
+			errorMessage = "Error getting current config:\n" +
+			  "  " + e.getMessage();
 			e.printStackTrace();
+			return null;
 		}
 
 	    	    
@@ -250,8 +240,10 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 			}
 			manager.startChannels(currentConfig.getPeriod());
 		} catch (PascoException e) {
-			// TODO Auto-generated catch block
+			errorMessage = "Error starting:\n" +
+			  "  " + e.getMessage();
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -281,7 +273,8 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 		try {
 			return manager.read(values, offset, nextSampleOffset);
 		} catch (PascoException e) {
-			// TODO Auto-generated catch block
+			errorMessage = "error reading measurements:\n" +
+			  "  " + e.getMessage();
 			e.printStackTrace();
 			return -1;
 		}
@@ -290,7 +283,7 @@ public class PascoUsbSensorDevice extends AbstractSensorDevice {
 	@Override
 	public void close() {
 		// Try to make sure the usb is closed
-		// FIXME need to also stop sampling if it is started
+		manager.stopChannels();
 		library.stop();
 		library.delete();
 	}

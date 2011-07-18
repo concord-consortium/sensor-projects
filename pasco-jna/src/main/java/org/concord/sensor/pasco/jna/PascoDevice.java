@@ -72,4 +72,12 @@ public class PascoDevice {
 		return handle;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof PascoDevice)){
+			return false;
+		}
+		return ((PascoDevice)obj).getHandle() == getHandle();
+	}
+	
 }

@@ -213,6 +213,7 @@ public class PascoSensorManager {
 	}
 
 	public void clearMeasurements() {
+		measurementCount = 0;
 		sensorsToStart.clear();
 		
 		// we could just go through the sensorsToStart but instead we run through all of them

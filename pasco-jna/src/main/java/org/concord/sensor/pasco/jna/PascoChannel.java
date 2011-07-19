@@ -267,10 +267,9 @@ public class PascoChannel {
 	public void stopContinuousSampling() throws PascoException{
 		int ret = jnaLib.PasStopContinuousSampling(library.getHandle(), device.getHandle(), channel);
 		
-		// there is a bug in the SDK right now where the return value of stopping the sampling is not consitant
-//		if(ret == 1){
-//			throwException("Error stopping sampling", ret);
-//		}
+		if(ret < 0){
+			throwException("Error stopping sampling", ret);
+		}
 	}
 	
 

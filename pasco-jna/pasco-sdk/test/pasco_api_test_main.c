@@ -475,7 +475,7 @@ int main(int argc, char* argv[])
 	test_read_data(handle,2); /* 2 -- do the test twice */
 
 	printf("\n-------------- Read continous data ---------------------------------------\n");	
-//	test_read_continuous_data(handle,2); /* 2 -- do the test twice */
+	test_read_continuous_data(handle,2); /* 2 -- do the test twice */
 	
 
 	PasStop(handle);

@@ -259,6 +259,8 @@ public class ByteBufferStreamReversed
             	returnStr += "deg";
             } else if(currChar == 0xBA) {
             	returnStr += "+/-";
+            } else if(currChar == 181) {
+            	returnStr += "u";
             } else if((currChar & 0xFF) > 127) {
             	// got unknown unit char:
             	logger.warning("got unknown unit char: " + currChar);

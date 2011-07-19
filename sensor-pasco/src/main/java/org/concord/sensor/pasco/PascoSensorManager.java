@@ -46,6 +46,15 @@ public class PascoSensorManager {
 			bufferedSamples = new byte[sampleSize*64];
 			numBufferedSamples = 0;
 		}
+
+		public void stop() throws PascoException {
+			if(readBuffer == null){
+				// already stopped, and the jna library doesn't like stoping twice
+				return;
+			}
+			channel.stopContinuousSampling();
+			readBuffer = null;			
+		}
 	}
 	
 	static class MeasurementInfo {
@@ -158,8 +167,7 @@ public class PascoSensorManager {
 	public void stopChannels() {
 		for(SensorInfo sensor: sensorsToStart) {
 			try {
-				sensor.channel.stopContinuousSampling();
-				sensor.readBuffer = null;
+				sensor.stop();
 			} catch (PascoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

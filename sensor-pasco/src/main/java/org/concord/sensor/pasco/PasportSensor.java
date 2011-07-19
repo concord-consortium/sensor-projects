@@ -51,6 +51,11 @@ public class PasportSensor extends SensorConfigImpl {
 				(unitStr.indexOf("N") >= 0)){
 			// need to choose the reversed measurement
 			setType(SensorConfig.QUANTITY_FORCE);
+		} else if(measurement.getDataSheet().getName().indexOf("EKG") >= 0 &&
+				name.indexOf("Voltage") >= 0){
+			// So far we are only handling EKG by returning voltage
+			// this has to go above the generic voltage other wise it won't match
+			setType(SensorConfig.QUANTITY_EKG);
 		} else if((name.indexOf("Voltage") >= 0) &&
 				(unitStr.indexOf("V") >= 0)) {
 			setType(SensorConfig.QUANTITY_VOLTAGE);
@@ -62,6 +67,27 @@ public class PasportSensor extends SensorConfigImpl {
 			setType(SensorConfig.QUANTITY_GAS_PRESSURE);
 		} else if(name.indexOf("Sound") >=0){
 			setType(SensorConfig.QUANTITY_SOUND_INTENSITY);
+		} else if(name.equals("Magnetic Field") && 
+				unitStr.indexOf("mT") >= 0){
+			setType(SensorConfig.QUANTITY_MAGNETIC_FIELD);
+		} else if(name.equals("pH")){
+			setType(SensorConfig.QUANTITY_PH);
+		} else if(name.indexOf("Conductivity") >= 0){
+			// FIXME this will result in two conductivity sensors one for each calibration but really there is only one
+			// so if an experiment called for two it would think this sensor is good enough.
+			// that happens because the conductivity sensor returns multiple measurements that have Conductivity in the 
+			// string.
+			// A better solution for this would be to expand the experiment config stuff to have a concept of conversions
+			// so a single SensorConfig could have multiple conversions, then this code will have to be smarter about
+			// which "raw" measurement is the root input for each non raw measurement.
+			setType(SensorConfig.QUANTITY_CONDUCTIVITY);
+		} else if(name.indexOf("Salinity") >= 0){
+			setType(SensorConfig.QUANTITY_SALINITY);
+		} else if(name.indexOf("CO2") >= 0){
+			setType(SensorConfig.QUANTITY_CO2_GAS);
+		} else if(measurement.getDataSheet().getName().indexOf("UVA") >= 0 &&
+				name.indexOf("Intensity") >= 0){
+			setType(SensorConfig.QUANTITY_UVA_INTENSITY);
 		} else {
 			setType(SensorConfig.QUANTITY_UNKNOWN);
 		}

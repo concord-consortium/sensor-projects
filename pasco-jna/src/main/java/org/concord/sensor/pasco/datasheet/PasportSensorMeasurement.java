@@ -206,6 +206,10 @@ public class PasportSensorMeasurement
 		return typicalMax;
 	}
 
+	public PasportSensorDataSheet getDataSheet() {
+		return dataSheet;
+	}
+	
 	protected void print(Printer p)
 	{
 		p.puts("SensorMeasurement");

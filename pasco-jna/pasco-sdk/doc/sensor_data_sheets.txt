@@ -690,3 +690,180 @@ warmUp: 1
     maxVale: 50.0
     typicalMin: -5.0
     typicalMax: 5.0
+    
+name: Magnetic Field Sensor
+min rate: 1.0 s/sample
+max rate: 0.05 s/sample
+default rate: 0.1 s/sample
+sample size: 4
+datasheet size: 506
+datasheet:
+  id: 134
+  maxDataSheetSize: 2048
+  dataSheetLength: 396
+  extendedDataSheetLength: 110
+  classCode: 0
+  version: 2.55
+  modelNumber: PS-2112   
+  numberMeasurements: 5
+  name: Magnetic Field Sensor
+  maxPeriod: 1.0
+  minPeriod: 0.05
+  defaultPeriod: 0.1
+  latency: 100
+  warmUp: 1
+    SensorMeasurement
+      id: 0
+      name: Raw Mag Field Data
+      units: 
+      type: 0
+      typeDescriptorLength: 0
+      visible: 10
+      accuracy: 0.0
+      precision: 0
+      displayFormat: 1
+      minValue: 0.0
+      maxVale: 10.0
+      typicalMin: 0.0
+      typicalMax: 10.0
+    SensorMeasurement
+      id: 1
+      name: Inverted Magnetic Field
+      units: gauss
+      type: 3
+      typeDescriptorLength: 18
+      SimpleCalibration
+        input: 0
+        slope: 236.0612
+        intersect: -1894.0583
+      visible: 2
+      accuracy: 0.2
+      precision: 1
+      displayFormat: 2
+      minValue: -1000.0
+      maxVale: 1000.0
+      typicalMin: -1000.0
+      typicalMax: 1000.0
+    SensorMeasurement
+      id: 2
+      name: Magnetic Field
+      units: gauss
+      type: 4
+      typeDescriptorLength: 11
+      MacroCalculation
+        input: 1
+        type: 7
+        args: -1.0 0.0 
+      visible: 9
+      accuracy: 0.00999466
+      precision: 2
+      displayFormat: 2
+      minValue: -1000.0
+      maxVale: 1000.0
+      typicalMin: -1000.0
+      typicalMax: 1000.0
+    SensorMeasurement
+      id: 3
+      name: Magnetic Field
+      units: mT
+      type: 4
+      typeDescriptorLength: 11
+      MacroCalculation
+        input: 2
+        type: 7
+        args: 0.09999237 0.0 
+      visible: 8
+      accuracy: 9.918364E-4
+      precision: 3
+      displayFormat: 2
+      minValue: -100.0
+      maxVale: 100.0
+      typicalMin: -100.0
+      typicalMax: 100.0
+    SensorMeasurement
+      id: 4
+      name: Magnetic Field
+      units: T
+      type: 4
+      typeDescriptorLength: 11
+      MacroCalculation
+        input: 2
+        type: 7
+        args: 9.155413E-5 0.0 
+      visible: 8
+      accuracy: 9.155413E-5
+      precision: 6
+      displayFormat: 2
+      minValue: -0.099977136
+      maxVale: 0.09999237
+      typicalMin: -0.099977136
+      typicalMax: 0.09999237
+      
+name: EKG Sensor
+min rate: 0.02 s/sample
+max rate: 0.0050 s/sample
+default rate: 0.0050 s/sample
+sample size: 6
+datasheet size: 307
+datasheet:
+  id: 147
+  maxDataSheetSize: 8192
+  dataSheetLength: 243
+  extendedDataSheetLength: 64
+  classCode: 0
+  version: 2.2 
+  modelNumber: PS-2111   
+  numberMeasurements: 3
+  name: EKG Sensor
+  maxPeriod: 0.02
+  minPeriod: 0.0050
+  defaultPeriod: 0.0050
+  latency: 100
+  warmUp: 1
+    SensorMeasurement
+      id: 0
+      name: Voltage
+      units: mV
+      type: 0
+      typeDescriptorLength: 0
+      visible: 1
+      accuracy: 0.0049897004
+      precision: 3
+      displayFormat: 2
+      minValue: 0.0
+      maxVale: 5.0
+      typicalMin: 0.0
+      typicalMax: 5.0
+    SensorMeasurement
+      id: 1
+      name: Heart Rate Count
+      units: samples
+      type: 2
+      typeDescriptorLength: 1
+      typeDescriptor[0]:2
+      visible: 10
+      accuracy: 1.0
+      precision: 0
+      displayFormat: 0
+      minValue: 0.0
+      maxVale: 4095.0
+      typicalMin: 0.0
+      typicalMax: 1023.0
+    SensorMeasurement
+      id: 2
+      name: Heart Rate
+      units: Beats/Min
+      type: 4
+      typeDescriptorLength: 11
+      MacroCalculation
+        input: 1
+        type: 2
+        args: 5.0 60.0 
+      visible: 13
+      accuracy: 1.0
+      precision: 0
+      displayFormat: 1
+      minValue: 47.0
+      maxVale: 250.0
+      typicalMin: 50.0
+      typicalMax: 120.0

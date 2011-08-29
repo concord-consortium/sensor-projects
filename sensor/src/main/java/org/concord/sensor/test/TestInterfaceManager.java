@@ -30,6 +30,8 @@
 package org.concord.sensor.test;
 
 
+import java.util.ArrayList;
+
 import org.concord.framework.data.stream.DataListener;
 import org.concord.framework.data.stream.DataStreamEvent;
 import org.concord.framework.data.stream.DataChannelDescription;
@@ -229,15 +231,122 @@ public class TestInterfaceManager
 			public void dataReceived(DataStreamEvent dataEvent)
 			{
 				int numSamples = dataEvent.getNumSamples();
+				int numChannels = dataEvent.getDataDescription().getChannelsPerSample();
+
 				DataChannelDescription channel0 = dataEvent.getDataDescription().getChannelDescription(0);
 				DataChannelDescription channel1 = dataEvent.getDataDescription().getChannelDescription(1);
 				float [] data = dataEvent.getData();
+				String status = "";
+				status = status + String.format("samples: %d", numSamples);
+				if(numSamples > 0) {
+					for(Integer i=0; i < numChannels; i++) {
+						DataChannelDescription channel = dataEvent.getDataDescription().getChannelDescription(i);
+						status = status + String.format(", %s: %3.1f %s", channel.getName(), data[i], channel.getUnit().getDimension());
+					}
+				}
+				System.out.println(status);
+				System.out.flush();
+			}
+
+			public void dataStreamEvent(DataStreamEvent dataEvent)
+			{
+				String eventString;
+				int eventType = dataEvent.getType();
+				
+				if(eventType == 1001) return;
+				
+				switch(eventType) {
+					case DataStreamEvent.DATA_DESC_CHANGED:
+						eventString = "Description changed";
+					break;
+					default:
+						eventString = "Unknown event type";
+				}
+				
+				System.out.println("Data Event: " + eventString);
+			}
+		});
+		
+		sDataProducer.start();
+		
+		System.out.println("started device");
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sDataProducer.stop();
+		
+		sDataProducer.close();
+		
+		System.exit(0);
+	}
+
+	/**
+	 * Test collecting data from a Temperature and a Light probe simultaneously
+	 * from a device which supports multiple sensors.
+	 */
+	public static void testAllConnectedProbes(int deviceId){
+		UserMessageHandler messenger = new PrintUserMessageHandler();
+		SensorDataManager  sdManager = new InterfaceManager(messenger);
+		
+		// setup a single config for the passed in device
+		DeviceConfig [] dConfigs = new DeviceConfig[1];
+		dConfigs[0] = new DeviceConfigImpl(deviceId, null);
+		((InterfaceManager)sdManager).setDeviceConfigs(dConfigs);
+				
+		// Check what is attached.
+		SensorDevice sensorDevice = sdManager.getSensorDevice();
+		ExperimentConfig currentConfig = sensorDevice.getCurrentConfig();
+		SensorUtilJava.printExperimentConfig(currentConfig);
+		
+		SensorConfig [] sensorConfigArr = currentConfig.getSensorConfigs();
+		if(sensorConfigArr.length == 0) {
+			String mesg = "Must have at least one sensor attached, found: 0";
+			System.out.println(mesg);
+			throw new RuntimeException(mesg);
+		}
+		
+		ArrayList<SensorRequest> sensorRequestList = new ArrayList<SensorRequest>();
+
+		for(Integer i=0; i<sensorConfigArr.length; i++){
+			SensorConfig config = sensorConfigArr[i];
+			SensorRequestImpl sensor = new SensorRequestImpl();
+			sensor.setDisplayPrecision(-2);
+			sensor.setUnit(config.getUnit());
+			sensor.setPort(config.getPort());
+			sensor.setStepSize(0.1f);
+			sensor.setType(config.getType());
+			sensorRequestList.add(sensor);
+		}
+		
+		ExperimentRequestImpl request = new ExperimentRequestImpl();
+		request.setPeriod(0.1f);
+		request.setNumberOfSamples(-1);
+		
+		SensorRequest [] sensorRequestArr = new SensorRequest[sensorRequestList.size()];
+		sensorRequestList.toArray(sensorRequestArr);
+		request.setSensorRequests(sensorRequestArr);
+				
+		SensorDataProducer sDataProducer =
+		    sdManager.createDataProducer();
+		sDataProducer.configure(request);
+		sDataProducer.addDataListener(new DataListener(){
+			public void dataReceived(DataStreamEvent dataEvent)
+			{
+				int numSamples = dataEvent.getNumSamples();
+				DataChannelDescription channel0 = dataEvent.getDataDescription().getChannelDescription(0);
+				DataChannelDescription channel1 = dataEvent.getDataDescription().getChannelDescription(1);
+				DataChannelDescription channel2 = dataEvent.getDataDescription().getChannelDescription(2);
+				float [] data = dataEvent.getData();
 				if(numSamples > 0) {
 					System.out.println(
-							String.format("samples: %d: %s: %3.1f %s, %s: %4.2f %s",
+							String.format("samples: %d: %s: %4.2f %s, %s: %4.2f %s,  %s: %4.2f %s",
 									numSamples,
 									channel0.getName(), data[0], channel0.getUnit().getDimension(),
-									channel1.getName(), data[1], channel1.getUnit().getDimension()
+									channel1.getName(), data[1], channel1.getUnit().getDimension(),
+									channel2.getName(), data[2], channel2.getUnit().getDimension()
 							));
 
 					System.out.flush();
@@ -270,7 +379,7 @@ public class TestInterfaceManager
 		
 		System.out.println("started device");
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

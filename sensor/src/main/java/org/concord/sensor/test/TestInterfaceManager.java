@@ -377,9 +377,9 @@ public class TestInterfaceManager
 		
 		sDataProducer.start();
 		
-		System.out.println("started device");
+		System.out.println("started device ... will collect for 10s");
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

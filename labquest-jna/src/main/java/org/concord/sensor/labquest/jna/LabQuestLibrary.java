@@ -259,7 +259,7 @@ public class LabQuestLibrary
     }
     
     private static File getNativeLibraryFromJarMac() throws IOException {
-		String resourceName = getNativeLibraryResourcePath() + "/libNGIO.dylib";
+		String resourceName = getNativeLibraryResourcePath() + "/libNGIOUniversal3way.dylib";
 		File directory = createTmpDirectory();
 		return extractResource(resourceName, directory);
     }

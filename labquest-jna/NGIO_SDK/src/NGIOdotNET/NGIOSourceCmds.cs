@@ -1,3 +1,31 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -59,7 +87,7 @@ namespace NGIOdotNET
 		/// Direct use of this command by application programs is not recommended. Instead, call
 		/// NGIO_Device_SetMeasurementPeriod().
 		/// <para>
-		/// parameters: none
+		/// parameters: NGIOSetMeasurementPeriodParams
 		/// </para>
 		/// <para>
 		/// response: NGIODefaultCmdResponse
@@ -71,10 +99,10 @@ namespace NGIOdotNET
 		/// Direct use of this command by application programs is not recommended. Instead, call
 		/// NGIO_Device_GetMeasurementPeriod().
 		/// <para>
-		/// parameters: none
+		/// parameters: NGIOGetMeasurementPeriodParams
 		/// </para>
 		/// <para>
-		/// response: NGIODefaultCmdResponse
+		/// response: NGIOSetMeasurementPeriodParams
 		/// </para>
 		/// </summary>
 		public const byte CMD_ID_GET_MEASUREMENT_PERIOD = 0x1C;
@@ -394,12 +422,6 @@ namespace NGIOdotNET
 	
 	}
 
-	[StructLayout(LayoutKind.Sequential, Pack=1)]
-	public struct NGIO_Parms0	//You can use this for commands that do not take parameters; Set nParamBytes = 0.
-	{
-		public byte cruft;
-	}
-
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct NGIODefaultCmdResponse
 	{
@@ -434,6 +456,7 @@ namespace NGIOdotNET
 
 	/// <summary>
 	/// Parameter block passed into SendCmdAndGetResponse() with NGIO_CMD_ID_SET_MEASUREMENT_PERIOD.
+	/// This is also the response payload returned by SendCmdAndGetResponse() for NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
 	/// Direct use of the NGIOSetMeasurementPeriodParams struct is not recommended. 
 	/// Use NGIO.Device_SetMeasurementPeriod() instead.
 	/// </summary>
@@ -461,12 +484,12 @@ namespace NGIOdotNET
 	}
 
 	/// <summary>
-	/// This is the response payload returned by SendCmdAndGetResponse() for NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
-	/// Direct use of the NGIOGetMeasurementPeriodCmdResponsePayload struct is not recommended. 
+	/// Parameter block passed into SendCmdAndGetResponse() with NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
+	/// Direct use of the NGIOGetMeasurementPeriodParams struct is not recommended. 
 	/// Use NGIO.Device_GetMeasurementPeriod() instead.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct NGIOGetMeasurementPeriodCmdResponsePayload 
+	public struct NGIOGetMeasurementPeriodParams 
 	{
 		/// <summary>
 		/// -1 => all channels.
@@ -479,13 +502,6 @@ namespace NGIOdotNET
 		public byte msbyteLswordDataRunId;
 		public byte lsbyteMswordDataRunId;
 		public byte msbyteMswordDataRunId;
-		/// <summary>
-		/// Measurement period in device 'ticks', which are microseconds for the LabQuest and LabQuest Mini.
-		/// </summary>
-		public byte lsbyteLswordMeasurementPeriod;
-		public byte msbyteLswordMeasurementPeriod;
-		public byte lsbyteMswordMeasurementPeriod;
-		public byte msbyteMswordMeasurementPeriod;
 	}
 
 	/// <summary>
@@ -639,7 +655,7 @@ namespace NGIOdotNET
 	/// NGIO_CMD_ID_READ_IO
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public unsafe struct NGIOChannelIdParameter
+	public struct NGIOChannelIdParameter
 	{
 		/// <summary>
 		/// NGIO_CHANNEL_ID_ANALOG1 .. NGIO_CHANNEL_ID_DIGITAL2
@@ -651,7 +667,7 @@ namespace NGIOdotNET
 	/// This is the response payload returned by SendCmdAndGetResponse() for NGIO_CMD_ID_GET_SENSOR_ID.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public unsafe struct NGIOGetSensorIdCmdResponsePayload
+	public struct NGIOGetSensorIdCmdResponsePayload
 	{
 		public byte lsbyteLswordSensorId;
 		public byte msbyteLswordSensorId;

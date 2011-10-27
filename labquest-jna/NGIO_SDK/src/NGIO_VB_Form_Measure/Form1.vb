@@ -1,3 +1,31 @@
+'/*********************************************************************************
+'
+'Copyright (c) 2010, Vernier Software & Technology
+'All rights reserved.
+'
+'Redistribution and use in source and binary forms, with or without
+'modification, are permitted provided that the following conditions are met:
+'    * Redistributions of source code must retain the above copyright
+'      notice, this list of conditions and the following disclaimer.
+'    * Redistributions in binary form must reproduce the above copyright
+'      notice, this list of conditions and the following disclaimer in the
+'      documentation and/or other materials provided with the distribution.
+'    * Neither the name of Vernier Software & Technology nor the
+'      names of its contributors may be used to endorse or promote products
+'      derived from this software without specific prior written permission.
+'
+'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+'ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+'WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+'DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+'DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+'(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+'LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+'ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+'(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+'SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'
+'**********************************************************************************/
 Imports NGIOdotNET
 Imports VSTCoreDefsdotNET
 Imports System.Runtime.InteropServices
@@ -152,9 +180,6 @@ Public Class Form1
 			g.DrawString(str, font, System.Drawing.Brushes.Black, x, y)
 
 			Dim units As String = GetUnits()
-			If 0 = String.Compare(units, "") Then
-				units = "volts"
-			End If
 
 			Dim fonty As New Font("Times New Roman", 11)
 			str = meas_y_min.ToString("G5") & " " & units
@@ -537,36 +562,24 @@ Public Class Form1
 		Dim device_handle As IntPtr = GetOpenDeviceHandle(False)
 		If IntPtr.Zero <> device_handle Then
 			Dim numMeasurementsAvailable As Integer
-			Dim volts, offset, gain, dummy As Single
+            Dim volts As Single
 			Dim rMeasurement As Double
 			Dim rTime As Double
-			Dim units As StringBuilder = New StringBuilder(20)
-			Dim equationType As SByte
-			Dim probeType As Integer = NGIO.Device_GetProbeType(device_handle, activeChannel)
+            Dim probeType As Integer = NGIO.Device_GetProbeType(device_handle, activeChannel)
 
 			numMeasurementsAvailable = NGIO.Device_ReadRawMeasurements(device_handle, activeChannel, _
 			 raw_measurements, raw_timestamps, NUM_MEASUREMENTS_IN_LOCAL_BIG_BUF)
 			If numMeasurementsAvailable > 0 Then
-				Dim CalPageIndex As Byte = 0
-				NGIO.Device_DDSMem_GetActiveCalPage(device_handle, activeChannel, CalPageIndex)
-				NGIO.Device_DDSMem_GetCalPage(device_handle, activeChannel, CalPageIndex, offset, gain, dummy, units, 20)
-				NGIO.Device_DDSMem_GetCalibrationEquation(device_handle, activeChannel, equationType)
-				If equationType <> VSTSensorDDSMemRec.kEquationType_Linear Then
-					'Just return raw volts for nonlinear calibrations.
-					gain = 1.0
-					offset = 0.0
-				End If
-
-				For i As Integer = 0 To (numMeasurementsAvailable - 1)
-					volts = NGIO.Device_ConvertToVoltage(device_handle, activeChannel, raw_measurements(i), probeType)
-					rMeasurement = volts * gain + offset  'This is faster than NGIO_Device_CalibrateData().
-					If device_handle <> NGIO_audio_device_handle Then
-						rTime = raw_timestamps(i) * 0.000001
-					Else
-						rTime = raw_timestamps(i) * measPeriodInSeconds
-					End If
-					measCirBuf.AddElement(rMeasurement, rTime)
-				Next i
+                For i As Integer = 0 To (numMeasurementsAvailable - 1)
+                    volts = NGIO.Device_ConvertToVoltage(device_handle, activeChannel, raw_measurements(i), probeType)
+                    rMeasurement = NGIO.Device_CalibrateData(device_handle, activeChannel, volts)
+                    If device_handle <> NGIO_audio_device_handle Then
+                        rTime = raw_timestamps(i) * 0.000001
+                    Else
+                        rTime = raw_timestamps(i) * measPeriodInSeconds
+                    End If
+                    measCirBuf.AddElement(rMeasurement, rTime)
+                Next i
 				Graph_Canvas.Invalidate()
 
 				MeasBox.Text = rMeasurement.ToString("G5")
@@ -696,8 +709,11 @@ Public Class Form1
 
 			If (desiredProbeType <> VSTSensorDDSMemRec.kProbeTypeDigitalCount) Then	'Do not complain when just counting pulses.
 				If NGIO.Device_GetProbeType(device_handle, activeChannel) <> desiredProbeType Then
-					MessageBox.Show("Sensor plugged in is not compatible with selected mode.")
-				End If
+                    MessageBox.Show("Sensor plugged in is not compatible with selected mode.")
+                ElseIf (measPeriodInSeconds < 0.02) Then    'Make sure measurement period is ok for motion detectors.
+                    measPeriodInSeconds = 0.05
+                    NGIO.Device_SetMeasurementPeriod(device_handle, -1, measPeriodInSeconds, NGIO.TIMEOUT_MS_DEFAULT)
+                End If
 			End If
 
 		End If
@@ -832,8 +848,7 @@ Public Class Form1
 		Dim device_handle As IntPtr = GetOpenDeviceHandle(False)
 		If (IntPtr.Zero <> device_handle) Then
 			NGIO.Device_DDSMem_ClearRecord(device_handle, channel)
-			NGIO.Device_DDSMem_SetOperationType(device_handle, channel, 14)	'Implies analog 5v probe type
-			NGIO.Device_DDSMem_SetCalibrationEquation(device_handle, channel, VSTSensorDDSMemRec.kEquationType_Linear)
+            NGIO.Device_DDSMem_SetCalibrationEquation(device_handle, channel, VSTSensorDDSMemRec.kEquationType_Linear)
 			NGIO.Device_DDSMem_SetCalPage(device_handle, channel, 0, 0.0, 1.0, 0.0, "units")
 			NGIO.Device_DDSMem_SetHighestValidCalPageIndex(device_handle, channel, 0)
 			NGIO.Device_DDSMem_SetActiveCalPage(device_handle, channel, 0)

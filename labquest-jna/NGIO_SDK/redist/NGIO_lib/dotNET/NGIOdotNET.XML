@@ -62,7 +62,7 @@
             Direct use of this command by application programs is not recommended. Instead, call
             NGIO_Device_SetMeasurementPeriod().
             <para>
-            parameters: none
+            parameters: NGIOSetMeasurementPeriodParams
             </para>
             <para>
             response: NGIODefaultCmdResponse
@@ -75,10 +75,10 @@
             Direct use of this command by application programs is not recommended. Instead, call
             NGIO_Device_GetMeasurementPeriod().
             <para>
-            parameters: none
+            parameters: NGIOGetMeasurementPeriodParams
             </para>
             <para>
-            response: NGIODefaultCmdResponse
+            response: NGIOSetMeasurementPeriodParams
             </para>
             </summary>
         </member>
@@ -380,6 +380,7 @@
         <member name="T:NGIOdotNET.NGIOSetMeasurementPeriodParams">
             <summary>
             Parameter block passed into SendCmdAndGetResponse() with NGIO_CMD_ID_SET_MEASUREMENT_PERIOD.
+            This is also the response payload returned by SendCmdAndGetResponse() for NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
             Direct use of the NGIOSetMeasurementPeriodParams struct is not recommended. 
             Use NGIO.Device_SetMeasurementPeriod() instead.
             </summary>
@@ -399,26 +400,21 @@
             Measurement period in device 'ticks', which are microseconds for the LabQuest.
             </summary>
         </member>
-        <member name="T:NGIOdotNET.NGIOGetMeasurementPeriodCmdResponsePayload">
+        <member name="T:NGIOdotNET.NGIOGetMeasurementPeriodParams">
             <summary>
-            This is the response payload returned by SendCmdAndGetResponse() for NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
-            Direct use of the NGIOGetMeasurementPeriodCmdResponsePayload struct is not recommended. 
+            Parameter block passed into SendCmdAndGetResponse() with NGIO_CMD_ID_GET_MEASUREMENT_PERIOD.
+            Direct use of the NGIOGetMeasurementPeriodParams struct is not recommended. 
             Use NGIO.Device_GetMeasurementPeriod() instead.
             </summary>
         </member>
-        <member name="F:NGIOdotNET.NGIOGetMeasurementPeriodCmdResponsePayload.channel">
+        <member name="F:NGIOdotNET.NGIOGetMeasurementPeriodParams.channel">
             <summary>
             -1 => all channels.
             </summary>
         </member>
-        <member name="F:NGIOdotNET.NGIOGetMeasurementPeriodCmdResponsePayload.lsbyteLswordDataRunId">
+        <member name="F:NGIOdotNET.NGIOGetMeasurementPeriodParams.lsbyteLswordDataRunId">
             <summary>
             Set this to 0, which indicates RealTime data collection.
-            </summary>
-        </member>
-        <member name="F:NGIOdotNET.NGIOGetMeasurementPeriodCmdResponsePayload.lsbyteLswordMeasurementPeriod">
-            <summary>
-            Measurement period in device 'ticks', which are microseconds for the LabQuest and LabQuest Mini.
             </summary>
         </member>
         <member name="T:NGIOdotNET.NGIOSetLedStateParams">
@@ -1102,7 +1098,7 @@
              <param name="deviceName"></param>
              <param name="bDemandExclusiveOwnership"> LabQuest requires that this be set to 0, and call
              NGIO_Device_AcquireExclusiveOwnership() before doing anything else. </param>
-             <returns></returns>
+             <returns>handle to open device if successful, else NULL.</returns>
         </member>
         <member name="M:NGIOdotNET.NGIO.Device_AcquireExclusiveOwnership(System.IntPtr,System.UInt32)">
             <summary>
@@ -1307,6 +1303,14 @@
             <returns>Number of measurements retrieved from the NGIO Measurement Buffer. This routine returns 
             immediately, so the return value may be less than maxCount. Return value less than 0 implies error.</returns>
         </member>
+        <member name="M:NGIOdotNET.NGIO.Device_GetProbeType(System.IntPtr,System.SByte)">
+            <summary>
+            NGIO_Device_GetProbeType()
+            </summary>
+            <param name="hDevice"></param>
+            <param name="channel"></param>
+            <returns>VSTSensorDDSMemRec.kProbeType...</returns>
+        </member>
         <member name="M:NGIOdotNET.NGIO.Device_DDSMem_ReadRecord(System.IntPtr,System.SByte,System.Byte,System.UInt32)">
             <summary>
             NGIO_Device_DDSMem_ReadRecord().
@@ -1326,7 +1330,7 @@
             <param name="SensorNumber"></param>
             <param name="sendQueryToHardwareflag">If sendQueryToHardwareflag != 0, then send a NGIO_CMD_ID_GET_SENSOR_ID to the sensor hardware.</param>
             <param name="channelSignature"></param>
-            <param name="timeoutMs"># of milliseconds to wait for a reply before giving up. DEFAULT_CMD_RESPONSE_TIMEOUT_MS is recommended.</param>
+            <param name="timeoutMs"># of milliseconds to wait for a reply before giving up. NGIO.TIMEOUT_MS_DEFAULT is recommended.</param>
             <returns></returns>
         </member>
         <member name="M:NGIOdotNET.NGIO.Device_DDSMem_SetOperationType(System.IntPtr,System.SByte,System.Byte)">

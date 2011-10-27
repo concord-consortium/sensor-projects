@@ -7,10 +7,26 @@ The API to this library is documented in \NGIO_SDK\redist\include\NGIO_lib_inter
 
 The Windows version of this library is NGIO_lib.dll. Since NGIO_lib.dll is a standard Microsoft Windows DLL, you can access the library from a variety of languages including C, C++, LabView, and Java. We have also written a .NET wrapper for NGIO_lib.dll called NGIOdotNET.dll. NGIOdotNET.dll allows .NET based applications to access the LabQuest and the LabQuest Mini.
 
-The Apple version of the NGIO_lib library is libNGIO.dylib.
+The Mac OS version of this SDK ships with several library variants:
+libNGIO.dylib is 32-bit only, ppc and Intel, for Mac OS 10.4 and higher.
+NGIO.framework is 32-bit only, ppc and Intel, for Mac OS 10.4 and higher, packaged as a framework.
+libNGIOUniversal.dylib is 32-bit and 64-bit, Intel only, for Mac OS 10.5 and higher.
+NGIOUniversal.framework is 32-bit and 64-bit, Intel only, for Mac OS 10.5 and higher, packaged as a framework.
+libNGIO64.dylib is 64-bit only, Intel only, for Mac OS 10.5 and higher.
+
 libNGIO has been ported to Linux, but it is packaged separately.
 
-Run LabQuestLabProJungoDeviceDriver922.exe to install the Windows USB device drivers for the LabQuest and the LabQuest Mini.
+Run LabQuestLabProJungoDeviceDriver921.exe to install the Windows USB device drivers for the LabQuest and the LabQuest Mini.
+
+====================================================================================================================
+
+The NGIO SDK includes partial source code. The sample applications include complete source, but the source code to the NGIO_lib library is not included.
+
+The NGIO SDK is currently distributed with a very permissive BSD style license. See the license.txt file located in the same folder as this readme.txt file.
+
+Basically we encourage everyone to use the SDK, and to freely redistribute the NGIO_lib library binaries. If the restrictions set out in the license.txt file discourage you from using the SDK, please contact VST at http://www.vernier.com/tech/supportform.html .
+
+VST does not guarantee that the code is bug free, but we try to make it so. If you find any bugs, please report them to http://www.vernier.com/tech/supportform.html .
 
 ====================================================================================================================
 
@@ -70,6 +86,13 @@ For maximum simplicity and portability, we recommend that you just build your .N
 ====================================================================================================================
 
 Release notes:
+Version 1.84
+64 bit version of NGIO lib is working on the Mac now(Mac OS 10.5 and higher).
+
+Version 1.78
+Add sensor map data for non smart sensors so DDS records are descriptive for all known sensors.
+NGIO_Device_CalibrateData() supports non linear calibrations now, so stainless steel temperature is supported.
+Support the +/-30 volt sensor.
 
 Version 1.75
 Added support for .NET languages.

@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("NGIO_VB_Form_Measure")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Vernier, Inc.")> 
+<Assembly: AssemblyCompany("Vernier Software & Technology")> 
 <Assembly: AssemblyProduct("NGIO_VB_Form_Measure")> 
-<Assembly: AssemblyCopyright("Copyright © Vernier, Inc. 2010")> 
+<Assembly: AssemblyCopyright("Copyright (C) 2010 Vernier Software & Technology. All rights reserved.")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.1.0.0")> 
+<Assembly: AssemblyFileVersion("1.1.0.0")> 

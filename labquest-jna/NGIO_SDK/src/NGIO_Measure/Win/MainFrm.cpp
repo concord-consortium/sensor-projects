@@ -1,3 +1,31 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
 // MainFrm.cpp : implementation of the CMainFrame class
 //
 
@@ -470,7 +498,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 		NGIO_DEVICE_HANDLE hDevice = pDoc->GetOpenDevicePtr();
 		if (hDevice)
 		{
-			double rMeasurement, rTime, volts, gain, offset;
+			gtype_real32 rMeasurement, rTime, volts;
 			int numMeasurementsAvailable = NGIO_Device_GetNumMeasurementsAvailable(hDevice, pDoc->GetActiveChannel());
 			if (numMeasurementsAvailable > 0)
 			{
@@ -483,35 +511,18 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
 			if (numMeasurementsAvailable > 0)
 			{
-				char units[20];
-				GCalibrationPage calPage;
-				unsigned char CalPageIndex;
 				signed char channel = pDoc->GetActiveChannel();
-				char equationType;
 				unsigned char probeType = NGIO_Device_GetProbeType(hDevice, channel);
-				NGIO_Device_DDSMem_GetActiveCalPage(hDevice, channel, &CalPageIndex);
-				NGIO_Device_DDSMem_GetCalPage(hDevice, channel, CalPageIndex,
-					&calPage.CalibrationCoefficientA, &calPage.CalibrationCoefficientB, &calPage.CalibrationCoefficientC, 
-					units, sizeof(units));
-				NGIO_Device_DDSMem_GetCalibrationEquation(hDevice, channel, &equationType);
-
-				gain = calPage.CalibrationCoefficientB;
-				offset = calPage.CalibrationCoefficientA;
-				if (equationType != kEquationType_Linear)
-				{
-					gain = 1.0;//spam
-					offset = 0.0;
-				}
 
 				//Stuff the new measurements in a circular buffer.
 				for (int k = 0; k < numMeasurementsAvailable; k++)
 				{
 					volts = NGIO_Device_ConvertToVoltage(hDevice, channel, g_measurements[k], probeType);
-					rMeasurement = volts*gain + offset;	//This is faster than NGIO_Device_CalibrateData().
+					rMeasurement = NGIO_Device_CalibrateData(hDevice, channel, volts);
 					if (pDoc->GetAudioDevicePtr())
-						rTime = g_times[k]*pDoc->GetMeasurementPeriodInSeconds();
+						rTime = (gtype_real32) (g_times[k]*pDoc->GetMeasurementPeriodInSeconds());
 					else
-						rTime = g_times[k]*0.000001;
+						rTime = (gtype_real32) (g_times[k]*0.000001);
 					pDoc->AddMeasurementToCirbuf(rMeasurement, rTime);
 				}
 				pView->Invalidate();
@@ -1096,6 +1107,11 @@ void CMainFrame::OnChannelsDigital1Motion()
 	
 		if (NGIO_Device_GetProbeType(pDevice, pDoc->GetActiveChannel()) != kProbeTypeMD)
 			MessageBox("Sensor plugged in is not compatible with selected mode.");
+		else if (pDoc->GetMeasurementPeriodInSeconds() < 0.020)	//Make sure measurement period is ok for motion detectors.
+		{
+			NGIO_Device_SetMeasurementPeriod(pDevice, -1, 0.050, NGIO_TIMEOUT_MS_DEFAULT);
+			pDoc->SetMeasurementPeriodInSeconds(0.050);
+		}
 	}
 }
 
@@ -1136,6 +1152,11 @@ void CMainFrame::OnChannelsDigital2Motion()
 	
 		if (NGIO_Device_GetProbeType(pDevice, pDoc->GetActiveChannel()) != kProbeTypeMD)
 			MessageBox("Sensor plugged in is not compatible with selected mode.");
+		else if (pDoc->GetMeasurementPeriodInSeconds() < 0.020)	//Make sure measurement period is ok for motion detectors.
+		{
+			NGIO_Device_SetMeasurementPeriod(pDevice, -1, 0.050, NGIO_TIMEOUT_MS_DEFAULT);
+			pDoc->SetMeasurementPeriodInSeconds(0.050);
+		}
 	}
 }
 

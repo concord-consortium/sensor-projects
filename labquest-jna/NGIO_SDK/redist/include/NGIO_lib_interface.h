@@ -1,3 +1,31 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
 #ifndef _NGIO_LIB_INTERFACE_H_
 #define _NGIO_LIB_INTERFACE_H_
 
@@ -865,6 +893,9 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetNumMeasurementsAvailable(
 					time is how long the ping audio pulse takes to travel from the detector to the object and then back
 					to the detector.
 
+					Note that if the sampling period for a channel configured with NGIO_SAMPLING_MODE_PERIODIC_MOTION_DETECT
+					is less than 10 milliseconds, then NGIO_CMD_ID_START_MEASUREMENTS will fail.
+
 				NGIO_SAMPLING_MODE_PERIODIC_PULSE_COUNT:
 					Used with radiation counters in NGIO_CHANNEL_ID_DIGITAL1 and NGIO_CHANNEL_ID_DIGITAL2.
 					Values returned are cumulative counts that range from 0 to 2147483647.
@@ -943,20 +974,10 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_ConvertFromVoltage(
 
 	Purpose:	This routine converts a voltage value into a calibrated measurement.
 
-				For most sensors, the following operation is performed(kEquationType_Linear):
-					calibrated val = CalibrationCoefficientB*volts + CalibrationCoefficientA
+				What units this routine produces can be determined by calling
+				NGIO_Device_DDSMem_GetCalPage(hDevice, GoIO_Sensor_DDSMem_GetActiveCalPage(),...) .
 
-				NGIO_Device_CalibrateData() gets the coefficients from NGIO_Device_DDSMem_GetActiveCalPage(),
-				and NGIO_Device_DDSMem_GetCalPage(). NGIO_Device_DDSMem_GetCalibrationEquation() must return 
-				kEquationType_Linear for NGIO_Device_CalibrateData() to work. And the application program must
-				have successfully called NGIO_Device_DDSMem_ReadRecord() beforehand for this to work. If the
-				sensor plugged into the channel is not 'smart', then NGIO_Device_DDSMem_ReadRecord() fails.
-
-				So what do you do if NGIO_Device_DDSMem_ReadRecord() fails? This is a thorny set of circumstances.
-				In this case, NGIO_Device_CalibrateData() just returns volts. The best place to gather instructions
-				for how to calibrate data from non-smart sensors is to run LoggerPro and bring up the Sensor Settings
-				pages for the sensor. The Sensor Info and Equation pages basically describe how to convert from volts
-				to sensor specific units.
+				The type of calibration equation being used is determined by SensorDDSMem.CalibrationEquation.
 
 				See GSensorDDSMem.h .
 
@@ -968,7 +989,7 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_CalibrateData(
 	signed char channel,		//[in]
 	gtype_real32 volts);		//[in] voltage value obtained from NGIO_Device_ConvertToVoltage();
 
-NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_UncalibrateData(
+NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_UncalibrateData(	//This function only works if SensorDDSMem.CalibrationEquation == kEquationType_Linear.
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	signed char channel,		//[in]
 	gtype_real32 measurement);	//[in] calibrated measurement obtained from NGIO_Device_CalibrateData();
@@ -985,16 +1006,12 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_UncalibrateData(
 											hDevice, channel, rawMeasurement, 
 												NGIO_Device_GetProbeType(hDevice, channel)))
 
-				If NGIO_Device_DDSMem_GetCalibrationEquation() does not return kEquationType_Linear,
-				then you must obtain the calibration coefficients using the NGIO_Device_DDSMem_ routines,
-				and then do the arithmetic yourself. See GSensorDDSMem.h .
-	
 	Return:		calibrated measurement value
 
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_CalibrateData2(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	signed char channel,				//[in]
+	signed char channel,		//[in]
 	gtype_int32 rawMeasurement);//[in] raw measurement obtained from NGIO_Device_GetLatestRawMeasurement() or 
 								//NGIO_Device_ReadRawMeasurements().
 
@@ -1207,17 +1224,49 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_GetMemMapVersion(
 	signed char channel,				//[in]
 	unsigned char *pMemMapVersion);
 
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_DDSMem_SetSensorNumber()
+	
+	Purpose:	Update SensorDDSRecord.SensorNumber.
+				
+	SIDE EFFECTS:	
+				If the new SensorDDSRecord.SensorNumber is set to an (id < kSensorIdNumber_FirstSmartSensor) and (id > 0),
+				then the rest of the fields in the DDS record are  populated with default values appropriate for the
+				new sensor id.
+
+				If the NGIO_Device_DDSMem_SetSensorNumber() causes the probeType to change in an analog channel, then you should
+				send a NGIO_CMD_ID_SET_ANALOG_INPUT command to the device. See NGIO_Device_GetProbeType().
+
+	Return:		0 if hDevice is valid, else -1.
+
+****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_SetSensorNumber(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	signed char channel,				//[in]
+	signed char channel,		//[in]
 	unsigned char SensorNumber);//[in]
 
+/***************************************************************************************************************************
+	Function Name: NGIO_Device_DDSMem_GetSensorNumber()
+	
+	Purpose:	Retrieve SensorDDSRecord.SensorNumber. 
+	
+				If sendQueryToHardwareflag != 0, then send a NGIO_CMD_ID_GET_SENSOR_ID to the sensor hardware, and then call
+				NGIO_Device_DDSMem_SetSensorNumber(new sensor number).
+
+				If the sensor reports a new sensor number >= kSensorIdNumber_FirstSmartSensor, then your application code
+				should call NGIO_Device_DDSMem_ReadRecord() to retrieve the SensorDDSRecord from the non volatile memory
+				embedded in the sensor hardware. And depending on what NGIO_Device_GetProbeType() reports, you may need to send
+				NGIO_CMD_ID_SET_ANALOG_INPUT and/or NGIO_CMD_ID_SET_SAMPLING_MODE commands to the device.
+
+	Return:		0 if successful, else -1.
+
+****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_GetSensorNumber(
 	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device. 
-	signed char channel,					//[in]
+	signed char channel,			//[in]
 	unsigned char *pSensorNumber,	//[out] ptr to SensorNumber.
 	gtype_bool sendQueryToHardwareflag,//[in] If sendQueryToHardwareflag != 0, then send a NGIO_CMD_ID_GET_SENSOR_ID to the sensor hardware. 
-	gtype_uint32 *pChannelSignature,//[out] May be NULL if (0 == sendQueryToHardwareflag). More about this later. spam
+	gtype_uint32 *pChannelSignature,//[out] May be NULL if (0 == sendQueryToHardwareflag).
 	gtype_uint32 timeoutMs);//[in] # of milliseconds to wait for a reply before giving up. NGIO_TIMEOUT_MS_DEFAULT is recommended.
 
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_DDSMem_SetSerialNumber(

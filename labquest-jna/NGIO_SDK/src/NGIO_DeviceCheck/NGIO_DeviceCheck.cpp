@@ -1,3 +1,32 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
+
 // NGIO_DeviceCheck.cpp : Defines the entry point for the console application.
 //
 
@@ -21,7 +50,7 @@
 
 #define MAX_NUM_MEASUREMENTS 200
 
-static void OSSleep(unsigned long msToSleep);
+static void OSSleep(unsigned int msToSleep);
 
 NGIO_LIBRARY_HANDLE g_hNGIOlib = NULL;
 NGIO_DEVICE_HANDLE g_hDevice = NULL;
@@ -40,7 +69,6 @@ int main(int argc, char* argv[])
 	gtype_uint32 nRespBytes;
 	signed char channel;
 	char units[20];
-	char equationType = 0;
 
 	gtype_int32 rawMeasurements[MAX_NUM_MEASUREMENTS];
 	gtype_real32 volts[MAX_NUM_MEASUREMENTS];
@@ -51,7 +79,7 @@ int main(int argc, char* argv[])
 	g_hNGIOlib = NGIO_Init();
 	NGIO_GetDLLVersion(g_hNGIOlib, &majorVersion, &minorVersion);
 
-	printf("NGIO_DeviceCheck version 1.0 . \n");
+	printf("NGIO_DeviceCheck version 1.1 . \n");
 	sprintf(tmpstring, "NGIO_DeviceCheck is linked to NGIO library version %02d.%02d .\n", majorVersion, minorVersion);
 	printf(tmpstring);
 
@@ -203,16 +231,11 @@ int main(int argc, char* argv[])
 									if (numMeasurements > 1)
 										averageCalbMeasurement = averageCalbMeasurement/numMeasurements;
 
-									NGIO_Device_DDSMem_GetCalibrationEquation(g_hDevice, channel, &equationType);
-									if (equationType != kEquationType_Linear)
-										strcpy(units, "volts");
-									else
-									{
-										gtype_real32 a, b, c;
-										unsigned char activeCalPage = 0;
-										NGIO_Device_DDSMem_GetActiveCalPage(g_hDevice, channel, &activeCalPage);
-										NGIO_Device_DDSMem_GetCalPage(g_hDevice, channel, activeCalPage, &a, &b, &c, units, sizeof(units));
-									}
+									gtype_real32 a, b, c;
+									unsigned char activeCalPage = 0;
+									NGIO_Device_DDSMem_GetActiveCalPage(g_hDevice, channel, &activeCalPage);
+									NGIO_Device_DDSMem_GetCalPage(g_hDevice, channel, activeCalPage, &a, &b, &c, units, sizeof(units));
+
 									printf("; average of %d measurements = %8.3f %s .", numMeasurements, averageCalbMeasurement, units);
 								}
 								printf("\n");
@@ -234,14 +257,14 @@ int main(int argc, char* argv[])
 }
 
 void OSSleep(
-	unsigned long msToSleep)//milliseconds
+	unsigned int msToSleep)//milliseconds
 {
 #ifdef TARGET_OS_WIN
 	::Sleep(msToSleep);
 #endif
 #ifdef TARGET_OS_LINUX
   struct timeval tv;
-  unsigned long usToSleep = msToSleep*1000;
+  unsigned int usToSleep = msToSleep*1000;
   tv.tv_sec = usToSleep/1000000;
   tv.tv_usec = usToSleep % 1000000;
   select (0, NULL, NULL, NULL, &tv);

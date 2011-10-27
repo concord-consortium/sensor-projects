@@ -1,3 +1,31 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,18 +68,6 @@ namespace NGIOdotNET
 		public const byte DEVTYPE_DAISYCHAIN_TEST = 10;
 		public const byte DEVTYPE_LABQUEST_FUNC_GENERATOR = 11;
 		public const byte DEVTYPE_LABQUEST_MINI = 12;
-
-		public const byte PROBETYPE_NONE = 0;
-		public const byte PROBETYPE_ANALOG5V = 2;
-		public const byte PROBETYPE_ANALOG10V = 3;
-		public const byte PROBETYPE_HEATPULSER = 4;
-		public const byte PROBETYPE_ANALOGOUT = 5;
-		public const byte PROBETYPE_MOTIONDETECTOR = 6;
-		public const byte PROBETYPE_PHOTOGATE = 7;
-		public const byte PROBETYPE_DIGITALCOUNT = 10;
-		public const byte PROBETYPE_ROTARY = 11;
-		public const byte PROBETYPE_DIGITALOUT = 12;
-		public const byte PROBETYPE_LABQUESTAUDIO = 13;
 
 		/// <summary>
 		/// TIMEOUT_MS_DEFAULT is the recommended timeout in milliseconds for most commands sent to the hardware 
@@ -384,7 +400,7 @@ namespace NGIOdotNET
 		/// <param name="deviceName"></param>
 		/// <param name="bDemandExclusiveOwnership"> LabQuest requires that this be set to 0, and call
 		/// NGIO_Device_AcquireExclusiveOwnership() before doing anything else. </param>
-		/// <returns></returns>
+		/// <returns>handle to open device if successful, else NULL.</returns>
 		[DllImport("NGIO_lib.dll", EntryPoint = "NGIO_Device_Open", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
 		public static extern IntPtr Device_Open(
 			IntPtr hLib,
@@ -776,6 +792,12 @@ namespace NGIOdotNET
 			sbyte channel,
 			Single measurement);
 
+		/// <summary>
+		/// NGIO_Device_GetProbeType()
+		/// </summary>
+		/// <param name="hDevice"></param>
+		/// <param name="channel"></param>
+		/// <returns>VSTSensorDDSMemRec.kProbeType...</returns>
 		[DllImport("NGIO_lib.dll", EntryPoint = "NGIO_Device_GetProbeType", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Int32 Device_GetProbeType(
 			IntPtr hDevice,
@@ -864,7 +886,7 @@ namespace NGIOdotNET
 		/// <param name="SensorNumber"></param>
 		/// <param name="sendQueryToHardwareflag">If sendQueryToHardwareflag != 0, then send a NGIO_CMD_ID_GET_SENSOR_ID to the sensor hardware.</param>
 		/// <param name="channelSignature"></param>
-		/// <param name="timeoutMs"># of milliseconds to wait for a reply before giving up. DEFAULT_CMD_RESPONSE_TIMEOUT_MS is recommended.</param>
+		/// <param name="timeoutMs"># of milliseconds to wait for a reply before giving up. NGIO.TIMEOUT_MS_DEFAULT is recommended.</param>
 		/// <returns></returns>
 		[DllImport("NGIO_lib.dll", EntryPoint = "NGIO_Device_DDSMem_GetSensorNumber", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Int32 Device_DDSMem_GetSensorNumber(

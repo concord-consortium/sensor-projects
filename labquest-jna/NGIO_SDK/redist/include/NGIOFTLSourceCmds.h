@@ -1,3 +1,31 @@
+/*********************************************************************************
+
+Copyright (c) 2010, Vernier Software & Technology
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Vernier Software & Technology nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL VERNIER SOFTWARE & TECHNOLOGY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**********************************************************************************/
 #ifndef _NGIO_FTL_SOURCE_CMDS_H_
 #define _NGIO_FTL_SOURCE_CMDS_H_
 
@@ -193,6 +221,25 @@ struct tagNGIOFTLSetTimeParams
 	unsigned char sDaylightTZName[TIME_ZONE_NAME_LENGTH]; // Name of the daylight savings time zone (e.g. "PDT")
 } _XPACK1;	/* Parameter block passed into SendCmd() with NGIO_FTL_CMD_ID_SET_TIME	*/
 typedef struct tagNGIOFTLSetTimeParams NGIOFTLSetTimeParams;
+
+// This is a new struct for specifying the timezone in a post 1.3 world.
+
+#define STANDARD_TIMEZONE_LENGTH TIME_ZONE_NAME_LENGTH * 2
+struct tagNGIOFTLSetTimeParams2
+{
+	unsigned char lsbyteLswordSecondsSince111970;	// Local time: Seconds since 1/1/70
+	unsigned char msbyteLswordSecondsSince111970;	
+	unsigned char lsbyteMswordSecondsSince111970;	
+	unsigned char msbyteMswordSecondsSince111970;	
+	unsigned char daylightSavings;					// This flag is deprecated. Posix-date can figure it out from the tz name and the seconds.
+	unsigned char lsbyteLswordSecondsDiffFromUTC;	// seconds difference from UTC (i.e. UTC - local time so PST is a positive number)
+	unsigned char msbyteLswordSecondsDiffFromUTC;	// Also -- doen't take into account daylight savings time (above flag can be used to adjust)
+	unsigned char lsbyteMswordSecondsDiffFromUTC;	
+	unsigned char msbyteMswordSecondsDiffFromUTC;	
+	unsigned char sStandardTZName[STANDARD_TIMEZONE_LENGTH]; // Name of the time zone (e.g. "America/Los_Angeles")
+} _XPACK1;	/* Parameter block passed into SendCmd() with NGIO_FTL_CMD_ID_SET_TIME	*/
+typedef struct tagNGIOFTLSetTimeParams2 NGIOFTLSetTimeParams2;
+
 
 /* 
 ** Execute (Asynchronous command to start the execution of an arbitrary command line command) 

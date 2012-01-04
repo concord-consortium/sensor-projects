@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.concord.framework.data.DataDimension;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
@@ -104,7 +105,8 @@ public class SensorUtilJava {
 			ret += "    portName " + sensor.getPortName() + "\n";
 			ret += "    stepSize " + sensor.getStepSize() + "\n";
 			ret += "    confirmed " + sensor.isConfirmed() + "\n";
-			ret += "    unit " + sensor.getUnit().getDimension() + "\n";
+			DataDimension unit = sensor.getUnit();
+			ret += "    unit " + (unit == null ? "null" : unit.getDimension()) + "\n";
 		}	
 		
 		return ret;

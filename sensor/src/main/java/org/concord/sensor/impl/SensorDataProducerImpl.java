@@ -375,7 +375,7 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 				// FIXME there should be a better string representation of the sensor names.
 				body = "This data collection requires a " + 
 					SensorUtilJava.getTypeConstantName(sensorRequest.getType()) + " sensor.\n";
-				body += "However a " + sensorConfig.getName() + " is attached";				
+				body += "Currently a " + sensorConfig.getName() + " sensor is attached";				
 			} else if(valueRangeScore < 0.6f) {
 				// Some sensor devices will reject a request if the value range doesn't match
 				// This is because not all devices use general scoring system

@@ -327,6 +327,38 @@ public abstract class SensorDeviceTest {
 	}
 
 	@Test
+	public void testOxygenGasCollection() throws InterruptedException{
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+		" and a oxygen gas sensor");
+
+		prepareDevice();
+
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();
+		experimentRequest.setPeriod(0.1f);
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_OXYGEN_GAS);
+
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		assertTrue("Correctly configured a oxygen gas sensor", experimentConfig.isValid());
+
+		assertTrue("Device started correctly", device.start());
+		
+		float[] values = new float[10000];		
+		int count = device.read(values, 0, 1, null);
+		assertTrue("Read doesn't return error", count >=0);
+
+		// This requires a 5 second warm up time, but we don't want to what that long
+		Thread.sleep(1000);
+		count = device.read(values, 0, 1, null);
+		assertTrue("Read got some valid values", count > 0);
+		assertTrue("Oxygen gas % is sane", values[0] > 15.0f && values[0] < 25.0f);
+				
+		device.stop(true);				
+	}
+
+	@Test
 	public void testRawVoltage1Collection() throws InterruptedException{
 		if(!supportsRawValueSensors()) {
 			return;

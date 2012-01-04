@@ -88,6 +88,9 @@ public class PasportSensor extends SensorConfigImpl {
 		} else if(measurement.getDataSheet().getName().indexOf("UVA") >= 0 &&
 				name.indexOf("Intensity") >= 0){
 			setType(SensorConfig.QUANTITY_UVA_INTENSITY);
+		} else if(name.indexOf("Oxygen Gas") >= 0 &&
+				unitStr.indexOf("%") >= 0){
+			setType(SensorConfig.QUANTITY_OXYGEN_GAS);
 		} else {
 			setType(SensorConfig.QUANTITY_UNKNOWN);
 		}

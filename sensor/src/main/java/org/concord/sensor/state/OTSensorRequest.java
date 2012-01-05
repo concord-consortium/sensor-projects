@@ -159,6 +159,9 @@ public class OTSensorRequest extends DefaultOTObject
 	public DataDimension getUnit() 
 	{
 		String unitStr = resources.getUnit();
+		if(unitStr == null){
+			return null;
+		}
 		return new SensorUnit(unitStr);
 	}
 	

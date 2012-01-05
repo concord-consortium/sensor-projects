@@ -91,6 +91,8 @@ public class PasportSensor extends SensorConfigImpl {
 		} else if(name.indexOf("Oxygen Gas") >= 0 &&
 				unitStr.indexOf("%") >= 0){
 			setType(SensorConfig.QUANTITY_OXYGEN_GAS);
+		} else if(name.indexOf("Heart Rate") >= 0){			
+			setType(SensorConfig.QUANTITY_HEART_RATE);
 		} else {
 			setType(SensorConfig.QUANTITY_UNKNOWN);
 		}

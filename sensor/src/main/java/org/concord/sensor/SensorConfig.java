@@ -119,6 +119,8 @@ public interface SensorConfig
 	
 	public static int QUANTITY_MAGNETIC_FIELD=      26;
 	public static int QUANTITY_LUNG_AIR_FLOW=       27;
+	
+	// This is the waveform of a heart rate sensor
 	public static int QUANTITY_HEART_RATE_SIGNAL=   28;
 	public static int QUANTITY_EKG=                 29;
 	public static int QUANTITY_BLOOD_PRESSURE=      30;	
@@ -128,8 +130,8 @@ public interface SensorConfig
 	public static int QUANTITY_HAND_DYNAMOMETER=    34;
 	public static int QUANTITY_UVA_INTENSITY=       35;
 	public static int QUANTITY_UVB_INTENSITY=       36;
-	
-	
+	// This is the heart rate itself in beats per minute
+	public static int QUANTITY_HEART_RATE=          37;
 	
 	/**
 	 * If the attached sensor can be identified by the device

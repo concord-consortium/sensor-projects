@@ -46,6 +46,7 @@ public class ByteBufferStreamReversed
     int offset;
     int endOffset;
     boolean lowNibble = false;
+	int initialOffset;
     
     /*
     public static final float readFloat(byte [] inBuf, int offset)
@@ -138,7 +139,7 @@ public class ByteBufferStreamReversed
     public ByteBufferStreamReversed(byte [] buffer, int offset, int length)
     {
         inBuf = buffer;
-        this.offset = offset;
+        this.initialOffset = this.offset = offset;
         this.endOffset = offset+length;
     }
     

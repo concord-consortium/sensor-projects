@@ -52,8 +52,12 @@ public class PasportSensorDataSheet
 	
 	int sampleDataSize;
 	
-	// uint - 4 byte checksum
-	// int checksum;
+	int checksum;
+
+	ArrayList<ExtendedDataSheetInfo> extendedInfos = new ArrayList<ExtendedDataSheetInfo>();
+	private int calculatedChecksum;
+	private int extendedChecksum;
+	private int calculatedExtendedChecksum;
 	
 	public PasportSensorDataSheet(ByteBufferStreamReversed bb)
 	{
@@ -88,9 +92,30 @@ public class PasportSensorDataSheet
 			}
 		}
 
+		checksum = bb.readInt();
+		// compute the checksum is right
+		calculatedChecksum = 0;
+		for(int i=bb.initialOffset, count = 0; count<(dataSheetLength-4); i++, count++){
+			calculatedChecksum += (bb.inBuf[i] & 0xFF);
+		}
+		calculatedChecksum = ~calculatedChecksum;
 		
-		// checksum
-		// I should check it
+		if(Float.parseFloat(version) >= 2.0f){
+			// - 4 to exclude the checksum at the end
+			int extendedBytesRemaining = extendedDataSheetLength - 4;
+			while(extendedBytesRemaining > 0){
+				ExtendedDataSheetInfo info = new ExtendedDataSheetInfo(bb);
+				extendedBytesRemaining -= info.getTotalSize();
+				extendedInfos.add(info);
+			}
+
+			extendedChecksum = bb.readInt();
+			calculatedExtendedChecksum = 0;
+			for(int i=bb.initialOffset + dataSheetLength, count = 0; count<(extendedDataSheetLength-4); i++, count++){
+				calculatedExtendedChecksum += (bb.inBuf[i] & 0xFF);
+			}
+			calculatedExtendedChecksum = ~calculatedExtendedChecksum;
+		}
 	}
 	
 	public int getId() {
@@ -197,6 +222,17 @@ public class PasportSensorDataSheet
 			Printer pMeas = new Printer("  ", p);
 			measurements[i].print(pMeas);
 		}
+
+		p.puts("checksum: " + Integer.toHexString(checksum));
+		p.puts("calculatedChecksum: " + Integer.toHexString(calculatedChecksum));
+		
+		for (ExtendedDataSheetInfo info : extendedInfos) {
+			Printer pInfo = new Printer("  ", p);
+			info.print(pInfo);
+		}
+
+		p.puts("extendedChecksum: " + Integer.toHexString(extendedChecksum));
+		p.puts("calculatedExtenededChecksum: " + Integer.toHexString(calculatedExtendedChecksum));
 	}
 		
 	public void printSample(byte [] buffer, int offset, String indent)

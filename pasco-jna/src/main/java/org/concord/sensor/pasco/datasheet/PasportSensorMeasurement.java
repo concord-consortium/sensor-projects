@@ -59,7 +59,7 @@ public class PasportSensorMeasurement
 				// simple calibration
 			case 7:
 				// user calibration
-				typeDescriptorObject = new SimpleCalibration(bb, typeDescriptorLength);
+				typeDescriptorObject = new SimpleCalibration(bb, typeDescriptorLength, type);
 				break;
 			case 4:
 				typeDescriptorObject = new MacroCalculation(bb, typeDescriptorLength);
@@ -147,9 +147,9 @@ public class PasportSensorMeasurement
 	}
 	
 	/**
-	 * I do not remember what being visible means. However from the code that
-	 * was deciding if a sensor request matched one of these measurement, the 
-	 * measurement was not considered valid if it was not visible
+	 * The visible field is a collection of bits to indicate if if a particular measurement
+	 * should be displayed to the user.  Some measurements are hidden, or they are "raw"
+	 * un-calibrated voltage measurements.  These will not be marked visible. 
 	 *  
 	 * @return
 	 */

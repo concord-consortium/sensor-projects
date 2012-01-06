@@ -72,14 +72,10 @@ public class PasportSensor extends SensorConfigImpl {
 			setType(SensorConfig.QUANTITY_MAGNETIC_FIELD);
 		} else if(name.equals("pH")){
 			setType(SensorConfig.QUANTITY_PH);
-		} else if(name.indexOf("Conductivity") >= 0){
-			// FIXME this will result in two conductivity sensors one for each calibration but really there is only one
-			// so if an experiment called for two it would think this sensor is good enough.
-			// that happens because the conductivity sensor returns multiple measurements that have Conductivity in the 
-			// string.
-			// A better solution for this would be to expand the experiment config stuff to have a concept of conversions
-			// so a single SensorConfig could have multiple conversions, then this code will have to be smarter about
-			// which "raw" measurement is the root input for each non raw measurement.
+		} else if(name.indexOf("Conductivity (10X") >= 0){
+			// the '(10X' is so only the first calibrated measurement is used.  There is a second
+			// measurement labeled : Conductivity (1X Probe)  but I don't see how software would
+			// decide to use that measurement.
 			setType(SensorConfig.QUANTITY_CONDUCTIVITY);
 		} else if(name.indexOf("Salinity") >= 0){
 			setType(SensorConfig.QUANTITY_SALINITY);

@@ -196,7 +196,7 @@ public class SensorDataProxy implements DataProducer, Copyable {
 			// producer
 
 			DataProducer newProducer = zeroSensor
-					.setupDataFilter(sensorDataProducer);
+					.setupDataFilter(sensorDataProducer, config);
 			if (producer != newProducer) {
 				// need to transfer all the listeners from the old
 				// producer to the new one

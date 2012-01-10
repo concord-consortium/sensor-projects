@@ -151,6 +151,46 @@ public abstract class SensorDeviceTest {
 	}
 	
 	@Test
+	public void testGetCurrentConfigAfterConfigure(){
+		// NOTE this is a problem with the current API
+		// it is not clear what to if a user wants to find out the attached sensors after they 
+		// have already done a configure.  
+		
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+			" with a temperature sensor");
+
+		prepareDevice();
+		
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_TEMPERATURE);		
+		
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		
+		assertTrue("Correctly found temperature sensor", experimentConfig.isValid());
+		
+		ExperimentConfig currentConfig = device.getCurrentConfig();
+
+
+		// This part will fail on some devices because calling getCurrentConfig will
+		// partially reset the configured sensors, so that starting it now will 
+		// try to access invalid sensors objects
+		
+		//		assertTrue("Device started correctly", device.start());
+		//		
+		//		float[] values = new float[10000];		
+		//		int count = device.read(values, 0, 1, null);
+		//		assertTrue("Read doesn't return error", count >=0);
+		//
+		//		count = readData(values, 0);
+		//		assertTrue("Read got some valid values", count > 0);
+		//				
+		//		device.stop(true);				
+	}
+	
+	@Test
 	public void testConfigureRawVoltage1(){
 		// This might not be supported by all devices.  The raw voltage configuration has
 		// 2 goals: 
@@ -443,7 +483,7 @@ public abstract class SensorDeviceTest {
 	}
 
 	@Test
-	public void testConfigureInvalid(){
+	public void testConfigureInvalidSensor(){
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
 			" with a sensor which is NOT a temperature sensor");
 
@@ -459,6 +499,26 @@ public abstract class SensorDeviceTest {
 		assertNotNull("Non null experiment config", experimentConfig);
 		
 		assertTrue("Correctly didn't find a temperature sensor", !experimentConfig.isValid());
+	}
+
+	@Test
+	public void testConfigureInvalidResolution(){
+		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
+			" with a force sensor");
+
+		prepareDevice();
+		
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		SensorRequestImpl sensorRequest = new SensorRequestImpl();
+		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
+		sensorRequest.setType(SensorConfig.QUANTITY_FORCE);
+		sensorRequest.setStepSize(0.00001f);
+		
+		
+		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		assertNotNull("Non null experiment config", experimentConfig);
+		
+		assertTrue("Correctly didn't find a force sensor with 0.00001 resolution", !experimentConfig.isValid());
 	}
 
 	@Test

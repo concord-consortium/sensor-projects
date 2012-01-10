@@ -65,12 +65,10 @@ public class OTZeroSensor extends DefaultOTObject
         this.resources = resources;        
     }
     
-    public DataProducer setupDataFilter(SensorDataProducer producer)
+    public DataProducer setupDataFilter(SensorDataProducer producer, ExperimentConfig expConfig)
     {
     	int index = resources.getSensorIndex();
-    	
-    	ExperimentConfig expConfig = producer.getCurrentConfig();
-    	
+    	    	
     	// Some devices don't correctly return the current config
     	if(expConfig != null && expConfig.getSensorConfigs() != null){    		
         	SensorConfig [] configs = expConfig.getSensorConfigs();

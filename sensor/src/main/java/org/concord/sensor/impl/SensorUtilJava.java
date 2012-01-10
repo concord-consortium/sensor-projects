@@ -218,7 +218,7 @@ public class SensorUtilJava {
     	// setting on many force probes
     	if(request.getType() == SensorConfig.QUANTITY_GAS_PRESSURE ||
     			request.getType() == SensorConfig.QUANTITY_FORCE){
-    		if(!Float.isNaN(request.getStepSize())){
+    		if(Float.isNaN(request.getStepSize())){
     			// the request doesn't have a valid step size
     			return 1f;
     		}

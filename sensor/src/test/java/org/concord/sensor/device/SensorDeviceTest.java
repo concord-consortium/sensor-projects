@@ -29,7 +29,9 @@ public abstract class SensorDeviceTest {
 	protected String openString = null;
 	
 	// This is to catch exceptions on second threads
-	Throwable otherThreadException = null;;
+	Throwable otherThreadException = null;
+
+	protected int msToWaitBeforeReadingData = 500;
 	
 	@Test
 	public void testDeviceCreated() {
@@ -287,8 +289,7 @@ public abstract class SensorDeviceTest {
 		int count = device.read(values, 0, 1, null);
 		assertTrue("Read doesn't return error", count >=0);
 
-		Thread.sleep(500);
-		count = device.read(values, 0, 1, null);
+		count = readData(values, 0);
 		assertTrue("Read got some valid values", count > 0);
 		assertTrue("Temp value is sane", values[0] > 10 && values[0] < 40);
 				
@@ -318,8 +319,7 @@ public abstract class SensorDeviceTest {
 		int count = device.read(values, 0, 1, null);
 		assertTrue("Read doesn't return error", count >=0);
 
-		Thread.sleep(500);
-		count = device.read(values, 0, 1, null);
+		count = readData(values, 0);
 		assertTrue("Read got some valid values", count > 0);
 		assertTrue("Temp value is sane", values[0] > 0f && values[0] < 1f);
 				
@@ -350,8 +350,8 @@ public abstract class SensorDeviceTest {
 		assertTrue("Read doesn't return error", count >=0);
 
 		// This requires a 5 second warm up time, but we don't want to what that long
-		Thread.sleep(1000);
-		count = device.read(values, 0, 1, null);
+		// instead we just add 500 extra milliseconds
+		count = readData(values, 500);
 		assertTrue("Read got some valid values", count > 0);
 		assertTrue("Oxygen gas % is sane", values[0] > 15.0f && values[0] < 25.0f);
 				
@@ -385,8 +385,7 @@ public abstract class SensorDeviceTest {
 		int count = device.read(values, 0, 1, null);
 		assertTrue("Read doesn't return error", count >=0);
 
-		Thread.sleep(500);
-		count = device.read(values, 0, 1, null);
+		count = readData(values, 0);
 		assertTrue("Read got some valid values", count > 0);
 		assertTrue("Voltage value is sane", values[0] >= 0 && values[0] <= 5);
 				
@@ -419,12 +418,7 @@ public abstract class SensorDeviceTest {
 				int count = device.read(values, 0, 1, null);
 				assertTrue("Read doesn't return error", count >=0);				
 
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					assertTrue("Should not throw an exception while waiting", false);
-				}
-				count = device.read(values, 0, 1, null);
+				count = readData(values, 0);
 				assertTrue("Read got some valid values", count > 0);
 				assertTrue("Temp value is sane", values[0] > 10 && values[0] < 40);
 			}
@@ -451,7 +445,7 @@ public abstract class SensorDeviceTest {
 	@Test
 	public void testConfigureInvalid(){
 		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-			" with NO temperature sensor");
+			" with a sensor which is NOT a temperature sensor");
 
 		prepareDevice();
 		
@@ -531,5 +525,14 @@ public abstract class SensorDeviceTest {
 	
 	protected boolean supportsRawValueSensors() {
 		return true;
+	}
+	
+	protected int readData(float [] values, int extraTime){
+		try {
+			Thread.sleep(msToWaitBeforeReadingData + extraTime);
+		} catch (InterruptedException e) {
+			assertTrue("Should not throw an exception while waiting", false);
+		}
+		return device.read(values, 0, 1, null);
 	}
 }

@@ -41,7 +41,7 @@ public class LabQuestLibrary
 			
 		};
 		
-		Map options = new HashMap();
+		Map<String, Object> options = new HashMap<String, Object>();
 		options.put(Library.OPTION_FUNCTION_MAPPER, functMapper);
 		options.put(Library.OPTION_STRUCTURE_ALIGNMENT, Structure.ALIGN_NONE);
 		ngio = (NGIOLibrary) Native.loadLibrary(nativeLibPath, 

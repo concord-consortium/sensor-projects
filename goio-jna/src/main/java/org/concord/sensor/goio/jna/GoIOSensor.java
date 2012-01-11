@@ -56,7 +56,8 @@ public class GoIOSensor {
 	
 	public void close() {
 		lock();
-		goIOLibrary.GoIO_Sensor_Close(hDevice);		
+		goIOLibrary.GoIO_Sensor_Close(hDevice);
+		// after the device is closed it cannot be unlocked
 	}
 
 	/**

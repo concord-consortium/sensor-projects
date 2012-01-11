@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xml" href="vernier-sensormap-table.xsl"?>
 <!-- WARNING: manually editing this file may break functionality in Logger Pro 3 -->
 <SensorMap Version="1.0">
 	<Sensor ID_Name="ACC" BaseID="27" NumAutoIDs="1" Product="ACC-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
-		<LocalName>25G Accelerometer</LocalName>
+		<LocalName>25g Accelerometer</LocalName>
 		<lname_base>Acceleration</lname_base>
 		<sname_base>Acc</sname_base>
 		<URL>http://www.vernier.com/faqs/acc-din.html</URL>
@@ -442,6 +441,116 @@
 						<CalibrationCoefficientB>1</CalibrationCoefficientB>
 						<CalibrationCoefficientC>0</CalibrationCoefficientC>
 						<Units>MG/L</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="ANM" BaseID="91" NumAutoIDs="1" Product="ANM-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Anemometer</LocalName>
+		<lname_base>Speed</lname_base>
+		<sname_base>Speed</sname_base>
+		<URL>http://www.vernier.com/faqs/anm.html</URL>
+		<UnitConversionFamily>Anemometer</UnitConversionFamily>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>1</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>2</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>1</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>5</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.1</Delta>
+			<MaxDelta>0.001</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Speed</ColumnName>
+			<DefaultColumnShortName>Speed</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="ANMMS">
+			<Calibration Units="m/s" PrettyUnits="m/s" IDName="ANMMS" UserName="Speed (m/s)" IDValue="91" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-10" K1="10"/>
+				<DisplayRange YMin="0" YMax="15"/>
+			</Calibration>
+			<Calibration Units="mph" PrettyUnits="mph" IDName="ANMMPH" UserName="Speed (mph)" IDValue="91" DDSIndex="1" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-22.37" K1="22.37"/>
+				<DisplayRange YMin="0" YMax="10"/>
+			</Calibration>
+			<Calibration Units="km/h" PrettyUnits="km/h" IDName="ANMKMH" UserName="Speed (km/h)" IDValue="91" DDSIndex="2" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-36" K1="36"/>
+				<DisplayRange YMin="0" YMax="20"/>
+			</Calibration>
+			<Calibration Units="ft/s" PrettyUnits="ft/s" IDName="ANMFTS" UserName="Speed (ft/s)" IDValue="91" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-32.8" K1="32.8"/>
+				<DisplayRange YMin="0" YMax="20"/>
+			</Calibration>
+			<Calibration Units="knots" PrettyUnits="knots" IDName="ANMKNOTS" UserName="Speed (knots)" IDValue="91" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-19.4" K1="19.4"/>
+				<DisplayRange YMin="0" YMax="10"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="91">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Speed</SensorLongName>
+				<SensorShortName>Speed</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>3</SignificantFigures>
+				<Precision>2</Precision>
+				<CurrentRequirement>5</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.1</TypSamplePeriod>
+				<TypNumberofSamples>600</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>15</YmaxValue>
+				<Yscale>3</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-10</CalibrationCoefficientA>
+						<CalibrationCoefficientB>10</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>m/s</Units>
+					</Calibration>
+					<Calibration DDSIndex="1">
+						<CalibrationCoefficientA>-22.37</CalibrationCoefficientA>
+						<CalibrationCoefficientB>22.37</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mph</Units>
+					</Calibration>
+					<Calibration DDSIndex="2">
+						<CalibrationCoefficientA>-36</CalibrationCoefficientA>
+						<CalibrationCoefficientB>36</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>km/h</Units>
 					</Calibration>
 				</CalibrationList>
 			</SensorBurnRec>
@@ -1862,9 +1971,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.1</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -2366,6 +2475,89 @@
 			</SensorBurnRec>
 		</BurnParams>
 	</Sensor>
+	<Sensor ID_Name="ETH" BaseID="93" NumAutoIDs="1" Product="ETH-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Ethanol Sensor</LocalName>
+		<lname_base>Ethanol</lname_base>
+		<sname_base>Eth</sname_base>
+		<URL>http://www.vernier.com/faqs/eth.html</URL>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>1</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>2</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<ShowInCatalog>0</ShowInCatalog>
+		<ShowInCatalog_LL>0</ShowInCatalog_LL>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>3</AvgCurrent>
+			<WarmUpTime>600</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>0.1</MaxDelta>
+			<NumSamples>180</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Ethanol</ColumnName>
+			<DefaultColumnShortName>Eth</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="ETHPCT">
+			<Calibration Units="PCT" PrettyUnits="%" IDName="ETHPCT" UserName="Ethanol %" IDValue="93" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="3"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="93">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Ethanol</SensorLongName>
+				<SensorShortName>Eth</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>3</SignificantFigures>
+				<Precision>3</Precision>
+				<CurrentRequirement>3</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.1</MinSamplePeriod>
+				<TypSamplePeriod>1</TypSamplePeriod>
+				<TypNumberofSamples>180</TypNumberofSamples>
+				<WarmUpTime>600</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>3</YmaxValue>
+				<Yscale>3</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>1</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>PCT</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
 	<Sensor ID_Name="TPL" BaseID="16" NumAutoIDs="1" Product="TPL-BTA" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>Extra Long Temperature</LocalName>
 		<lname_base>Temperature</lname_base>
@@ -2403,9 +2595,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.01</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -2836,7 +3028,7 @@
 			</Calibration>
 		</CalibrationList>
 	</Sensor>
-	<Sensor ID_Name="USB_TMP" BaseID="60" NumAutoIDs="1" Product="USB TMP-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+	<Sensor ID_Name="USB_TMP" BaseID="60" NumAutoIDs="1" Product="GO-TMP" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>Go! Temp</LocalName>
 		<lname_base>Temperature</lname_base>
 		<sname_base>Temp</sname_base>
@@ -2874,9 +3066,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.5</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -2907,8 +3099,8 @@
 				<CurrentRequirement>15</CurrentRequirement>
 				<Averaging>1</Averaging>
 				<MinSamplePeriod>0.5</MinSamplePeriod>
-				<TypSamplePeriod>1</TypSamplePeriod>
-				<TypNumberofSamples>180</TypNumberofSamples>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>360</TypNumberofSamples>
 				<WarmUpTime>0</WarmUpTime>
 				<ExperimentType>1</ExperimentType>
 				<OperationType>14</OperationType>
@@ -2967,7 +3159,7 @@
 		<LabQuestSourceSupported>0</LabQuestSourceSupported>
 		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
 		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
-		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
 		<AutoAddGauge>0</AutoAddGauge>
 		<AutoAddThermometer>0</AutoAddThermometer>
 		<Hardware>
@@ -2978,7 +3170,7 @@
 		<CollectDefaults>
 			<Delta>1</Delta>
 			<MaxDelta>1</MaxDelta>
-			<NumSamples>10</NumSamples>
+			<NumSamples>3600</NumSamples>
 			<Averaging>-2</Averaging>
 			<ColumnName>Altitude</ColumnName>
 			<DefaultColumnShortName>Alt</DefaultColumnShortName>
@@ -3002,7 +3194,7 @@
 				<Averaging>-2</Averaging>
 				<MinSamplePeriod>1</MinSamplePeriod>
 				<TypSamplePeriod>1</TypSamplePeriod>
-				<TypNumberofSamples>10</TypNumberofSamples>
+				<TypNumberofSamples>3600</TypNumberofSamples>
 				<WarmUpTime>0</WarmUpTime>
 				<ExperimentType>1</ExperimentType>
 				<OperationType>14</OperationType>
@@ -3053,7 +3245,7 @@
 		<CollectDefaults>
 			<Delta>1</Delta>
 			<MaxDelta>1</MaxDelta>
-			<NumSamples>10</NumSamples>
+			<NumSamples>3600</NumSamples>
 			<Averaging>-2</Averaging>
 			<ColumnName>Latitude</ColumnName>
 			<DefaultColumnShortName>Lat</DefaultColumnShortName>
@@ -3077,7 +3269,7 @@
 				<Averaging>-2</Averaging>
 				<MinSamplePeriod>1</MinSamplePeriod>
 				<TypSamplePeriod>1</TypSamplePeriod>
-				<TypNumberofSamples>10</TypNumberofSamples>
+				<TypNumberofSamples>3600</TypNumberofSamples>
 				<WarmUpTime>0</WarmUpTime>
 				<ExperimentType>1</ExperimentType>
 				<OperationType>14</OperationType>
@@ -3128,7 +3320,7 @@
 		<CollectDefaults>
 			<Delta>1</Delta>
 			<MaxDelta>1</MaxDelta>
-			<NumSamples>10</NumSamples>
+			<NumSamples>3600</NumSamples>
 			<Averaging>-2</Averaging>
 			<ColumnName>Longitude</ColumnName>
 			<DefaultColumnShortName>Long</DefaultColumnShortName>
@@ -3153,6 +3345,156 @@
 				<MinSamplePeriod>1</MinSamplePeriod>
 				<TypSamplePeriod>1</TypSamplePeriod>
 				<TypNumberofSamples>10</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-130</YminValue>
+				<YmaxValue>-60</YmaxValue>
+				<Yscale>-2</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="GPS_SPEED" BaseID="108" NumAutoIDs="1" Product="GPSSPEED-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>GPS Ground Speed</LocalName>
+		<lname_base>Ground Speed</lname_base>
+		<sname_base>Speed</sname_base>
+		<URL>http://www.vernier.com/faqs/gpsdevice.html</URL>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>1</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>3600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Ground Speed</ColumnName>
+			<DefaultColumnShortName>Speed</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="G_SPEED">
+			<Calibration Units="SPEED" PrettyUnits="m/s" IDName="G_SPEED" UserName="Ground Speed" IDValue="108" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="2" Trace="0" Trace_LL="0" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="-130" YMax="-60"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="108">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Ground Speed</SensorLongName>
+				<SensorShortName>Spped</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>-2</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>-2</CurrentRequirement>
+				<Averaging>-2</Averaging>
+				<MinSamplePeriod>1</MinSamplePeriod>
+				<TypSamplePeriod>1</TypSamplePeriod>
+				<TypNumberofSamples>10</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-130</YminValue>
+				<YmaxValue>-60</YmaxValue>
+				<Yscale>-2</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="GPS_DIRECTION" BaseID="109" NumAutoIDs="1" Product="GPSGDIR-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>GPS Ground Direction</LocalName>
+		<lname_base>Direction</lname_base>
+		<sname_base>Dir</sname_base>
+		<URL>http://www.vernier.com/faqs/gpsdevice.html</URL>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>1</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>3600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Direction</ColumnName>
+			<DefaultColumnShortName>Dir</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="G_DIR">
+			<Calibration Units="DIR" PrettyUnits="&#xB0;" IDName="G_DIR" UserName="Ground Direction" IDValue="109" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="2" Trace="0" Trace_LL="0" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="360"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="109">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Ground Direction</SensorLongName>
+				<SensorShortName>Dir</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>-2</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>-2</CurrentRequirement>
+				<Averaging>-2</Averaging>
+				<MinSamplePeriod>1</MinSamplePeriod>
+				<TypSamplePeriod>1</TypSamplePeriod>
+				<TypNumberofSamples>3600</TypNumberofSamples>
 				<WarmUpTime>0</WarmUpTime>
 				<ExperimentType>1</ExperimentType>
 				<OperationType>14</OperationType>
@@ -3436,7 +3778,242 @@
 			</Calibration>
 		</CalibrationList>
 	</Sensor>
-	<Sensor ID_Name="INA" BaseID="0" NumAutoIDs="0" Product="INA-BTA" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+	<Sensor ID_Name="HCS" BaseID="90" NumAutoIDs="1" Product="HCS-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>High Current Sensor</LocalName>
+		<lname_base>Current</lname_base>
+		<sname_base>A</sname_base>
+		<URL>http://www.vernier.com/faqs/hcs.html</URL>
+		<SensorFamily>Current</SensorFamily>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>1</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>2</ForceTimePlaces>
+		<VoltageDecimalPlaces>-1</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>7</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.1</Delta>
+			<MaxDelta>1e-05</MaxDelta>
+			<NumSamples>150</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Current</ColumnName>
+			<DefaultColumnShortName>A</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="HCSA">
+			<Calibration Units="A" PrettyUnits="A" IDName="HCSA" UserName="High Current A" IDValue="90" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="-11.31" K1="4.51"/>
+				<DisplayRange YMin="-10" YMax="10"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="90">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Current</SensorLongName>
+				<SensorShortName>A</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>4</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>7</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>1e-05</MinSamplePeriod>
+				<TypSamplePeriod>0.1</TypSamplePeriod>
+				<TypNumberofSamples>150</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-10</YminValue>
+				<YmaxValue>10</YmaxValue>
+				<Yscale>10</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-11.31</CalibrationCoefficientA>
+						<CalibrationCoefficientB>4.51</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>A</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="HSL" BaseID="87" NumAutoIDs="3" Product="HSL-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>High Sensitivity Light</LocalName>
+		<lname_base>Illumination</lname_base>
+		<sname_base>Illum</sname_base>
+		<URL>http://www.vernier.com/faqs/hls.html</URL>
+		<SensorFamily>Light</SensorFamily>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>1</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>2</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<SwitchLabel87>0-0.1 lux</SwitchLabel87>
+		<SwitchLabel88>0-1 lux</SwitchLabel88>
+		<SwitchLabel89>0-10 lux</SwitchLabel89>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>3</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.05</Delta>
+			<MaxDelta>1e-04</MaxDelta>
+			<NumSamples>200</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Illumination</ColumnName>
+			<DefaultColumnShortName>Illum</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="HSL1">
+			<Calibration Units="lux" PrettyUnits="lux" IDName="HSL10" UserName="High Sensitivity Light 10 lux" IDValue="89" DDSIndex="0" RangeDesc="0-10 lux" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="10"/>
+			</Calibration>
+			<Calibration Units="lux" PrettyUnits="lux" IDName="HSL1" UserName="High Sensitivity Light 1 lux" IDValue="88" DDSIndex="0" RangeDesc="0-1 lux" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="1"/>
+			</Calibration>
+			<Calibration Units="lux" PrettyUnits="lux" IDName="HSL01" UserName="High Sensitivity Light 0.1 lux" IDValue="87" DDSIndex="0" RangeDesc="0-0.1 lux" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="0.1"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="87">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Illumination</SensorLongName>
+				<SensorShortName>Illum</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>-1</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>3</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>1e-04</MinSamplePeriod>
+				<TypSamplePeriod>0.05</TypSamplePeriod>
+				<TypNumberofSamples>200</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>0.1</YmaxValue>
+				<Yscale>-1</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>1</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>lux</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="88">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Illumination</SensorLongName>
+				<SensorShortName>Illum</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>-1</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>3</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>1e-04</MinSamplePeriod>
+				<TypSamplePeriod>0.05</TypSamplePeriod>
+				<TypNumberofSamples>200</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>1</YmaxValue>
+				<Yscale>-1</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>1</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>lux</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="89">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Illumination</SensorLongName>
+				<SensorShortName>Illum</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>-1</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>3</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>1e-04</MinSamplePeriod>
+				<TypSamplePeriod>0.05</TypSamplePeriod>
+				<TypNumberofSamples>200</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>10</YmaxValue>
+				<Yscale>-1</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>1</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>lux</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="INA" BaseID="81" NumAutoIDs="6" Product="INA-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>Instrumentation Amplifier</LocalName>
 		<lname_base>Potential</lname_base>
 		<sname_base>Pot</sname_base>
@@ -3451,6 +4028,12 @@
 		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
 		<ForceTimePlaces>0</ForceTimePlaces>
 		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<SwitchLabel81>0-1V</SwitchLabel81>
+		<SwitchLabel82>0-20mV</SwitchLabel82>
+		<SwitchLabel83>0-200mV</SwitchLabel83>
+		<SwitchLabel84>+/-1V</SwitchLabel84>
+		<SwitchLabel85>+/-20mV</SwitchLabel85>
+		<SwitchLabel86>+/-200mV</SwitchLabel86>
 		<LabProSourceSupported>1</LabProSourceSupported>
 		<SkipSourceSupported>1</SkipSourceSupported>
 		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
@@ -3471,39 +4054,221 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>2</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.001</MaxDelta>
 			<NumSamples>60</NumSamples>
-			<Averaging>-1</Averaging>
+			<Averaging>1</Averaging>
 			<ColumnName>Potential</ColumnName>
 			<DefaultColumnShortName>Pot</DefaultColumnShortName>
 		</CollectDefaults>
 		<CalibrationList DefaultIndex="0" DefaultCalIDName="INA1V">
-			<Calibration Units="mV1V" PrettyUnits="mV" IDName="INA1V" UserName="INSTR Amp 0-1V" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA1V" UserName="INSTR Amp 0-1V" IDValue="81" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="0" K1="308.64"/>
 				<DisplayRange YMin="0" YMax="1000"/>
 			</Calibration>
-			<Calibration Units="mV20" PrettyUnits="mV" IDName="INA20" UserName="INSTR Amp 0-20mV" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA20" UserName="INSTR Amp 0-20mV" IDValue="82" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="0" K1="6.636"/>
 				<DisplayRange YMin="0" YMax="20"/>
 			</Calibration>
-			<Calibration Units="mV200" PrettyUnits="mV" IDName="INA200" UserName="INSTR Amp 0-200mV" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA200" UserName="INSTR Amp 0-200mV" IDValue="83" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="0" K1="62.62"/>
 				<DisplayRange YMin="0" YMax="200"/>
 			</Calibration>
-			<Calibration Units="mV1V+-" PrettyUnits="mV" IDName="INA1V+-" UserName="INSTR Amp +/-1V" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA1V+-" UserName="INSTR Amp +/-1V" IDValue="84" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="-801" K1="471.64801"/>
 				<DisplayRange YMin="-1000" YMax="1000"/>
 			</Calibration>
-			<Calibration Units="mV20+-" PrettyUnits="mV" IDName="INA20+-" UserName="INSTR Amp +/-20mV" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA20+-" UserName="INSTR Amp +/-20mV" IDValue="85" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="-22.4" K1="13.181"/>
 				<DisplayRange YMin="-20" YMax="20"/>
 			</Calibration>
-			<Calibration Units="mV200+-" PrettyUnits="mV" IDName="INA200+-" UserName="INSTR Amp +/-200mV" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="mV" PrettyUnits="mV" IDName="INA200+-" UserName="INSTR Amp +/-200mV" IDValue="86" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="1" LabProOp="14" K0="-200.4" K1="117.912003"/>
 				<DisplayRange YMin="-200" YMax="200"/>
 			</Calibration>
 		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="81">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>2</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>1000</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>308.64</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="82">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>5</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>20</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>6.636</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="83">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>4</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>200</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>0</CalibrationCoefficientA>
+						<CalibrationCoefficientB>62.62</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="84">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>2</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-1000</YminValue>
+				<YmaxValue>1000</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-801</CalibrationCoefficientA>
+						<CalibrationCoefficientB>471.64801</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="85">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>4</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-20</YminValue>
+				<YmaxValue>20</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-22.4</CalibrationCoefficientA>
+						<CalibrationCoefficientB>13.181</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+			<SensorBurnRec SensorNumber="86">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Potential</SensorLongName>
+				<SensorShortName>Pot</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>3</SignificantFigures>
+				<Precision>-1</Precision>
+				<CurrentRequirement>4</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.001</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>60</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-200</YminValue>
+				<YmaxValue>200</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-200.4</CalibrationCoefficientA>
+						<CalibrationCoefficientB>117.912003</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>mV</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
 	</Sensor>
 	<Sensor ID_Name="IRT" BaseID="73" NumAutoIDs="1" Product="IRT-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>IR Temperature Sensor</LocalName>
@@ -3868,8 +4633,8 @@
 		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
 		<ForceTimePlaces>0</ForceTimePlaces>
 		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
-		<SwitchLabel45>LOW x10</SwitchLabel45>
-		<SwitchLabel44>HIGH x200</SwitchLabel44>
+		<SwitchLabel45>6.4 mT (LOW x10)</SwitchLabel45>
+		<SwitchLabel44>0.3 mT (HIGH x200)</SwitchLabel44>
 		<LabProSourceSupported>1</LabProSourceSupported>
 		<SkipSourceSupported>1</SkipSourceSupported>
 		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
@@ -3985,6 +4750,100 @@
 						<CalibrationCoefficientB>32.25</CalibrationCoefficientB>
 						<CalibrationCoefficientC>0</CalibrationCoefficientC>
 						<Units>G</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
+	<Sensor ID_Name="MLT" BaseID="92" NumAutoIDs="1" Product="MLT-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Melt Station</LocalName>
+		<lname_base>Temperature</lname_base>
+		<sname_base>Temp</sname_base>
+		<URL>http://www.vernier.com/faqs/mlt.html</URL>
+		<UnitConversionFamily>Temperature</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<ShowMarkButton>1</ShowMarkButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<TimeUnit>minutes</TimeUnit>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>2</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<ShowInCatalog>1</ShowInCatalog>
+		<ShowInCatalog_LL>1</ShowInCatalog_LL>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>0</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.6</Delta>
+			<MaxDelta>0.5</MaxDelta>
+			<NumSamples>2000</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Temperature</ColumnName>
+			<DefaultColumnShortName>Temp</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="MLTC">
+			<Calibration Units="C" PrettyUnits="&#xB0;C" IDName="MLTC" UserName="Melt Station &#xB0;C" IDValue="92" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-35.786548" K1="71.1695098" K2="0.82831686"/>
+				<DisplayRange YMin="0" YMax="300"/>
+			</Calibration>
+			<Calibration Units="F" PrettyUnits="&#xB0;F" IDName="MLTF" UserName="Melt Station &#xB0;F" IDValue="92" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-1" K1="-1" K2="-1"/>
+				<DisplayRange YMin="30" YMax="100"/>
+			</Calibration>
+			<Calibration Units="K" PrettyUnits="K" IDName="MLTK" UserName="Melt Station K" IDValue="92" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-1" K1="-1" K2="-1"/>
+				<DisplayRange YMin="250" YMax="400"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="92">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Temperature</SensorLongName>
+				<SensorShortName>Temp</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>4</SignificantFigures>
+				<Precision>4</Precision>
+				<CurrentRequirement>0</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.5</MinSamplePeriod>
+				<TypSamplePeriod>1</TypSamplePeriod>
+				<TypNumberofSamples>1800</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>2</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>300</YmaxValue>
+				<Yscale>6</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-35.786548</CalibrationCoefficientA>
+						<CalibrationCoefficientB>71.1695098</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0.82831686</CalibrationCoefficientC>
+						<Units>C</Units>
 					</Calibration>
 				</CalibrationList>
 			</SensorBurnRec>
@@ -4725,6 +5584,88 @@
 			</Calibration>
 		</CalibrationList>
 	</Sensor>
+	<Sensor ID_Name="PAMPC" BaseID="79" NumAutoIDs="1" Product="PAMPC-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Power Amp Current</LocalName>
+		<lname_base>Current</lname_base>
+		<sname_base>I</sname_base>
+		<URL>http://www.vernier.com/faqs/pamp.html</URL>
+		<SensorFamily>Current</SensorFamily>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>1</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>-1</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>7</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.1</Delta>
+			<MaxDelta>1e-05</MaxDelta>
+			<NumSamples>180</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Current</ColumnName>
+			<DefaultColumnShortName>I</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="PAMPC">
+			<Calibration Units="A" PrettyUnits="A" IDName="PAMPC" UserName="Current A" IDValue="79" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="1" LabProOp="14" K0="1.0235" K1="-0.40716"/>
+				<DisplayRange YMin="-0.6" YMax="0.6"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="79">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Current</SensorLongName>
+				<SensorShortName>I</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>2</SignificantFigures>
+				<Precision>6</Precision>
+				<CurrentRequirement>7</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>1e-05</MinSamplePeriod>
+				<TypSamplePeriod>0.1</TypSamplePeriod>
+				<TypNumberofSamples>180</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>1</CalibrationEquation>
+				<YminValue>-0.6</YminValue>
+				<YmaxValue>0.6</YmaxValue>
+				<Yscale>5</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>1.0235</CalibrationCoefficientA>
+						<CalibrationCoefficientB>-0.40716</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0</CalibrationCoefficientC>
+						<Units>A</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
+	</Sensor>
 	<Sensor ID_Name="PS" BaseID="0" NumAutoIDs="0" Product="PS-BTA" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>Pressure Sensor</LocalName>
 		<lname_base>Pressure</lname_base>
@@ -4959,7 +5900,7 @@
 		</Hardware>
 		<CollectDefaults>
 			<Delta>10</Delta>
-			<MaxDelta>1e-04</MaxDelta>
+			<MaxDelta>0.01</MaxDelta>
 			<NumSamples>60</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Radiation</ColumnName>
@@ -5153,16 +6094,6 @@
 				<DisplayRange YMin="95" YMax="115"/>
 				<CalcColumn0 Name="Respiration Rate" ShortName="Rate" Units="bpm" Equation="beatsPerMinute(%sID, %T, 30, 40, 50, 0.5, 10)" YMin="0" YMax="30" DecimalPlaces="0" Trace="1" Trace_LL="1" LiveReadouts="1" AutoAddDigitalMeter="1"/>
 			</Calibration>
-			<Calibration Units="MMHG" PrettyUnits="mm Hg" IDName="GPSMMHG" UserName="Gas Pres mm Hg" IDValue="24" DDSIndex="1" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1" StripChart="1">
-				<Equation Type="1" LabProOp="14" K0="0.024" K1="348.63"/>
-				<DisplayRange YMin="900" YMax="1200"/>
-				<CalcColumn0 Name="Respiration Rate" ShortName="Rate" Units="bpm" Equation="beatsPerMinute(%sID, %T, 30, 40, 50, 0.5, 10)" YMin="0" YMax="30" DecimalPlaces="0" Trace="1" Trace_LL="1" LiveReadouts="1" AutoAddDigitalMeter="1"/>
-			</Calibration>
-			<Calibration Units="ATM" PrettyUnits="atm" IDName="GPSATM" UserName="Gas Pres atm" IDValue="24" DDSIndex="2" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1" StripChart="1">
-				<Equation Type="1" LabProOp="14" K0="3e-05" K1="0.4587"/>
-				<DisplayRange YMin="0.9" YMax="1.2"/>
-				<CalcColumn0 Name="Respiration Rate" ShortName="Rate" Units="bpm" Equation="beatsPerMinute(%sID, %T, 30, 40, 50, 0.5, 10)" YMin="0" YMax="30" DecimalPlaces="0" Trace="1" Trace_LL="1" LiveReadouts="1" AutoAddDigitalMeter="1"/>
-			</Calibration>
 		</CalibrationList>
 		<BurnParams>
 			<SensorBurnRec SensorNumber="24">
@@ -5288,7 +6219,7 @@
 		<SensorFamily>Conductivity</SensorFamily>
 		<UserCalibrationSupported>1</UserCalibrationSupported>
 		<ReverseSupported>0</ReverseSupported>
-		<ZeroSupported>0</ZeroSupported>
+		<ZeroSupported>1</ZeroSupported>
 		<ShowZeroButton>0</ShowZeroButton>
 		<UserRemoteSupported>1</UserRemoteSupported>
 		<GroupGraphs>0</GroupGraphs>
@@ -5577,9 +6508,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>2</Delta>
 			<MaxDelta>1</MaxDelta>
-			<NumSamples>200</NumSamples>
+			<NumSamples>100</NumSamples>
 			<Averaging>-2</Averaging>
 			<ColumnName></ColumnName>
 			<DefaultColumnShortName></DefaultColumnShortName>
@@ -5596,6 +6527,14 @@
 			<Calibration Units="RI" PrettyUnits="rel" IDName="INTENSITY" UserName="Intensity" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Intensity" ShortColumnName="I" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="17" LabProOp="14" K0="0" K1="1"/>
 				<DisplayRange YMin="0" YMax="1"/>
+			</Calibration>
+			<Calibration Units="RI" PrettyUnits="Rel" IDName="FLUORESCENCE1" UserName="Fluorescence 1" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Fluorescence 405 nm" ShortColumnName="F 405" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
+			  <Equation Type="17" LabProOp="14" K0="0" K1="1"/>
+			  <DisplayRange YMin="0" YMax="1"/>
+			</Calibration>
+			<Calibration Units="RI" PrettyUnits="Rel." IDName="FLUORESCENCE2" UserName="Fluorescence 2" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Fluorescence 500 nm" ShortColumnName="F 500" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
+			  <Equation Type="17" LabProOp="14" K0="0" K1="1"/>
+			  <DisplayRange YMin="0" YMax="1"/>
 			</Calibration>
 		</CalibrationList>
 	</Sensor>
@@ -5636,9 +6575,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>2</Delta>
 			<MaxDelta>1</MaxDelta>
-			<NumSamples>200</NumSamples>
+			<NumSamples>100</NumSamples>
 			<Averaging>-2</Averaging>
 			<ColumnName></ColumnName>
 			<DefaultColumnShortName></DefaultColumnShortName>
@@ -5648,13 +6587,21 @@
 				<Equation Type="17" LabProOp="14" K0="0" K1="1"/>
 				<DisplayRange YMin="0" YMax="1.5"/>
 			</Calibration>
-			<Calibration Units="PCT" PrettyUnits="%" IDName="TRANMITTANCE" UserName="Transmittance" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Transmittance at %wavelength nm" ShortColumnName="%T-%wavelength" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+			<Calibration Units="PCT" PrettyUnits="%" IDName="TRANSMITTANCE" UserName="Transmittance" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Transmittance at %wavelength nm" ShortColumnName="%T-%wavelength" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="17" LabProOp="14" K0="0" K1="1"/>
 				<DisplayRange YMin="0" YMax="100"/>
 			</Calibration>
 			<Calibration Units="RI" PrettyUnits="rel" IDName="INTENSITY" UserName="Intensity" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Intensity at %wavelength nm" ShortColumnName="I-%wavelength" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
 				<Equation Type="17" LabProOp="14" K0="0" K1="1"/>
 				<DisplayRange YMin="0" YMax="1"/>
+			</Calibration>
+			<Calibration Units="RI" PrettyUnits="Rel" IDName="FLUORESCENCE1" UserName="Fluorescence 1" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Fluorescence (405 nm) at %wavelength nm" ShortColumnName="F 405" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
+			  <Equation Type="17" LabProOp="14" K0="0" K1="1"/>
+			  <DisplayRange YMin="0" YMax="1"/>
+			</Calibration>
+			<Calibration Units="RI" PrettyUnits="Rel." IDName="FLUORESCENCE2" UserName="Fluorescence 2" IDValue="0" DDSIndex="0" RangeDesc="" ColumnName="Fluorescence (500 nm) at %wavelength nm" ShortColumnName="F 500" ExperimentType="1" DecimalPlaces="3" Trace="1" Trace_LL="1" LiveReadouts="1">
+			  <Equation Type="17" LabProOp="14" K0="0" K1="1"/>
+			  <DisplayRange YMin="0" YMax="1"/>
 			</Calibration>
 		</CalibrationList>
 	</Sensor>
@@ -5781,9 +6728,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.5</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -5840,9 +6787,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.01</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -5955,7 +6902,7 @@
 		</Hardware>
 		<CollectDefaults>
 			<Delta>10</Delta>
-			<MaxDelta>1e-04</MaxDelta>
+			<MaxDelta>0.01</MaxDelta>
 			<NumSamples>60</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Radiation</ColumnName>
@@ -6005,9 +6952,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.5</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -6063,9 +7010,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>0.005</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>-1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -6119,9 +7066,9 @@
 			<WarmUpTime>0</WarmUpTime>
 		</Hardware>
 		<CollectDefaults>
-			<Delta>1</Delta>
+			<Delta>0.5</Delta>
 			<MaxDelta>1e-04</MaxDelta>
-			<NumSamples>180</NumSamples>
+			<NumSamples>360</NumSamples>
 			<Averaging>1</Averaging>
 			<ColumnName>Temperature</ColumnName>
 			<DefaultColumnShortName>Temp</DefaultColumnShortName>
@@ -6152,8 +7099,8 @@
 				<CurrentRequirement>7</CurrentRequirement>
 				<Averaging>1</Averaging>
 				<MinSamplePeriod>1e-04</MinSamplePeriod>
-				<TypSamplePeriod>1</TypSamplePeriod>
-				<TypNumberofSamples>180</TypNumberofSamples>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>360</TypNumberofSamples>
 				<WarmUpTime>0</WarmUpTime>
 				<ExperimentType>1</ExperimentType>
 				<OperationType>14</OperationType>
@@ -6578,6 +7525,97 @@
 				<DisplayRange YMin="-10" YMax="10"/>
 			</Calibration>
 		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="TMPW" BaseID="78" NumAutoIDs="1" Product="WRT-BTA" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Wide-Range Temperature Probe</LocalName>
+		<lname_base>Temperature</lname_base>
+		<sname_base>Temp</sname_base>
+		<URL>http://www.vernier.com/faqs/wrt.html</URL>
+		<SensorFamily>Temperature</SensorFamily>
+		<UnitConversionFamily>Temperature</UnitConversionFamily>
+		<UserCalibrationSupported>1</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>1</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>-1</VoltageDecimalPlaces>
+		<LabProSourceSupported>1</LabProSourceSupported>
+		<SkipSourceSupported>1</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>1</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>1</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>0.5</Delta>
+			<MaxDelta>0.5</MaxDelta>
+			<NumSamples>360</NumSamples>
+			<Averaging>1</Averaging>
+			<ColumnName>Temperature</ColumnName>
+			<DefaultColumnShortName>Temp</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="TMPWC">
+			<Calibration Units="C" PrettyUnits="&#xB0;C" IDName="TMPWC" UserName="Wide-Range Temperature &#xB0;C" IDValue="78" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-33.8509" K1="73.2444" K2="0.9078"/>
+				<DisplayRange YMin="0" YMax="50"/>
+			</Calibration>
+			<Calibration Units="F" PrettyUnits="&#xB0;F" IDName="TMPWF" UserName="Wide-Range Temperature &#xB0;F" IDValue="78" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-1" K1="-1" K2="-1"/>
+				<DisplayRange YMin="30" YMax="100"/>
+			</Calibration>
+			<Calibration Units="K" PrettyUnits="K" IDName="TMPWK" UserName="Wide-Range Temperature K" IDValue="78" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1">
+				<Equation Type="2" LabProOp="14" K0="-1" K1="-1" K2="-1"/>
+				<DisplayRange YMin="250" YMax="400"/>
+			</Calibration>
+		</CalibrationList>
+		<BurnParams>
+			<SensorBurnRec SensorNumber="78">
+				<MemMapVersion>1</MemMapVersion>
+				<ManufacturerID>0</ManufacturerID>
+				<SensorLongName>Temperature</SensorLongName>
+				<SensorShortName>Temp</SensorShortName>
+				<Uncertainty>0</Uncertainty>
+				<SignificantFigures>2</SignificantFigures>
+				<Precision>2</Precision>
+				<CurrentRequirement>1</CurrentRequirement>
+				<Averaging>1</Averaging>
+				<MinSamplePeriod>0.5</MinSamplePeriod>
+				<TypSamplePeriod>0.5</TypSamplePeriod>
+				<TypNumberofSamples>360</TypNumberofSamples>
+				<WarmUpTime>0</WarmUpTime>
+				<ExperimentType>1</ExperimentType>
+				<OperationType>14</OperationType>
+				<CalibrationEquation>2</CalibrationEquation>
+				<YminValue>0</YminValue>
+				<YmaxValue>50</YmaxValue>
+				<Yscale>7</Yscale>
+				<ActiveCalPage>0</ActiveCalPage>
+				<CalibrationList>
+					<Calibration DDSIndex="0">
+						<CalibrationCoefficientA>-33.8509</CalibrationCoefficientA>
+						<CalibrationCoefficientB>73.2444</CalibrationCoefficientB>
+						<CalibrationCoefficientC>0.9078</CalibrationCoefficientC>
+						<Units>C</Units>
+					</Calibration>
+				</CalibrationList>
+			</SensorBurnRec>
+		</BurnParams>
 	</Sensor>
 	<Sensor ID_Name="CTD-FS" BaseID="100" NumAutoIDs="1" Product="WDSS" DDS="1" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
 		<LocalName>Force</LocalName>
@@ -7034,4 +8072,1006 @@
 			</SensorBurnRec>
 		</BurnParams>
 	</Sensor>
+	<Sensor ID_Name="WU_W" BaseID="300" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Real Power</LocalName>
+		<lname_base>Real Power</lname_base>
+		<sname_base>Power</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Real Power</ColumnName>
+			<DefaultColumnShortName>Power</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_W">
+			<Calibration Units="W" PrettyUnits="W" IDName="WU_W" UserName="Real Power" IDValue="300" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="200"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>	
+	<Sensor ID_Name="WU_V" BaseID="301" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Potential</LocalName>
+		<lname_base>Potential</lname_base>
+		<sname_base>Line</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Potential</ColumnName>
+			<DefaultColumnShortName>Line</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_V">
+			<Calibration Units="Vrms" PrettyUnits="Vrms" IDName="WU_V" UserName="Potential" IDValue="301" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="150"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_A" BaseID="302" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Current</LocalName>
+		<lname_base>Current</lname_base>
+		<sname_base>Cur</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Current</ColumnName>
+			<DefaultColumnShortName>Cur</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_A">
+			<Calibration Units="Arms" PrettyUnits="Arms" IDName="WU_A" UserName="Current" IDValue="302" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="3" Trace="0" Trace_LL="0" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="2"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_WH" BaseID="303" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Watt Hours</LocalName>
+		<lname_base>Watt Hours</lname_base>
+		<sname_base>W-h</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Watt Hours</ColumnName>
+			<DefaultColumnShortName>W-h</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_WH">
+			<Calibration Units="W-H" PrettyUnits="W-h" IDName="WU_WH" UserName="Watt Hours" IDValue="303" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="1" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="500"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>	
+	<Sensor ID_Name="WU_COST" BaseID="304" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Cost</LocalName>
+		<lname_base>Cost</lname_base>
+		<sname_base>$</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Cost</ColumnName>
+			<DefaultColumnShortName>$</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_COST">
+			<Calibration Units="USD" PrettyUnits="USD" IDName="WU_COST" UserName="Cost" IDValue="304" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="2" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="1000"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>					
+	<Sensor ID_Name="WU_WH_MO" BaseID="305" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Watt Hours/Mo</LocalName>
+		<lname_base>Watt Hours/Mo</lname_base>
+		<sname_base>W-h/Mo</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Watt Hours/Mo</ColumnName>
+			<DefaultColumnShortName>W-h/Mo</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_WH_MO">
+			<Calibration Units="W-h" PrettyUnits="W-h" IDName="WU_WH_MO" UserName="Watt Hours/Mo" IDValue="305" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="500"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_COST_MO" BaseID="306" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Cost per Month</LocalName>
+		<lname_base>Cost per Month</lname_base>
+		<sname_base>$/Mo</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Cost per Month</ColumnName>
+			<DefaultColumnShortName>$/Mo</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_COST_MO">
+			<Calibration Units="USD" PrettyUnits="USD" IDName="WU_COST_MO" UserName="Cost per Month" IDValue="306" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="2" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="10000"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>					
+	<Sensor ID_Name="WU_W_MAX" BaseID="307" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Watt Max</LocalName>
+		<lname_base>Watt Max</lname_base>
+		<sname_base>W Max</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Watt Max</ColumnName>
+			<DefaultColumnShortName>W Max</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_W_MAX">
+			<Calibration Units="W" PrettyUnits="W" IDName="WU_W_MAX" UserName="Watt Max" IDValue="307" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="500"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>	
+	<Sensor ID_Name="WU_V_MAX" BaseID="308" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Volts Max</LocalName>
+		<lname_base>Volts Max</lname_base>
+		<sname_base>V Max</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Volts Max</ColumnName>
+			<DefaultColumnShortName>V Max</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_V_MAX">
+			<Calibration Units="V" PrettyUnits="V" IDName="WU_V_MAX" UserName="Volts Max" IDValue="308" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="200"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_A_MAX" BaseID="309" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Amps Max</LocalName>
+		<lname_base>Amps Max</lname_base>
+		<sname_base>A Max</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Amps Max</ColumnName>
+			<DefaultColumnShortName>A Max</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_A_MAX">
+			<Calibration Units="A" PrettyUnits="A" IDName="WU_A_MAX" UserName="Amps Max" IDValue="309" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="3" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="2.0"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>			
+	<Sensor ID_Name="WU_W_MIN" BaseID="310" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Watt Min</LocalName>
+		<lname_base>Watt Min</lname_base>
+		<sname_base>W Min</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Watt Min</ColumnName>
+			<DefaultColumnShortName>W Min</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_W_MIN">
+			<Calibration Units="W" PrettyUnits="W" IDName="WU_W_MIN" UserName="Watt Min" IDValue="310" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="500"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>	
+	<Sensor ID_Name="WU_V_MIN" BaseID="311" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Volts Min</LocalName>
+		<lname_base>Volts Min</lname_base>
+		<sname_base>V Min</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Volts Min</ColumnName>
+			<DefaultColumnShortName>V Min</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_V_MIN">
+			<Calibration Units="V" PrettyUnits="V" IDName="WU_V_MIN" UserName="Volts Min" IDValue="311" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="200"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>	
+	<Sensor ID_Name="WU_A_MIN" BaseID="312" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Amps Min</LocalName>
+		<lname_base>Amps Min</lname_base>
+		<sname_base>A Min</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Amps Min</ColumnName>
+			<DefaultColumnShortName>A Min</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_A_MIN">
+			<Calibration Units="A" PrettyUnits="A" IDName="WU_A_MIN" UserName="Amps Min" IDValue="312" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="3" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="2.0"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>						
+	<Sensor ID_Name="WU_PF" BaseID="313" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Power Factor</LocalName>
+		<lname_base>Power Factor</lname_base>
+		<sname_base>PF</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Power Factor</ColumnName>
+			<DefaultColumnShortName>PF</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_PF">
+			<Calibration Units="%" PrettyUnits="%" IDName="WU_PF" UserName="Power Factor" IDValue="313" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="0" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="100"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>						
+	<Sensor ID_Name="WU_DC" BaseID="314" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Duty Cycle</LocalName>
+		<lname_base>Duty Cycle</lname_base>
+		<sname_base>DC</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Duty Cycle</ColumnName>
+			<DefaultColumnShortName>DC</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_DC">
+			<Calibration Units="%" PrettyUnits="%" IDName="WU_DC" UserName="Duty Cycle" IDValue="314" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="0" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="100"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_PC" BaseID="315" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Power Cycle</LocalName>
+		<lname_base>Power Cycle</lname_base>
+		<sname_base>PC</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Power Cycle</ColumnName>
+			<DefaultColumnShortName>PC</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_PC">
+			<Calibration Units="" PrettyUnits="" IDName="WU_PC" UserName="Power Cycle" IDValue="315" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="0" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="255"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+	<Sensor ID_Name="WU_HZ" BaseID="316" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Line Frequency</LocalName>
+		<lname_base>Line Frequency</lname_base>
+		<sname_base>Freq</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Line Frequency</ColumnName>
+			<DefaultColumnShortName>Freq</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_HZ">
+			<Calibration Units="Hz" PrettyUnits="Hz" IDName="WU_HZ" UserName="Line Frequency" IDValue="316" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="120"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>			
+	<Sensor ID_Name="WU_VA" BaseID="317" NumAutoIDs="1" Product="WATTS_UP" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+		<LocalName>Apparent Power</LocalName>
+		<lname_base>Apparent Power</lname_base>
+		<sname_base>VA</sname_base>
+		<URL>http://www.vernier.com/faqs/wattsup.html</URL>
+		<UnitConversionFamily>Watts Up</UnitConversionFamily>
+		<UserCalibrationSupported>0</UserCalibrationSupported>
+		<ReverseSupported>0</ReverseSupported>
+		<ZeroSupported>0</ZeroSupported>
+		<ShowZeroButton>0</ShowZeroButton>
+		<UserRemoteSupported>0</UserRemoteSupported>
+		<GroupGraphs>0</GroupGraphs>
+		<Oversample>0</Oversample>
+		<SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+		<ForceTimePlaces>0</ForceTimePlaces>
+		<VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+		<LabProSourceSupported>0</LabProSourceSupported>
+		<SkipSourceSupported>0</SkipSourceSupported>
+		<USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+		<CyclopsSourceSupported>0</CyclopsSourceSupported>
+		<OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+		<OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+		<GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+		<SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+		<LabQuestSourceSupported>0</LabQuestSourceSupported>
+		<SinglePointCalibrationSupported>0</SinglePointCalibrationSupported>
+		<SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+		<AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+		<AutoAddGauge>0</AutoAddGauge>
+		<AutoAddThermometer>0</AutoAddThermometer>
+		<Hardware>
+			<Uncertainty>0</Uncertainty>
+			<AvgCurrent>-2</AvgCurrent>
+			<WarmUpTime>0</WarmUpTime>
+		</Hardware>
+		<CollectDefaults>
+			<Delta>1</Delta>
+			<MaxDelta>1</MaxDelta>
+			<NumSamples>600</NumSamples>
+			<Averaging>-2</Averaging>
+			<ColumnName>Apparent Power</ColumnName>
+			<DefaultColumnShortName>VA</DefaultColumnShortName>
+		</CollectDefaults>
+		<CalibrationList DefaultIndex="0" DefaultCalIDName="WU_VA">
+			<Calibration Units="W" PrettyUnits="W" IDName="WU_VA" UserName="Apparent Power" IDValue="317" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="0" Trace_LL="0" LiveReadouts="0" NumPP="1">
+				<Equation Type="1" LabProOp="14" K0="0" K1="1"/>
+				<DisplayRange YMin="0" YMax="200"/>
+			</Calibration>
+		</CalibrationList>
+	</Sensor>
+
+  <Sensor ID_Name="MiniGC" BaseID="80" NumAutoIDs="1" Product="Mini-GC" DDS="0" Obnoxious="0" Type="Analog5V" CHType="analog-in" Legacy="1">
+    <LocalName>Mini Gas Chromatograph</LocalName>
+    <lname_base>Signal</lname_base>
+    <sname_base>Signal</sname_base>
+    <URL>http://www.vernier.com</URL>
+    <UserCalibrationSupported>0</UserCalibrationSupported>
+    <ReverseSupported>0</ReverseSupported>
+    <ZeroSupported>0</ZeroSupported>
+    <ShowZeroButton>0</ShowZeroButton>
+    <UserRemoteSupported>0</UserRemoteSupported>
+    <GroupGraphs>0</GroupGraphs>
+    <Oversample>0</Oversample>
+    <SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+    <ForceTimePlaces>3</ForceTimePlaces>
+    <VoltageDecimalPlaces>-1</VoltageDecimalPlaces>
+    <LabProSourceSupported>0</LabProSourceSupported>
+    <SkipSourceSupported>0</SkipSourceSupported>
+    <MiniGCSourceSupported>1</MiniGCSourceSupported>
+    <USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+    <CyclopsSourceSupported>0</CyclopsSourceSupported>
+    <OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+    <OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+    <GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+    <SensorDAQSourceSupported>0</SensorDAQSourceSupported>
+    <LabQuestSourceSupported>0</LabQuestSourceSupported>
+    <SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+    <SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+    <AutoAddDigitalMeter>0</AutoAddDigitalMeter>
+    <AutoAddGauge>0</AutoAddGauge>
+    <AutoAddThermometer>0</AutoAddThermometer>
+    <PointProtectorsOn>0</PointProtectorsOn>
+    <Hardware>
+      <Uncertainty>0</Uncertainty>
+      <AvgCurrent>0</AvgCurrent>
+      <WarmUpTime>0</WarmUpTime>
+    </Hardware>
+    <CollectDefaults>
+      <Delta>0.3</Delta>
+      <MaxDelta>0.001</MaxDelta>
+      <NumSamples>4000</NumSamples>
+      <Averaging>0</Averaging>
+      <ColumnName>Signal</ColumnName>
+      <DefaultColumnShortName>Signal</DefaultColumnShortName>
+    </CollectDefaults>
+    <CalibrationList DefaultIndex="0" DefaultCalIDName="minigcv">
+      <Calibration Units="mV" PrettyUnits="mV" IDName="minigcv" UserName="Mini GC" IDValue="80" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="1" Trace="1" Trace_LL="1" LiveReadouts="0">
+        <Equation Type="1" LabProOp="1" K0="0" K1="1000"/>
+        <DisplayRange YMin="0" YMax="800"/>
+      </Calibration>
+    </CalibrationList>
+  </Sensor>
+  <Sensor ID_Name="30VP" BaseID="11" NumAutoIDs="1" Product="VP-BTA" DDS="0" Obnoxious="0" Type="Analog10V" CHType="analog-in" Legacy="1">
+    <LocalName>30V Voltage (+/-30V)</LocalName>
+    <lname_base>Potential</lname_base>
+    <sname_base>Pot</sname_base>
+    <URL>http://www.vernier.com/faqs/tl.html</URL>
+    <SensorFamily>Voltage</SensorFamily>
+    <UserCalibrationSupported>1</UserCalibrationSupported>
+    <ReverseSupported>0</ReverseSupported>
+    <ZeroSupported>1</ZeroSupported>
+    <ShowZeroButton>0</ShowZeroButton>
+    <UserRemoteSupported>1</UserRemoteSupported>
+    <GroupGraphs>0</GroupGraphs>
+    <Oversample>0</Oversample>
+    <SampleAtTimeZeroSupported>1</SampleAtTimeZeroSupported>
+    <ForceTimePlaces>0</ForceTimePlaces>
+    <VoltageDecimalPlaces>2</VoltageDecimalPlaces>
+    <LabProSourceSupported>1</LabProSourceSupported>
+    <SkipSourceSupported>1</SkipSourceSupported>
+    <USBDirectTempSourceSupported>0</USBDirectTempSourceSupported>
+    <CyclopsSourceSupported>0</CyclopsSourceSupported>
+    <OhausScoutProSourceSupported>0</OhausScoutProSourceSupported>
+    <OceanOpticsSourceSupported>0</OceanOpticsSourceSupported>
+    <GPSGarminSourceSupported>0</GPSGarminSourceSupported>
+    <SensorDAQSourceSupported>1</SensorDAQSourceSupported>
+    <LabQuestSourceSupported>1</LabQuestSourceSupported>
+    <SinglePointCalibrationSupported>1</SinglePointCalibrationSupported>
+    <SinglePointCalibrationDefault>0</SinglePointCalibrationDefault>
+    <AutoAddDigitalMeter>1</AutoAddDigitalMeter>
+    <AutoAddGauge>0</AutoAddGauge>
+    <AutoAddThermometer>0</AutoAddThermometer>
+    <Hardware>
+      <Uncertainty>0</Uncertainty>
+      <AvgCurrent>0</AvgCurrent>
+      <WarmUpTime>0</WarmUpTime>
+    </Hardware>
+    <CollectDefaults>
+      <Delta>0.1</Delta>
+      <MaxDelta>2e-05</MaxDelta>
+      <NumSamples>150</NumSamples>
+      <Averaging>-1</Averaging>
+      <ColumnName>Potential</ColumnName>
+      <DefaultColumnShortName>Pot</DefaultColumnShortName>
+    </CollectDefaults>
+    <CalibrationList DefaultIndex="0" DefaultCalIDName="VP">
+      <Calibration Units="V" PrettyUnits="V" IDName="VP" UserName="Voltage V" IDValue="11" DDSIndex="0" RangeDesc="" ColumnName="" ShortColumnName="" ExperimentType="1" DecimalPlaces="-1" Trace="1" Trace_LL="1" LiveReadouts="1">
+        <Equation Type="1" LabProOp="2" K0="0" K1="3"/>
+        <DisplayRange YMin="-30" YMax="30"/>
+      </Calibration>
+    </CalibrationList>
+  </Sensor>
 </SensorMap>

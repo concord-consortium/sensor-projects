@@ -56,7 +56,7 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 	int timeWithoutData = 0;
 	protected String [] okOptions;
 	protected String [] continueOptions;	
-	public final static int DATA_TIME_OUT = 20;
+	public final static int DATA_TIME_OUT = 2000;
 	private boolean inDeviceRead;
 	private int totalDataRead;
 	private SensorDevice device;
@@ -121,7 +121,7 @@ public class SensorDataProducerImpl extends DefaultDataProducer
 			// we didn't get any data. 
 	    	// keep track of this so we can report there is
 	    	// is a problem.  If this persists too long
-			timeWithoutData++;
+			timeWithoutData += ticker.getMillis();
 			if(timeWithoutData > DATA_TIME_OUT){
 				stop();
 				if(messageHandler != null) {

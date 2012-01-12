@@ -130,6 +130,11 @@ public class JavaTicker extends Thread
 		return (int)(System.currentTimeMillis() % (long)Integer.MAX_VALUE);
 	}
 	
+	public int getMillis()
+	{
+		return millis;
+	}
+	
 	public void run()
 	{
 		while(true) {

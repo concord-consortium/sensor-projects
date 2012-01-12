@@ -72,6 +72,11 @@ public interface Ticker
 	public Ticker createNew();
 	
 	/**
+	 * @return number of millis seconds between ticks
+	 */
+	public int getMillis();
+	
+	/**
 	 * This is needed in a few places
 	 * and putting it here allows us to abstract the java waba 
 	 * differences

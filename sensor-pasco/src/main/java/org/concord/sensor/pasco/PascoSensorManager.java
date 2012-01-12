@@ -42,8 +42,8 @@ public class PascoSensorManager {
 
 		public void start(int msPeriod) throws PascoException {
 			sampleSize = channel.startContinuousSampling(msPeriod);
-			readBuffer = new byte[sampleSize*32];
-			bufferedSamples = new byte[sampleSize*64];
+			readBuffer = new byte[sampleSize*64];
+			bufferedSamples = new byte[sampleSize*128];
 			numBufferedSamples = 0;
 		}
 

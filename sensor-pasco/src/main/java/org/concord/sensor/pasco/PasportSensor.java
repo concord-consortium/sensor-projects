@@ -2,7 +2,6 @@ package org.concord.sensor.pasco;
 
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.device.impl.SensorConfigImpl;
-import org.concord.sensor.impl.SensorUnit;
 import org.concord.sensor.pasco.datasheet.PasportSensorMeasurement;
 import org.concord.sensor.pasco.jna.PascoChannel;
 
@@ -24,8 +23,7 @@ public class PasportSensor extends SensorConfigImpl {
 		setPort(measurement.getId());
 		setName(measurement.getName());
 		setStepSize(measurement.getAccuracy());
-		SensorUnit unit = new SensorUnit(measurement.getUnitStr());
-		setUnit(unit);
+		setUnit(measurement.getUnitStr());
 		setConfirmed(true);
 
 		String name = measurement.getName();

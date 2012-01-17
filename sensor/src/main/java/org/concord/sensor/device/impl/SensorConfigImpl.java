@@ -29,7 +29,6 @@
  */
 package org.concord.sensor.device.impl;
 
-import org.concord.framework.data.DataDimension;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.impl.Range;
 
@@ -48,7 +47,7 @@ public class SensorConfigImpl
     private String name;
     private String portName;
     private float stepSize;
-    private DataDimension unit;
+    private String unit;
 
     private Range valueRange;
         
@@ -148,7 +147,7 @@ public class SensorConfigImpl
     /* (non-Javadoc)
      * @see org.concord.sensor.SensorConfig#getUnit()
      */
-    public DataDimension getUnit()
+    public String getUnit()
     {
         // TODO Auto-generated method stub
         return unit;
@@ -157,7 +156,7 @@ public class SensorConfigImpl
     /**
      * @param unit The unit to set.
      */
-    public void setUnit(DataDimension unit)
+    public void setUnit(String unit)
     {
         this.unit = unit;
     }

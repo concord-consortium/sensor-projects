@@ -32,7 +32,6 @@
 */
 package org.concord.sensor.device;
 
-import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.serial.SensorSerialPort;
 
 public interface DeviceService

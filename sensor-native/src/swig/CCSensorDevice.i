@@ -50,9 +50,9 @@
 		return getConfirmed() == 1;
 	}
 	
-	public org.concord.framework.data.DataDimension getUnit()
+	public String getUnit()
 	{
-		return new org.concord.sensor.impl.SensorUnit(getUnitStr());
+		return getUnitStr();
 	}
 %}
 

@@ -32,7 +32,6 @@
 */
 package org.concord.sensor;
 
-import org.concord.framework.data.DataDimension;
 
 
 /**
@@ -206,7 +205,7 @@ public interface SensorConfig
 	 * wants to use it.
 	 * @return
 	 */
-	public DataDimension getUnit();
+	public String getUnit();
 		
 	/**
 	 * These parameters can be used to customize a sensor.  If a parameter

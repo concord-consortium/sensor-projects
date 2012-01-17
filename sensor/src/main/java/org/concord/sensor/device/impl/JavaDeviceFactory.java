@@ -35,13 +35,13 @@ package org.concord.sensor.device.impl;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.DeviceConfig;
 import org.concord.sensor.device.DeviceFactory;
 import org.concord.sensor.device.DeviceIdAware;
 import org.concord.sensor.device.DeviceService;
 import org.concord.sensor.device.DeviceServiceAware;
 import org.concord.sensor.device.SensorDevice;
+import org.concord.sensor.device.UserMessageHandler;
 import org.concord.sensor.impl.Ticker;
 
 

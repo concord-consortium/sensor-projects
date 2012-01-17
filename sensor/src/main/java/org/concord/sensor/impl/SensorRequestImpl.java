@@ -23,7 +23,6 @@
 
 package org.concord.sensor.impl;
 
-import org.concord.framework.data.DataDimension;
 import org.concord.sensor.SensorRequest;
 
 
@@ -32,11 +31,11 @@ public class SensorRequestImpl
 {
 	protected int type = 0;
 	protected float stepSize = 0.1f;
-	protected float requiredMax;
-	protected float requiredMin;
+	protected float requiredMax = Float.NaN;
+	protected float requiredMin = Float.NaN;
 	protected int displayPrecision;
 	protected int port;
-	protected DataDimension unit;
+	protected String unit;
 	
 	// we can't use hashtables because we want this class
 	// to be portable to waba
@@ -103,12 +102,12 @@ public class SensorRequestImpl
 		this.port = port;
 	}
 	
-	public DataDimension getUnit()
+	public String getUnit()
 	{
 		return unit;
 	}
 	
-	public void setUnit(DataDimension unit)
+	public void setUnit(String unit)
 	{
 		this.unit = unit;
 	}

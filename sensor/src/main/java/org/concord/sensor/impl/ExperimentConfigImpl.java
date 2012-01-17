@@ -29,7 +29,6 @@
  */
 package org.concord.sensor.impl;
 
-import org.concord.framework.util.Copyable;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 
@@ -40,7 +39,7 @@ import org.concord.sensor.SensorConfig;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ExperimentConfigImpl 
-	implements ExperimentConfig, Copyable
+	implements ExperimentConfig
 {
 	private SensorConfig [] sensorConfigs = null;
 	private boolean valid;

@@ -37,7 +37,6 @@ import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.impl.Range;
-import org.concord.sensor.impl.SensorUnit;
 
 /**
  * @author scott
@@ -193,7 +192,7 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 		sensConfig.setPort(0);
 		sensConfig.setStepSize(0.1f);
 		sensConfig.setType(SensorConfig.QUANTITY_TEMPERATURE);
-		sensConfig.setUnit(new SensorUnit("degC"));
+		sensConfig.setUnit("degC");
 		currentConfig.setSensorConfigs(sensConfigs);
 		return currentConfig;
 	}

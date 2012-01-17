@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.concord.framework.data.DataDimension;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
@@ -81,7 +80,7 @@ public class SensorUtilJava {
 			out.println("    portName " + sensor.getPortName());
 			out.println("    stepSize " + sensor.getStepSize());
 			out.println("    confirmed " + sensor.isConfirmed());
-			out.println("    unit " + sensor.getUnit().getDimension());
+			out.println("    unit " + sensor.getUnit());
 		}	
 	}
 	
@@ -105,8 +104,8 @@ public class SensorUtilJava {
 			ret += "    portName " + sensor.getPortName() + "\n";
 			ret += "    stepSize " + sensor.getStepSize() + "\n";
 			ret += "    confirmed " + sensor.isConfirmed() + "\n";
-			DataDimension unit = sensor.getUnit();
-			ret += "    unit " + (unit == null ? "null" : unit.getDimension()) + "\n";
+			String unit = sensor.getUnit();
+			ret += "    unit " + (unit == null ? "null" : unit) + "\n";
 		}	
 		
 		return ret;
@@ -126,7 +125,7 @@ public class SensorUtilJava {
 		    ret += "    requiredMin: " + sensor.getRequiredMin() + "\n";		    
 		    ret += "    stepSize: " + sensor.getStepSize() + "\n";
 		    ret += "    type: " + getTypeConstantName(sensor.getType()) + "\n";
-		    ret += "    unit: " + sensor.getUnit().getDimension() + "\n";
+		    ret += "    unit: " + sensor.getUnit() + "\n";
 			String[] sensorParamKeys = sensor.getSensorParamKeys();
 		    if(sensorParamKeys != null && sensorParamKeys.length > 0){
 		    	ret += "    sensorParams:\n";

@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 
 import junit.framework.Assert;
 
-import org.concord.framework.text.UserMessageHandler;
 import org.concord.sensor.ExperimentConfig;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;

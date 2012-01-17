@@ -29,7 +29,6 @@
  */
 package org.concord.sensor;
 
-import org.concord.framework.data.DataDimension;
 
 /**
  * This is sent to a SensorDataProducer and then to a SensorDevice
@@ -136,7 +135,7 @@ public interface SensorRequest
 	 * 
 	 * @return
 	 */
-	public DataDimension getUnit();
+	public String getUnit();
 		
 	/**
 	 * These parameters can be used to customize a sensor.  If a parameter

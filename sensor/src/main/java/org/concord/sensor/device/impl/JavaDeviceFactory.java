@@ -115,7 +115,7 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case PSEUDO_DEVICE_VARIABLE_TIME:
 				className = "org.concord.sensor.pseudo.PseudoSensorDevice";
 				break;
-			case VERNIER_GO_LINK:
+			case VERNIER_GO_LINK_NATIVE:
 				className = "org.concord.sensor.nativelib.NativeVernierSensorDevice";
 				break;
 			case VERNIER_LAB_PRO:
@@ -124,6 +124,7 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case VERNIER_LAB_QUEST:
 				className = "org.concord.sensor.vernier.labquest.LabQuestSensorDevice";
 				break;
+			case VERNIER_GO_LINK:
 			case VERNIER_GO_LINK_JNA:
 				className = "org.concord.sensor.vernier.goio.GoIOSensorDevice";
 				break;

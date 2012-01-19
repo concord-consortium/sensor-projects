@@ -112,6 +112,7 @@ public class JavaDeviceFactory extends JavaDeviceService
 		
 		switch(id) {
 			case PSEUDO_DEVICE:
+			case PSEUDO_DEVICE_VARIABLE_TIME:
 				className = "org.concord.sensor.pseudo.PseudoSensorDevice";
 				break;
 			case VERNIER_GO_LINK:

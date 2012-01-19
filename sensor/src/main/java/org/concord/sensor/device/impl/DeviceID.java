@@ -27,6 +27,7 @@ package org.concord.sensor.device.impl;
 public interface DeviceID
 {
 	public final static int PSEUDO_DEVICE = 0;
+	public final static int PSEUDO_DEVICE_VARIABLE_TIME = 1;
 	public final static int VERNIER_GO_LINK = 10;
 	public final static int VERNIER_LAB_PRO = 11;
 	public final static int VERNIER_LAB_QUEST = 12;

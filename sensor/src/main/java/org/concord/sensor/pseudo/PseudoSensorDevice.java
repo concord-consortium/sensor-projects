@@ -34,6 +34,7 @@ import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.DeviceIdAware;
 import org.concord.sensor.device.DeviceReader;
 import org.concord.sensor.device.impl.AbstractSensorDevice;
+import org.concord.sensor.device.impl.DeviceID;
 import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.impl.Range;
@@ -72,6 +73,11 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 		// we have no real sensors so we dont' need to open anything
 	}
 
+	protected boolean hasVariableTime()
+	{
+		return deviceId == DeviceID.PSEUDO_DEVICE_VARIABLE_TIME;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.device.SensorDevice#configure(org.concord.sensor.ExperimentRequest)
 	 */
@@ -82,7 +88,11 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 		currentConfig = new ExperimentConfigImpl();
 		currentConfig.setValid(true);
 		currentConfig.setDeviceName("Psuedo Device");
-		currentConfig.setExactPeriod(true);
+		if(hasVariableTime()){
+			currentConfig.setExactPeriod(false);						
+		} else {
+			currentConfig.setExactPeriod(true);			
+		}
 		currentConfig.setPeriod(0.1f);
 		currentConfig.setDataReadPeriod(0.1f);
 		
@@ -128,6 +138,14 @@ public class PseudoSensorDevice extends AbstractSensorDevice
 		// was X but we are only return a single value every time, so if the 
 		// read takes longer than X then we will be behind.  But for testing
 		// purposes this should be ok
+		if(hasVariableTime()){
+			// we pass our 'precise' time here, this will make testing repeatable
+			// however that might trigger some bug situations so feel free to make this
+			// less precise as long at it is repeatable, perhaps with some fixed variations
+			// off of the precise value
+			values[offset++] = time;
+		}
+		
 	    for(int i=0; i<sensConfigs.length; i++) {
 	        float sinOffset = sensConfigs[i].getSinOffset();
 	        float sinMagnitude = sensConfigs[i].getSinMagnitude();

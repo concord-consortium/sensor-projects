@@ -29,11 +29,13 @@
   </repositories>
   <modules>
     <module>ftdi-serial-wrapper</module>
+    <module>goio-jna</module>
     <module>labpro-usb</module>
     <module>labquest-jna</module>
+    <module>pasco-jna</module>
     <module>sensor</module>
     <module>sensor-native</module>
+    <module>sensor-pasco</module>
     <module>sensor-vernier</module>
-    <module>sensor-applets</module>
   </modules>
 </project>

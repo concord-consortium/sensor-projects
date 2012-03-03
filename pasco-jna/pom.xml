@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.concord.project-groups</groupId>
-    <artifactId>sensor</artifactId>
-    <version>4.0-SNAPSHOT</version>
+    <groupId>org.concord</groupId>
+    <artifactId>sensor-projects</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
   
   <groupId>org.concord.sensor</groupId>
   <artifactId>pasco-jna</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Pasco JNA</name>
@@ -24,13 +24,7 @@
       <scope>compile</scope>
       <type>pom</type>
     </dependency>
-    <dependency>
-      <groupId>org.concord.external.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>3.0.9</version>
-      <scope>test</scope>
-     </dependency>
-   </dependencies>
+  </dependencies>
   
   <build>
     <!--  reset this back to the default -->

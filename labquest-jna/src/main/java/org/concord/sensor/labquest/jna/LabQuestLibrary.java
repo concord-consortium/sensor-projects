@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -283,9 +284,14 @@ public class LabQuestLibrary
         File resourceFile = null;
         if (url.getProtocol().toLowerCase().equals("file")) {
             // NOTE: use older API for 1.3 compatibility
-            resourceFile = new File(URLDecoder.decode(url.getPath()));
+            try {
+				resourceFile = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
         }
-        else {
+        
+        if(resourceFile == null) {
             InputStream is = Native.class.getResourceAsStream(resourceName);
             if (is == null) {
                 throw new Error("Can't obtain jnidispatch InputStream");

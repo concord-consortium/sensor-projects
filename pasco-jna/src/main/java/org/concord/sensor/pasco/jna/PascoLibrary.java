@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -55,19 +56,19 @@ public class PascoLibrary {
     public void start()
     {
 		// TODO see if this returns negative or some form of error message
-    	int ret = jnaLib.PasStart(handle);
+    	jnaLib.PasStart(handle);
     }
 
     public void stop()
     {
 		// TODO see if this returns negative or some form of error message
-    	int ret = jnaLib.PasStop(handle);
+    	jnaLib.PasStop(handle);
     }
     
     public void delete()
     {
 		// TODO see if this returns negative or some form of error message
-    	int ret = jnaLib.PasDelete(handle);
+    	jnaLib.PasDelete(handle);
     }
     
 	public PascoDevice [] getDevices() throws PascoException
@@ -113,10 +114,14 @@ public class PascoLibrary {
 
 		File resourceFile = null;
 		if (url.getProtocol().toLowerCase().equals("file")) {
-			// NOTE: use older API for 1.3 compatibility
-			resourceFile = new File(URLDecoder.decode(url.getPath()));
+			try {
+				resourceFile = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
-		else {
+		
+		if(resourceFile == null) {
 			InputStream is = PascoLibrary.class.getResourceAsStream(resourcePath);
 			if (is == null) {
 				throw new Error("Can't obtain resource InputStream, resource: " + resourcePath);

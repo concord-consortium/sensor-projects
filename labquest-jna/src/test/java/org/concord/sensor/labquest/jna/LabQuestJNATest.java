@@ -5,15 +5,9 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.sun.jna.Native;
-import com.sun.jna.Pointer;
 
 public class LabQuestJNATest {
-	private static LabQuestLibrary labQuestLib;
-	
-	private static NGIOLibrary ngio;
-	private static Pointer hLibrary;
-	private static Pointer hDevice;
-
+	private static LabQuestLibrary labQuestLib;	
 	private static LabQuest labQuest;
 
 	@Test
@@ -181,7 +175,7 @@ public class LabQuestJNATest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			int numMeasurements = labQuest.readRawMeasurementsMotion(
+			labQuest.readRawMeasurementsMotion(
 					NGIOSourceCmds.CHANNEL_ID_DIGITAL1, pMeasurementsBuf,
 					pTimestampsBuf, pMeasurementsBuf.length);
 		}

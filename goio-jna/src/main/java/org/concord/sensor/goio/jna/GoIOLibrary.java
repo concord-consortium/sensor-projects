@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -42,7 +43,6 @@ public class GoIOLibrary
 
 	protected GoIOJNALibrary goIOLibrary;
 
-	@SuppressWarnings("unchecked")
 	public boolean initLibrary()
 	{
 		File nativeLibFile = getNativeLibraryFromJar();
@@ -63,7 +63,7 @@ public class GoIOLibrary
 
 		
 		
-		Map options = new HashMap();
+		Map<String, Object> options = new HashMap<String, Object>();
 		options.put(Library.OPTION_FUNCTION_MAPPER, functMapper);
 		options.put(Library.OPTION_STRUCTURE_ALIGNMENT, Structure.ALIGN_NONE);
 		goIOLibrary = (GoIOJNALibrary) Native.loadLibrary(nativeLibPath, 
@@ -292,9 +292,15 @@ public class GoIOLibrary
         File lib = null;
         if (url.getProtocol().toLowerCase().equals("file")) {
             // NOTE: use older API for 1.3 compatibility
-            lib = new File(URLDecoder.decode(url.getPath()));
+            try {
+				lib = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
-        else {
+        
+        if(lib == null) {
             InputStream is = Native.class.getResourceAsStream(resourceName);
             if (is == null) {
                 throw new Error("Can't obtain jnidispatch InputStream");

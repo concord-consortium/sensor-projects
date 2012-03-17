@@ -2,7 +2,6 @@ package org.concord.sensor.pasco;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import org.concord.sensor.pasco.datasheet.ByteBufferStreamReversed;
 import org.concord.sensor.pasco.datasheet.PasportSensorDataSheet;
@@ -15,13 +14,12 @@ import org.concord.sensor.pasco.jna.PascoNoSensorAttachedException;
 
 
 public class TestPascoLibrary2 {
-	private static final Logger logger = Logger.getLogger(TestPascoLibrary2.class.getCanonicalName());
-
 	/**
 	 * @param args
 	 * @throws IOException 
 	 * @throws PascoException 
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws InterruptedException, IOException, PascoException {
 		System.out.println( "Test Pasco USB sensor lib" );
 		
@@ -284,6 +282,7 @@ public class TestPascoLibrary2 {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void dumpBuffer (byte[] pvBuf, int lLen)
 	{
 	    byte[] pbBuf = pvBuf;

@@ -15,7 +15,6 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		boolean sweet = false;
-		boolean isthere = false;
 		GoIOLibrary goio;
 		
 		goio = new GoIOLibrary();

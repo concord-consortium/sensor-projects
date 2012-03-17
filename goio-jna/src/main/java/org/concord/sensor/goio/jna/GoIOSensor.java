@@ -15,6 +15,7 @@ public class GoIOSensor {
 	char []deviceName = new char[GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME];
 	int productId;
 	Pointer hDevice;
+	@SuppressWarnings("unused")
 	private int openedSensorId;
 	
 	public GoIOSensor(GoIOJNALibrary goIOLibrary){

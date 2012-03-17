@@ -21,6 +21,7 @@ public class SingleThreadDelegator <T> extends Thread
 	{
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T instanciate(T instance, Class<T> interface_,
 			Class<? extends Throwable>throwableWrapper, Method terminateMethod){
 		this.instance = instance;		

@@ -8,7 +8,6 @@
 
   <groupId>org.concord.sensor</groupId>
   <artifactId>sensor-vernier</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Sensor Vernier</name>
@@ -18,7 +17,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.concord</groupId>
+      <groupId>org.concord.sensor</groupId>
       <artifactId>sensor</artifactId>
       <scope>compile</scope>
     </dependency>

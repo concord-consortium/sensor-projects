@@ -83,7 +83,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.concord</groupId>
+        <groupId>org.concord.sensor</groupId>
         <artifactId>sensor</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>

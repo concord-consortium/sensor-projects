@@ -6,9 +6,8 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   
-  <groupId>org.concord</groupId>
+  <groupId>org.concord.sensor</groupId>
   <artifactId>ftdi-serial-wrapper</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>FtdiSerialWrapper</name>

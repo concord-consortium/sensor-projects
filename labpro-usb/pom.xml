@@ -8,7 +8,6 @@
   
   <groupId>org.concord.sensor</groupId>
   <artifactId>labpro-usb</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>LabPro USB</name>

@@ -131,7 +131,7 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 
 		// read the sensor ids of each of the ports to see what is
 		// attached.  
-		ArrayList sensorConfigList = new ArrayList();
+		ArrayList<VernierSensor> sensorConfigList = new ArrayList<VernierSensor>();
 
 		try {
 			for(byte i=1; i<7; i++){
@@ -274,7 +274,6 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 
 			assert(minAvailable != Integer.MAX_VALUE);
 
-			int mask = 0;
 			int numMeasurements = 0;
 			for (int sensorIndex = 0; sensorIndex<sensors.length; sensorIndex++){
 				VernierSensor sensorConfig = (VernierSensor) sensors[sensorIndex];

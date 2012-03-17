@@ -60,8 +60,8 @@ public class JavaDeviceFactory extends JavaDeviceService
 	private static final Logger logger = Logger.getLogger(JavaDeviceFactory.class.getCanonicalName());
 	Ticker ticker = null;
 		
-	Hashtable deviceTable = new Hashtable();
-	Hashtable configTable = new Hashtable();
+	Hashtable<String, SensorDevice> deviceTable = new Hashtable<String, SensorDevice>();
+	Hashtable<SensorDevice, String> configTable = new Hashtable<SensorDevice, String>();
 	
 	/*
 	 *
@@ -175,7 +175,7 @@ public class JavaDeviceFactory extends JavaDeviceService
 		
 		try {
 			System.out.println("Loading sensor device: " + className);
-			Class sensDeviceClass = 
+			Class<?> sensDeviceClass = 
 				getClass().getClassLoader().loadClass(className);
 
 			device = (SensorDevice) sensDeviceClass.newInstance();

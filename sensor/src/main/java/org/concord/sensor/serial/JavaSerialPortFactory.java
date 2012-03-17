@@ -23,9 +23,6 @@
 
 package org.concord.sensor.serial;
 
-import org.concord.sensor.device.impl.JavaDeviceFactory;
-
-
 public class JavaSerialPortFactory
 	implements SerialPortFactory
 {
@@ -41,7 +38,7 @@ public class JavaSerialPortFactory
 		}
 		
 		try {		    
-			Class portClass = getClass().getClassLoader().loadClass(portClassName);
+			Class<?> portClass = getClass().getClassLoader().loadClass(portClassName);
 			
 			if(!portClass.isInstance(oldPort)){
 				return(SensorSerialPort) portClass.newInstance();

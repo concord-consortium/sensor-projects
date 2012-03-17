@@ -34,7 +34,9 @@ package org.concord.sensor.serial;
 
 public class SerialException extends Exception
 {
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * This is reimplemented here instead of using the cause
      * support in Exception because waba doesn't have that cause
      * support.

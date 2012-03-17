@@ -71,7 +71,7 @@ public class SensorSerialPortRXTX
             commDriver.initialize();
         }
         
-        Enumeration ports = CommPortIdentifier.getPortIdentifiers();
+        Enumeration<?> ports = CommPortIdentifier.getPortIdentifiers();
         while(ports.hasMoreElements()) {
             CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
             String portName = portID.getName();
@@ -95,7 +95,7 @@ public class SensorSerialPortRXTX
 			commDriver = new RXTXCommDriver();
 			commDriver.initialize();
 
-			Enumeration ports = CommPortIdentifier.getPortIdentifiers();
+			Enumeration<?> ports = CommPortIdentifier.getPortIdentifiers();
 			while(ports.hasMoreElements()) {
 				CommPortIdentifier portID = (CommPortIdentifier)ports.nextElement();
 				System.out.println("RXTX: found port: " + portID.getName());

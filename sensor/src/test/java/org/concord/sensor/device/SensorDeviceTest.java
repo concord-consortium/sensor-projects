@@ -169,9 +169,10 @@ public abstract class SensorDeviceTest {
 		assertNotNull("Non null experiment config", experimentConfig);
 		
 		assertTrue("Correctly found temperature sensor", experimentConfig.isValid());
+	
+		device.getCurrentConfig();
 		
-		ExperimentConfig currentConfig = device.getCurrentConfig();
-
+		//		ExperimentConfig currentConfig = device.getCurrentConfig();
 
 		// This part will fail on some devices because calling getCurrentConfig will
 		// partially reset the configured sensors, so that starting it now will 

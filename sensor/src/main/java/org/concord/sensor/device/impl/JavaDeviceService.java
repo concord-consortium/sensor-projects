@@ -33,7 +33,7 @@ public abstract class JavaDeviceService implements DeviceService {
 	    		
 	        
 	    try {           
-	        Class portClass = getClass().getClassLoader().loadClass(portClassName);
+	        Class<?> portClass = getClass().getClassLoader().loadClass(portClassName);
 	
 	        if(!portClass.isInstance(oldPort)){
 	            return(SensorSerialPort) portClass.newInstance();

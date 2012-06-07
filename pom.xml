@@ -43,6 +43,7 @@
     <module>ftdi-serial-wrapper</module>
     <module>goio-jna</module>
     <module>labpro-usb</module>
+    <module>labpro-usb-jna</module>
     <module>labquest-jna</module>
     <module>pasco-jna</module>
     <module>sensor</module>

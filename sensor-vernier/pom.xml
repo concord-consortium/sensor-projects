@@ -21,9 +21,17 @@
       <artifactId>sensor</artifactId>
       <scope>compile</scope>
     </dependency>
+<!--     
     <dependency>
       <groupId>org.concord.sensor</groupId>
       <artifactId>labpro-usb</artifactId>
+      <scope>compile</scope>
+      <optional/>
+    </dependency>
+-->
+    <dependency>
+      <groupId>org.concord.sensor</groupId>
+      <artifactId>labpro-usb-jna</artifactId>
       <scope>compile</scope>
       <optional/>
     </dependency>

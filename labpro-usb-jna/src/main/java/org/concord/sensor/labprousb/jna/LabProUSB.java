@@ -26,12 +26,22 @@ public class LabProUSB {
 		return lpusb.getAvailableBytes();
 	}
 
-	public short readBytes(LongByReference numBytes, byte[] buffer) {
-		return lpusb.readBytes(numBytes, buffer);
+	public long readBytes(long numBytes, byte[] buffer) {
+		LongByReference longRef = new LongByReference(numBytes);
+		short ret = lpusb.readBytes(longRef, buffer);
+		if (ret >= 0) {
+			return longRef.getValue();
+		}
+		return ret;
 	}
 
-	public short writeBytes(ShortByReference numBytes, byte[] buffer) {
-		return lpusb.writeBytes(numBytes, buffer);
+	public short writeBytes(short numBytes, byte[] buffer) {
+		ShortByReference shortRef = new ShortByReference(numBytes);
+		short ret = lpusb.writeBytes(shortRef, buffer);
+		if (ret >= 0) {
+			return shortRef.getValue();
+		}
+		return ret;
 	}
 
 	public short clearInputs(short ignored) {

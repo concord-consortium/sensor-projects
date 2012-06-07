@@ -1,13 +1,11 @@
 package org.concord.sensor.vernier.labpro;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 import org.concord.sensor.impl.Vector;
-import org.concord.sensor.labprousb.LabProUSB;
+import org.concord.sensor.labprousb.jna.LabProUSB;
+import org.concord.sensor.labprousb.jna.LabProUSBException;
+import org.concord.sensor.labprousb.jna.LabProUSBLibrary;
 import org.concord.sensor.serial.SensorSerialPort;
 import org.concord.sensor.serial.SerialException;
 
@@ -15,22 +13,28 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 {
 	byte [] tmpBuffer = new byte [2048];
 
+	private static LabProUSB lpusb;
+	
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			public void run() {
-				System.err.println("Closing LabProUSB.  Its open state is: " +
-						LabProUSB.isOpen());
-				
-				// Make sure the labpro is closed
-				LabProUSB.close();
+				if (lpusb != null) {
+					System.err.println("Closing LabProUSB.  Its open state is: " + lpusb.isOpen());
+					
+					// Make sure the labpro is closed
+					lpusb.close();
+				}
 			}
 		});
 	}
 	
+	public SensorSerialPortLabProUSB() {
+		
+	}
 	
 	public void close() throws SerialException 
 	{
-		LabProUSB.close();
+		lpusb.close();
 	}
 
 	public void disableReceiveTimeout() 
@@ -75,75 +79,29 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 
 	public boolean isOpen() 
 	{
-		short open = LabProUSB.isOpen();
+		short open = lpusb.isOpen();
 		return open == 1;
 	}
 
 	public void open(String portName) throws SerialException 
-	{
-		boolean hasNewVernierDeviceDriver = false;
-		if(System.getProperty("os.name").toLowerCase().startsWith("windows")){
-			// check if the new labpro device driver is installed
-			String windir = System.getenv("windir");
-			if(windir != null){
-				File newLabProFile = new File(windir + "\\system32\\LabProCo.dll");
-				if(newLabProFile.exists()){
-					// this computer has the new device driver.
-					hasNewVernierDeviceDriver = true;
-					System.out.println("Found new vernier device driver");
-				}
-			}
-		}
-				
+	{	
 		try {
-			if(hasNewVernierDeviceDriver){
-				System.loadLibrary("LabProUSB");
-			} else {
-				// extract the old driver and do a System.load with that.
-				URL labProDLL2Resource = LabProUSB.class.getResource("LabProUSB-2.dll");
-				try {
-					File tempFile = File.createTempFile("testFile", null);
-					File tempDir = tempFile.getParentFile();					
-					tempFile.delete();
-					File ccSensorLabProDir = new File(tempDir, "cc-sens-labpro");
-					if(!ccSensorLabProDir.isDirectory()){
-						ccSensorLabProDir.mkdirs();
-					} 
-					File dllFile = new File(ccSensorLabProDir, "LabProUSB.dll");
-					if(dllFile.exists()){
-						dllFile.delete();
-					}
-					dllFile.createNewFile();
-					FileOutputStream fileOutputStream = new FileOutputStream(dllFile);
-					InputStream openStream = labProDLL2Resource.openStream();
-					byte [] buffer= new byte[1024];
-					while(true){
-						int numRead = openStream.read(buffer);
-						if(numRead < 0){
-							break;
-						}
-						fileOutputStream.write(buffer, 0, numRead);						
-					}
-					fileOutputStream.close();
-					System.load(dllFile.getAbsolutePath());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			System.loadLibrary("labprousb_wrapper");			
+			LabProUSBLibrary lplib = new LabProUSBLibrary();
+	    	lplib.init();
+	    	lpusb = lplib.openDevice();
+		} catch (LabProUSBException e) {
+			e.printStackTrace();
+			throw new SerialException("Unable to open device");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new SerialException("Unable to initialize native library");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			throw new SerialException("Unable to initialize native library (interrupted)");
 		} catch (UnsatisfiedLinkError e){
 			e.printStackTrace();
 			throw new SerialException("Can't load labprousb library", e);
 		}
-		
-		short open = LabProUSB.open();
-		if(open < 0){
-			// not opened 
-			throw new SerialException("LabPro USB driver returned " + open + " on open call");
-		}
-		
-		return;
 	}
 
 	/**
@@ -157,9 +115,9 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	    while(size != -1 && size < len &&
 	            (System.currentTimeMillis() - startTime) < timeout){
 	    	
-	    	int availableBytes = LabProUSB.getAvailableBytes();
+	    	long availableBytes = lpusb.getAvailableBytes();
 	    	if(availableBytes > 0){
-	    		int numRead = LabProUSB.readBytes(availableBytes, tmpBuffer);
+	    		int numRead = (int) lpusb.readBytes(availableBytes, tmpBuffer);
 		        if(numRead < 0) {	      
 		            System.err.println();
 		            System.err.println("error in readBytes: " + numRead);
@@ -213,7 +171,7 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 			bufToWrite = tmpBuffer;
 		}
 		
-		short numWritten = LabProUSB.writeBytes((short)length, bufToWrite);
+		short numWritten = lpusb.writeBytes((short)length, bufToWrite);
 		if(numWritten < length){			
 			throw new SerialException("Didn't write all bytes. Wrote: " + numWritten +
 					" out of: " + length);

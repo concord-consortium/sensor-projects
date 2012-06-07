@@ -3,6 +3,7 @@ package org.concord.sensor.labprousb.jna;
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sun.jna.Platform;

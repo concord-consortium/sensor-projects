@@ -25,6 +25,7 @@ public class LabProUSBTest {
 	}
 	
 	@Test
+  @Ignore
 	public void testOpenDevice() throws Exception {
 			LabProUSBLibrary lib = new LabProUSBLibrary();
 			lib.init();

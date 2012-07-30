@@ -33,17 +33,17 @@
       <groupId>org.concord.sensor</groupId>
       <artifactId>labpro-usb-jna</artifactId>
       <scope>compile</scope>
-      <optional/>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.concord.sensor</groupId>
       <artifactId>labquest-jna</artifactId>
-      <optional/>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.concord.sensor</groupId>
       <artifactId>goio-jna</artifactId>
-      <optional />
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.concord</groupId>

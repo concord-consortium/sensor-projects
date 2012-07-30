@@ -65,7 +65,7 @@ public class LabProUSBLibrary {
 
 	public LabProUSB openDevice() throws LabProUSBException
 	{
-		LabProUSB labPro = new LabProUSB(lpusb);
+		LabProUSB labPro = new LabProUSBImpl(lpusb);
 
 		SingleThreadDelegator<LabProUSB> singleThreadDelegator = 
 			new SingleThreadDelegator<LabProUSB>();
@@ -83,12 +83,12 @@ public class LabProUSBLibrary {
 			e.printStackTrace();
 		}
 		
-		LabProUSB labQuest2 = singleThreadDelegator.instanciate(labPro, LabProUSB.class, 
+		LabProUSB labPro2 = singleThreadDelegator.instanciate(labPro, LabProUSB.class, 
 				LabProUSBException.class, closeMethod);
 
-		labQuest2.open();
+		labPro2.open();
 		
-		return labQuest2;		
+		return labPro2;		
 	}
 	
     static File getNativeLibraryFromJar() throws IOException, InterruptedException {

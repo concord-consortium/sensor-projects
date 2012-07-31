@@ -7,7 +7,7 @@ public class LabProSensorDeviceTest extends SensorDeviceTest {
 	@Override
 	public void setup() {
 		device = new LabProSensorDevice();
-		openString = "/dev/tty.KeySerial1";
+		openString = "usb";
 		msToWaitBeforeReadingData = 1000;
 	}
 

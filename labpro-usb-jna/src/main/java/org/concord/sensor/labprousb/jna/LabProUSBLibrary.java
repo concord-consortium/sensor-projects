@@ -94,6 +94,8 @@ public class LabProUSBLibrary {
     static File getNativeLibraryFromJar() throws IOException, InterruptedException {
     	if(Platform.isWindows()){
     		return getNativeLibraryFromJarWindows();
+    	} else if (Platform.isMac()){
+    		return getNativeLibraryFromJarMac(); 
     	} else {
     		return null;
     	}
@@ -118,6 +120,12 @@ public class LabProUSBLibrary {
         exec.waitFor();
 
         return extractResource(labProUSBDll, directory);        
+    }
+
+    private static File getNativeLibraryFromJarMac() throws IOException {
+		String resourceName = getNativeLibraryResourcePath() + "/LabProUSB.dylib";
+		File directory = createTmpDirectory();
+		return extractResource(resourceName, directory);
     }
 
     static File createTmpDirectory() throws IOException {
@@ -181,7 +189,34 @@ public class LabProUSBLibrary {
 	}
 
     private static String getNativeLibraryResourcePath() {
-        return "/org/concord/sensor/labprousb/jna";
+        String arch = System.getProperty("os.arch").toLowerCase();
+        String osPrefix;
+        if (Platform.isWindows()) {
+            osPrefix = "win32_" + arch;
+        }
+        else if (Platform.isMac()) {
+            osPrefix = "darwin";
+        }
+        else if (Platform.isLinux()) {
+            if ("x86".equals(arch)) {
+                arch = "i386";
+            }
+            else if ("x86_64".equals(arch)) {
+                arch = "amd64";
+            }
+            osPrefix = "linux_" + arch;
+        }
+        else if (Platform.isSolaris()) {
+            osPrefix = "sunos_" + arch;
+        }
+        else {
+            osPrefix = System.getProperty("os.name").toLowerCase();
+            int space = osPrefix.indexOf(" ");
+            if (space != -1) {
+                osPrefix = osPrefix.substring(0, space);
+            }
+            osPrefix += "-" + arch;
+        }
+        return "/org/concord/sensor/labprousb/jna/" + osPrefix;
     }
-
 }

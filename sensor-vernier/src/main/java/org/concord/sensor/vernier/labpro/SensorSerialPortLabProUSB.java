@@ -35,6 +35,7 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	public void close() throws SerialException 
 	{
 		lpusb.close();
+		lpusb = null;
 	}
 
 	public void disableReceiveTimeout() 
@@ -79,6 +80,9 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 
 	public boolean isOpen() 
 	{
+		if(lpusb == null){
+			return false;
+		}
 		short open = lpusb.isOpen();
 		return open == 1;
 	}

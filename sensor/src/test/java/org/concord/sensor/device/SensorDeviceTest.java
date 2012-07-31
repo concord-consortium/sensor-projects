@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import junit.framework.Assert;
 
 import org.concord.sensor.ExperimentConfig;
-import org.concord.sensor.ExperimentRequest;
 import org.concord.sensor.SensorConfig;
 import org.concord.sensor.SensorRequest;
 import org.concord.sensor.device.impl.JavaDeviceService;
@@ -195,6 +194,21 @@ public abstract class SensorDeviceTest {
 		device.stop(true);		
 	}
 	
+	/**
+	 *  The API supports calling stop multiple times. This is makes it simple so users
+	 *  of the API don't need to keep track of the device state.
+	 */
+	@Test
+	public void testStartStopAndStop(){
+		prepareForTemperatureCollection();
+
+		assertTrue("Device started correctly", device.start());
+
+		device.stop(true);
+
+		// typically the second time the device is stopped wasRunning should be false
+		device.stop(false);
+	}
 
 	@Test
 	public void testThreadedCollection() throws Throwable{

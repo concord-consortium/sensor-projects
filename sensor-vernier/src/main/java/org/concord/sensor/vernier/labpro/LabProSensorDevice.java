@@ -378,15 +378,19 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	public void stop(boolean wasRunning)
 	{
 		try {
+			if(!port.isOpen()){
+				return;
+			}
+
 			// send a wakeup just in case
 			protocol.wakeUp();
 			
 			// send the reset
 			protocol.reset();
 						
-			// The port should be closed if it opens quickly, that way
-			// if the program crashes or another one is opened then will
-			// be less of a chance of conflict.
+			// Close the port if it can open quickly again.
+			// This way if the program crashes or second program is opened then there will
+			// be less of a chance of port conflict.
 			if(port.isOpenFast()){
 				port.close();
 			}

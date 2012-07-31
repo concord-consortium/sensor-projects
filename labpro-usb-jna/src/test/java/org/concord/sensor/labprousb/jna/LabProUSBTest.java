@@ -31,7 +31,7 @@ public class LabProUSBTest {
 			LabProUSBLibrary lib = new LabProUSBLibrary();
 			lib.init();
 		try {
-			LabProUSB lpusb = lib.openDevice();
+			lib.openDevice();
 			Assert.assertTrue("openDevice should throw an exception when the device isn't present!", false);
 		} catch (LabProUSBException e) {
 			

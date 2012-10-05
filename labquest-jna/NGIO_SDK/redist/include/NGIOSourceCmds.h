@@ -143,6 +143,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 /***************************************************************************************************/
 //
+// NGIO_DEVTYPE_LABQUEST_BUILTIN_ACCELEROMETER devices use the following channels:
+
+#define NGIO_CHANNEL_ID_BUILTIN_ACC_X 1
+#define NGIO_CHANNEL_ID_BUILTIN_ACC_Y 2
+#define NGIO_CHANNEL_ID_BUILTIN_ACC_Z 3
+
+#define NGIO_MAX_NUM_BUILTIN_ACC_CHANNELS 4
+
+#define NGIO_CHANNEL_ID_MASK_BUILTIN_ACC_X 2
+#define NGIO_CHANNEL_ID_MASK_BUILTIN_ACC_Y 4
+#define NGIO_CHANNEL_ID_MASK_BUILTIN_ACC_Z 8
+
+// NGIO_DEVTYPE_LABQUEST_BUILTIN_ACCELEROMETER devices support the following commands:
+//NGIO_CMD_ID_GET_STATUS
+//NGIO_CMD_ID_START_MEASUREMENTS
+//NGIO_CMD_ID_STOP_MEASUREMENTS
+//NGIO_CMD_ID_SET_MEASUREMENT_PERIOD 
+//NGIO_CMD_ID_GET_MEASUREMENT_PERIOD 
+//NGIO_CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK 
+//NGIO_CMD_ID_GET_SENSOR_CHANNEL_ENABLE_MASK 
+
+//
+/***************************************************************************************************/
+//
+// NGIO_DEVTYPE_LABQUEST_BUILTIN_LIGHT_SENSOR devices use the following channels:
+
+#define NGIO_CHANNEL_ID_BUILTIN_LUX 1
+
+// NGIO_DEVTYPE_LABQUEST_BUILTIN_LIGHT_SENSOR devices support the following commands:
+//NGIO_CMD_ID_GET_STATUS
+//NGIO_CMD_ID_START_MEASUREMENTS
+//NGIO_CMD_ID_STOP_MEASUREMENTS
+//NGIO_CMD_ID_SET_MEASUREMENT_PERIOD 
+//NGIO_CMD_ID_GET_MEASUREMENT_PERIOD 
+
+//
+/***************************************************************************************************/
+//
 
 #if defined (TARGET_OS_WIN)
 #pragma pack(push)
@@ -197,6 +235,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define NGIO_STATUS_ERROR_AUDIO_STREAM_FAILURE 0x3D
 #define NGIO_STATUS_ERROR_CANNOT_REALLOCATE_FRAME_BUFFERS 0x3E
 #define NGIO_STATUS_ERROR_COMMUNICATION 0x41
+#define NGIO_STATUS_INTERNAL_ERROR3 0x48
+#define NGIO_STATUS_INTERNAL_ERROR4 0x49
 
 //If SendCmdAndGetResponse() returns kResponse_Error and (1 == *pnRespBytes), then *pRespBuf contains
 //NGIODefaultCmdResponse, even if a different response structure is defined for the command.
@@ -207,6 +247,15 @@ struct tagNGIODefaultCmdResponse
 	unsigned char status;//NGIO_STATUS_...
 } _XPACK1;
 typedef struct tagNGIODefaultCmdResponse NGIODefaultCmdResponse;
+
+struct tagNGIO_LE_DWORD		//Little endian
+{
+	unsigned char lsbyteLsword;
+	unsigned char msbyteLsword;
+	unsigned char lsbyteMsword;
+	unsigned char msbyteMsword;
+} _XPACK1; 
+typedef struct tagNGIO_LE_DWORD NGIO_LE_DWORD;
 
 /***************************************************************************************************/
 //NGIO_CMD_ID_SET_MEASUREMENT_PERIOD:
@@ -332,18 +381,25 @@ typedef struct tagNGIO_DAQ_channelCalibrationParams NGIO_DAQ_channelCalibrationP
 
 struct tagNGIO_DAQ_CalibrationParams
 {
+	//channelParams[0] corr. to NGIO_CHANNEL_ID_ANALOG1, channelParams[1] corr. to NGIO_CHANNEL_ID_ANALOG2, etc.
 	NGIO_DAQ_channelCalibrationParams channelParams[NGIO_CHANNEL_ID_DIGITAL2 - NGIO_CHANNEL_ID_ANALOG1 + 1];
 } _XPACK1;
 typedef struct tagNGIO_DAQ_CalibrationParams NGIO_DAQ_CalibrationParams;
 
+#define NGIO_CALIB_VERSION_FIRST 1
+#define NGIO_CALIB_VERSION_10V 2
+#define NGIO_CALIB_VERSION_REF_OHMS 3
+
 struct tagNGIO_NVMEM_CHANNEL_ID1_rec
 {
-	unsigned char version;	//First valid version is 1 .
+	unsigned char version;	//NGIO_CALIB_VERSION_...
 	unsigned char spare1;
 	unsigned char spare2;
 	unsigned char spare3;
 	NGIOSerialNumber serialNumber;
 	NGIO_DAQ_CalibrationParams calibrationParams;
+	NGIO_DAQ_CalibrationParams calibrationParams2;	//used for +/- 10 volt calibration.
+	NGIO_DAQ_CalibrationParams calibrationParams3;	//used to calibrate resistive sensors, eg. stainless steel temperature.
 } _XPACK1;
 typedef struct tagNGIO_NVMEM_CHANNEL_ID1_rec NGIO_NVMEM_CHANNEL_ID1_rec;
 //Use offsetof(NGIO_NVMEM_CHANNEL_ID1_rec, field) to calculate the address of field in NGIO_NVMEM_CHANNEL_ID1_rec.

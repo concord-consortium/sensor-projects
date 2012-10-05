@@ -138,7 +138,7 @@ NGIO_DEVICE_HANDLE CNGIO_MeasureDoc::OpenDevice(LPCSTR pDeviceName)
 		double period = 1.0;
 		gtype_uint32 deviceType = 0;
 		NGIO_GetDeviceTypeFromDeviceName(pDeviceName, &deviceType);
-		if (NGIO_DEVTYPE_LABQUEST == deviceType)
+		if ((NGIO_DEVTYPE_LABQUEST == deviceType) || (NGIO_DEVTYPE_LABQUEST2 == deviceType))
 			NGIO_Device_AcquireExclusiveOwnership(m_pDevice, NGIO_GRAB_DAQ_TIMEOUT);
 		else if (NGIO_DEVTYPE_LABQUEST_MINI == deviceType)
 		{

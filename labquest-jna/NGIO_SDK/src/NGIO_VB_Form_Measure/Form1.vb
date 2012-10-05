@@ -275,7 +275,33 @@ Public Class Form1
 			NGIO.CloseDeviceListSnapshot(hList)
 		End If
 
-		NGIO.SearchForDevices(NGIO_lib_handle, NGIO.DEVTYPE_LABQUEST_MINI, NGIO.COMM_TRANSPORT_USB, IntPtr.Zero, signature)
+        NGIO.SearchForDevices(NGIO_lib_handle, NGIO.DEVTYPE_LABQUEST2, NGIO.COMM_TRANSPORT_USB, IntPtr.Zero, signature)
+
+        hList = NGIO.OpenDeviceListSnapshot(NGIO_lib_handle, NGIO.DEVTYPE_LABQUEST2, numDevices, signature)
+        If (hList <> IntPtr.Zero) Then
+            N = 0
+            Do While N < numDevices
+                status = NGIO.DeviceListSnapshot_GetNthEntry(hList, N, deviceName, NGIO.MAX_SIZE_DEVICE_NAME, status_mask)
+                If 0 = status Then
+                    deviceName2 = deviceName.ToString()
+                    mnu = New ToolStripMenuItem()
+                    mnu.Text = deviceName2
+                    If 0 = String.Compare(openDeviceName2, deviceName2) Then
+                        mnu.Checked() = True
+                    End If
+                    AddDeviceNHandler(mnu, numDevicesAdded)
+                    numDevicesAdded = numDevicesAdded + 1
+                    Me.DevicesToolStripMenuItem.DropDownItems.Add(mnu)
+                Else
+                    Exit Do
+                End If
+                N = N + 1
+            Loop
+
+            NGIO.CloseDeviceListSnapshot(hList)
+        End If
+
+        NGIO.SearchForDevices(NGIO_lib_handle, NGIO.DEVTYPE_LABQUEST_MINI, NGIO.COMM_TRANSPORT_USB, IntPtr.Zero, signature)
 
 		hList = NGIO.OpenDeviceListSnapshot(NGIO_lib_handle, NGIO.DEVTYPE_LABQUEST_MINI, numDevices, signature)
 		If (hList <> IntPtr.Zero) Then
@@ -360,26 +386,26 @@ Public Class Form1
 	End Sub
 
 	Private Sub OpenDevice(ByVal deviceName As String)
-		If IntPtr.Zero <> NGIO_device_handle Then
-			CloseDevice()
-		End If
+        If IntPtr.Zero <> NGIO_device_handle Then
+            CloseDevice()
+        End If
 		NGIO_device_handle = NGIO.Device_Open(NGIO_lib_handle, deviceName, 0)
 		If IntPtr.Zero <> NGIO_device_handle Then
 			NGIO.GetDeviceTypeFromDeviceName(deviceName, openDeviceType)
-			If NGIO.DEVTYPE_LABQUEST = openDeviceType Then
-				Dim oldCursor As Cursor = Cursor
-				Cursor = Cursors.WaitCursor
-				Dim status As Integer = NGIO.Device_AcquireExclusiveOwnership(NGIO_device_handle, NGIO.GRAB_DAQ_TIMEOUT_MS)
-				If status <> 0 Then
-					CloseDevice()
-				End If
-				Cursor = oldCursor
-			ElseIf NGIO.DEVTYPE_LABQUEST_MINI = openDeviceType Then
-				Dim ledParams As NGIOSetLedStateParams = New NGIOSetLedStateParams
-				ledParams.color = NGIOSetLedStateParams.LED_COLOR_GREEN
-				ledParams.brightness = NGIOSetLedStateParams.LED_BRIGHTNESS_MAX
-				NGIO.Device_SendCmdAndGetResponse2(NGIO_device_handle, NGIO_ParmBlk.CMD_ID_SET_LED_STATE, ledParams, NGIO.TIMEOUT_MS_DEFAULT)
-			End If
+            If (NGIO.DEVTYPE_LABQUEST = openDeviceType) Or (NGIO.DEVTYPE_LABQUEST2 = openDeviceType) Then
+                Dim oldCursor As Cursor = Cursor
+                Cursor = Cursors.WaitCursor
+                Dim status As Integer = NGIO.Device_AcquireExclusiveOwnership(NGIO_device_handle, NGIO.GRAB_DAQ_TIMEOUT_MS)
+                If status <> 0 Then
+                    CloseDevice()
+                End If
+                Cursor = oldCursor
+            ElseIf NGIO.DEVTYPE_LABQUEST_MINI = openDeviceType Then
+                Dim ledParams As NGIOSetLedStateParams = New NGIOSetLedStateParams
+                ledParams.color = NGIOSetLedStateParams.LED_COLOR_GREEN
+                ledParams.brightness = NGIOSetLedStateParams.LED_BRIGHTNESS_MAX
+                NGIO.Device_SendCmdAndGetResponse2(NGIO_device_handle, NGIO_ParmBlk.CMD_ID_SET_LED_STATE, ledParams, NGIO.TIMEOUT_MS_DEFAULT)
+            End If
 		End If
 		If IntPtr.Zero <> NGIO_device_handle Then
 			'Set desired sampling period.
@@ -990,11 +1016,11 @@ Public Class Form1
 			'Handle audio device case.
 			listItem = ChannelsToolStripMenuItem.DropDownItems(ChannelsToolStripMenuItem.DropDownItems.Count() - 1)
 			menuItem = CType(listItem, ToolStripMenuItem)
-			If NGIO.DEVTYPE_LABQUEST = openDeviceType Then
-				menuItem.Enabled = True
-			Else
-				menuItem.Enabled = False
-			End If
+            If (NGIO.DEVTYPE_LABQUEST = openDeviceType) Or (NGIO.DEVTYPE_LABQUEST2 = openDeviceType) Then
+                menuItem.Enabled = True
+            Else
+                menuItem.Enabled = False
+            End If
 		End If
 
 		'Clear all the checks.

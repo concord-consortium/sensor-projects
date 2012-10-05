@@ -43,7 +43,7 @@ Partial Class AboutDlg
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(184, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "NGIO_Measure (VB.NET) version 1.1"
+        Me.Label1.Text = "NGIO_Measure (VB.NET) version 1.2"
         '
         'NGIO_lib_version_label
         '

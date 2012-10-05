@@ -16,7 +16,7 @@ libNGIO64.dylib is 64-bit only, Intel only, for Mac OS 10.5 and higher.
 
 libNGIO has been ported to Linux, but it is packaged separately.
 
-Run LabQuestLabProJungoDeviceDriver921.exe to install the Windows USB device drivers for the LabQuest and the LabQuest Mini.
+Run VernierInterfaceDrivers_100.exe to install the Windows USB device drivers for the LabQuest, LabQuest2, and the LabQuest Mini.
 
 ====================================================================================================================
 
@@ -86,6 +86,9 @@ For maximum simplicity and portability, we recommend that you just build your .N
 ====================================================================================================================
 
 Release notes:
+Version 1.95
+Support LabQuest2.
+
 Version 1.84
 64 bit version of NGIO lib is working on the Mac now(Mac OS 10.5 and higher).
 

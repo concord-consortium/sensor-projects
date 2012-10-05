@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 	g_hNGIOlib = NGIO_Init();
 	NGIO_GetDLLVersion(g_hNGIOlib, &majorVersion, &minorVersion);
 
-	printf("NGIO_DeviceCheck version 1.1 . \n");
+	printf("NGIO_DeviceCheck version 1.2 . \n");
 	sprintf(tmpstring, "NGIO_DeviceCheck is linked to NGIO library version %02d.%02d .\n", majorVersion, minorVersion);
 	printf(tmpstring);
 
@@ -99,6 +99,17 @@ int main(int argc, char* argv[])
 		if (0 != status)
 		{
 			//Couldn't find a LabQuest, so look for a LabQuest Mini.
+			deviceType = NGIO_DEVTYPE_LABQUEST2;
+			NGIO_SearchForDevices(g_hNGIOlib, deviceType, NGIO_COMM_TRANSPORT_USB, NULL, &sig);
+
+			hDeviceList = NGIO_OpenDeviceListSnapshot(g_hNGIOlib, deviceType, &numDevices, &sig);
+			status = NGIO_DeviceListSnapshot_GetNthEntry(hDeviceList, 0, deviceName, sizeof(deviceName), &mask);
+			NGIO_CloseDeviceListSnapshot(hDeviceList);
+		}
+
+		if (0 != status)
+		{
+			//Couldn't find a LabQuest, so look for a LabQuest Mini.
 			deviceType = NGIO_DEVTYPE_LABQUEST_MINI;
 			NGIO_SearchForDevices(g_hNGIOlib, deviceType, NGIO_COMM_TRANSPORT_USB, NULL, &sig);
 
@@ -109,13 +120,15 @@ int main(int argc, char* argv[])
 
 		if (0 != status)
 		{
-			printf("NGIO_DeviceCheck cannot find a LabQuest or a LabQuest Mini.\n");
+			printf("NGIO_DeviceCheck cannot find a LabQuest, LabQuest2, or a LabQuest Mini.\n");
 		}
 		else
 		{
 			char deviceDesc[50];
 			if (NGIO_DEVTYPE_LABQUEST == deviceType)
 				strcpy(deviceDesc, "LabQuest");
+			else if (NGIO_DEVTYPE_LABQUEST2 == deviceType)
+				strcpy(deviceDesc, "LabQuest2");
 			else
 				strcpy(deviceDesc, "LabQuest Mini");
 			g_hDevice = NGIO_Device_Open(g_hNGIOlib, deviceName, 0);
@@ -126,7 +139,7 @@ int main(int argc, char* argv[])
 
 			if (g_hDevice)
 			{
-				if (NGIO_DEVTYPE_LABQUEST == deviceType)
+				if ((NGIO_DEVTYPE_LABQUEST == deviceType) || (NGIO_DEVTYPE_LABQUEST2 == deviceType))
 				{
 					//Wrest control of the LabQuest data acquisition subsystem(the DAQ) away from the GUI app running
 					//down on the LabQuest.

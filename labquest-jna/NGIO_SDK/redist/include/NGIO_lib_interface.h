@@ -120,6 +120,10 @@ typedef void *NGIO_PTR;
 #define NGIO_DEVTYPE_DAISYCHAIN_TEST 10
 #define NGIO_DEVTYPE_LABQUEST_FUNC_GENERATOR 11
 #define NGIO_DEVTYPE_LABQUEST_MINI 12
+#define NGIO_DEVTYPE_MACGUFFIN 13
+#define NGIO_DEVTYPE_LABQUEST2 14
+#define NGIO_DEVTYPE_LABQUEST_BUILTIN_ACCELEROMETER 15
+#define NGIO_DEVTYPE_LABQUEST_BUILTIN_LIGHT_SENSOR 16
 
 //We are deprecating NGIO_DEVTYPE_LABPRO2. Use NGIO_DEVTYPE_LABQUEST instead.
 #define NGIO_DEVTYPE_LABPRO2 NGIO_DEVTYPE_LABQUEST
@@ -1027,11 +1031,11 @@ NGIO_LIB_INTERFACE_DECL gtype_real32 NGIO_Device_CalibrateData2(
 
 	Return:		EProbeType.
 
+
 ****************************************************************************************************************************/
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetProbeType(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
 	signed char channel);				//[in]
-
 
 NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Device_GetChannelRange(
 	NGIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
@@ -1769,5 +1773,13 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_ReadOutputTraceBytes(
 	NGIO_DEVICE_HANDLE hDevice,		//[in] handle to open device.
 	unsigned char *pOutputTraceBuf,	//[out] ptr to loc to store trace info.
 	gtype_int32 maxCount);	//[in] maximum number of bytes to copy into pOutputTraceBuf.
+
+////////////////////////////////////////////////////////
+// This method is only used on the Linux desktop
+// to share information about libusb that NGIO Library 
+// needs to communicate with devices.
+////////////////////////////////////////////////////////
+NGIO_LIB_INTERFACE_DECL void NGIO_Set_pSLibusbInfo(
+	void *p); // [in] Pointer to SLibusbInfo struct init'd by application 
 
 #endif //_NGIO_LIB_INTERFACE_H_

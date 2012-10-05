@@ -135,7 +135,7 @@ BEGIN
         MENUITEM "Digital2 (Rotary)",           ID_CHANNELS_DIGITAL2_ROTARY
         MENUITEM "Digital2 (RotaryX4)",         ID_CHANNELS_DIGITAL2_ROTARY_X4
         MENUITEM "Digital2 (Radiation)",        ID_CHANNELS_DIGITAL2_RADIATION
-        MENUITEM "Audio (internal)",            ID_CHANNELS_AUDIO_INTERNAL
+        MENUITEM "Audio (internal)",            ID_CHANNELS_AUDIO_INTERNAL, CHECKED
     END
     POPUP "Calibrations"
     BEGIN
@@ -193,7 +193,7 @@ CAPTION "About NGIO_Measure"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "NGIO_Measure Version 1.21",IDC_STATIC,40,21,119,8,SS_NOPREFIX
+    LTEXT           "NGIO_Measure Version 1.26",IDC_STATIC,40,21,119,8,SS_NOPREFIX
     DEFPUSHBUTTON   "OK",IDOK,178,18,50,14,WS_GROUP
     LTEXT           "lib version",IDC_LIB_VERSION,40,39,160,8
 END
@@ -243,8 +243,8 @@ VS_VERSION_INFO$(WIN32) VERSIONINFO
 #else
 VS_VERSION_INFO VERSIONINFO
 #endif
- FILEVERSION 0,0,1,21
- PRODUCTVERSION 0,0,1,21
+ FILEVERSION 0,0,1,26
+ PRODUCTVERSION 0,0,1,26
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -261,12 +261,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Vernier Software & Technology"
             VALUE "FileDescription", "NGIO_Measure (x86)"
-            VALUE "FileVersion", "0, 0, 1, 21"
+            VALUE "FileVersion", "0, 0, 1, 26"
             VALUE "InternalName", "NGIO_Measure.exe"
             VALUE "LegalCopyright", "Copyright (C) 2010 Vernier Software & Technology. All rights reserved."
             VALUE "OriginalFilename", "NGIO_Measure.exe"
             VALUE "ProductName", "NGIO_Measure"
-            VALUE "ProductVersion", "0, 0, 1, 21"
+            VALUE "ProductVersion", "0, 0, 1, 26"
         END
     END
     BLOCK "VarFileInfo"
@@ -282,8 +282,8 @@ VS_VERSION_INFO$(WIN64) VERSIONINFO
 #else
 VS_VERSION_INFO VERSIONINFO
 #endif
- FILEVERSION 0,0,1,21
- PRODUCTVERSION 0,0,1,21
+ FILEVERSION 0,0,1,26
+ PRODUCTVERSION 0,0,1,26
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -300,12 +300,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Vernier Software & Technology"
             VALUE "FileDescription", "NGIO_Measure (x64)"
-            VALUE "FileVersion", "0, 0, 1, 21"
+            VALUE "FileVersion", "0, 0, 1, 26"
             VALUE "InternalName", "NGIO_Measure.exe"
             VALUE "LegalCopyright", "Copyright (C) 2010 Vernier Software & Technology. All rights reserved."
             VALUE "OriginalFilename", "NGIO_Measure.exe"
             VALUE "ProductName", "NGIO_Measure"
-            VALUE "ProductVersion", "0, 0, 1, 21"
+            VALUE "ProductVersion", "0, 0, 1, 26"
         END
     END
     BLOCK "VarFileInfo"

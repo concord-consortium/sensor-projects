@@ -196,11 +196,11 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 
 	if ((1 == nIndex) && pDoc && hNGIO_lib)
 	{
-		gtype_uint32 sig, numLabpro2s, numLabQuestMinis, status;
-		NGIO_DEVICE_LIST_HANDLE hLabpro2List, hLabQuestMiniList;
+		gtype_uint32 sig, numLabpro2s, numLabQuestMinis, numLabquest2s, status;
+		NGIO_DEVICE_LIST_HANDLE hLabpro2List, hLabQuestMiniList, hLabquest2List;
 
-		NGIO_SearchForDevices(hNGIO_lib, NGIO_DEVTYPE_LABPRO2, NGIO_COMM_TRANSPORT_USB, NULL, &sig);//spam
-		hLabpro2List = NGIO_OpenDeviceListSnapshot(hNGIO_lib, NGIO_DEVTYPE_LABPRO2, &numLabpro2s, &sig);
+		NGIO_SearchForDevices(hNGIO_lib, NGIO_DEVTYPE_LABQUEST, NGIO_COMM_TRANSPORT_USB, NULL, &sig);//spam
+		hLabpro2List = NGIO_OpenDeviceListSnapshot(hNGIO_lib, NGIO_DEVTYPE_LABQUEST, &numLabpro2s, &sig);
 		if (!hLabpro2List)
 			numLabpro2s = 0;
 
@@ -231,8 +231,8 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 
 		NGIO_CloseDeviceListSnapshot(hLabpro2List);
 
-		NGIO_SearchForDevices(hNGIO_lib, NGIO_DEVTYPE_STANDALONE_DAQ, NGIO_COMM_TRANSPORT_USB, NULL, &sig);//spam
-		hLabQuestMiniList = NGIO_OpenDeviceListSnapshot(hNGIO_lib, NGIO_DEVTYPE_STANDALONE_DAQ, &numLabQuestMinis, &sig);
+		NGIO_SearchForDevices(hNGIO_lib, NGIO_DEVTYPE_LABQUEST_MINI, NGIO_COMM_TRANSPORT_USB, NULL, &sig);//spam
+		hLabQuestMiniList = NGIO_OpenDeviceListSnapshot(hNGIO_lib, NGIO_DEVTYPE_LABQUEST_MINI, &numLabQuestMinis, &sig);
 		if (!hLabQuestMiniList)
 			numLabQuestMinis = 0;
 
@@ -248,6 +248,24 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 		}
 
 		NGIO_CloseDeviceListSnapshot(hLabQuestMiniList);
+
+		NGIO_SearchForDevices(hNGIO_lib, NGIO_DEVTYPE_LABQUEST2, NGIO_COMM_TRANSPORT_USB, NULL, &sig);//spam
+		hLabquest2List = NGIO_OpenDeviceListSnapshot(hNGIO_lib, NGIO_DEVTYPE_LABQUEST2, &numLabquest2s, &sig);
+		if (!hLabquest2List)
+			numLabquest2s = 0;
+
+		for (j = 0; j < numLabquest2s; j++)
+		{
+			if (0 == NGIO_DeviceListSnapshot_GetNthEntry(hLabquest2List, j, newDeviceName, NGIO_MAX_SIZE_DEVICE_NAME, &status))
+			{
+				pPopupMenu->AppendMenu(MF_STRING, IDM_DEVICE0 + i, newDeviceName);
+				if (0 == lstrcmp(openDeviceName, newDeviceName))
+					pPopupMenu->CheckMenuItem(IDM_DEVICE0 + i, MF_BYCOMMAND | MF_CHECKED);
+				i++;
+			}
+		}
+
+		NGIO_CloseDeviceListSnapshot(hLabquest2List);
 	}
 	else
 	if ((2 == nIndex) && pDoc)
@@ -267,7 +285,7 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 			NGIO_Device_GetOpenDeviceName(hParentDev, parent_devstring, NGIO_MAX_SIZE_DEVICE_NAME);
 			if (NGIO_GetDeviceTypeFromDeviceName(parent_devstring, &deviceType) >= 0)
 			{
-				if (NGIO_DEVTYPE_LABQUEST == deviceType)
+				if ((NGIO_DEVTYPE_LABQUEST == deviceType) || (NGIO_DEVTYPE_LABQUEST2 == deviceType))
 					enable_audio_flags = MF_ENABLED | MF_BYCOMMAND;
 			}
 		}

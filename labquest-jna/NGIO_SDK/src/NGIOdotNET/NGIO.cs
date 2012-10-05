@@ -68,6 +68,9 @@ namespace NGIOdotNET
 		public const byte DEVTYPE_DAISYCHAIN_TEST = 10;
 		public const byte DEVTYPE_LABQUEST_FUNC_GENERATOR = 11;
 		public const byte DEVTYPE_LABQUEST_MINI = 12;
+        public const byte DEVTYPE_LABQUEST2 = 14;
+        public const byte DEVTYPE_LABQUEST_BUILTIN_ACCELEROMETER = 15;
+        public const byte DEVTYPE_LABQUEST_BUILTIN_LIGHT_SENSOR = 16;
 
 		/// <summary>
 		/// TIMEOUT_MS_DEFAULT is the recommended timeout in milliseconds for most commands sent to the hardware 

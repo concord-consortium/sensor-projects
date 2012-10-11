@@ -7,6 +7,10 @@ public class LabQuestException extends Exception {
 		super();
 	}
 	
+	public LabQuestException(String msg) {
+		super(msg);
+	}
+
 	public LabQuestException(Throwable cause) {
 		super(cause);
 	}

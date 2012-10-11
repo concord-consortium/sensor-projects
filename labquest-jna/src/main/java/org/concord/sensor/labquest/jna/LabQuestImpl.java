@@ -141,7 +141,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_DDSMem_ReadRecord(hDevice, channel, 
 				strictByte, NGIOLibrary.TIMEOUT_MS_READ_DDSMEMBLOCK);
 		if(ret != 0){
-			throw new LabQuestException();
+			throw new LabQuestException("ddsMemReadRecord returned: " + ret);
 		}
 	}
 	

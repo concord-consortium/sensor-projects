@@ -44,8 +44,9 @@ public class LabQuestSensorDeviceTest extends SensorDeviceTest {
 		assertEquals("Force sensor", SensorConfig.QUANTITY_FORCE,
 				experimentConfig.getSensorConfigs()[0].getType());
 		
+		int channel = experimentConfig.getSensorConfigs()[0].getPort();
 		// however I believe the goio sdk will not have loaded in the correct calibration
-		byte ddsChecksum2 = ((LabQuestSensorDevice)device).getCurrentLabQuest().ddsMemCalculateChecksum((byte) 0);
+		byte ddsChecksum2 = ((LabQuestSensorDevice)device).getCurrentLabQuest().ddsMemCalculateChecksum((byte) channel);
 		assertTrue("Checksum of no device should be different than with a device", 
 				ddsChecksum != ddsChecksum2);
 	}	

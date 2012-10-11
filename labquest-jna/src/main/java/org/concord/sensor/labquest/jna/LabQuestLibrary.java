@@ -111,7 +111,13 @@ public class LabQuestLibrary
 		if(ret != 0){
 			throw new LabQuestException();
 		}
-	}
+
+		ret = ngio.searchForDevices(hLibrary, NGIOLibrary.DEVTYPE_LABQUEST2, 
+				NGIOLibrary.COMM_TRANSPORT_USB, null, listSig);
+		if(ret != 0){
+			throw new LabQuestException();
+		}
+}
 	
 	public void printListOfDevices() throws LabQuestException 
 	{
@@ -121,6 +127,9 @@ public class LabQuestLibrary
 		
 		// print labquest mini devices
 		printDeviceListSnapshot(NGIOLibrary.DEVTYPE_LABQUEST_MINI, "labquest_mini");
+
+		// print labquest mini devices
+		printDeviceListSnapshot(NGIOLibrary.DEVTYPE_LABQUEST2, "labquest_mini");
 	}
 
 	private void printDeviceListSnapshot(int deviceType, String deviceTypeName) throws LabQuestException

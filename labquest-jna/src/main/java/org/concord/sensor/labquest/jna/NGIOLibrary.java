@@ -30,6 +30,10 @@ public interface NGIOLibrary extends Library {
 	public final static int DEVTYPE_DAISYCHAIN_TEST = 10;
 	public final static int DEVTYPE_LABQUEST_FUNC_GENERATOR = 11;
 	public final static int DEVTYPE_LABQUEST_MINI = 12;
+	public final static int DEVTYPE_MACGUFFIN = 13;
+	public final static int DEVTYPE_LABQUEST2 = 14;
+	public final static int DEVTYPE_LABQUEST_BUILTIN_ACCELEROMETER = 15;
+	public final static int DEVTYPE_LABQUEST_BUILTIN_LIGHT_SENSOR = 16;
 
 	public final static int MAX_SIZE_DEVICE_NAME = 220;
 	public final static int GRAB_DAQ_TIMEOUT = 12000;

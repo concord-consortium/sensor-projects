@@ -179,6 +179,12 @@ public class LabQuestLibrary
 		}
 		
 		ret = getFirstDeviceName(NGIOLibrary.DEVTYPE_LABQUEST_MINI);
+		if(ret != null) {
+			return ret;
+		}
+
+		ret = getFirstDeviceName(NGIOLibrary.DEVTYPE_LABQUEST2);
+
 		return ret;
 	}
 	

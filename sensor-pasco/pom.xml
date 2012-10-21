@@ -26,7 +26,7 @@
       <artifactId>pasco-jna</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.concord</groupId>
+      <groupId>org.concord.sensor</groupId>
       <artifactId>sensor</artifactId>
       <type>test-jar</type>
       <scope>test</scope>

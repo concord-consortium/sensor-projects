@@ -113,7 +113,7 @@
         <version>1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>org.concord</groupId>
+        <groupId>org.concord.sensor</groupId>
         <artifactId>sensor</artifactId>
         <type>test-jar</type>
         <version>1.0-SNAPSHOT</version>

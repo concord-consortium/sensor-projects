@@ -17,9 +17,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.concord.external.rxtx</groupId>
-      <artifactId>rxtx-comm</artifactId>
-      <version>2.1.7-r2</version>
+      <groupId>org.rxtx</groupId>
+      <artifactId>rxtx</artifactId>
+      <version>2.1.7</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -63,15 +63,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!--this is required to find the parent pom -->
-  <repositories>
-    <repository>
-      <id>cc-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal_snapshot</url>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-  </repositories>
 
 </project>

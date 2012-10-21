@@ -17,14 +17,11 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.concord.external.jna</groupId>
-      <artifactId>jna-jws-crossplatform</artifactId>
-      <version>3.0.9</version>
-      <scope>compile</scope>
-      <type>pom</type>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
     </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -38,15 +35,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!--this is required to find out parent pom you should-->
-  <repositories>
-    <repository>
-      <id>cc-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal_snapshot</url>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-  </repositories>
 
 </project>

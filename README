@@ -3,8 +3,6 @@ are typically used in schools.
 
 TODO
 - move ftdi-serial-wrapper into its own repository, it isn't used by any of this code and could be a useful independent project for someone
-- separate out rxtx dependent code from sensor since that won't be easy to put in maven central
-- find a way to remove jna-jws dependency from here, or get it upstream if we can't get rid of it
 - get jars deployed to maven central
 - update documentation to make it really easy to try out by pulling jars from central
 - consider bringing in a refactored sensor-applet project or keep it in its own repo

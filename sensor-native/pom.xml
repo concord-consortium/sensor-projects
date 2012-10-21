@@ -45,15 +45,4 @@
   	</plugins>
   </build>
 
-
-  <!--this is required to find the parent pom -->
-  <repositories>
-    <repository>
-      <id>cc-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal_snapshot</url>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-  </repositories>
-
 </project>

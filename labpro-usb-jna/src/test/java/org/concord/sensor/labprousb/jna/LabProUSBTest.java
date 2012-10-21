@@ -20,6 +20,9 @@ public class LabProUSBTest {
 			File dir = lib.getParentFile();
 			File dependentLib = new File(dir, "wdapi921.dll");
 			Assert.assertTrue("wdapi921.dll should be created from wdapi921_WIN32forOS32.dll or wdapi921_WIN32forOS64.dll", dependentLib.exists());
+		} else if(Platform.isMac()) {
+			Assert.assertNotNull("LabProUSB native library should not be null on Mac operating systems.", lib);
+			Assert.assertTrue(lib.exists());
 		} else {
 			Assert.assertNull("LabProUSB native library should be null on non-Windows operating systems.", lib);
 		}

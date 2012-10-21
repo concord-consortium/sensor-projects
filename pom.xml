@@ -9,17 +9,6 @@
   <name>Sensor Projects</name>
   <description> A parent for all sensor specific projects </description>
 
-  <repositories>
-    <repository>
-      <id>cc-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal_snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-  
   <distributionManagement>
     <repository>
       <id>cc-dist-repo-internal</id>
@@ -67,10 +56,9 @@
   <dependencies>
     <!-- this is added since jna-jws-crossplatform doesn't have the binaries -->
     <dependency>
-      <groupId>org.concord.external.jna</groupId>
+      <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
       <version>3.0.9</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

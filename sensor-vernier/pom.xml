@@ -21,14 +21,6 @@
       <artifactId>sensor</artifactId>
       <scope>compile</scope>
     </dependency>
-<!--     
-    <dependency>
-      <groupId>org.concord.sensor</groupId>
-      <artifactId>labpro-usb</artifactId>
-      <scope>compile</scope>
-      <optional/>
-    </dependency>
--->
     <dependency>
       <groupId>org.concord.sensor</groupId>
       <artifactId>labpro-usb-jna</artifactId>
@@ -66,15 +58,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!--this is required to find the parent pom -->
-  <repositories>
-    <repository>
-      <id>cc-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal</name>
-      <url>http://source.concord.org/maven2/internal_snapshot</url>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-  </repositories>
 
 </project>

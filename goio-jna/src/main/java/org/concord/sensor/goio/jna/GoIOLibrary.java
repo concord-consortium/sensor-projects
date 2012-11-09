@@ -13,6 +13,7 @@ package org.concord.sensor.goio.jna;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +30,6 @@ import com.sun.jna.NativeLibrary;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
-import com.sun.jna.Native.DeleteNativeLibrary;
 
 public class GoIOLibrary
 {
@@ -45,6 +45,8 @@ public class GoIOLibrary
 
 	public boolean initLibrary()
 	{
+		NativeHelper.removeTemporaryFiles();
+		
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
 		
@@ -69,6 +71,8 @@ public class GoIOLibrary
 		goIOLibrary = (GoIOJNALibrary) Native.loadLibrary(nativeLibPath, 
 				GoIOJNALibrary.class, options);
 
+        NativeHelper.deleteNativeLibrary(nativeLibFile);
+        
 		return goIOLibrary != null;		
 	};
 
@@ -311,10 +315,6 @@ public class GoIOLibrary
                 // Suffix is required on windows, or library fails to load
                 // Let Java pick the suffix
                 lib = File.createTempFile("jna", null);
-                lib.deleteOnExit();
-                if (Platform.deleteNativeLibraryAfterVMExit()) {
-                    Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(lib));
-                }
                 fos = new FileOutputStream(lib);
                 int count;
                 byte[] buf = new byte[1024];
@@ -380,7 +380,46 @@ public class GoIOLibrary
         return "/org/concord/sensor/goio/jna/" + osPrefix; //path == package name
     }
     
-    
-	
+    private static class NativeHelper {
+    	private static void deleteNativeLibrary(File file) {
+    		if (file.delete()) {
+    			return;
+    		}
+    		markTemporaryFile(file);
+    	}
+
+    	private static void markTemporaryFile(File file) {
+    		try {
+    			File marker = new File(file.getParentFile(), file.getName() + ".x");
+    			marker.createNewFile();
+    		}
+    		catch(IOException e) { e.printStackTrace(); }
+    	}
+
+    	private static void removeTemporaryFiles() {
+    		File dir;
+    		try {
+    			dir = File.createTempFile("jna", ".x").getParentFile();
+    			FilenameFilter filter = new FilenameFilter() {
+    				public boolean accept(File dir, String name) {
+    					return name.endsWith(".x") && name.indexOf("jna") != -1;
+    				}
+    			};
+    			File[] files = dir.listFiles(filter);
+    			for (int i=0;files != null && i < files.length;i++) {
+    				File marker = files[i];
+    				String name = marker.getName();
+    				name = name.substring(0, name.length()-2);
+    				File target = new File(marker.getParentFile(), name);
+    				if (!target.exists() || target.delete()) {
+    					marker.delete();
+    				}
+    			}
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
+    }
 }
 

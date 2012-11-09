@@ -1,5 +1,8 @@
 package org.concord.sensor.labquest.jna;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class GSensorDDSMem extends NGIOStructure {
 	public byte		MemMapVersion;
@@ -29,6 +32,17 @@ public class GSensorDDSMem extends NGIOStructure {
 	public byte		ActiveCalPage;
 	public GCalibrationPage []	CalibrationPage = new GCalibrationPage[3];
 	public byte		Checksum;				//Result of XORing bytes 0-126.
+	
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList(new String[] { "MemMapVersion", "SensorNumber", 
+				"SensorSerialNumber", "SensorLotCode", "ManufacturerID", "SensorLongName", "SensorShortName",
+				"Uncertainty", "SignificantFigures", "CurrentRequirement", "Averaging",
+				"MinSamplePeriod", "TypSamplePeriod", "TypNumberofSamples", "WarmUpTime",
+				"ExperimentType", "OperationType", "CalibrationEquation", "YminValue", "YmaxValue", "Yscale",
+				"HighestValidCalPageIndex", "ActiveCalPage", "CalibrationPage", "Checksum" });
+
+	}
 	
 	public static int getUnsignedVar(byte byteValue)
 	{

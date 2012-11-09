@@ -1,5 +1,8 @@
 package org.concord.sensor.labquest.jna;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class GCalibrationPage extends NGIOStructure 
 {
@@ -9,5 +12,10 @@ public class GCalibrationPage extends NGIOStructure
 	public float		CalibrationCoefficientB;
 	public float		CalibrationCoefficientC;
 	public byte []		Units = new byte[MAX_CALIBRATION_UNITS_CHARS_ON_SENSOR];
+	
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList(new String[] { "CalibrationCoefficientA", "CalibrationCoefficientB", "CalibrationCoefficientC", "Units" });
+	}
 
 }

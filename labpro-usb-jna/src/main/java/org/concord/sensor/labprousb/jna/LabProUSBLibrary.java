@@ -3,6 +3,7 @@ package org.concord.sensor.labprousb.jna;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -15,7 +16,6 @@ import java.util.Map;
 import com.sun.jna.FunctionMapper;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.sun.jna.Native.DeleteNativeLibrary;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Platform;
 import com.sun.jna.Structure;
@@ -25,6 +25,7 @@ public class LabProUSBLibrary {
 
 	public void init() throws IOException, InterruptedException
 	{
+		NativeHelper.removeTemporaryFiles();
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
 		
@@ -46,6 +47,7 @@ public class LabProUSBLibrary {
 		// This is necessary on windows, before calling certain methods the device needs 
 		// some time to wake up.
 		Thread.sleep(100);
+		NativeHelper.deleteNativeLibrary(nativeLibFile);
 	}
 
 	public void cleanup()
@@ -164,10 +166,6 @@ public class LabProUSBLibrary {
             try {
             	String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
             	resourceFile = new File(directory, fileName);
-                resourceFile.deleteOnExit();
-                if (Platform.deleteNativeLibraryAfterVMExit()) {
-                    Runtime.getRuntime().addShutdownHook(new DeleteNativeLibrary(resourceFile));
-                }
                 fos = new FileOutputStream(resourceFile);
                 int count;
                 byte[] buf = new byte[1024];
@@ -218,5 +216,47 @@ public class LabProUSBLibrary {
             osPrefix += "-" + arch;
         }
         return "/org/concord/sensor/labprousb/jna/" + osPrefix;
+    }
+    
+    private static class NativeHelper {
+    	private static void deleteNativeLibrary(File file) {
+    		if (file.delete()) {
+    			return;
+    		}
+    		markTemporaryFile(file);
+    	}
+
+    	private static void markTemporaryFile(File file) {
+    		try {
+    			File marker = new File(file.getParentFile(), file.getName() + ".x");
+    			marker.createNewFile();
+    		}
+    		catch(IOException e) { e.printStackTrace(); }
+    	}
+
+    	private static void removeTemporaryFiles() {
+    		File dir;
+    		try {
+    			dir = File.createTempFile("jna", ".x").getParentFile();
+    			FilenameFilter filter = new FilenameFilter() {
+    				public boolean accept(File dir, String name) {
+    					return name.endsWith(".x") && name.indexOf("jna") != -1;
+    				}
+    			};
+    			File[] files = dir.listFiles(filter);
+    			for (int i=0;files != null && i < files.length;i++) {
+    				File marker = files[i];
+    				String name = marker.getName();
+    				name = name.substring(0, name.length()-2);
+    				File target = new File(marker.getParentFile(), name);
+    				if (!target.exists() || target.delete()) {
+    					marker.delete();
+    				}
+    			}
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
     }
 }

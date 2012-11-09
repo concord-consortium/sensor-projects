@@ -1,5 +1,8 @@
 package org.concord.sensor.labquest.jna;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public interface NGIOSourceCmds 
 {
@@ -86,33 +89,63 @@ public interface NGIOSourceCmds
 		public byte [] dataRunId = new byte[4];  // byte 0 is least significant
 		public byte [] collectionDuration = new byte[8]; // byte 0 is least significant
 		public byte [] collectionOffset = new byte[8]; // byte 0 is least significant
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "dataRunId", "collectionDuration", "collectionOffset" });
+		}
 	}
 	
 	class NGIOSetMeasurementPeriodParams extends NGIOStructure {
 		public byte channel;
 		public byte [] dataRunId = new byte[4];  // byte 0 is least significant
 		public byte [] measurementPeriod = new byte[4]; // byte 0 is least significant
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "channel", "dataRunId", "measurementPeriod" });
+		}
 	}
 	
 	class NGIOGetMeasurementPeriodParams extends NGIOStructure {
 		public byte channel;
 		public byte [] dataRunId = new byte[4];  // byte 0 is least significant		
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "channel", "dataRunId" });
+		}
 	}
 	
 	class NGIOGetSensorIdParams extends NGIOStructure 
 	{
 		public byte channel;	//NGIO_CHANNEL_ID_ANALOG1 .. NGIO_CHANNEL_ID_DIGITAL2
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "channel" });
+		}
 	} 
 
 	 //This is the response payload returned by GetNextResponse() after sending NGIO_CMD_ID_GET_SENSOR_ID.
 	class NGIOGetSensorIdCmdResponsePayload extends NGIOStructure
 	{
 		public byte [] sensorId = new byte [4]; // byte 0 is least significant
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "sensorId" });
+		}
 	}
 	
 	class NGIOSetSensorChannelEnableMaskParams extends NGIOStructure
 	{
 		public byte [] enableSensorChannels = new byte[4];  // byte 0 channels 0-7, byte 1 8-15 ...
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "enableSensorChannels" });
+		}
 	} 
 
 	class NGIOSetAnalogInputParams extends NGIOStructure
@@ -124,6 +157,11 @@ public interface NGIOSourceCmds
 		 * NGIO_CMD_ID_INIT causes analogInput to be ANALOG_INPUT_5V_BUILTIN_12BIT_ADS
 		 */
 		public byte analogInput; 
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "channel", "analogInput" });
+		}
 	}
 
 	class NGIOSetSamplingModeParams extends NGIOStructure
@@ -131,6 +169,11 @@ public interface NGIOSourceCmds
 		public byte channel; //NGIO_CHANNEL_ID_ANALOG1 ...
 		public byte samplingMode; //NGIO_CMD_ID_INIT causes samplingMode to be NGIO_SAMPLING_MODE_PERIODIC_LEVEL_SNAPSHOT
 		//for analog channels, and NGIO_SAMPLING_MODE_APERIODIC_EDGE_DETECT for digital channels.
+		
+		@Override
+		protected List getFieldOrder() {
+			return Arrays.asList(new String[] { "channel", "samplingMode" });
+		}
 	}
 	
 }

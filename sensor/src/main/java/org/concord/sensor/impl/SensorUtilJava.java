@@ -61,27 +61,7 @@ public class SensorUtilJava {
 
 	public static void printExperimentConfig(ExperimentConfig currentConfig) {
 		PrintStream out = System.out;
-		
-		out.println("ExperimentConfig");
-		out.println("  deviceName " + currentConfig.getDeviceName());
-		out.println("  dataReadPeriod " + currentConfig.getDataReadPeriod());
-		out.println("  exactPeriod " + currentConfig.getExactPeriod());
-		out.println("  invalid " + currentConfig.isValid());
-		out.println("  invalidReason " + currentConfig.getInvalidReason());
-		
-		SensorConfig[] sensors = currentConfig.getSensorConfigs();
-		for (int i=0; i<sensors.length; i++) {
-			SensorConfig sensor = sensors[i];
-			out.println("  SensorConfig");
-			out.println("    name " + sensor.getName());
-			out.println("    type " + sensor.getType());
-			out.println("    typeConstant " + getTypeConstantName(sensor.getType()));
-			out.println("    port " + sensor.getPort());
-			out.println("    portName " + sensor.getPortName());
-			out.println("    stepSize " + sensor.getStepSize());
-			out.println("    confirmed " + sensor.isConfirmed());
-			out.println("    unit " + sensor.getUnit());
-		}	
+		out.println(experimentConfigToString(currentConfig));
 	}
 	
 	public static String experimentConfigToString(ExperimentConfig currentConfig) {
@@ -94,19 +74,23 @@ public class SensorUtilJava {
 		ret += "  invalidReason " + currentConfig.getInvalidReason() + "\n";
 		
 		SensorConfig[] sensors = currentConfig.getSensorConfigs();
-		for (int i=0; i<sensors.length; i++) {
-			SensorConfig sensor = sensors[i];
-			ret += "  SensorConfig" + "\n";
-			ret += "    name " + sensor.getName() + "\n";
-			ret += "    type " + sensor.getType() + "\n";
-			ret += "    typeConstant " + getTypeConstantName(sensor.getType()) + "\n";
-			ret += "    port " + sensor.getPort() + "\n";
-			ret += "    portName " + sensor.getPortName() + "\n";
-			ret += "    stepSize " + sensor.getStepSize() + "\n";
-			ret += "    confirmed " + sensor.isConfirmed() + "\n";
-			String unit = sensor.getUnit();
-			ret += "    unit " + (unit == null ? "null" : unit) + "\n";
-		}	
+		if (sensors == null) {
+			ret += "  No SensorConfigs found!\n";
+		} else {
+			for (int i=0; i<sensors.length; i++) {
+				SensorConfig sensor = sensors[i];
+				ret += "  SensorConfig" + "\n";
+				ret += "    name " + sensor.getName() + "\n";
+				ret += "    type " + sensor.getType() + "\n";
+				ret += "    typeConstant " + getTypeConstantName(sensor.getType()) + "\n";
+				ret += "    port " + sensor.getPort() + "\n";
+				ret += "    portName " + sensor.getPortName() + "\n";
+				ret += "    stepSize " + sensor.getStepSize() + "\n";
+				ret += "    confirmed " + sensor.isConfirmed() + "\n";
+				String unit = sensor.getUnit();
+				ret += "    unit " + (unit == null ? "null" : unit) + "\n";
+			}
+		}
 		
 		return ret;
 	}

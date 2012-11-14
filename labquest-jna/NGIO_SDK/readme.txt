@@ -86,6 +86,9 @@ For maximum simplicity and portability, we recommend that you just build your .N
 ====================================================================================================================
 
 Release notes:
+Version 1.97
+Fix bug in 64 bit Mac implementation of NGIO_Device_Close() that caused subsequent invocation of NGIO_Device_Open() to hang.
+
 Version 1.95
 Support LabQuest2.
 

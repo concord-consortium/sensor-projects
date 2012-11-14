@@ -1774,12 +1774,5 @@ NGIO_LIB_INTERFACE_DECL gtype_int32 NGIO_Diags_ReadOutputTraceBytes(
 	unsigned char *pOutputTraceBuf,	//[out] ptr to loc to store trace info.
 	gtype_int32 maxCount);	//[in] maximum number of bytes to copy into pOutputTraceBuf.
 
-////////////////////////////////////////////////////////
-// This method is only used on the Linux desktop
-// to share information about libusb that NGIO Library 
-// needs to communicate with devices.
-////////////////////////////////////////////////////////
-NGIO_LIB_INTERFACE_DECL void NGIO_Set_pSLibusbInfo(
-	void *p); // [in] Pointer to SLibusbInfo struct init'd by application 
 
 #endif //_NGIO_LIB_INTERFACE_H_

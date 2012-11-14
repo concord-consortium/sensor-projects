@@ -12,14 +12,11 @@
 		7EC9472D11E53ACF00228FDD /* libNGIO.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7EC9472B11E53AC800228FDD /* libNGIO.dylib */; };
 		7EC947FC11E53B9B00228FDD /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC947FB11E53B9B00228FDD /* Carbon.framework */; };
 		C471433E13E752CB000ABF1A /* NGIO_DeviceCheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9470611E539A600228FDD /* NGIO_DeviceCheck.cpp */; };
-		C471434013E752CB000ABF1A /* libNGIO.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC9472B11E53AC800228FDD /* libNGIO.dylib */; };
 		C471434113E752CB000ABF1A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC947FB11E53B9B00228FDD /* Carbon.framework */; };
 		C471434E13E7531F000ABF1A /* libNGIOUniversal.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C471434D13E7531F000ABF1A /* libNGIOUniversal.dylib */; };
 		C471434F13E75328000ABF1A /* libNGIOUniversal.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = C471434D13E7531F000ABF1A /* libNGIOUniversal.dylib */; };
 		C471435813E75381000ABF1A /* NGIO_DeviceCheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EC9470611E539A600228FDD /* NGIO_DeviceCheck.cpp */; };
-		C471435A13E75381000ABF1A /* libNGIO.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC9472B11E53AC800228FDD /* libNGIO.dylib */; };
 		C471435B13E75381000ABF1A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC947FB11E53B9B00228FDD /* Carbon.framework */; };
-		C471435C13E75381000ABF1A /* libNGIOUniversal.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C471434D13E7531F000ABF1A /* libNGIOUniversal.dylib */; };
 		C471437213E753BB000ABF1A /* libNGIO64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C471437113E753BB000ABF1A /* libNGIO64.dylib */; };
 		C471437E13E75718000ABF1A /* libNGIO64.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = C471437113E753BB000ABF1A /* libNGIO64.dylib */; };
 /* End PBXBuildFile section */
@@ -88,7 +85,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C471434013E752CB000ABF1A /* libNGIO.dylib in Frameworks */,
 				C471434113E752CB000ABF1A /* Carbon.framework in Frameworks */,
 				C471434E13E7531F000ABF1A /* libNGIOUniversal.dylib in Frameworks */,
 			);
@@ -98,9 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C471435A13E75381000ABF1A /* libNGIO.dylib in Frameworks */,
 				C471435B13E75381000ABF1A /* Carbon.framework in Frameworks */,
-				C471435C13E75381000ABF1A /* libNGIOUniversal.dylib in Frameworks */,
 				C471437213E753BB000ABF1A /* libNGIO64.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

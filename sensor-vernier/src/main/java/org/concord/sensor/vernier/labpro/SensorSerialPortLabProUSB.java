@@ -119,7 +119,7 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	    while(size != -1 && size < len &&
 	            (System.currentTimeMillis() - startTime) < timeout){
 	    	
-	    	long availableBytes = lpusb.getAvailableBytes();
+	    	int availableBytes = lpusb.getAvailableBytes();
 	    	if(availableBytes > 0){
 	    		int numRead = (int) lpusb.readBytes(availableBytes, tmpBuffer);
 		        if(numRead < 0) {	      

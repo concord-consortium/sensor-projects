@@ -1,6 +1,6 @@
 package org.concord.sensor.labprousb.jna;
 
-import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.ShortByReference;
 
 public class LabProUSBImpl implements LabProUSB {
@@ -34,18 +34,19 @@ public class LabProUSBImpl implements LabProUSB {
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.labprousb.jna.ILabProUSB#getAvailableBytes()
 	 */
-	public long getAvailableBytes() {
+	public int getAvailableBytes() {
 		return lpusb.getAvailableBytes();
 	}
 
 	/* (non-Javadoc)
+	 * @Override
 	 * @see org.concord.sensor.labprousb.jna.ILabProUSB#readBytes(long, byte[])
 	 */
-	public long readBytes(long numBytes, byte[] buffer) {
-		LongByReference longRef = new LongByReference(numBytes);
-		short ret = lpusb.readBytes(longRef, buffer);
+	public int readBytes(int numBytes, byte[] buffer) {
+		IntByReference intRef = new IntByReference(numBytes);
+		short ret = lpusb.readBytes(intRef, buffer);
 		if (ret >= 0) {
-			return longRef.getValue();
+			return intRef.getValue();
 		}
 		return ret;
 	}

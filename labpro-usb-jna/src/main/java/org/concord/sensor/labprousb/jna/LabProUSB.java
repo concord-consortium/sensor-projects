@@ -8,9 +8,9 @@ public interface LabProUSB {
 
 	public abstract short isOpen();
 
-	public abstract long getAvailableBytes();
+	public abstract int getAvailableBytes();
 
-	public abstract long readBytes(long numBytes, byte[] buffer);
+	public abstract int readBytes(int numBytes, byte[] buffer);
 
 	public abstract short writeBytes(short numBytes, byte[] buffer);
 

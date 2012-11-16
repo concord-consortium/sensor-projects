@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7E14DD75164467A80060B77E /* VST_Errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD71164467A80060B77E /* VST_Errors.h */; };
+		7E14DD76164467A80060B77E /* VST_USB.c in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DD72164467A80060B77E /* VST_USB.c */; };
+		7E14DD77164467A80060B77E /* VST_USB.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD73164467A80060B77E /* VST_USB.h */; };
+		7E14DD78164467A80060B77E /* VST_USBTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD74164467A80060B77E /* VST_USBTypes.h */; };
+		7E14DD7C164467C50060B77E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DD7B164467C50060B77E /* Carbon.framework */; };
+		7E14DE37164468020060B77E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DE36164468020060B77E /* IOKit.framework */; };
+		7E14DF80164468980060B77E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DF7F164468980060B77E /* Foundation.framework */; };
+		7E14DFBB16446A5B0060B77E /* LabProUSB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DFBA16446A5B0060B77E /* LabProUSB.cpp */; };
+		7E14DFBD16446AA20060B77E /* LabProUSB_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DFBC16446AA20060B77E /* LabProUSB_interface.h */; };
+		7E8E147316487977004CA213 /* GDeviceToHostUSBTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8E147216487977004CA213 /* GDeviceToHostUSBTypes.h */; };
+		7EDDE7DF16542388001D063C /* VST_Errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD71164467A80060B77E /* VST_Errors.h */; };
+		7EDDE7E016542388001D063C /* VST_USB.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD73164467A80060B77E /* VST_USB.h */; };
+		7EDDE7E116542388001D063C /* VST_USBTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DD74164467A80060B77E /* VST_USBTypes.h */; };
+		7EDDE7E216542388001D063C /* LabProUSB_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E14DFBC16446AA20060B77E /* LabProUSB_interface.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EDDE7E316542388001D063C /* GDeviceToHostUSBTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8E147216487977004CA213 /* GDeviceToHostUSBTypes.h */; };
+		7EDDE7E41654239A001D063C /* VST_USB.c in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DD72164467A80060B77E /* VST_USB.c */; };
+		7EDDE7E51654239A001D063C /* LabProUSB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DFBA16446A5B0060B77E /* LabProUSB.cpp */; };
+		7EDDE9D11654240F001D063C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DD7B164467C50060B77E /* Carbon.framework */; };
+		7EDDE9D21654240F001D063C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DE36164468020060B77E /* IOKit.framework */; };
+		7EDDE9D31654240F001D063C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E14DF7F164468980060B77E /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		32DBCF5E0370ADEE00C91783 /* LabProUSB_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabProUSB_Prefix.pch; sourceTree = "<group>"; };
+		7E14DD71164467A80060B77E /* VST_Errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VST_Errors.h; sourceTree = "<group>"; };
+		7E14DD72164467A80060B77E /* VST_USB.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = VST_USB.c; sourceTree = "<group>"; };
+		7E14DD73164467A80060B77E /* VST_USB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VST_USB.h; sourceTree = "<group>"; };
+		7E14DD74164467A80060B77E /* VST_USBTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VST_USBTypes.h; sourceTree = "<group>"; };
+		7E14DD7B164467C50060B77E /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		7E14DE36164468020060B77E /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		7E14DF7F164468980060B77E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7E14DFBA16446A5B0060B77E /* LabProUSB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LabProUSB.cpp; sourceTree = "<group>"; };
+		7E14DFBC16446AA20060B77E /* LabProUSB_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabProUSB_interface.h; path = ../../../redist/include/LabProUSB_interface.h; sourceTree = SOURCE_ROOT; };
+		7E8E147216487977004CA213 /* GDeviceToHostUSBTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDeviceToHostUSBTypes.h; sourceTree = "<group>"; };
+		7E9A13DB1649CC0B005286F0 /* LabProUSB framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LabProUSB framework-Info.plist"; sourceTree = "<group>"; };
+		7E9A13E51649CC32005286F0 /* LabProUSB-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LabProUSB-Info.plist"; sourceTree = "<group>"; };
+		7EDDE7DB16542359001D063C /* LabProUSB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LabProUSB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC0C705546C1D00DB518D /* LabProUSB.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = LabProUSB.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7EDDE7D916542359001D063C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EDDE9D11654240F001D063C /* Carbon.framework in Frameworks */,
+				7EDDE9D21654240F001D063C /* IOKit.framework in Frameworks */,
+				7EDDE9D31654240F001D063C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2AAC0C505546C1D00DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E14DD7C164467C50060B77E /* Carbon.framework in Frameworks */,
+				7E14DE37164468020060B77E /* IOKit.framework in Frameworks */,
+				7E14DF80164468980060B77E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC0C705546C1D00DB518D /* LabProUSB.dylib */,
+				7EDDE7DB16542359001D063C /* LabProUSB.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* LabProUSB */ = {
+			isa = PBXGroup;
+			children = (
+				7E14DFB916446A0F0060B77E /* Source */,
+				7E14DD661644675D0060B77E /* VST_USB */,
+				08FB77AEFE84172EC02AAC07 /* Classes */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+				7E9A13DB1649CC0B005286F0 /* LabProUSB framework-Info.plist */,
+				7E9A13E51649CC32005286F0 /* LabProUSB-Info.plist */,
+			);
+			name = LabProUSB;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7E14DD7B164467C50060B77E /* Carbon.framework */,
+				7E14DE36164468020060B77E /* IOKit.framework */,
+				7E14DF7F164468980060B77E /* Foundation.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF5E0370ADEE00C91783 /* LabProUSB_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		7E14DD661644675D0060B77E /* VST_USB */ = {
+			isa = PBXGroup;
+			children = (
+				7E8E147216487977004CA213 /* GDeviceToHostUSBTypes.h */,
+				7E14DD71164467A80060B77E /* VST_Errors.h */,
+				7E14DD72164467A80060B77E /* VST_USB.c */,
+				7E14DD73164467A80060B77E /* VST_USB.h */,
+				7E14DD74164467A80060B77E /* VST_USBTypes.h */,
+			);
+			name = VST_USB;
+			sourceTree = "<group>";
+		};
+		7E14DFB916446A0F0060B77E /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				7E14DFBC16446AA20060B77E /* LabProUSB_interface.h */,
+				7E14DFBA16446A5B0060B77E /* LabProUSB.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7EDDE7D616542359001D063C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EDDE7DF16542388001D063C /* VST_Errors.h in Headers */,
+				7EDDE7E016542388001D063C /* VST_USB.h in Headers */,
+				7EDDE7E116542388001D063C /* VST_USBTypes.h in Headers */,
+				7EDDE7E216542388001D063C /* LabProUSB_interface.h in Headers */,
+				7EDDE7E316542388001D063C /* GDeviceToHostUSBTypes.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2AAC0C305546C1D00DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E14DD75164467A80060B77E /* VST_Errors.h in Headers */,
+				7E14DD77164467A80060B77E /* VST_USB.h in Headers */,
+				7E14DD78164467A80060B77E /* VST_USBTypes.h in Headers */,
+				7E14DFBD16446AA20060B77E /* LabProUSB_interface.h in Headers */,
+				7E8E147316487977004CA213 /* GDeviceToHostUSBTypes.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7EDDE7DA16542359001D063C /* LabProUSB */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EDDE7DE16542377001D063C /* Build configuration list for PBXNativeTarget "LabProUSB" */;
+			buildPhases = (
+				7EDDE7D616542359001D063C /* Headers */,
+				7EDDE7D716542359001D063C /* Resources */,
+				7EDDE7D816542359001D063C /* Sources */,
+				7EDDE7D916542359001D063C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LabProUSB;
+			productName = LabProUSB;
+			productReference = 7EDDE7DB16542359001D063C /* LabProUSB.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D2AAC0C605546C1D00DB518D /* LabProUSB dylib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "LabProUSB dylib" */;
+			buildPhases = (
+				D2AAC0C305546C1D00DB518D /* Headers */,
+				D2AAC0C405546C1D00DB518D /* Sources */,
+				D2AAC0C505546C1D00DB518D /* Frameworks */,
+				7E8E12A016483CA8004CA213 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LabProUSB dylib";
+			productName = LabProUSB;
+			productReference = D2AAC0C705546C1D00DB518D /* LabProUSB.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB918108733D990010E9CD /* Build configuration list for PBXProject "LabProUSB" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* LabProUSB */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC0C605546C1D00DB518D /* LabProUSB dylib */,
+				7EDDE7DA16542359001D063C /* LabProUSB */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7EDDE7D716542359001D063C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7E8E12A016483CA8004CA213 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ $BUILD_STYLE == \"Release\" ]; then\n\tcp -f -R \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_NAME}\" \"${SRCROOT}/../../../redist/LabProUSB_lib/MacOSX/\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7EDDE7D816542359001D063C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EDDE7E41654239A001D063C /* VST_USB.c in Sources */,
+				7EDDE7E51654239A001D063C /* LabProUSB.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2AAC0C405546C1D00DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E14DD76164467A80060B77E /* VST_USB.c in Sources */,
+				7E14DFBB16446A5B0060B77E /* LabProUSB.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB917E08733D990010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 4.12;
+				EXPORTED_SYMBOLS_FILE = LabProUSB_exports.symbols;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LabProUSB_Prefix.pch;
+				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/LabProUSB.dylib";
+				PRODUCT_NAME = LabProUSB;
+			};
+			name = Debug;
+		};
+		1DEB917F08733D990010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 4.12;
+				EXPORTED_SYMBOLS_FILE = LabProUSB_exports.symbols;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LabProUSB_Prefix.pch;
+				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/LabProUSB.dylib";
+				PRODUCT_NAME = LabProUSB;
+			};
+			name = Release;
+		};
+		1DEB918208733D990010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DYLIB_CURRENT_VERSION = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		1DEB918308733D990010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DYLIB_CURRENT_VERSION = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = 4.0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+		7EDDE7DC16542359001D063C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 4.12;
+				EXPORTED_SYMBOLS_FILE = LabProUSB_exports.symbols;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LabProUSB_Prefix.pch;
+				INFOPLIST_FILE = "LabProUSB-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = LabProUSB;
+			};
+			name = Debug;
+		};
+		7EDDE7DD16542359001D063C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 4.12;
+				EXPORTED_SYMBOLS_FILE = LabProUSB_exports.symbols;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LabProUSB_Prefix.pch;
+				INFOPLIST_FILE = "LabProUSB-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = LabProUSB;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "LabProUSB dylib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB917E08733D990010E9CD /* Debug */,
+				1DEB917F08733D990010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB918108733D990010E9CD /* Build configuration list for PBXProject "LabProUSB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB918208733D990010E9CD /* Debug */,
+				1DEB918308733D990010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7EDDE7DE16542377001D063C /* Build configuration list for PBXNativeTarget "LabProUSB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EDDE7DC16542359001D063C /* Debug */,
+				7EDDE7DD16542359001D063C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

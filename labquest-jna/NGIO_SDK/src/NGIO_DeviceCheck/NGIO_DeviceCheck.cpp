@@ -259,6 +259,16 @@ int main(int argc, char* argv[])
 
 				NGIO_Device_Close(g_hDevice);
 				g_hDevice = NULL;
+				
+				printf("Trying to reopen device\n");
+				
+				g_hDevice = NGIO_Device_Open(g_hNGIOlib, deviceName, 0);
+				if (!g_hDevice)
+					printf("Failed to open %s device %s \n", deviceDesc, deviceName);
+				else
+					printf("Successfully opened %s device %s \n", deviceDesc, deviceName);
+				
+				
 			}
 		}
 

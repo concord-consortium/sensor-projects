@@ -146,41 +146,30 @@ public class LabProUSBLibrary {
             throw new FileNotFoundException(resourceName + " not found in resource path");
         }
     
-        File resourceFile = null;
-        if (url.getProtocol().toLowerCase().equals("file")) {
-            // NOTE: use older API for 1.3 compatibility
-            try {
-				resourceFile = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+        InputStream is = Native.class.getResourceAsStream(resourceName);
+        if (is == null) {
+            throw new Error("Can't obtain jnidispatch InputStream");
         }
         
-        if(resourceFile == null) {
-            InputStream is = Native.class.getResourceAsStream(resourceName);
-            if (is == null) {
-                throw new Error("Can't obtain jnidispatch InputStream");
+        File resourceFile = null;
+        FileOutputStream fos = null;
+        try {
+        	String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
+        	resourceFile = new File(directory, fileName);
+            fos = new FileOutputStream(resourceFile);
+            int count;
+            byte[] buf = new byte[1024];
+            while ((count = is.read(buf, 0, buf.length)) > 0) {
+                fos.write(buf, 0, count);
             }
-            
-            FileOutputStream fos = null;
-            try {
-            	String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
-            	resourceFile = new File(directory, fileName);
-                fos = new FileOutputStream(resourceFile);
-                int count;
-                byte[] buf = new byte[1024];
-                while ((count = is.read(buf, 0, buf.length)) > 0) {
-                    fos.write(buf, 0, count);
-                }
-            }
-            catch(IOException e) {
-                throw new Error("Failed to create temporary file: " + e);
-            }
-            finally {
-                try { is.close(); } catch(IOException e) { }
-                if (fos != null) {
-                    try { fos.close(); } catch(IOException e) { }
-                }
+        }
+        catch(IOException e) {
+            throw new Error("Failed to create temporary file: " + e);
+        }
+        finally {
+            try { is.close(); } catch(IOException e) { }
+            if (fos != null) {
+                try { fos.close(); } catch(IOException e) { }
             }
         }
         return resourceFile;

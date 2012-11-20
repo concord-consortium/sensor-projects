@@ -97,6 +97,8 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 		
 		try {
 			labQuest.close();
+			System.out.println("Calling cleanup");
+			labQuestLibrary.cleanup();
 			labQuest = null;
 		} catch (LabQuestException e) {
 			e.printStackTrace();

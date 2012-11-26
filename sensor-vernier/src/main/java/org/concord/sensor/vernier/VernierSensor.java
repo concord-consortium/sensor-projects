@@ -344,6 +344,7 @@ public class VernierSensor extends SensorConfigImpl
 					setStepSize(10f);
 					break;
 				}
+				break;
 
 			default:
 				setType(QUANTITY_UNKNOWN);

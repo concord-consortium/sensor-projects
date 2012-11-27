@@ -34,6 +34,7 @@
     <module>labpro-usb-jna</module>
     <module>labquest-jna</module>
     <module>pasco-jna</module>
+    <module>pasco-libs</module>
     <module>sensor</module>
     <module>sensor-native</module>
     <module>sensor-pasco</module>

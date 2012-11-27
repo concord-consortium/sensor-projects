@@ -294,42 +294,30 @@ public class GoIOLibrary
         }
     
         File lib = null;
-        if (url.getProtocol().toLowerCase().equals("file")) {
-            // NOTE: use older API for 1.3 compatibility
-            try {
-				lib = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        InputStream is = Native.class.getResourceAsStream(resourceName);
+        if (is == null) {
+            throw new Error("Can't obtain jnidispatch InputStream");
         }
         
-        if(lib == null) {
-            InputStream is = Native.class.getResourceAsStream(resourceName);
-            if (is == null) {
-                throw new Error("Can't obtain jnidispatch InputStream");
+        FileOutputStream fos = null;
+        try {
+            // Suffix is required on windows, or library fails to load
+            // Let Java pick the suffix
+            lib = File.createTempFile("jna", null);
+            fos = new FileOutputStream(lib);
+            int count;
+            byte[] buf = new byte[1024];
+            while ((count = is.read(buf, 0, buf.length)) > 0) {
+                fos.write(buf, 0, count);
             }
-            
-            FileOutputStream fos = null;
-            try {
-                // Suffix is required on windows, or library fails to load
-                // Let Java pick the suffix
-                lib = File.createTempFile("jna", null);
-                fos = new FileOutputStream(lib);
-                int count;
-                byte[] buf = new byte[1024];
-                while ((count = is.read(buf, 0, buf.length)) > 0) {
-                    fos.write(buf, 0, count);
-                }
-            }
-            catch(IOException e) {
-                throw new Error("Failed to create temporary file for jnidispatch library: " + e);
-            }
-            finally {
-                try { is.close(); } catch(IOException e) { }
-                if (fos != null) {
-                    try { fos.close(); } catch(IOException e) { }
-                }
+        }
+        catch(IOException e) {
+            throw new Error("Failed to create temporary file for jnidispatch library: " + e);
+        }
+        finally {
+            try { is.close(); } catch(IOException e) { }
+            if (fos != null) {
+                try { fos.close(); } catch(IOException e) { }
             }
         }
         return lib;

@@ -115,39 +115,29 @@ public class PascoLibrary {
 		}
 
 		File resourceFile = null;
-		if (url.getProtocol().toLowerCase().equals("file")) {
-			try {
-				resourceFile = new File(URLDecoder.decode(url.getPath(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+		InputStream is = PascoLibrary.class.getResourceAsStream(resourcePath);
+		if (is == null) {
+			throw new Error("Can't obtain resource InputStream, resource: " + resourcePath);
+		}
+
+		FileOutputStream fos = null;
+		try {
+			String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
+			resourceFile = new File(directory, fileName);
+			fos = new FileOutputStream(resourceFile);
+			int count;
+			byte[] buf = new byte[1024];
+			while ((count = is.read(buf, 0, buf.length)) > 0) {
+				fos.write(buf, 0, count);
 			}
 		}
-		
-		if(resourceFile == null) {
-			InputStream is = PascoLibrary.class.getResourceAsStream(resourcePath);
-			if (is == null) {
-				throw new Error("Can't obtain resource InputStream, resource: " + resourcePath);
-			}
-
-			FileOutputStream fos = null;
-			try {
-				String fileName = resourceName.substring(resourceName.lastIndexOf('/')+1);
-				resourceFile = new File(directory, fileName);
-				fos = new FileOutputStream(resourceFile);
-				int count;
-				byte[] buf = new byte[1024];
-				while ((count = is.read(buf, 0, buf.length)) > 0) {
-					fos.write(buf, 0, count);
-				}
-			}
-			catch(IOException e) {
-				throw new Error("Failed to create temporary file: " + e);
-			}
-			finally {
-				try { is.close(); } catch(IOException e) { }
-				if (fos != null) {
-					try { fos.close(); } catch(IOException e) { }
-				}
+		catch(IOException e) {
+			throw new Error("Failed to create temporary file: " + e);
+		}
+		finally {
+			try { is.close(); } catch(IOException e) { }
+			if (fos != null) {
+				try { fos.close(); } catch(IOException e) { }
 			}
 		}
 		return resourceFile;

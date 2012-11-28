@@ -33,6 +33,9 @@ public class PascoLibrary {
 	
 	public void initLibrary() throws IOException, InterruptedException
 	{
+		if(jnaLib != null){
+			return;
+		}
 		NativeHelper.removeTemporaryFiles();
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();

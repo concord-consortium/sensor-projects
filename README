@@ -5,6 +5,6 @@ TODO
 - move ftdi-serial-wrapper into its own repository, it isn't used by any of this code and could be a useful independent project for someone
 - get jars deployed to maven central
 - update documentation to make it really easy to try out by pulling jars from central
-- consider bringing in a refactored sensor-applet project or keep it in its own repo
 - remove sensor native
+- make sure the native libraries are not loaded multiple times in a single jvm
 

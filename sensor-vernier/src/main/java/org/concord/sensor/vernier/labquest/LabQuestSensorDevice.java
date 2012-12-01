@@ -33,17 +33,15 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 	public LabQuestSensorDevice() {
     	deviceLabel = "LQ";
     	
-    	labQuestLibrary = new LabQuestLibrary();
     	try {
-			labQuestLibrary.init();
+        	labQuestLibrary = LabQuestLibrary.getInstance();
+			labQuestLibrary.init(this);
 		} catch (IOException e) {
-			errorMessage = "Unable to initialize native library";
-			labQuestLibrary = null;
-			e.printStackTrace();
+			unableToInitialize(e);
 		} catch (InterruptedException e) {
-			errorMessage = "Unable to initialize native library";
-			labQuestLibrary = null;
-			e.printStackTrace();
+			unableToInitialize(e);
+		} catch (LabQuestException e) {
+			unableToInitialize(e);
 		}
 		
     	Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -61,6 +59,12 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 			}
 		});    	
 
+	}
+	
+	private void unableToInitialize(Exception e){
+		errorMessage = "Unable to initialize native library";
+		labQuestLibrary = null;
+		e.printStackTrace();
 	}
 	
 	/**
@@ -97,8 +101,8 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 		
 		try {
 			labQuest.close();
-			System.out.println("Calling cleanup");
-			labQuestLibrary.cleanup();
+			System.out.println("Calling uninit");
+			labQuestLibrary.uninit(this);
 			labQuest = null;
 		} catch (LabQuestException e) {
 			e.printStackTrace();

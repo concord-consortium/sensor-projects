@@ -6,10 +6,9 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,10 +24,22 @@ import com.sun.jna.ptr.ShortByReference;
 
 public class LabQuestLibrary 
 {
+	private static LabQuestLibrary instance;
 	private NGIOLibrary ngio;
 	private Pointer hLibrary;
+	private ArrayList<Integer> initializers = new ArrayList<Integer>();
 
-	public void init() throws IOException, InterruptedException
+	public static LabQuestLibrary getInstance() throws IOException, InterruptedException
+	{
+		if(instance != null){
+			return instance;
+		}
+
+		instance = new LabQuestLibrary();
+		return instance;
+	}
+
+	private LabQuestLibrary() throws IOException, InterruptedException
 	{
 		NativeHelper.removeTemporaryFiles();
 		File nativeLibFile = getNativeLibraryFromJar();
@@ -48,8 +59,23 @@ public class LabQuestLibrary
 		options.put(Library.OPTION_STRUCTURE_ALIGNMENT, Structure.ALIGN_NONE);
 		ngio = (NGIOLibrary) Native.loadLibrary(nativeLibPath, 
 				NGIOLibrary.class, options);
-		
+		NativeHelper.deleteNativeLibrary(nativeLibFile);
+	}
+
+	public void init(Object key) throws InterruptedException, LabQuestException
+	{
+		// keep track of objects that have intialized us, so we don't uninit until all of them
+		// have called uninit
+		initializers.add(key.hashCode());
+		if(hLibrary != null){
+			// we were already initialized
+			return;
+		}
+
 		hLibrary = ngio.init();
+		if(hLibrary == null){
+			throw new LabQuestException("Cannot initialize native library");
+		}
 
 		int lqDebugLevel = Integer.getInteger("labquest.debug.level", -1);
 		if(lqDebugLevel != -1){
@@ -58,20 +84,18 @@ public class LabQuestLibrary
 
 		// This is necessary on windows, before calling certain methods the device needs 
 		// some time to wake up.
-		Thread.sleep(100);
-		NativeHelper.deleteNativeLibrary(nativeLibFile);
+		Thread.sleep(200);
 	}
 
-	public void cleanup()
+	public void uninit(Object key)
 	{
-		System.err.println("LabQuestLibrary: cleaning up");
-		if(ngio == null){
-			System.err.println("  ngio null");
-			return;
-		}
-		
 		if(hLibrary == null){
 			System.err.println("  hLibrary null");
+			return;
+		}
+
+		initializers.remove((Integer)key.hashCode());
+		if(initializers.size() > 0){
 			return;
 		}
 
@@ -80,7 +104,6 @@ public class LabQuestLibrary
 			System.err.println("  uninit failed");
 		}
 		hLibrary = null;
-		ngio = null;
 	}
 	
 	public short [] getDLLVersion() throws LabQuestException

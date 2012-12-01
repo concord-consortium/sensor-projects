@@ -16,10 +16,10 @@ public class LabQuestJNATest {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		labQuestLib = new LabQuestLibrary();
 
 		try {
-			labQuestLib.init();
+			labQuestLib = LabQuestLibrary.getInstance();
+			labQuestLib.init("main");
 			
 			// This doesn't work unfortunately because it won't be called on the 
 			// same thread that called all of the other things.  So it would be 
@@ -39,7 +39,7 @@ public class LabQuestJNATest {
 						}
 					}
 					
-					labQuestLib.cleanup();				
+					labQuestLib.uninit();				
 				}
 			});
 			*/    	
@@ -77,7 +77,7 @@ public class LabQuestJNATest {
 			}
 		}
 
-		labQuestLib.cleanup();
+		labQuestLib.uninit("main");
 	}
 	
 	/**

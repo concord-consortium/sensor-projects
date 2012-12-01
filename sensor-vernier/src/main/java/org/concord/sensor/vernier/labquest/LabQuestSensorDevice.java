@@ -103,6 +103,10 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 			labQuest.close();
 			System.out.println("Calling uninit");
 			labQuestLibrary.uninit(this);
+			// because we only init the library when the device is created
+			// it is safest to null out the library here so we don't try use it again
+			// without initializing it
+			labQuestLibrary = null;
 			labQuest = null;
 		} catch (LabQuestException e) {
 			e.printStackTrace();

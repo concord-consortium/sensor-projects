@@ -27,18 +27,18 @@ There are javadocs in this interface describing how it is intended to be used.
 A summary of one way to use the application API goes like this:
 
 1. The Application uses a DeviceFactory to get an instance of a SensorDevice
-2. The Application creates a ExperientRequest consiting of one or more SensorRequests.
+2. The Application creates a ExperientRequest consisting of one or more SensorRequests.
    This describes what sensors and timing the Application wants to use.
 3. The Application calls SensorDevice#configure with this ExperimentRequest
 4. The SensorDevice implementation asks the hardware what sensors are actually attached,
    compares it to the requested sensors, and then returns a ExperiementConfig that contains
    the set of sensors which the SensorDevice feels is the best match for the request.
    This ExperiementConfig also indicates if the SensorDevice thinks the config meets the
-   requirments of the request. So for example if ExperimentRequest contains a temperature
-   sensor but no temperature sensor is attached the returned ExperimentConfig indicate
-   the requriements are not met.
-5. The Application then calls SensorDevice#start to start the collection of the most recent
-   SensorDevice#configure
+   requirements of the request. So for example if the ExperimentRequest contains a temperature
+   sensor but no temperature sensor is attached, the returned ExperimentConfig should indicate
+   the requirements are not met.
+5. The Application then calls SensorDevice#start to start collecting data from the sensors
+   specified in the most recently returned ExperimentConfig.
 6. The Application calls SensorDevice#read again and again to get the resulting data.
 7. The Application calls SensorDevice#stop when it doesn't want to read anymore data.
 
@@ -51,3 +51,5 @@ A summary of one way to use the application API goes like this:
 - remove sensor native
 - make sure the native libraries are not loaded multiple times in a single jvm
 - make a command line app that lists the available devices, and runs the 2 tests on whichever device the user selects
+- move the matching of current configuration of sensors to a different API layer. This simplifies the
+  the implementation for the Vendors, and it also provides a simplier API for Application developers

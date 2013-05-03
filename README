@@ -6,6 +6,8 @@ and modify the deviceId and possibly openString in order to test out a specific 
 
 The list of available 'deviceId's is in the DeviceID interface.
 
+If you don't have any hardware you can start with the PseudoSensorExampleApp which extends ExampleSensorApp.
+
 TODO
 - move ftdi-serial-wrapper into its own repository, it isn't used by any of this code and could be a useful independent project for someone
 - get jars deployed to maven central

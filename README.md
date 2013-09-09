@@ -53,3 +53,12 @@ A summary of one way to use the application API goes like this:
 - make a command line app that lists the available devices, and runs the 2 tests on whichever device the user selects
 - move the matching of current configuration of sensors to a different API layer. This simplifies the
   the implementation for the Vendors, and it also provides a simplier API for Application developers
+- update the API to support checking if a device is attached without actually opening it, also this API
+  should support opening multiple devices of the same type attached to the same computer. Perhaps it would work to
+  have the DeviceFactory return a list of devices which aren't opened. These devices can then be queried to see
+  if they are actually available(they might be in use by us or some other program). And they can be opened. It is also nice
+  though to work without the device factory. So it might be best to introduce a 'Library' style object for each device.
+  So a GoIOLibrary sigleton can be created and this can be used to list the GoIO devices. The DeviceFactory can use this.
+- boil DeviceService down to just logging and user messages, the rest of the methods can be removed or made static, they
+  are legacy for Waba support
+- Move DeviceFactory out of this library and make the creation of devices more like 'new SomethingDevice(deviceService, optional_type)'

@@ -37,7 +37,7 @@ public class LabQuestImpl implements LabQuest
 		IntByReference pDeviceType = new IntByReference();		
 		int ret = ngio.getDeviceTypeFromDeviceName(deviceName, pDeviceType);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		deviceType = pDeviceType.getValue();
 	}
@@ -52,7 +52,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_Close(hDevice);
 		System.err.println("LabQuest: called close");
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		System.err.println("LabQuest: claimed to close");
 
@@ -72,7 +72,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_IsRemoteCollectionActive(hDevice, remoteCollectionActive, 
 				NGIOLibrary.TIMEOUT_MS_DEFAULT);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		return remoteCollectionActive.getValue() != 0;
 	}
@@ -88,19 +88,15 @@ public class LabQuestImpl implements LabQuest
 		
 		int ret = ngio.device_AcquireExclusiveOwnership(hDevice, NGIOLibrary.GRAB_DAQ_TIMEOUT);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 	}
 
 	public LabQuestStatus getStatus() throws LabQuestException
 	{
 		LabQuestStatus status = new LabQuestStatus();
-		try{
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_GET_STATUS, null,
-					status);
-		} catch(NGIOException e) {
-			throw new LabQuestException(e);
-		}
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_GET_STATUS, null,
+				status);
 		return status;
 	}
 	
@@ -132,12 +128,8 @@ public class LabQuestImpl implements LabQuest
 			new NGIOSourceCmds.NGIOGetSensorIdCmdResponsePayload();
 		
 		sensorIdParams.channel = channel;
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_GET_SENSOR_ID, sensorIdParams, 
-					sensorIdCmdResponsePayload);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_GET_SENSOR_ID, sensorIdParams,
+				sensorIdCmdResponsePayload);
 		
 		byte[] sensorId = sensorIdCmdResponsePayload.sensorId;
 		return intFromBytes(sensorId);					
@@ -152,7 +144,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_DDSMem_ReadRecord(hDevice, channel, 
 				strictByte, NGIOLibrary.TIMEOUT_MS_READ_DDSMEMBLOCK);
 		if(ret != 0){
-			throw new LabQuestException("ddsMemReadRecord returned: " + ret);
+			handleError();
 		}
 	}
 	
@@ -166,7 +158,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_DDSMem_GetRecord(hDevice, NGIOSourceCmds.CHANNEL_ID_ANALOG1, 
 				sensorDDSMem);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		return sensorDDSMem;
 	}
@@ -195,7 +187,7 @@ public class LabQuestImpl implements LabQuest
 		int ret = ngio.device_SetMeasurementPeriod(hDevice, channel, desiredPeriod, 
 				NGIOLibrary.TIMEOUT_MS_DEFAULT);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 	}
 
@@ -207,12 +199,8 @@ public class LabQuestImpl implements LabQuest
 		NGIOSetSensorChannelEnableMaskParams channelEnableMaskParams = 
 			new NGIOSourceCmds.NGIOSetSensorChannelEnableMaskParams();
 		bytesFromInt(mask, channelEnableMaskParams.enableSensorChannels);
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK, 
-					channelEnableMaskParams, null);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}		
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_SENSOR_CHANNEL_ENABLE_MASK,
+				channelEnableMaskParams, null);
 	}
 
 	/**
@@ -222,7 +210,7 @@ public class LabQuestImpl implements LabQuest
 	{
 		int ret = ngio.device_ClearIO(hDevice, channel);
 		if(ret != 0){
-			throw new LabQuestException();
+			handleError();
 		}
 	}
 	
@@ -231,12 +219,8 @@ public class LabQuestImpl implements LabQuest
 	 */
 	public void startMeasurements() throws LabQuestException
 	{
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_START_MEASUREMENTS, 
-					null, null);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}		
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_START_MEASUREMENTS,
+				null, null);
 	}
 
 	/**
@@ -244,13 +228,8 @@ public class LabQuestImpl implements LabQuest
 	 */
 	public void stopMeasurements() throws LabQuestException
 	{
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_STOP_MEASUREMENTS, 
-					null, null);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}
-
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_STOP_MEASUREMENTS,
+				null, null);
 	}
 	
 	/**
@@ -261,7 +240,7 @@ public class LabQuestImpl implements LabQuest
 		
 		int ret = ngio.device_GetNumMeasurementsAvailable(hDevice, channel);
 		if(ret < 0){
-			throw new LabQuestException();			
+			handleError();
 		}
 		return ret;
 	}
@@ -275,7 +254,7 @@ public class LabQuestImpl implements LabQuest
 		int numMeasurements = ngio.device_ReadRawMeasurements(hDevice, channel, 
 				pMeasurementsBuf, null, maxCount);
 		if(numMeasurements < 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		return numMeasurements;
 		
@@ -291,7 +270,7 @@ public class LabQuestImpl implements LabQuest
 		int numMeasurements = ngio.device_ReadRawMeasurements(hDevice, channel, 
 				pMeasurementsBuf, timestampBuf, maxCount);
 		if(numMeasurements < 0){
-			throw new LabQuestException();
+			handleError();
 		}
 		return numMeasurements;
 
@@ -315,12 +294,8 @@ public class LabQuestImpl implements LabQuest
 			new NGIOSourceCmds.NGIOSetAnalogInputParams();
 		setAnalogInputParams.channel = channel;
 		setAnalogInputParams.analogInput = analogInput;
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_ANALOG_INPUT, 
-					setAnalogInputParams, null);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_ANALOG_INPUT,
+				setAnalogInputParams, null);
 	}
 
 	/**
@@ -332,12 +307,8 @@ public class LabQuestImpl implements LabQuest
 			new NGIOSourceCmds.NGIOSetSamplingModeParams();
 		setSamplingModeParams.channel = channel;
 		setSamplingModeParams.samplingMode = samplingMode;
-		try {
-			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_SAMPLING_MODE, 
-					setSamplingModeParams, null);
-		} catch (NGIOException e) {
-			throw new LabQuestException(e);
-		}
+		sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_SET_SAMPLING_MODE,
+				setSamplingModeParams, null);
 	}
 	
 	/**
@@ -371,7 +342,7 @@ public class LabQuestImpl implements LabQuest
 	 * @see org.concord.sensor.labquest.jna.LabQuest#sendCmdAndGetResponse(byte, com.sun.jna.Structure, com.sun.jna.Structure)
 	 */
 	public void sendCmdAndGetResponse(byte cmd, Structure params, Structure response) 
-	throws NGIOException
+	throws LabQuestCommandException
 	{		
 		int paramsSize = 0;
 		if(params != null){
@@ -397,18 +368,43 @@ public class LabQuestImpl implements LabQuest
 		// if there is an error then the returned structure is NGIODefaultCmdResponse which 
 		// has one byte which indicates the status
 		if(ret != 0){
-			if(responseSizeReference.getValue() == 1){
-				byte status = responsePtr.getByte(0);			
+			int responseSize = responseSizeReference.getValue();
+			if(responseSize == 1){
+				byte status = responsePtr.getByte(0);
 				System.err.println("error sending command: " + status);
-				throw new NGIOException(status);
+				throw new LabQuestCommandException(cmd, status);
+			} else {
+				handleError();
 			}
-			
-			throw new NGIOException((byte) -1);
 		}
 
 		if(response != null){
 			response.read();
 		}		
+	}
+
+	private void handleError() throws LabQuestCommandException {
+		throw exceptionFromResponseStatus((byte)-1);
+	}
+
+	private LabQuestCommandException exceptionFromResponseStatus(byte cmd) {
+		ByteByReference lastCmd = new ByteByReference();
+		ByteByReference lastCmdStatus = new ByteByReference();
+		ByteByReference lastCmdWithErrorRespSentOvertheWire = new ByteByReference();
+		ByteByReference lastErrorSentOvertheWire = new ByteByReference();
+		// use the NGIO_Device_GetLastCmdResponseStatus
+		// to see it returns a actual status message
+		int ret = ngio.device_GetLastCmdResponseStatus(hDevice, lastCmd, lastCmdStatus,
+				lastCmdWithErrorRespSentOvertheWire, lastErrorSentOvertheWire);
+		if(ret == 0){
+			LabQuestCommandException exception = new LabQuestCommandException(lastCmd.getValue(), lastCmdStatus.getValue(),
+		      		lastCmdWithErrorRespSentOvertheWire.getValue(),
+		      		lastErrorSentOvertheWire.getValue());
+			System.err.println("error sending command " + exception.getMessage());
+			return exception;
+		} else {
+			return new LabQuestCommandException(cmd, (byte) -1);
+		}
 	}
 	
 	private static int intFromBytes(byte [] buf)

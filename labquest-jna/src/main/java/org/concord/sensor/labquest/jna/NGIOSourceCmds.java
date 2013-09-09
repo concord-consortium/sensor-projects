@@ -67,6 +67,10 @@ public interface NGIOSourceCmds
 	public final static byte STATUS_ERROR_OP_NOT_SUPPORTED_IN_CURRENT_MODE = 0x3B;
 	public final static byte STATUS_ERROR_AUDIO_CONTROL_FAILURE = 0x3C;
 	public final static byte STATUS_ERROR_AUDIO_STREAM_FAILURE = 0x3D;
+	public final static byte STATUS_ERROR_CANNOT_REALLOCATE_FRAME_BUFFERS = 0x3E;
+	public final static byte STATUS_ERROR_COMMUNICATION = 0x41;
+	public final static byte STATUS_INTERNAL_ERROR3 = 0x48;
+	public final static byte STATUS_INTERNAL_ERROR4 = 0x49;
 
 	public final static byte ANALOG_INPUT_5V_BUILTIN_12BIT_ADC = 0;
 	public final static byte ANALOG_INPUT_5V_BUILTIN_10BIT_ADC = 1;

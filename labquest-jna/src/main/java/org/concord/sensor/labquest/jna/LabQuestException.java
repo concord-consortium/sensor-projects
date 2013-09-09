@@ -14,5 +14,9 @@ public class LabQuestException extends Exception {
 	public LabQuestException(Throwable cause) {
 		super(cause);
 	}
+
+	public boolean isCommunicationError() {
+		return false;
+	}
 	
 }

@@ -67,6 +67,6 @@ public interface LabQuest {
 	public void printAttachedSensors() throws LabQuestException;
 
 	public void sendCmdAndGetResponse(byte cmd, Structure params,
-			Structure response) throws NGIOException;
+			Structure response) throws LabQuestCommandException;
 
 }

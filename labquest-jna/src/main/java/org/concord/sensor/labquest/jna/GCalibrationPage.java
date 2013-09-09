@@ -14,7 +14,7 @@ public class GCalibrationPage extends NGIOStructure
 	public byte []		Units = new byte[MAX_CALIBRATION_UNITS_CHARS_ON_SENSOR];
 	
 	@Override
-	protected List getFieldOrder() {
+	protected List<String> getFieldOrder() {
 		return Arrays.asList(new String[] { "CalibrationCoefficientA", "CalibrationCoefficientB", "CalibrationCoefficientC", "Units" });
 	}
 

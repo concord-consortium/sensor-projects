@@ -34,7 +34,7 @@ public class GSensorDDSMem extends NGIOStructure {
 	public byte		Checksum;				//Result of XORing bytes 0-126.
 	
 	@Override
-	protected List getFieldOrder() {
+	protected List<String> getFieldOrder() {
 		return Arrays.asList(new String[] { "MemMapVersion", "SensorNumber", 
 				"SensorSerialNumber", "SensorLotCode", "ManufacturerID", "SensorLongName", "SensorShortName",
 				"Uncertainty", "SignificantFigures", "CurrentRequirement", "Averaging",

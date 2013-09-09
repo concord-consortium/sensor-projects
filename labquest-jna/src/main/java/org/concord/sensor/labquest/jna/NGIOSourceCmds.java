@@ -91,7 +91,7 @@ public interface NGIOSourceCmds
 		public byte [] collectionOffset = new byte[8]; // byte 0 is least significant
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "dataRunId", "collectionDuration", "collectionOffset" });
 		}
 	}
@@ -102,7 +102,7 @@ public interface NGIOSourceCmds
 		public byte [] measurementPeriod = new byte[4]; // byte 0 is least significant
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "channel", "dataRunId", "measurementPeriod" });
 		}
 	}
@@ -112,7 +112,7 @@ public interface NGIOSourceCmds
 		public byte [] dataRunId = new byte[4];  // byte 0 is least significant		
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "channel", "dataRunId" });
 		}
 	}
@@ -122,7 +122,7 @@ public interface NGIOSourceCmds
 		public byte channel;	//NGIO_CHANNEL_ID_ANALOG1 .. NGIO_CHANNEL_ID_DIGITAL2
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "channel" });
 		}
 	} 
@@ -133,7 +133,7 @@ public interface NGIOSourceCmds
 		public byte [] sensorId = new byte [4]; // byte 0 is least significant
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "sensorId" });
 		}
 	}
@@ -143,7 +143,7 @@ public interface NGIOSourceCmds
 		public byte [] enableSensorChannels = new byte[4];  // byte 0 channels 0-7, byte 1 8-15 ...
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "enableSensorChannels" });
 		}
 	} 
@@ -159,7 +159,7 @@ public interface NGIOSourceCmds
 		public byte analogInput; 
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "channel", "analogInput" });
 		}
 	}
@@ -171,7 +171,7 @@ public interface NGIOSourceCmds
 		//for analog channels, and NGIO_SAMPLING_MODE_APERIODIC_EDGE_DETECT for digital channels.
 		
 		@Override
-		protected List getFieldOrder() {
+		protected List<String> getFieldOrder() {
 			return Arrays.asList(new String[] { "channel", "samplingMode" });
 		}
 	}

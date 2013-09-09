@@ -20,6 +20,8 @@ public interface LabQuest {
 
 	public void acquireExclusiveOwnership() throws LabQuestException;
 
+	public LabQuestStatus getStatus() throws LabQuestException;
+
 	public String getSensorName(byte channel) throws LabQuestException;
 	
 	public int getSensorId(byte channel) throws LabQuestException;

@@ -92,6 +92,17 @@ public class LabQuestImpl implements LabQuest
 		}
 	}
 
+	public LabQuestStatus getStatus() throws LabQuestException
+	{
+		LabQuestStatus status = new LabQuestStatus();
+		try{
+			sendCmdAndGetResponse(NGIOSourceCmds.CMD_ID_GET_STATUS, null,
+					status);
+		} catch(NGIOException e) {
+			throw new LabQuestException(e);
+		}
+		return status;
+	}
 	
 	/**
 	 * @see org.concord.sensor.labquest.jna.LabQuest#getSensorName()

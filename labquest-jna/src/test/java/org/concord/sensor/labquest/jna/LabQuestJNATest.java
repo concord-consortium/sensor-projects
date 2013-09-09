@@ -85,6 +85,8 @@ public class LabQuestJNATest {
 	 * @throws IOException 
 	 */
 	public static void test() throws LabQuestException {
+		LabQuestStatus status = labQuest.getStatus();
+		System.out.println("labQuest status: " + status.inspect());
 		boolean remoteCollectionActive = false;
 		remoteCollectionActive = labQuest.isRemoteCollectionActive();
 		System.out.println("remote collection active: " + remoteCollectionActive);

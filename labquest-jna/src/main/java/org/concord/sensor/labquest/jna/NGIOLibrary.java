@@ -110,6 +110,11 @@ public interface NGIOLibrary extends Library {
 	int device_SendCmdAndGetResponse(Pointer hDevice, byte cmd, Structure pParams,
 			int nParamBytes, Pointer pRespBuf, IntByReference pnRespBytes, int timeoutMs); 
 
+	int device_GetLastCmdResponseStatus(Pointer hDevice,
+			ByteByReference lastCmd, ByteByReference lastCmdStatus,
+			ByteByReference lastCmdWithErrorRespSentOvertheWire,
+			ByteByReference lastErrorSentOvertheWire);
+
 	// untested
 	// need to possibly add in the NGIO_PTR structure for pParams
 	int device_SendCmd(Pointer hDevice,	byte cmd, Pointer pParms, int nParamBytes,

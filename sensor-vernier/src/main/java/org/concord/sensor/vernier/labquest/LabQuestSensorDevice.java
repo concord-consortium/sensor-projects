@@ -11,7 +11,6 @@ import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.labquest.jna.LabQuest;
-import org.concord.sensor.labquest.jna.LabQuestCommandException;
 import org.concord.sensor.labquest.jna.LabQuestException;
 import org.concord.sensor.labquest.jna.LabQuestLibrary;
 import org.concord.sensor.labquest.jna.NGIOLibrary;

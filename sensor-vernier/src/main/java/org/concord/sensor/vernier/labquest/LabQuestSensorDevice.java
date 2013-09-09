@@ -11,6 +11,7 @@ import org.concord.sensor.device.impl.AbstractSensorDevice;
 import org.concord.sensor.device.impl.SerialPortParams;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.labquest.jna.LabQuest;
+import org.concord.sensor.labquest.jna.LabQuestCommandException;
 import org.concord.sensor.labquest.jna.LabQuestException;
 import org.concord.sensor.labquest.jna.LabQuestLibrary;
 import org.concord.sensor.labquest.jna.NGIOLibrary;
@@ -128,7 +129,18 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 	
 	public boolean isAttached()
 	{
-		return labQuest != null;
+		if(labQuest == null){
+			return false;
+		}
+		try {
+			labQuest.getStatus();
+		} catch(LabQuestException e){
+			if (e.isCommunicationError()){
+				return false;
+			}
+		}
+
+		return true;
 	}
 	
 	public LabQuest getCurrentLabQuest() {

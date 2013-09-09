@@ -477,6 +477,19 @@ public abstract class SensorDeviceTest {
 		
 	}
 	
+	@Test
+	public void testIsNotAttachedAfterAttached() throws Throwable {
+		tellUserToAttachTheDevice();
+
+		prepareDevice();
+
+		assertTrue("Device should be attached", device.isAttached());
+
+		tellUserToDetachTheDevice();
+
+		assertTrue("Device should not be attached", !device.isAttached());
+	}
+
 	@Before
 	public abstract void setup();
 	

@@ -102,22 +102,29 @@ public class SensorUtilJava {
 		 ret += "  period: " + request.getPeriod() + "\n";
 		 SensorRequest[] sensorRequests = request.getSensorRequests();
 		 for (SensorRequest sensor: sensorRequests){
-			ret += "  sensorRequest:\n";
-		    ret += "    displayPrecision: " + sensor.getDisplayPrecision() + "\n";
-		    ret += "    port: " + sensor.getPort() + "\n";
-		    ret += "    requiredMax: " + sensor.getRequiredMax() + "\n";
-		    ret += "    requiredMin: " + sensor.getRequiredMin() + "\n";		    
-		    ret += "    stepSize: " + sensor.getStepSize() + "\n";
-		    ret += "    type: " + getTypeConstantName(sensor.getType()) + "\n";
-		    ret += "    unit: " + sensor.getUnit() + "\n";
-			String[] sensorParamKeys = sensor.getSensorParamKeys();
+			ret += sensorRequestToString(sensor);
+		 }
+		 
+		 return ret;
+	}
+	
+	public static String sensorRequestToString(SensorRequest request) 
+	{
+		 String ret = "  sensorRequest:\n";
+		    ret += "    displayPrecision: " + request.getDisplayPrecision() + "\n";
+		    ret += "    port: " + request.getPort() + "\n";
+		    ret += "    requiredMax: " + request.getRequiredMax() + "\n";
+		    ret += "    requiredMin: " + request.getRequiredMin() + "\n";		    
+		    ret += "    stepSize: " + request.getStepSize() + "\n";
+		    ret += "    type: " + getTypeConstantName(request.getType()) + "\n";
+		    ret += "    unit: " + request.getUnit() + "\n";
+			String[] sensorParamKeys = request.getSensorParamKeys();
 		    if(sensorParamKeys != null && sensorParamKeys.length > 0){
 		    	ret += "    sensorParams:\n";
 		    	for (String key : sensorParamKeys) {
-					ret += "      " + key + ": " + sensor.getSensorParam(key) + "\n";
+					ret += "      " + key + ": " + request.getSensorParam(key) + "\n";
 				}
 		    }
-		 }
 		 
 		 return ret;
 	}

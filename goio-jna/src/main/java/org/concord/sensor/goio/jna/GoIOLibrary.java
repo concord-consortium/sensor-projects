@@ -16,10 +16,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -330,7 +328,7 @@ public class GoIOLibrary
         	return "GoIO_DLL.dll";
         }
         else if (Platform.isMac()) {
-        	return "libGoIO_DLL.dylib";
+        	return "libGoIOUniversal.dylib";
         }
         return null;
     }

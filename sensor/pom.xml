@@ -22,6 +22,11 @@
       <version>2.1.7</version>
       <scope>compile</scope>
     </dependency>
+	<dependency>
+	  <groupId>org.usb4java</groupId>
+	  <artifactId>usb4java</artifactId>
+	  <version>1.2.0</version>
+	</dependency>
   </dependencies>
 
   <build>

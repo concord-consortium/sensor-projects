@@ -9,25 +9,6 @@
   <name>Sensor Projects</name>
   <description> A parent for all sensor specific projects </description>
 
-  <distributionManagement>
-    <repository>
-      <id>cc-dist-repo-internal</id>
-      <name>Concord Consortium Internal</name>
-      <url>scpexe://source.concord.org/web/source.concord.org/html/software/maven2/internal/</url>
-    </repository>
-    <snapshotRepository>
-      <id>cc-dist-repo-internal-snapshot</id>
-      <name>Concord Consortium Internal Snapshot</name>
-      <uniqueVersion>true</uniqueVersion>
-      <url>scpexe://source.concord.org/web/source.concord.org/html/software/maven2/internal_snapshot/</url>
-    </snapshotRepository>
-    <site> 
-      <id>cc-dist-site</id>
-      <name>Concord Consortium Maven2 Website</name>
-      <url>scpexe://source.concord.org/web/source.concord.org/html/software/maven2/site/</url>
-    </site>
-  </distributionManagement>
-  
   <modules>
     <module>ftdi-serial-wrapper</module>
     <module>goio-jna</module>

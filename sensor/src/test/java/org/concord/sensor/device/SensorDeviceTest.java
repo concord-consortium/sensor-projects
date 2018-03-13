@@ -34,7 +34,11 @@ public abstract class SensorDeviceTest {
 	
 	// This is used so we don't tell the user the same thing multiple times
 	protected static String lastUserMessage;
+	protected static int lastUserResponse;
 	
+	// Enable device tests unless user says device is not attached.
+	protected int deviceAttachedResponse = JOptionPane.YES_OPTION;
+
 	@Test
 	public void testDeviceCreated() {
 		assertNotNull("The setup method needs to set the device instance variable", device);
@@ -56,8 +60,7 @@ public abstract class SensorDeviceTest {
 			// test that the device name is still a valid name
 			assertNotNull("Device should return valid vendor name after id is set, before open is called", device.getVendorName());
 		}
-				
-		
+
 		// and also test after the open call
 		openDevice();
 		
@@ -67,21 +70,20 @@ public abstract class SensorDeviceTest {
 	@Test
 	public void testGetDeviceName() {
 		// test this before open is called
-		assertNotNull("Device should return valid vendor name before open is called", device.getDeviceName());
+		assertNotNull("Device should return valid device name before open is called", device.getDeviceName());
 		
 		// and if the device is idAware test after setting the device id
 		if(device instanceof DeviceIdAware){
 			((DeviceIdAware)device).setDeviceId(deviceId);
 
 			// test that the device name is still a valid name
-			assertNotNull("Device should return valid vendor name after id is set, before open is called", device.getDeviceName());
+			assertNotNull("Device should return valid device name after id is set, before open is called", device.getDeviceName());
 		}
-				
-		
+
 		// and also test after the open call
 		openDevice();
 		
-		assertNotNull("Device should return valid vendor name after open is called", device.getDeviceName());
+		assertNotNull("Device should return valid device name after open is called", device.getDeviceName());
 	}
 	
 	@Test
@@ -97,7 +99,10 @@ public abstract class SensorDeviceTest {
 	
 	@Test 
 	public void testIsAttached() {
-		tellUserToAttachTheDevice();
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		deviceAttachedResponse = tellUserToAttachTheDevice();
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -106,7 +111,10 @@ public abstract class SensorDeviceTest {
 	
 	@Test
 	public void testGetCurrentConfig() {
-		tellUserToAttachTheDeviceWith("a temperature sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response = tellUserToAttachTheDeviceWith("just a temperature sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -169,7 +177,10 @@ public abstract class SensorDeviceTest {
 	
 	@Test
 	public void testConfigureInvalidSensor(){
-		tellUserToAttachTheDeviceWith("a temperature sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response = tellUserToAttachTheDeviceWith("just a temperature sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		
@@ -262,18 +273,36 @@ public abstract class SensorDeviceTest {
 				
 		device.stop(true);				
 	}
+
+	@Test
+	public void testTemperaturePolling() throws Throwable {
+		org.junit.Assume.assumeTrue(device.supportsChannelPolling());
+
+		int response;
+		response = tellUserToAttachTheDeviceWith("just a temperature sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
+
+		prepareDevice();
+		
+		float[] channelValues = new float[16];
+		ExperimentConfig expConfig = device.getCurrentConfig();
+		SensorConfig[] sensors = expConfig.getSensorConfigs();
+		int sensorCount = (sensors != null) ? sensors.length : 0;
+		int valueCount = device.pollChannelValues(expConfig, channelValues);
+		assertTrue("Polled a value for each channel", valueCount == sensorCount);
+	}
 	
 	@Test
 	public void testConfigureRawVoltage1(){
-		if(!supportsRawValueSensors()) {
-			return;
-		}
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+		org.junit.Assume.assumeTrue(supportsRawValueSensors());
 
 		// This might not be supported by all devices.  The raw voltage configuration has
 		// 2 goals: 
 		// -- allow people to build their own sensors
 		// -- debugging calibrations of production sensors 
-		tellUserToAttachTheDeviceWith("a raw voltage compatible sensor reading between 0 and 5 Volts");
+		int response = tellUserToAttachTheDeviceWith("just a raw voltage compatible sensor reading between 0 and 5 Volts");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		
@@ -297,24 +326,23 @@ public abstract class SensorDeviceTest {
 	
 	@Test
 	public void testConfigureRawVoltage2(){
-		if(!supportsRawValueSensors()) {
-			return;
-		}
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+		org.junit.Assume.assumeTrue(supportsRawValueSensors());
 
 		// This might not be supported by all devices.  The raw voltage configuration has
 		// 2 goals: 
 		// -- allow people to build their own sensors
 		// -- debugging calibrations of production sensors 
 
-		tellUserToAttachTheDeviceWith("a raw voltage compatible sensor reading between 0 and 5 Volts");
-		
+		int response = tellUserToAttachTheDeviceWith("just a raw voltage compatible sensor reading between 0 and 5 Volts");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
+
 		prepareDevice();
 		
 		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
 		SensorRequestImpl sensorRequest = new SensorRequestImpl();
 		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
 		sensorRequest.setType(SensorConfig.QUANTITY_RAW_VOLTAGE_2);
-		
 		
 		ExperimentConfig experimentConfig = device.configure(experimentRequest);
 		assertNotNull("Non null experiment config", experimentConfig);
@@ -330,11 +358,11 @@ public abstract class SensorDeviceTest {
 
 	@Test
 	public void testRawVoltage1Collection() throws InterruptedException{
-		if(!supportsRawValueSensors()) {
-			return;
-		}
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+		org.junit.Assume.assumeTrue(supportsRawValueSensors());
 		
-		tellUserToAttachTheDeviceWith("a raw voltage compatible sensor reading between 0 and 5 Volts");
+		int response = tellUserToAttachTheDeviceWith("just a raw voltage compatible sensor reading between 0 and 5 Volts");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -364,22 +392,28 @@ public abstract class SensorDeviceTest {
 	
 	@Test
 	public void testRepeatConfiguration(){
-		tellUserToAttachTheDeviceWith("a temperature sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
+		ExperimentConfig experimentConfig = null;
+
+		int response = tellUserToAttachTheDeviceWith("just a non-force (e.g. temperature) sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		
-		ExperimentRequestImpl experimentRequest = new ExperimentRequestImpl();		
 		SensorRequestImpl sensorRequest = new SensorRequestImpl();
 		experimentRequest.setSensorRequests(new SensorRequest[] {sensorRequest});
 		sensorRequest.setType(SensorConfig.QUANTITY_FORCE);
 				
-		ExperimentConfig experimentConfig = device.configure(experimentRequest);
+		experimentConfig = device.configure(experimentRequest);
 		assertNotNull("Non null experiment config", experimentConfig);
 		assertTrue("Correctly didn't find a force sensor", !experimentConfig.isValid());
-		
+
 		experimentConfig = null;
-		
-		tellUserToAttachTheDeviceWith("a force sensor");
+
+		response = tellUserToAttachTheDeviceWith("just a force sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		experimentConfig = device.configure(experimentRequest);		
 		
@@ -389,7 +423,10 @@ public abstract class SensorDeviceTest {
 		
 	@Test
 	public void testConfigureInvalidResolution(){
-		tellUserToAttachTheDeviceWith("a force sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response = tellUserToAttachTheDeviceWith("just a force sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		
@@ -408,7 +445,10 @@ public abstract class SensorDeviceTest {
 
 	@Test
 	public void testMotionCollection() throws InterruptedException{
-		tellUserToAttachTheDeviceWith("a motion sensor between 0 and 1 meter");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response = tellUserToAttachTheDeviceWith("just a motion sensor between 0 and 1 meter");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -430,14 +470,17 @@ public abstract class SensorDeviceTest {
 
 		count = readData(values, 0);
 		assertTrue("Read got some valid values", count > 0);
-		assertTrue("Temp value is sane", values[0] > 0f && values[0] < 1f);
+		assertTrue("Distance value is sane", values[0] > 0f && values[0] < 1f);
 				
 		device.stop(true);				
 	}
 
 	@Test
 	public void testOxygenGasCollection() throws InterruptedException{
-		tellUserToAttachTheDeviceWith("a oxygen gas sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response = tellUserToAttachTheDeviceWith("just an oxygen gas sensor");
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -468,7 +511,10 @@ public abstract class SensorDeviceTest {
 
 	@Test
 	public void testIsNotAttached() throws Throwable {
-		tellUserToDetachTheDevice();
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int deviceDetachedResponse = tellUserToDetachTheDevice();
+		org.junit.Assume.assumeTrue(deviceDetachedResponse == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
@@ -479,13 +525,17 @@ public abstract class SensorDeviceTest {
 	
 	@Test
 	public void testIsNotAttachedAfterAttached() throws Throwable {
-		tellUserToAttachTheDevice();
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		deviceAttachedResponse = tellUserToAttachTheDevice();
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 
 		assertTrue("Device should be attached", device.isAttached());
 
-		tellUserToDetachTheDevice();
+		int deviceDetachedResponse = tellUserToDetachTheDevice();
+		org.junit.Assume.assumeTrue(deviceDetachedResponse == JOptionPane.YES_OPTION);
 
 		assertTrue("Device should not be attached", !device.isAttached());
 	}
@@ -503,24 +553,27 @@ public abstract class SensorDeviceTest {
 		device = null;
 	}
 	
-	protected void tellUser(String message) {
+	protected int tellUser(String message) {
+		System.out.println("Tell user: " + message);
 		if(message.equals(lastUserMessage)){
-			return;
+			return lastUserResponse;
 		}
-		JOptionPane.showMessageDialog(null, message);
+		int response = JOptionPane.showConfirmDialog(null, message, "", JOptionPane.YES_NO_OPTION);
 		lastUserMessage = message;
+		lastUserResponse = response;
+		return response;
 	}
 	
-	protected void tellUserToAttachTheDevice() {
-		tellUser("Attach the " + getDeviceLabel());
+	protected int tellUserToAttachTheDevice() {
+		return tellUser("Attach the " + getDeviceLabel());
 	}
 	
-	protected void tellUserToAttachTheDeviceWith(String message) {
-		tellUser("Attach the " + getDeviceLabel() + " with " + message);
+	protected int tellUserToAttachTheDeviceWith(String message) {
+		return tellUser("Attach the " + getDeviceLabel() + " with " + message);
 	}
 	
-	protected void tellUserToDetachTheDevice() {
-		tellUser("Detach the " + getDeviceLabel());
+	protected int tellUserToDetachTheDevice() {
+		return tellUser("Detach the " + getDeviceLabel());
 	}
 	
 	protected void prepareDevice() {
@@ -532,11 +585,15 @@ public abstract class SensorDeviceTest {
 	}
 	
  	protected void prepareForTemperatureCollectionBetween(String range) {
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		int response;
  		if(range == null){
- 			tellUserToAttachTheDeviceWith("a temperature sensor");
+			response = tellUserToAttachTheDeviceWith("just a temperature sensor");
  		} else {
- 			tellUserToAttachTheDeviceWith("a temperature sensor between " + range);
- 		}
+			response = tellUserToAttachTheDeviceWith("just a temperature sensor between " + range);
+		}
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		

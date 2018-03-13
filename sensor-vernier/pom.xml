@@ -52,6 +52,7 @@
         <configuration>
           <excludes>
             <!-- don't run any of the tests automatically because they require the correct hardware to be attached -->
+            <!-- to run a test, comment out its <exclude> line -->
             <exclude>org/concord/sensor/vernier/goio/**</exclude>
             <exclude>org/concord/sensor/vernier/labpro/**</exclude>
             <exclude>org/concord/sensor/vernier/labquest/**</exclude>

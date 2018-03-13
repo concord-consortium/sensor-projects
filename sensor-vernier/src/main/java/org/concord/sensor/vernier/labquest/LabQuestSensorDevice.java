@@ -109,7 +109,7 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 			labQuestLibrary = null;
 			labQuest = null;
 		} catch (LabQuestException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			// set it to null even if we have an exception because that is the 
 			// indication that the device is not attached
 			labQuest = null;
@@ -131,15 +131,15 @@ public class LabQuestSensorDevice extends AbstractSensorDevice
 		if(labQuest == null){
 			return false;
 		}
+
 		try {
 			labQuest.getStatus();
-		} catch(LabQuestException e){
-			if (e.isCommunicationError()){
-				return false;
-			}
+		} catch(Exception e){
+			return false;
 		}
 
-		return true;
+		// errors can set it to null
+		return labQuest != null;
 	}
 	
 	public LabQuest getCurrentLabQuest() {

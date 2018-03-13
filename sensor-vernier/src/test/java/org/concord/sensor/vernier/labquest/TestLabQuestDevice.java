@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class TestLabQuestDevice
 {
+	/*
 	@Test
 	public void testTemperatureAndLight(){
 		ExampleSensorApp app = new ExampleSensorApp(){
@@ -17,4 +18,5 @@ public class TestLabQuestDevice
 		};
 		app.testAllConnectedProbes();
 	}
+	*/
 }

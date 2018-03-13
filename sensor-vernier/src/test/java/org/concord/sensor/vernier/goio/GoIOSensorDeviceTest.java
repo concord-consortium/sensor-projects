@@ -22,8 +22,11 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 	
 	@Test
 	public void testRepeatGetCurrentConfig(){
-		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-			" and no sensor");
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
+		deviceAttachedResponse = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel()
+															+ " and no sensor", "", JOptionPane.YES_NO_OPTION);
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 		
@@ -36,9 +39,10 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 		
 		// The force sensor is used here because it is a smart sensor that has a DDS record
 		// stored in the sensor.  The temperature sensor does not have a DDS record.
-		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-		" and a force sensor");
-		
+		int response = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel()
+										+ " and a force sensor", "", JOptionPane.YES_NO_OPTION);
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
+
 		experimentConfig = device.getCurrentConfig();
 		assertNotNull("Non null experiment config", experimentConfig);
 		assertEquals("Force sensor", SensorConfig.QUANTITY_FORCE,
@@ -52,11 +56,14 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 
 	@Test
 	public void testRawVoltage2Collection() throws InterruptedException{
+		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
+
 		// This isn't a good test because the 10V channel doesn't report a 
 		// very different value from the 5V channel.  This test would require
 		// the actual header.
-		JOptionPane.showMessageDialog(null, "Attach the " + getDeviceLabel() +
-		" and a temperature sensor");
+		int response = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel() +
+										" and a temperature sensor", "", JOptionPane.YES_NO_OPTION);
+		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();
 

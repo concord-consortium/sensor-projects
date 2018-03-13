@@ -33,7 +33,10 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	
     public final static int [] CHANNELS = {1,2,3,4,11,12};
 
-    public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
+		public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
+
+		// additional delay from starting an experiment to reading first sample
+		public final static int INITIAL_READ_DELAY_MILLIS = 850;
     
 	protected final byte [] buf = new byte [1024];
 	
@@ -169,15 +172,18 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
      * @see org.concord.sensor.device.SensorDevice#configure(org.concord.sensor.ExperimentRequest)
      */
     public ExperimentConfig configure(ExperimentRequest request) 
-    {
+	{
 		ExperimentConfig experimentConfig = autoIdConfigure(request);
+
+		// Configure the LabPro-specific timing delay
+		experimentConfig.setInitialReadDelay(INITIAL_READ_DELAY_MILLIS);
 
 		// Configure the LabPro library appropriately
 		int numChannels = experimentConfig.getSensorConfigs().length;
 		port.setNumChannels(numChannels);
 
 		return experimentConfig;
-    }
+	}
 
 
 	/**
@@ -389,12 +395,12 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 				} else if(sensor.getType() == SensorConfig.QUANTITY_RAW_VOLTAGE_2 ||
 						sensor.getType() == SensorConfig.QUANTITY_RAW_DATA_2){
 					// setup sensor to report +/-10V
-					protocol.channelSetup(channelNumber, 2);				
+					protocol.channelSetup(channelNumber, 2);
 				} else {
 					protocol.channelSetup(channelNumber, 1);
-				}				
-			}			
-			
+				}
+			}
+
 			port.setNumChannels(sensorConfigs.length);
 			
 			// Turning on the power seems necessary before reading
@@ -439,7 +445,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			// send the reset
 			protocol.reset();
 			port.reset();
-						
+
 			// Close the port if it can open quickly again.
 			// This way if the program crashes or second program is opened then there will
 			// be less of a chance of port conflict.

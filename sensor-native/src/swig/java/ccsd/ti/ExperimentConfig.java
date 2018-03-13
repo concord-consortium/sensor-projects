@@ -37,6 +37,7 @@ public class ExperimentConfig implements
  {
   private long swigCPtr;
   protected boolean swigCMemOwn;
+  private int initialReadDelayMillis;
 
   protected ExperimentConfig(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
@@ -136,6 +137,16 @@ public class ExperimentConfig implements
     return NativeBridgeJNI.get_ExperimentConfig_deviceName(swigCPtr);
   }
 
+  public int getInitialReadDelay()
+  {
+    return initialReadDelayMillis;
+  }
+
+  public void setInitialReadDelay(int initialReadDelayMillis)
+  {
+    this.initialReadDelayMillis = initialReadDelayMillis;
+  }
+	
   public void setNumSensorConfigs(int numSensorConfigs) {
     NativeBridgeJNI.set_ExperimentConfig_numSensorConfigs(swigCPtr, numSensorConfigs);
   }

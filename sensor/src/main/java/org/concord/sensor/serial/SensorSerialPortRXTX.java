@@ -234,6 +234,12 @@ public class SensorSerialPortRXTX
 
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws SerialException
+	{
+		return readBytesUntil(buf, off, len, timeout, NO_TERMINATE_BYTE);
+	}
+
+	public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
+		throws SerialException
 	{	
 		// at least one of the receive time and theshold
 		// don't work on windows.

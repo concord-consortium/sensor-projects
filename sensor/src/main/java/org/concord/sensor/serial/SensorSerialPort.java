@@ -87,8 +87,8 @@ public interface SensorSerialPort
 	 * set to len bytes.  In this method the threshold is always len
 	 * bytes.
 	 * 
-	 * The thresold is the minimum number of bytes that need to be read
-	 * before the method returns.  If this is minimum number is not read
+	 * The threshold is the minimum number of bytes that need to be read
+	 * before the method returns.  If this minimum number is not read
 	 * before the timeout then the method returns the number read
 	 * at that point.   
 	 * 
@@ -101,6 +101,11 @@ public interface SensorSerialPort
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws SerialException;
+    
+		public static final int NO_TERMINATE_BYTE = 0xFF00;
+		
+		public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
+			throws SerialException;
     
     public void write(int value)
         throws SerialException;

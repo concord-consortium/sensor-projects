@@ -405,15 +405,15 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
     	throws SerialException
 	{
 		// read one byte at a time until we get to the closing bracket
-		// this is not the best way to do this, but it work without blocking
-		// regardless about how the readBytes on the port is implemented
+		// this is not the best way to do this, but it works without blocking
+		// regardless of how the readBytes on the port is implemented
 		// The timeout here should be set depending on how long it takes
 		// the LabPro to get back to us with the first byte
-		// check that the first byte is a }		
 		if((sb.totalBytes - sb.processedBytes) < 2){
 			return 0;
 		}
 		
+		// check that the first byte is a '{'
 		byte currentByte = sb.buf[sb.processedBytes];
 		if(currentByte != '{'){
 			log("First byte isn't { instead it is: " + (char)currentByte);
@@ -455,9 +455,13 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		String result = 
 			new String(sb.buf, sb.processedBytes, off-sb.processedBytes);
 
+		// optional logging should have an option in the logging
+		// system so this can be turned on and off
+		log("read: " + result);
+		
 		// now we have to use basic string parsing because waba and java don't 
 		// share the tokenizer
-		// but sense we are in a crunch lets just use the java conventions
+		// but since we are in a crunch let's just use the java conventions
 		// and deal with the waba stuff when we need it.
 		int count = 0;
 		StringTokenizer toks = new StringTokenizer(result, "{},\r\n");
@@ -478,7 +482,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	}
 	
 	/**
-	 * This read the string return values of the LabPro
+	 * This reads the string return values of the LabPro
 	 * These values look like:
 	 * {  +2.40000E+01, -9.99900E+02, -9.99900E+02 }
 	 * @param values
@@ -489,11 +493,10 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		throws SerialException
 	{
 		// read one byte at a time until we get to the closing bracket
-		// this is not the best way to do this, but it work without blocking
-		// regardless about how the readBytes on the port is implemented
+		// this is not the best way to do this, but it works without blocking
+		// regardless of how the readBytes on the port is implemented
 		// The timeout here should be set depending on how long it takes
 		// the LabPro to get back to us with the first byte
-		// check that the first byte is a }		
 
 		// It ought to be faster to read a whole chunk of bytes until the last
 		// byte read is }
@@ -502,8 +505,8 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		int numBytes = 0;
 		int attempts = 0;
 		while(attempts < 5){
-			// give it 100ms to send the reponse
-			ret = port.readBytes(buf, off, buf.length-off, 100);		
+			// give it 100ms to send the response
+			ret = port.readBytesUntil(buf, off, buf.length-off, 100, '\n');
 			if(ret < 0){
 				log("error reading values err: " + ret);
 				return -1;
@@ -548,14 +551,14 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 
 		// optional logging should have an option in the logging
 		// system so this can be turned on and off
-		log("read: \"" + result + "\"");
+		log("read: " + result);
 		
 		// We should use basic string parsing because waba and java don't 
 		// share a common tokenizer class
 		// but since we are in a time crunch lets just use the java conventions
 		// and deal with the waba stuff when we need it.
 		
-		// first find the last occurance of { that way we can 
+		// first find the last occurrence of '{' that way we can 
 		// skip any junk that came with this. 
 		int startingIndex = result.lastIndexOf("{");
 		

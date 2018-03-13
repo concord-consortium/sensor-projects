@@ -43,7 +43,7 @@ public abstract class AbstractStreamingSensorDevice extends AbstractSensorDevice
 		// assume there is something wrong with the port.
 		int ret = -1;
 
-        try {
+		try {
             ret = port.readBytes(streamingBuffer.buf, 
             		streamingBuffer.totalBytes,
             		readSize - streamingBuffer.totalBytes, 1);
@@ -78,6 +78,7 @@ public abstract class AbstractStreamingSensorDevice extends AbstractSensorDevice
         
         streamingBuffer.shift();
 
+        // System.out.println("AbstractStreamingSensorDevice.read [end] numSamples: " + numSamples);
         return numSamples;
 	}
 	

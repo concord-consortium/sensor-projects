@@ -157,6 +157,10 @@ public class SensorSerialPortRXTX
 	{
 	    return port != null;
 	}
+
+	public void reset() {
+		// nothing to do
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.dataharvest.SerialPort#setSerialPortParams(int, int, int, int)
@@ -230,6 +234,10 @@ public class SensorSerialPortRXTX
 		} catch (UnsupportedCommOperationException e) {
 			throw new SerialException("UnsupportedCommOperation");
 		}
+	}
+
+	public void setNumChannels(int numChannels) {
+		// nothing to do
 	}
 
 	public int readBytes(byte [] buf, int off, int len, long timeout)

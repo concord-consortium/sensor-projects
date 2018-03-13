@@ -67,6 +67,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			if (port != null && port.isOpen() && protocol != null) {
 				protocol.reset();
+				port.reset();
 			}
 		} catch (SerialException e) {
 			// if we can't reset don't worry about it
@@ -91,6 +92,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			protocol.wakeUp();
 			protocol.reset();
+			port.reset();
 		} catch (SerialException e) {
 			e.printStackTrace();
 			return false;
@@ -134,7 +136,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			}
 
 			if(round(values[LabProProtocol.SYS_STATUS.CONST_8888]) != 8888){
-				log("system status has wrong constent vlaue: " + 
+				log("system status has wrong constant value: " +
 						values[LabProProtocol.SYS_STATUS.CONST_8888]);
 				return false;
 			}
@@ -168,7 +170,13 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
      */
     public ExperimentConfig configure(ExperimentRequest request) 
     {
-    	return autoIdConfigure(request);
+		ExperimentConfig experimentConfig = autoIdConfigure(request);
+
+		// Configure the LabPro library appropriately
+		int numChannels = experimentConfig.getSensorConfigs().length;
+		port.setNumChannels(numChannels);
+
+		return experimentConfig;
     }
 
 
@@ -226,7 +234,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 					new VernierSensor(this, devService, channelNumber,
 							channelType);
 				
-				// translate the vernier id to the SenorConfig id
+				// translate the vernier id to the SensorConfig id
 				sensorConfig.setupSensor(sensorId, null);
 				sensorConfigVect.add(sensorConfig);
 			}
@@ -362,6 +370,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			protocol.wakeUp();
 			protocol.reset();
+			port.reset();
 
 			SensorConfig[] sensorConfigs = currentConfig.getSensorConfigs();
 			for (SensorConfig sensor : sensorConfigs) {
@@ -385,6 +394,8 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 					protocol.channelSetup(channelNumber, 1);
 				}				
 			}			
+			
+			port.setNumChannels(sensorConfigs.length);
 			
 			// Turning on the power seems necessary before reading
 			// from the gomotion in real time.  It might also be
@@ -427,6 +438,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			
 			// send the reset
 			protocol.reset();
+			port.reset();
 						
 			// Close the port if it can open quickly again.
 			// This way if the program crashes or second program is opened then there will
@@ -680,7 +692,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			portName = "usb";
 			return true;
 		} catch (SerialException e) {
-			// The port could not be opened so lets move on to the rxtxPort
+			// The port could not be opened so let's move on to the rxtxPort
 			System.err.println("Can't open LabPro USB");
 			System.err.println("  " + e.toString());
 		}

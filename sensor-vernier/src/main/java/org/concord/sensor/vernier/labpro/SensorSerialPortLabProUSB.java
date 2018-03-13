@@ -38,6 +38,12 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 		lpusb = null;
 	}
 
+	public void reset() {
+		if (lpusb != null) {
+			lpusb.clearInputs((short)0);
+		}
+	}
+
 	public void disableReceiveTimeout() 
 	{
 		// there are no timeouts
@@ -88,11 +94,17 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	}
 
 	public void open(String portName) throws SerialException 
-	{	
+	{
 		try {
 			LabProUSBLibrary lplib = new LabProUSBLibrary();
-	    	lplib.init();
-	    	lpusb = lplib.openDevice();
+			lplib.init();
+			lpusb = lplib.openDevice();
+			if (lpusb != null) {
+				lpusb.clearInputs((short)0);
+			}
+			else {
+				throw new SerialException("Unable to open device");
+			}
 		} catch (LabProUSBException e) {
 			e.printStackTrace();
 			throw new SerialException("Unable to open device");
@@ -106,6 +118,13 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 			e.printStackTrace();
 			throw new SerialException("Can't load labprousb library", e);
 		}
+	}
+
+	public void setNumChannels(int numChannels) {
+		short binaryMode = 0;	// default to text mode
+		short realTime = 1;		// default to real-time collection
+		int clearResult = lpusb.clearInputs((short)0);
+		int setResult = lpusb.setNumChannelsAndModes(numChannels, binaryMode, realTime);
 	}
 
 	/**
@@ -201,6 +220,10 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 			bufToWrite = tmpBuffer;
 		}
 		
+		if (!this.isOpen()) {
+			throw new SerialException("SensorSerialPortLabProUSB can't write to closed device");
+		}
+
 		short numWritten = lpusb.writeBytes((short)length, bufToWrite);
 		if(numWritten < length){			
 			throw new SerialException("Didn't write all bytes. Wrote: " + numWritten +
@@ -214,6 +237,6 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	 */
 	public boolean isOpenFast() 
 	{
-		return true;
+		return false;
 	}
 }

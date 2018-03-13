@@ -62,6 +62,8 @@ public interface SensorSerialPort
 		throws SerialException;
 	
 	public boolean isOpen();
+
+	public void reset();
 	
 	public abstract void setSerialPortParams( int baud, int data, 
             int stop, int parity )
@@ -79,6 +81,8 @@ public interface SensorSerialPort
 	
     public abstract void enableReceiveTimeout( int time )
 		throws SerialException;
+
+	public abstract void setNumChannels(int numChannels);
 
 	/**
 	 * The read method on input stream does not handle the timeout 
@@ -101,7 +105,7 @@ public interface SensorSerialPort
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws SerialException;
-    
+		
 		public static final int NO_TERMINATE_BYTE = 0xFF00;
 		
 		public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)

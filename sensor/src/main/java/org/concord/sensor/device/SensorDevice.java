@@ -109,7 +109,7 @@ public interface SensorDevice
 	 * object will be created instead.
 	 */
 	public void close();
-	
+
 	/**
 	 * This method is called after open but before start.  The request is 
 	 * a general sensor configuration request.  The device should try to
@@ -223,4 +223,24 @@ public interface SensorDevice
 	 * @return
 	 */
 	public ExperimentConfig getCurrentConfig();
+
+	/**
+	 * Whether the device supports polling individual channel values without 
+	 * setting up a full-blown experiment collection.
+	 * 
+	 * @return
+	 */
+	public boolean supportsChannelPolling();
+	
+	/**
+	 * Returns sensor values for the channels specified in 'channels',
+	 * and returns them in the 'values' array.
+	 * Return value is the number of values returned (generally the
+	 * number of channels requested) or an error value.
+	 * 
+	 * @param channels
+	 * @param values
+	 * @return
+	 */
+	public int pollChannelValues(ExperimentConfig channels, float [] values);
 }

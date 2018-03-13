@@ -215,6 +215,23 @@ public class NativeVernierSensorDevice
 	}
 
 	/**
+	 * @see org.concord.sensor.device.SensorDevice#supportsChannelPolling()
+	 */
+	public boolean supportsChannelPolling() 
+	{
+		return false;
+	}
+
+	/**
+	 * @see org.concord.sensor.device.SensorDevice#pollChannelValues()
+	 */
+	public int pollChannelValues(org.concord.sensor.ExperimentConfig expConfig, float [] values)
+	{
+		// not supported
+		return -1;
+	}
+
+	/**
 	 * 
 	 * native. but with the associated cookie.  unless there is another
 	 * perhaps the cookie can be stored in this object so the native code

@@ -314,6 +314,46 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		return 0;
 	}
 
+	@Override
+	public boolean supportsChannelPolling() 
+	{
+		return true;
+	}
+
+	/**
+	 * @see org.concord.sensor.device.SensorDevice#pollChannelValues()
+	 */
+	@Override
+	public int pollChannelValues(ExperimentConfig expConfig, float [] values) {
+		int returnValueCount = 0;
+		try {
+			SensorConfig[] sensorConfigs = expConfig.getSensorConfigs();
+			for(int i=0; i < sensorConfigs.length; i++) {
+				SensorConfig sensorConfig = sensorConfigs[i];
+				int sensorChannel = sensorConfig.getPort();
+				// must set up channel before reading data
+				protocol.channelSetup(sensorChannel, 1);
+				protocol.requestChannelData(sensorChannel);
+
+				float [] channelValue = new float[1];
+				int count = readValues(channelValue);
+				// LabPro uses -999.9 as an error status value
+				if((count < 1) || ((channelValue[0] > -1000) && (channelValue[0] < -999))) {
+					throw new SerialException("Error reading channel values");
+				}
+				else {
+					values[i] = channelValue[0];
+					++ returnValueCount;
+				}
+			}
+			return returnValueCount;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	/**
 	 * @see org.concord.sensor.device.SensorDevice#start()
 	 */

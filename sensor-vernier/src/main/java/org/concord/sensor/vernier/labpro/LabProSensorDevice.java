@@ -342,7 +342,8 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		int returnValueCount = 0;
 		try {
 			SensorConfig[] sensorConfigs = expConfig.getSensorConfigs();
-			for(int i=0; i < sensorConfigs.length; i++) {
+			int sensorCount = sensorConfigs != null ? sensorConfigs.length : 0;
+			for(int i=0; i < sensorCount; i++) {
 				SensorConfig sensorConfig = sensorConfigs[i];
 				int sensorChannel = sensorConfig.getPort();
 				// must set up channel before reading data

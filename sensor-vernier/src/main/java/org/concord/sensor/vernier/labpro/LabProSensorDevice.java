@@ -33,10 +33,10 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	
     public final static int [] CHANNELS = {1,2,3,4,11,12};
 
-		public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
+	public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
 
-		// additional delay from starting an experiment to reading first sample
-		public final static int INITIAL_READ_DELAY_MILLIS = 850;
+	// additional delay from starting an experiment to reading first sample
+	public final static int INITIAL_READ_DELAY_MILLIS = 850;
     
 	protected final byte [] buf = new byte [1024];
 	
@@ -177,10 +177,6 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 
 		// Configure the LabPro-specific timing delay
 		experimentConfig.setInitialReadDelay(INITIAL_READ_DELAY_MILLIS);
-
-		// Configure the LabPro library appropriately
-		int numChannels = experimentConfig.getSensorConfigs().length;
-		port.setNumChannels(numChannels);
 
 		return experimentConfig;
 	}

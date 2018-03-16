@@ -105,12 +105,12 @@ public interface SensorSerialPort
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws SerialException;
-		
-		public static final int NO_TERMINATE_BYTE = 0xFF00;
-		
-		public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
-			throws SerialException;
-    
+	
+	public static final int NO_TERMINATE_BYTE = 0xFF00;
+	
+	public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
+		throws SerialException;
+
     public void write(int value)
         throws SerialException;
     

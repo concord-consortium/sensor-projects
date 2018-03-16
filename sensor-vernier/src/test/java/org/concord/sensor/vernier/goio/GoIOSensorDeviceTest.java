@@ -24,8 +24,8 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 	public void testRepeatGetCurrentConfig(){
 		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
 
-		deviceAttachedResponse = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel()
-															+ " and no sensor", "", JOptionPane.YES_NO_OPTION);
+		String deviceAloneMsg = "Attach the " + getDeviceLabel() + " and no sensor";
+		deviceAttachedResponse = JOptionPane.showConfirmDialog(null, deviceAloneMsg, "", JOptionPane.YES_NO_OPTION);
 		org.junit.Assume.assumeTrue(deviceAttachedResponse == JOptionPane.YES_OPTION);
 
 		prepareDevice();
@@ -39,8 +39,8 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 		
 		// The force sensor is used here because it is a smart sensor that has a DDS record
 		// stored in the sensor.  The temperature sensor does not have a DDS record.
-		int response = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel()
-										+ " and a force sensor", "", JOptionPane.YES_NO_OPTION);
+		String withForceMsg = "Attach the " + getDeviceLabel() + " and a force sensor";
+		int response = JOptionPane.showConfirmDialog(null, withForceMsg, "", JOptionPane.YES_NO_OPTION);
 		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		experimentConfig = device.getCurrentConfig();
@@ -61,8 +61,8 @@ public class GoIOSensorDeviceTest extends SensorDeviceTest {
 		// This isn't a good test because the 10V channel doesn't report a 
 		// very different value from the 5V channel.  This test would require
 		// the actual header.
-		int response = JOptionPane.showConfirmDialog(null, "Attach the " + getDeviceLabel() +
-										" and a temperature sensor", "", JOptionPane.YES_NO_OPTION);
+		String withTempMsg = "Attach the " + getDeviceLabel() + " and a temperature sensor";
+		int response = JOptionPane.showConfirmDialog(null, withTempMsg, "", JOptionPane.YES_NO_OPTION);
 		org.junit.Assume.assumeTrue(response == JOptionPane.YES_OPTION);
 
 		prepareDevice();

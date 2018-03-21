@@ -37,10 +37,12 @@ public class ExperimentConfig implements
  {
   private long swigCPtr;
   protected boolean swigCMemOwn;
+  private int initialReadDelayMillis;
 
   protected ExperimentConfig(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
+    initialReadDelayMillis = 0;
   }
 
   protected void finalize() {
@@ -67,7 +69,17 @@ public class ExperimentConfig implements
 	public boolean getExactPeriod()
 	{
 		return getExactPeriodUChar() == 1;
-	}
+  }
+  
+  public int getInitialReadDelay()
+  {
+    return initialReadDelayMillis;
+  }
+
+  public void setInitialReadDelay(int initialReadDelayMillis)
+  {
+    this.initialReadDelayMillis = initialReadDelayMillis;
+  }
 	
 	public org.concord.sensor.SensorConfig [] getSensorConfigs()
 	{

@@ -38,6 +38,12 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 		lpusb = null;
 	}
 
+	public void reset() {
+		if (lpusb != null) {
+			lpusb.clearInputs((short)0);
+		}
+	}
+
 	public void disableReceiveTimeout() 
 	{
 		// there are no timeouts
@@ -88,11 +94,17 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	}
 
 	public void open(String portName) throws SerialException 
-	{	
+	{
 		try {
 			LabProUSBLibrary lplib = new LabProUSBLibrary();
-	    	lplib.init();
-	    	lpusb = lplib.openDevice();
+			lplib.init();
+			lpusb = lplib.openDevice();
+			if (lpusb != null) {
+				lpusb.clearInputs((short)0);
+			}
+			else {
+				throw new SerialException("Unable to open device");
+			}
 		} catch (LabProUSBException e) {
 			e.printStackTrace();
 			throw new SerialException("Unable to open device");
@@ -108,29 +120,57 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 		}
 	}
 
+	public void setNumChannels(int numChannels) {
+		short binaryMode = 0;	// default to text mode
+		short realTime = 1;		// default to real-time collection
+		int clearResult = lpusb.clearInputs((short)0);
+		int setResult = lpusb.setNumChannelsAndModes(numChannels, binaryMode, realTime);
+	}
+
 	/**
 	 * This is not thread safe.
 	 */
-	public int readBytes(byte[] buf, int off, int len, long timeout)
-			throws SerialException 
+	public int readBytes(byte [] buf, int off, int len, long timeout)
+		throws SerialException
 	{
-		int size = 0;	    
+		return readBytesUntil(buf, off, len, timeout, NO_TERMINATE_BYTE);
+	}
+
+	private boolean bufferHasTerminateByte(byte [] buf, int off, int size, int terminateByte)
+	{
+		if ((size <= 0) || (terminateByte == NO_TERMINATE_BYTE)) {
+			return false;
+		}
+		return buf[off + size - 1] == terminateByte;
+	}
+
+	public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
+		throws SerialException
+	{	
+		if (!this.isOpen()) {
+			throw new SerialException("SensorSerialPortLabProUSB can't read from closed device");
+		}
+		int size = 0;
+		int tries = 1;
 	    long startTime = System.currentTimeMillis();
-	    while(size != -1 && size < len &&
+	    while(size != -1 && size < len && !bufferHasTerminateByte(buf, off, size, terminateByte) &&
 	            (System.currentTimeMillis() - startTime) < timeout){
 	    	
 	    	int availableBytes = lpusb.getAvailableBytes();
 	    	if(availableBytes > 0){
-	    		int numRead = (int) lpusb.readBytes(availableBytes, tmpBuffer);
+					// System.out.println(String.format("SensorSerialPortLabProUSB.readBytesUntil availableBytes: %d, tries: %d",
+					// 										availableBytes, tries));
+					int numRead = (int) lpusb.readBytes(availableBytes, tmpBuffer);
 		        if(numRead < 0) {	      
 		            System.err.println();
-		            System.err.println("error in readBytes: " + numRead);
+		            System.err.println("error in readBytesUntil: " + numRead);
 		            
 		            return numRead;
 		        }
-	    		
-				System.arraycopy(tmpBuffer, 0, buf, size+off, numRead);	    		
-	    		size += numRead;
+					
+				// TODO: handle case when numRead exceeds remaining size of buf
+				System.arraycopy(tmpBuffer, 0, buf, size+off, numRead);
+					size += numRead;
 	    	} 
 	    	
 	    	try {
@@ -139,8 +179,13 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    }
+			++tries;
+			}
+			// System.out.println(String.format("SensorSerialPortLabProUSB.readBytesUntil [readTerminate] millis: %d, hasTerminateByte: %b",
+			// 																	System.currentTimeMillis() - startTime, bufferHasTerminateByte(buf, off, size, terminateByte)));
 	    
+			// System.out.println(String.format("SensorSerialPortLabProUSB.readBytesUntil [end] size: %d, tries: %d",
+			// 										size, tries - 1));
 	    return size;	
 	}
 
@@ -175,6 +220,10 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 			bufToWrite = tmpBuffer;
 		}
 		
+		if (!this.isOpen()) {
+			throw new SerialException("SensorSerialPortLabProUSB can't write to closed device");
+		}
+
 		short numWritten = lpusb.writeBytes((short)length, bufToWrite);
 		if(numWritten < length){			
 			throw new SerialException("Didn't write all bytes. Wrote: " + numWritten +
@@ -188,6 +237,6 @@ public class SensorSerialPortLabProUSB implements SensorSerialPort
 	 */
 	public boolean isOpenFast() 
 	{
-		return true;
+		return false;
 	}
 }

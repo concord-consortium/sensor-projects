@@ -96,6 +96,13 @@ public class LabProProtocol
 		sendCommand(LabProProtocol.CMD.REQUEST_CHANNEL_STATUS, "" + channel + ",0");
 	}
 
+	// Note: Must set up channel ("s{1,...}") before requesting channel data
+	public void requestChannelData(int channel)
+	    throws SerialException
+	{
+		sendCommand(LabProProtocol.CMD.REQUEST_CHANNEL_DATA, "" + channel + ",0");
+	}
+
 	public void channelSetup(int channel, int operation) 
 		throws SerialException
 	{
@@ -147,11 +154,9 @@ public class LabProProtocol
 		throws SerialException
 	{
 		if(PRINT_SENDS){
-			System.out.println("s");
+			System.out.print("sending: " + "s\n");
 		}
 		labProDevice.getPort().write(wakeUpBytes);
 		labProDevice.getDeviceService().sleep(100);
 	}
-	
-
 }

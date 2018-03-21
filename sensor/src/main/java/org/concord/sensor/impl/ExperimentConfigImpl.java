@@ -49,9 +49,15 @@ public class ExperimentConfigImpl
     private String deviceName;
 	private int deviceId;
     private float dataReadPeriod;
+	private int initialReadDelayMillis;
 
     private Range periodRange;
-    
+	
+	public ExperimentConfigImpl()
+	{
+		initialReadDelayMillis = 0;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentConfig#isValid()
 	 */
@@ -102,8 +108,18 @@ public class ExperimentConfigImpl
 	{
 	    exactPeriod = exact;
 	}
-	
-	/* (non-Javadoc)
+
+	public int getInitialReadDelay()
+	{
+	  return initialReadDelayMillis;
+	}
+  
+	public void setInitialReadDelay(int initialReadDelayMillis)
+	{
+	  this.initialReadDelayMillis = initialReadDelayMillis;
+	}
+	  
+	  /* (non-Javadoc)
 	 * @see org.concord.sensor.ExperimentConfig#getSensorConfigs()
 	 */
 	public SensorConfig[] getSensorConfigs() 

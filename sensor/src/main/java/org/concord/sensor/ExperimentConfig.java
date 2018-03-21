@@ -97,6 +97,15 @@ public interface ExperimentConfig
 	public float getDataReadPeriod();
 		
 	/**
+	 * This is the number of milliseconds the client should wait between
+	 * starting an experiment and beginning to collect the data in
+	 * addition to the time it takes to collect the first sample.
+	 * 
+	 * @return
+	 */
+	public int getInitialReadDelay();
+		
+	/**
 	 * An array of SensorConfig, each SensorConfig contains configuration
 	 * information about the sensor.  This will return null if there are no
 	 * sensor configs.  Zero length arrays are not handled by waba which is 

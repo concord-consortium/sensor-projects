@@ -62,6 +62,8 @@ public interface SensorSerialPort
 		throws SerialException;
 	
 	public boolean isOpen();
+
+	public void reset();
 	
 	public abstract void setSerialPortParams( int baud, int data, 
             int stop, int parity )
@@ -80,6 +82,8 @@ public interface SensorSerialPort
     public abstract void enableReceiveTimeout( int time )
 		throws SerialException;
 
+	public abstract void setNumChannels(int numChannels);
+
 	/**
 	 * The read method on input stream does not handle the timeout 
 	 * quite the way I want it.  It varies from implementation.  In 
@@ -87,8 +91,8 @@ public interface SensorSerialPort
 	 * set to len bytes.  In this method the threshold is always len
 	 * bytes.
 	 * 
-	 * The thresold is the minimum number of bytes that need to be read
-	 * before the method returns.  If this is minimum number is not read
+	 * The threshold is the minimum number of bytes that need to be read
+	 * before the method returns.  If this minimum number is not read
 	 * before the timeout then the method returns the number read
 	 * at that point.   
 	 * 
@@ -101,7 +105,12 @@ public interface SensorSerialPort
 	 */
 	public int readBytes(byte [] buf, int off, int len, long timeout)
 		throws SerialException;
-    
+	
+	public static final int NO_TERMINATE_BYTE = 0xFF00;
+	
+	public int readBytesUntil(byte [] buf, int off, int len, long timeout, int terminateByte)
+		throws SerialException;
+
     public void write(int value)
         throws SerialException;
     

@@ -33,7 +33,10 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	
     public final static int [] CHANNELS = {1,2,3,4,11,12};
 
-    public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
+	public final static String ERR_DEVICE_NOT_ATTACHED = "LabPro is not attached";
+
+	// additional delay from starting an experiment to reading first sample
+	public final static int INITIAL_READ_DELAY_MILLIS = 850;
     
 	protected final byte [] buf = new byte [1024];
 	
@@ -67,6 +70,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			if (port != null && port.isOpen() && protocol != null) {
 				protocol.reset();
+				port.reset();
 			}
 		} catch (SerialException e) {
 			// if we can't reset don't worry about it
@@ -91,6 +95,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			protocol.wakeUp();
 			protocol.reset();
+			port.reset();
 		} catch (SerialException e) {
 			e.printStackTrace();
 			return false;
@@ -134,7 +139,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			}
 
 			if(round(values[LabProProtocol.SYS_STATUS.CONST_8888]) != 8888){
-				log("system status has wrong constent vlaue: " + 
+				log("system status has wrong constant value: " +
 						values[LabProProtocol.SYS_STATUS.CONST_8888]);
 				return false;
 			}
@@ -167,9 +172,14 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
      * @see org.concord.sensor.device.SensorDevice#configure(org.concord.sensor.ExperimentRequest)
      */
     public ExperimentConfig configure(ExperimentRequest request) 
-    {
-    	return autoIdConfigure(request);
-    }
+	{
+		ExperimentConfig experimentConfig = autoIdConfigure(request);
+
+		// Configure the LabPro-specific timing delay
+		experimentConfig.setInitialReadDelay(INITIAL_READ_DELAY_MILLIS);
+
+		return experimentConfig;
+	}
 
 
 	/**
@@ -226,7 +236,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 					new VernierSensor(this, devService, channelNumber,
 							channelType);
 				
-				// translate the vernier id to the SenorConfig id
+				// translate the vernier id to the SensorConfig id
 				sensorConfig.setupSensor(sensorId, null);
 				sensorConfigVect.add(sensorConfig);
 			}
@@ -314,6 +324,47 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		return 0;
 	}
 
+	@Override
+	public boolean supportsChannelPolling() 
+	{
+		return true;
+	}
+
+	/**
+	 * @see org.concord.sensor.device.SensorDevice#pollChannelValues()
+	 */
+	@Override
+	public int pollChannelValues(ExperimentConfig expConfig, float [] values) {
+		int returnValueCount = 0;
+		try {
+			SensorConfig[] sensorConfigs = expConfig.getSensorConfigs();
+			int sensorCount = sensorConfigs != null ? sensorConfigs.length : 0;
+			for(int i=0; i < sensorCount; i++) {
+				SensorConfig sensorConfig = sensorConfigs[i];
+				int sensorChannel = sensorConfig.getPort();
+				// must set up channel before reading data
+				protocol.channelSetup(sensorChannel, 1);
+				protocol.requestChannelData(sensorChannel);
+
+				float [] channelValue = new float[1];
+				int count = readValues(channelValue);
+				// LabPro uses -999.9 as an error status value
+				if((count < 1) || ((channelValue[0] > -1000) && (channelValue[0] < -999))) {
+					throw new SerialException("Error reading channel values");
+				}
+				else {
+					values[i] = channelValue[0];
+					++ returnValueCount;
+				}
+			}
+			return returnValueCount;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	/**
 	 * @see org.concord.sensor.device.SensorDevice#start()
 	 */
@@ -322,6 +373,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		try {
 			protocol.wakeUp();
 			protocol.reset();
+			port.reset();
 
 			SensorConfig[] sensorConfigs = currentConfig.getSensorConfigs();
 			for (SensorConfig sensor : sensorConfigs) {
@@ -340,11 +392,13 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 				} else if(sensor.getType() == SensorConfig.QUANTITY_RAW_VOLTAGE_2 ||
 						sensor.getType() == SensorConfig.QUANTITY_RAW_DATA_2){
 					// setup sensor to report +/-10V
-					protocol.channelSetup(channelNumber, 2);				
+					protocol.channelSetup(channelNumber, 2);
 				} else {
 					protocol.channelSetup(channelNumber, 1);
-				}				
-			}			
+				}
+			}
+
+			port.setNumChannels(sensorConfigs.length);
 			
 			// Turning on the power seems necessary before reading
 			// from the gomotion in real time.  It might also be
@@ -387,7 +441,8 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			
 			// send the reset
 			protocol.reset();
-						
+			port.reset();
+
 			// Close the port if it can open quickly again.
 			// This way if the program crashes or second program is opened then there will
 			// be less of a chance of port conflict.
@@ -405,15 +460,15 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
     	throws SerialException
 	{
 		// read one byte at a time until we get to the closing bracket
-		// this is not the best way to do this, but it work without blocking
-		// regardless about how the readBytes on the port is implemented
+		// this is not the best way to do this, but it works without blocking
+		// regardless of how the readBytes on the port is implemented
 		// The timeout here should be set depending on how long it takes
 		// the LabPro to get back to us with the first byte
-		// check that the first byte is a }		
 		if((sb.totalBytes - sb.processedBytes) < 2){
 			return 0;
 		}
 		
+		// check that the first byte is a '{'
 		byte currentByte = sb.buf[sb.processedBytes];
 		if(currentByte != '{'){
 			log("First byte isn't { instead it is: " + (char)currentByte);
@@ -455,9 +510,13 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		String result = 
 			new String(sb.buf, sb.processedBytes, off-sb.processedBytes);
 
+		// optional logging should have an option in the logging
+		// system so this can be turned on and off
+		log("read: " + result);
+		
 		// now we have to use basic string parsing because waba and java don't 
 		// share the tokenizer
-		// but sense we are in a crunch lets just use the java conventions
+		// but since we are in a crunch let's just use the java conventions
 		// and deal with the waba stuff when we need it.
 		int count = 0;
 		StringTokenizer toks = new StringTokenizer(result, "{},\r\n");
@@ -478,7 +537,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 	}
 	
 	/**
-	 * This read the string return values of the LabPro
+	 * This reads the string return values of the LabPro
 	 * These values look like:
 	 * {  +2.40000E+01, -9.99900E+02, -9.99900E+02 }
 	 * @param values
@@ -489,11 +548,10 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		throws SerialException
 	{
 		// read one byte at a time until we get to the closing bracket
-		// this is not the best way to do this, but it work without blocking
-		// regardless about how the readBytes on the port is implemented
+		// this is not the best way to do this, but it works without blocking
+		// regardless of how the readBytes on the port is implemented
 		// The timeout here should be set depending on how long it takes
 		// the LabPro to get back to us with the first byte
-		// check that the first byte is a }		
 
 		// It ought to be faster to read a whole chunk of bytes until the last
 		// byte read is }
@@ -502,8 +560,8 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		int numBytes = 0;
 		int attempts = 0;
 		while(attempts < 5){
-			// give it 100ms to send the reponse
-			ret = port.readBytes(buf, off, buf.length-off, 100);		
+			// give it 100ms to send the response
+			ret = port.readBytesUntil(buf, off, buf.length-off, 100, '\n');
 			if(ret < 0){
 				log("error reading values err: " + ret);
 				return -1;
@@ -548,14 +606,14 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 
 		// optional logging should have an option in the logging
 		// system so this can be turned on and off
-		log("read: \"" + result + "\"");
+		log("read: " + result);
 		
 		// We should use basic string parsing because waba and java don't 
 		// share a common tokenizer class
 		// but since we are in a time crunch lets just use the java conventions
 		// and deal with the waba stuff when we need it.
 		
-		// first find the last occurance of { that way we can 
+		// first find the last occurrence of '{' that way we can 
 		// skip any junk that came with this. 
 		int startingIndex = result.lastIndexOf("{");
 		
@@ -637,7 +695,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 			portName = "usb";
 			return true;
 		} catch (SerialException e) {
-			// The port could not be opened so lets move on to the rxtxPort
+			// The port could not be opened so let's move on to the rxtxPort
 			System.err.println("Can't open LabPro USB");
 			System.err.println("  " + e.toString());
 		}

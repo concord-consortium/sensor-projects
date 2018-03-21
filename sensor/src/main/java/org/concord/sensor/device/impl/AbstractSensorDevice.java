@@ -576,6 +576,25 @@ public abstract class AbstractSensorDevice implements SensorDevice,
 	}
 	
 	/**
+	 * Subclasses should override this method if they support polling individual
+	 * channel values without setting up a full-blown experiment collection.
+	 * 
+	 * @return
+	 */
+	public boolean supportsChannelPolling() {
+		return false;
+	}
+	
+	/**
+	 * Subclasses should override this method if they support polling individual
+	 * channel values without setting up a full-blown experiment collection.
+	 */
+	public int pollChannelValues(ExperimentConfig channels, float [] values) {
+		// not supported by default
+		return -1;
+	}
+
+	/**
 	 * This method is called after the port has been setup with the
 	 * serialPortParams returned by getSerialPortParams and then opened with
 	 * this portName.

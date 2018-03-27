@@ -35,8 +35,6 @@ public class LoadNativeLibraryTest {
 		if(Platform.isWindows()){
 			@SuppressWarnings("unused")
 			File nativeLibraryFromJarWindows = LabQuestLibrary.getNativeLibraryFromJarWindows();
-			// the copy_win32_wdapi_dll.exe should have been run 
-			// and now there should be a wdapi921.dll next to the NGIO_lib.dll
 			return;
 		}
 		
@@ -44,7 +42,7 @@ public class LoadNativeLibraryTest {
 			try{
 				@SuppressWarnings("unused")
 				File nativeLibraryFromJarWindows = LabQuestLibrary.getNativeLibraryFromJarWindows();
-				Assert.fail("running the windows extaction on Mac should fail");
+				Assert.fail("running the windows extraction on Mac should fail");
 			} catch(Exception e){				
 			}
 		}

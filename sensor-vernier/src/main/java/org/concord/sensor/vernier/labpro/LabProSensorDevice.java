@@ -176,7 +176,7 @@ public class LabProSensorDevice extends AbstractStreamingSensorDevice
 		ExperimentConfig experimentConfig = autoIdConfigure(request);
 
 		// Configure the LabPro-specific timing delay
-		experimentConfig.setInitialReadDelay(INITIAL_READ_DELAY_MILLIS);
+		((ExperimentConfigImpl) experimentConfig).setInitialReadDelay(INITIAL_READ_DELAY_MILLIS);
 
 		return experimentConfig;
 	}

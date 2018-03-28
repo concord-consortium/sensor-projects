@@ -142,7 +142,7 @@ public class LabQuestLibrary
 		if(ret != 0){
 			throw new LabQuestException();
 		}
-}
+	}
 	
 	public void printListOfDevices() throws LabQuestException 
 	{
@@ -279,32 +279,8 @@ public class LabQuestLibrary
     }
     
     static File getNativeLibraryFromJarWindows() throws IOException, InterruptedException {
-    	String path = getNativeLibraryResourcePath();
-        File directory = createTmpDirectory();
-
         String ngioDll = getNativeLibraryResourcePath() + "/NGIO_lib.dll";
-    	if (path.endsWith("amd64")) {
-            String wdapi64OS64 = getNativeLibraryResourcePath() + "/wdapi921.dll";
-            extractResource(wdapi64OS64, directory);
-    	} else {
-            String copyExec = getNativeLibraryResourcePath() + "/copy_win32_wdapi_dll.exe";
-            String wdapiOS32 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS32.dll";
-            String wdapiOS64 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS64.dll";
-
-
-            File copyExecFile = extractResource(copyExec, directory);
-            extractResource(wdapiOS32, directory);
-            extractResource(wdapiOS64, directory);
-
-            // run the copyExec
-            // it seems the executive needs the full path it isn't relative to the working directory.
-            Process exec = Runtime.getRuntime().exec(new String[] {copyExecFile.getCanonicalPath()}, 
-            		null, copyExecFile.getParentFile());
-
-            exec.waitFor();
-    	}
-
-        return extractResource(ngioDll, directory);        
+        return extractResource(ngioDll, createTmpDirectory());
     }
     
     private static File getNativeLibraryFromJarMac() throws IOException {
@@ -362,7 +338,7 @@ public class LabQuestLibrary
         String arch = System.getProperty("os.arch").toLowerCase();
         String osPrefix;
         if (Platform.isWindows()) {
-            osPrefix = "win32_" + arch;
+            osPrefix = "win32";
         }
         else if (Platform.isMac()) {
             osPrefix = "darwin";

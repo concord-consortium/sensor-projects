@@ -13,17 +13,21 @@
 # But if you extract the i386 file from libNGIO and libNGIOUniversal they are not the same
 # the libNGIO version of the i386 works better. the one in libNGIOUniversal can't reopen a device
 # after closing it
+#
+# 2018-03-28 NGIO_LIB 1.100
+# In the latest version of the SDK, the "Universal" lib is actually x86_64 only.
+# We also drop PPC support in this version, so we're really only creating a two-way universal.
 
 export NGIO_MAC_DIR=NGIO_SDK/redist/NGIO_lib/mac
 
 mkdir -p target/ngio
 rm -f target/ngio/*
-lipo -extract ppc     $NGIO_MAC_DIR/libNGIO.dylib          -output target/ngio/libNGIO1.dylib
+# lipo -extract ppc     $NGIO_MAC_DIR/libNGIO.dylib          -output target/ngio/libNGIO1.dylib
 lipo -extract i386    $NGIO_MAC_DIR/libNGIO.dylib          -output target/ngio/libNGIO2.dylib
-lipo -extract ppc7400 $NGIO_MAC_DIR/libNGIOUniversal.dylib -output target/ngio/libNGIO3.dylib
-lipo -extract x86_64  $NGIO_MAC_DIR/libNGIOUniversal.dylib -output target/ngio/libNGIO4.dylib
+# lipo -extract ppc7400 $NGIO_MAC_DIR/libNGIOUniversal.dylib -output target/ngio/libNGIO3.dylib
+# lipo -extract x86_64  $NGIO_MAC_DIR/libNGIOUniversal.dylib -output target/ngio/libNGIO4.dylib
 
-lipo -create target/ngio/* -output src/main/resources/org/concord/sensor/labquest/jna/darwin/libNGIOUniversal3way.dylib
-lipo -info src/main/resources/org/concord/sensor/labquest/jna/darwin/libNGIOUniversal3way.dylib
+lipo -create target/ngio/* "$NGIO_MAC_DIR/libNGIOUniversal.dylib" -output src/main/resources/org/concord/sensor/labquest/jna/darwin/libNGIOUniversal2way.dylib
+lipo -info src/main/resources/org/concord/sensor/labquest/jna/darwin/libNGIOUniversal2way.dylib
 
 rm -r target/ngio

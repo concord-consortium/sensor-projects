@@ -1,8 +1,0 @@
-_LabProUSB_Open
-_LabProUSB_Close
-_LabProUSB_IsOpen
-_LabProUSB_GetAvailableBytes
-_LabProUSB_ReadBytes
-_LabProUSB_WriteBytes
-_LabProUSB_ClearInputs
-_LabProUSB_SetNumChannelsAndModes

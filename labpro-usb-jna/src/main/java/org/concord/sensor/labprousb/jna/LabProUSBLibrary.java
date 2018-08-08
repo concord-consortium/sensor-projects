@@ -105,22 +105,7 @@ public class LabProUSBLibrary {
     
     static File getNativeLibraryFromJarWindows() throws IOException, InterruptedException {
         String labProUSBDll = getNativeLibraryResourcePath() + "/LabProUSB.dll";
-        String copyExec = getNativeLibraryResourcePath() + "/copy_win32_wdapi_dll.exe";
-        String wdapiOS32 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS32.dll";
-        String wdapiOS64 = getNativeLibraryResourcePath() + "/wdapi921_WIN32forOS64.dll";
-
         File directory = createTmpDirectory();
-        File copyExecFile = extractResource(copyExec, directory);
-        extractResource(wdapiOS32, directory);
-        extractResource(wdapiOS64, directory);
-
-        // run the copyExec
-        // it seems the executive needs the full path it isn't relative to the working directory.
-        Process exec = Runtime.getRuntime().exec(new String[] {copyExecFile.getCanonicalPath()}, 
-        		null, copyExecFile.getParentFile());
-
-        exec.waitFor();
-
         return extractResource(labProUSBDll, directory);        
     }
 

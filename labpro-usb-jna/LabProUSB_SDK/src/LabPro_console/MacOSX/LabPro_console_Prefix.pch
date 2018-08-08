@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'LabPro_console' target in the 'LabPro_console' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif

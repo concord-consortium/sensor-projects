@@ -13,44 +13,36 @@ import com.sun.jna.ptr.ShortByReference;
  *
  */
 public class D2PIOSensor {
-	protected D2PIOJNALibrary libInstance;
-	protected Pointer libHandle;
-	protected String deviceName;
-	protected String friendlyName;
+	protected D2PIOSensorSpec sensorSpec;
 	protected Pointer deviceHandle;
 
-	D2PIOSensor(D2PIOJNALibrary libInstance, Pointer libHandle,
-				String deviceName, String friendlyName) {
-		this.libInstance = libInstance;
-		this.libHandle = libHandle;
-		this.deviceName = deviceName;
-		this.friendlyName = friendlyName;
+	D2PIOSensor(D2PIOSensorSpec sensorSpec) {
+		this.sensorSpec = sensorSpec;
+
+		deviceHandle = open();
 	}
 
 	protected void finalize() {
 		close();
 	}
 
-	public String getName() {
-		return deviceName;
+	public String deviceName() {
+		return sensorSpec.deviceName();
 	}
 
-	public String getFriendlyName() {
-		return friendlyName;
+	public String friendlyName() {
+		return sensorSpec.friendlyName();
 	}
 
-	public boolean open() {
-		// byte[] devName = null;
-		// try {
-		// 	devName = (deviceName + '\0').getBytes("UTF-8");
-		// }
-		// catch(Exception ex) {
-		// }
-		// System.out.println("deviceNameStringLength: " + deviceName.length());
-		// System.out.println("devNameBytesLength: " + devName.length);
-		deviceHandle = libInstance.D2PIO_Device_Open(
-						libHandle, deviceName, null, 0,
-						D2PIOJNALibrary.D2PIO_USB_OPEN_TIMEOUT_MS, null, null);
+	protected Pointer open() {
+		final Pointer params = null;
+		final int paramsLen = 0;
+		final int timeout = D2PIOJNALibrary.D2PIO_USB_OPEN_TIMEOUT_MS;
+		final Pointer pCallback = null;
+		final Point pContext = null;
+		return sensorSpec.libInstance().D2PIO_Device_Open(
+					sensorSpec.libHandle(), sensorSpec.deviceName(),
+					params, paramsLen, timeout, pCallback, pContext);
 		if (deviceHandle == null) return false;
 
 		int result;
@@ -97,6 +89,23 @@ public class D2PIOSensor {
 			deviceHandle = null;
 		}
 		return result;
+	}
+
+	protected boolean waitForOpenSuccess() {
+		int callStatus = 0;
+		IntByReference pOpenStatus = new IntByReference(D2PIOJNALibrary.D2PIO_DEVICE_OPEN_STATUS_IN_PROGRESS);
+		while ((callStatus == 0) &&
+				(pOpenStatus.getValue() == D2PIOJNALibrary.D2PIO_DEVICE_OPEN_STATUS_IN_PROGRESS)) {
+			try {
+				Thread.sleep(50);
+			}
+			catch(InterruptedException ex) {
+				System.out.println("Sleep interrupted!");
+			}
+			callStatus = libInstance.D2PIO_Device_GetOpenStatus(deviceHandle, pOpenStatus);
+		}
+		return (callStatus == 0) &&
+				(pOpenStatus.getValue() == D2PIOJNALibrary.D2PIO_DEVICE_OPEN_STATUS_SUCCESS);
 	}
 
 /*

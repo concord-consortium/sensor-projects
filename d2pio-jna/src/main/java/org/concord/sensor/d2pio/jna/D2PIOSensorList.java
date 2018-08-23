@@ -60,7 +60,7 @@ public class D2PIOSensorList {
 		return deviceCount;
 	}
 
-	public D2PIOSensor getSensor(int index) {
+	public D2PIOSensorSpec getSensor(int index) {
 		int MAX_NAME_SIZE = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 		Pointer pDeviceName = new Memory(MAX_NAME_SIZE);
 		Pointer pFriendlyName = new Memory(MAX_NAME_SIZE);
@@ -75,19 +75,8 @@ public class D2PIOSensorList {
 			String friendlyName = pFriendlyName.getString(0, "UTF-8");
 			System.out.println("Device name: " + deviceName);
 			System.out.println("Friendly name: " + friendlyName);
-			return new D2PIOSensor(libInstance, libHandle, deviceName, friendlyName);
+			return new D2PIOSensorSpec(libInstance, libHandle, deviceName, friendlyName);
 		}
 		return null;
 	}
-
-	// cf. https://worldmodscode.wordpress.com/2012/12/14/the-java-bytebuffer-a-crash-course/
-	// public static String byteBufferToString(ByteBuffer bb) {
-	// 	// CharBuffer = bb.asCharBuffer();
-	// 	final int count = bb.remaining();
-	// 	final byte[] bytes = new byte[bb.remaining()];
-	 
-	// 	bb.duplicate().get(bytes);
-
-	// 	return new String(bytes, Charset.forName("UTF-8"));
-	// }
 }

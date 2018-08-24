@@ -339,6 +339,9 @@ public class LabQuestLibrary
         String osPrefix;
         if (Platform.isWindows()) {
             osPrefix = "win32";
+            if ("x86_64".equals(arch)) {
+                osPrefix = "win64";
+            }			
         }
         else if (Platform.isMac()) {
             osPrefix = "darwin";

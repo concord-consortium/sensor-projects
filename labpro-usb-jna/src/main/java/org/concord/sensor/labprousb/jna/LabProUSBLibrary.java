@@ -104,7 +104,11 @@ public class LabProUSBLibrary {
     }
     
     static File getNativeLibraryFromJarWindows() throws IOException, InterruptedException {
-        String labProUSBDll = getNativeLibraryResourcePath() + "/LabProUSB.dll";
+        String nativeLibraryResourcePath = getNativeLibraryResourcePath();
+        if (nativeLibraryResourcePath == null) {
+            return null;
+        }
+        String labProUSBDll = nativeLibraryResourcePath + "/LabProUSB.dll";
         File directory = createTmpDirectory();
         return extractResource(labProUSBDll, directory);        
     }
@@ -164,7 +168,14 @@ public class LabProUSBLibrary {
         String arch = System.getProperty("os.arch").toLowerCase();
         String osPrefix;
         if (Platform.isWindows()) {
-            osPrefix = "win32_" + arch;
+            // At present the only valid LabPro DLL is the 32 bit version located in the "win32_x86" folder
+            // expand cases below if more DLLs (e.g., 64 bit version) are added to the build resources
+            if ("x86".equals(arch)) {
+                osPrefix = "win32_" + arch;
+            }
+            else {
+                return null;
+            }
         }
         else if (Platform.isMac()) {
             osPrefix = "darwin";

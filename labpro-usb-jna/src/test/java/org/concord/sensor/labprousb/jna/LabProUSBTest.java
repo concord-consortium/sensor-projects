@@ -14,8 +14,13 @@ public class LabProUSBTest {
 	public void testNativeLibraryExtraction() throws Exception {
 		File lib = LabProUSBLibrary.getNativeLibraryFromJar();
 		if (Platform.isWindows()) {
-			Assert.assertNotNull("LabProUSB native library should not be null on Windows operating systems.", lib);
-			Assert.assertTrue(lib.exists());
+			String arch = System.getProperty("os.arch").toLowerCase();
+			// At present we only have a 32 bit version of the LabPro DLL
+			// Add additional unit tests if more DLLs (e.g., 64 bit version) are eventually added
+			if ("x86".equals(arch)) {
+				Assert.assertNotNull("LabProUSB native library should not be null when making 32 bit build on Windows operating systems.", lib);
+				Assert.assertTrue(lib.exists());				
+			}
 		} else if(Platform.isMac()) {
 			Assert.assertNotNull("LabProUSB native library should not be null on Mac operating systems.", lib);
 			Assert.assertTrue(lib.exists());

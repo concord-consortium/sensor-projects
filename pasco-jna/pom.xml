@@ -32,6 +32,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
@@ -41,7 +42,9 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20.1</version>
         <configuration>
           <excludes>
             <!-- don't run any of the tests automatically because they require the correct hardware to be attached -->

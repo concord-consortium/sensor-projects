@@ -55,9 +55,10 @@ public class D2PIOSensor {
 
 		int result;
 		IntByReference pOpenStatus = new IntByReference();
+		pOpenStatus.setValue(D2PIOJNALibrary.D2PIO_DEVICE_OPEN_STATUS_IN_PROGRESS);
 		while (true) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(50);
 			}
 			catch(InterruptedException ex) {
 				System.out.println("Sleep interrupted!");

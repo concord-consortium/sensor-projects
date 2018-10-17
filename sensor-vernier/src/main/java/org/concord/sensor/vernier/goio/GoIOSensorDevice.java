@@ -191,7 +191,7 @@ public class GoIOSensorDevice extends AbstractSensorDevice implements
 	
 	public String getErrorMessage(int error) {
 		if(errorMessage == null){
-			return "Unkown Error";
+			return "Unknown Error";
 		}
 		
 		return errorMessage;

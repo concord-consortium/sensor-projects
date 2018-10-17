@@ -22,17 +22,17 @@ public interface D2PIOJNALibrary extends Library {
 	public final static int D2PIO_DEVICE_OPEN_STATUS_TIMEOUT = 3;
 	public final static int D2PIO_DEVICE_OPEN_STATUS_SUCCESS = 4;
 	public final static int D2PIO_DEVICE_OPEN_STATUS_CLOSED = 5;
-	
+
 	public final static int D2PIO_USB_OPEN_TIMEOUT_MS = 3000;
-	
+
 	public final static byte D2PIO_CMD_ID_GET_STATUS = 0x10;
 	public final static byte D2PIO_CMD_ID_START_MEASUREMENTS = 0x18;
 	public final static byte D2PIO_CMD_ID_STOP_MEASUREMENTS = 0x19;
 	public final static int D2PIO_TIMEOUT_MS_DEFAULT = (2000*4);
-	
+
 	public final static int D2PIO_NUMERIC_MEAS_TYPE_REAL64 = 0;
 	public final static int D2PIO_NUMERIC_MEAS_TYPE_INT32 = 1;
-	
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Init()
 
@@ -157,7 +157,7 @@ public interface D2PIOJNALibrary extends Library {
 		Pointer pDevFriendlyNameBuf,	//[out] ptr to buffer to store NULL terminated UTF-8 string that may be displayed for the user to identify the device.
 								//Note that pDevFriendlyNameBuf is not very friendly for D2PIO_COMM_TRANSPORT_USB.
 								//However, the friendly name can be obtained via D2PIO_Device_GetOpenDeviceName() after the device is open.
-		int DevFriendlyNameBufsize,//[in] number of UTF-8 chars in buffer pointed to by pDevFriendlyNameBuf. strlen(pDevFriendlyNameBuf) < bufSize, 
+		int DevFriendlyNameBufsize,//[in] number of UTF-8 chars in buffer pointed to by pDevFriendlyNameBuf. strlen(pDevFriendlyNameBuf) < bufSize,
 								//because the string is NULL terminated.
 								//strlen(pDevFriendlyNameBuf)is guaranteed to be < D2PIO_MAX_SIZE_DEVICE_NAME.
 		IntByReference pRSSI_level);	//[out] Valid RSSI levels are < 0. 0 is an invalid RSSI level. This output is only set for D2PIO_COMM_TRANSPORT_BLUETOOTH_LE.
@@ -165,7 +165,7 @@ public interface D2PIOJNALibrary extends Library {
 	Function Name: D2PIO_Device_Open()
 
 	Purpose:	Open a device with the name returned by D2PIO_DeviceListSnapshot_GetNthEntry.
-		
+
 				D2PIO_Device_Open() returns immediately with a non NULL handle if successful.
 				Call D2PIO_Device_GetOpenStatus() or wait for D2PIODeviceNotificationOpenStatus to be reported via the supplied
 				callback function until device_open_status is not D2PIO_DEVICE_OPEN_STATUS_IN_PROGRESS.
@@ -176,7 +176,7 @@ public interface D2PIOJNALibrary extends Library {
 				applications to discover device details. These query functions generally run almost instantaneously
 				because the info that they are supplying to the caller was cached in local memory by D2PIO_Device_Open().
 
-				After calling D2PIO_Device_Open() and waiting for D2PIO_DEVICE_OPEN_STATUS_SUCCESS, an application needs to perform the 
+				After calling D2PIO_Device_Open() and waiting for D2PIO_DEVICE_OPEN_STATUS_SUCCESS, an application needs to perform the
 				following operations to take measurements:
 
 				-	Call D2PIO_Device_SetMeasurementPeriod() to set the sampling period used for periodic measurements.
@@ -256,7 +256,7 @@ public interface D2PIOJNALibrary extends Library {
 	Purpose:	Get the unique device name string for a specified open device. This is the string returned by
 				D2PIO_DeviceListSnapshot_GetNthEntry() and passed in to D2PIO_Device_Open().
 
-				This routine also returns the 'friendly' name for the device which may be displayed for the user to identify the device. 
+				This routine also returns the 'friendly' name for the device which may be displayed for the user to identify the device.
 
 	Return:		0 iff successful, else -1.
 	****************************************************************************************************************************/
@@ -346,12 +346,12 @@ public interface D2PIOJNALibrary extends Library {
 		ByteByReference pMajorVersionSlaveCPU, 	//[out] Binary coded decimal
 		ByteByReference pMinorVersionSlaveCPU, 	//[out] Binary coded decimal
 		ShortByReference pBuildNumSlaveCPU); 	//[out]
-		
-		
+
+
 	/***************************************************************************************************************************
 	Purpose:	Send a command to the specified device hardware and wait for a response.
 
-				Each device type has a command protocol that is unique to that device type. 
+				Each device type has a command protocol that is unique to that device type.
 				The Go Direct device (D2PIO_DEVTYPE_GENERIC) protocol is documented in D2PIOSourceCmds.h .
 
 				Note that if you send D2PIO_CMD_ID_START_MEASUREMENTS while D2PIO_Device_GetNumMeasurementsAvailable()
@@ -371,11 +371,11 @@ public interface D2PIOJNALibrary extends Library {
 				If D2PIO_Device_SendCmdAndGetResponse() returns -1 and (1 == *pnRespBytes), then *pRespBuf contains
 				D2PIODefaultCmdResponse, even if a different response structure is defined for the command.
 				The D2PIODefaultCmdResponse structure contains only a single status byte field, which contains
-				a D2PIO_STATUS_ERROR_... value. Additional information about a D2PIO_Device_SendCmdAndGetResponse() error may be obtained 
+				a D2PIO_STATUS_ERROR_... value. Additional information about a D2PIO_Device_SendCmdAndGetResponse() error may be obtained
 				by calling D2PIO_Device_GetLastCmdResponseStatus().
 
-				Errors coming back from D2PIO_Device_SendCmdAndGetResponse() may or may not be fatal. 
-				By definition errors are fatal if they cause cause D2PIO_Device_GetOpenStatus() to return 
+				Errors coming back from D2PIO_Device_SendCmdAndGetResponse() may or may not be fatal.
+				By definition errors are fatal if they cause cause D2PIO_Device_GetOpenStatus() to return
 				D2PIO_DEVICE_OPEN_STATUS_ERROR or D2PIO_DEVICE_OPEN_STATUS_TIMEOUT.
 
 	Return:		0 if successful, else -1.
@@ -387,9 +387,9 @@ public interface D2PIOJNALibrary extends Library {
 		int nParamBytes,	//[in] # of bytes in (*pParams).
 		Pointer pRespBuf,			//[out] ptr to destination buffer, may be NULL.
 		IntByReference pnRespBytes,	//[in, out] ptr to size of of pRespBuf buffer on input, size of response on output, should be NULL if pRespBuf is NULL.
-		int timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. Most devices should reply to almost all the 
+		int timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. Most devices should reply to almost all the
 															//currently defined commands within D2PIO_TIMEOUT_MS_DEFAULT milliseconds. In fact, typical response
-															//times are less than 50 milliseconds. See D2PIO_TIMEOUT_MS_* definitions.	
+															//times are less than 50 milliseconds. See D2PIO_TIMEOUT_MS_* definitions.
 
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementChannelInfo()
@@ -402,9 +402,9 @@ public interface D2PIOJNALibrary extends Library {
 	****************************************************************************************************************************/
 	int D2PIO_GetMeasurementChannelAvailabilityMask(
 		Pointer hDevice,	//[in] handle to open device.
-		ByteByReference pChannelAvailabilityMask);//[out] ptr to loc to store mask identifying which channels are supported by the device					
+		ByteByReference pChannelAvailabilityMask);//[out] ptr to loc to store mask identifying which channels are supported by the device
 
-		
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_SetMeasurementPeriod()
 
@@ -426,7 +426,7 @@ public interface D2PIOJNALibrary extends Library {
 	  byte channel,		//[in] -1 => all channels. Currently ignored.
 	  double desiredPeriod,	//[in] desired measurement period in seconds.
 	  int timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. D2PIO_TIMEOUT_MS_DEFAULT is recommended.
-		
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementPeriod()
 
@@ -443,8 +443,8 @@ public interface D2PIOJNALibrary extends Library {
 		Pointer hDevice,//[in] handle to open device.
 		byte channel,		//[in] -1 => return 'base' period, else return period for specified channel. Currently ignored.
 		DoubleByReference pPeriod,		//[out] ptr to loc to store period in seconds.
-		int timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. D2PIO_TIMEOUT_MS_DEFAULT is recommended.		
-		
+		int timeoutMs);	//[in] # of milliseconds to wait for a reply before giving up. D2PIO_TIMEOUT_MS_DEFAULT is recommended.
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementChannelSensorId()
 
@@ -458,7 +458,7 @@ public interface D2PIOJNALibrary extends Library {
 		Pointer hDevice,	//[in] handle to open device.
 		byte channel,			//[in]
 		IntByReference pSensorId);		//[out] sensor id, which is unique record key for the Sensor Map.
-		
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementChannelSensorDescription()
 
@@ -471,11 +471,11 @@ public interface D2PIOJNALibrary extends Library {
 	int D2PIO_Device_GetMeasurementChannelSensorDescription(
 		Pointer hDevice,	//[in] handle to open device.
 		byte channel,			//[in]
-		Pointer pSensorDescription,//[out] ptr to loc to store NULL terminated UTF-8 string describing sensor. 
+		Pointer pSensorDescription,//[out] ptr to loc to store NULL terminated UTF-8 string describing sensor.
 		int sensorDescriptionLen);//[in] number of bytes in buffer pointed to by pSensorDescription. strlen(pSensorDescription) < sensorDescriptionLen, because the string is NULL terminated.
-											//strlen(pSensorDescription)is guaranteed to be < D2PIO_MAX_NUM_BYTES_IN_SENSOR_DESCRIPTION.		
-											
-											
+											//strlen(pSensorDescription)is guaranteed to be < D2PIO_MAX_NUM_BYTES_IN_SENSOR_DESCRIPTION.
+
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementChannelSensorUnit()
 
@@ -490,18 +490,18 @@ public interface D2PIOJNALibrary extends Library {
 		byte channel,			//[in]
 		Pointer pSensorUnit,		//[out] ptr to loc to store NULL terminated UTF-8 string describing measurement unit.
 		int sensorUnitLen);	//[in] number of bytes in buffer pointed to by pSensorUnit. strlen(pSensorUnit) < sensorUnitLen, because the string is NULL terminated.
-										//strlen(pSensorUnit) is guaranteed to be < D2PIO_MAX_NUM_BYTES_IN_SENSOR_UNIT.					
+										//strlen(pSensorUnit) is guaranteed to be < D2PIO_MAX_NUM_BYTES_IN_SENSOR_UNIT.
 
 
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_GetMeasurementChannelNumericType()
 
-	Purpose:	Retrieve the numeric measurement type(D2PIO_NUMERIC_MEAS_TYPE_REAL64 or D2PIO_NUMERIC_MEAS_TYPE_INT32) 
+	Purpose:	Retrieve the numeric measurement type(D2PIO_NUMERIC_MEAS_TYPE_REAL64 or D2PIO_NUMERIC_MEAS_TYPE_INT32)
 				for the specified channel.
 				This information is also available from D2PIO_Device_GetMeasurementChannelInfo().
 
-				If the numeric measurement type is D2PIO_NUMERIC_MEAS_TYPE_INT32, then call D2PIO_Device_ReadRawMeasurements() 
-				to retrieve measurements from the D2PIO Measurement Buffer for the specified channel. 
+				If the numeric measurement type is D2PIO_NUMERIC_MEAS_TYPE_INT32, then call D2PIO_Device_ReadRawMeasurements()
+				to retrieve measurements from the D2PIO Measurement Buffer for the specified channel.
 				If the numeric measurement type is D2PIO_NUMERIC_MEAS_TYPE_REAL64, then call D2PIO_Device_ReadMeasurements().
 
 	Return:		0 if successful, else -1.
@@ -510,7 +510,7 @@ public interface D2PIOJNALibrary extends Library {
 	int D2PIO_Device_GetMeasurementChannelNumericType(
 		Pointer hDevice,	//[in] handle to open device.
 		byte channel,			//[in]
-		ByteByReference pNumericMeasType);//[out] numeric measurement type, eg D2PIO_NUMERIC_MEAS_TYPE...			
+		ByteByReference pNumericMeasType);//[out] numeric measurement type, eg D2PIO_NUMERIC_MEAS_TYPE...
 
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_ReadMeasurements()
@@ -538,18 +538,18 @@ public interface D2PIOJNALibrary extends Library {
 		int [] pMeasurementsBuf,	//[out] ptr to loc to store measurements.
 		long [] pTimeStamps,		//[out] ptr to loc to store 'tick' resolution timestamps. May be NULL.
 		int maxCount);	//[in] maximum number of measurements to copy to pMeasurementsBuf.
-		
+
 
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_ReadMeasurements()
 
-	Purpose:	Retrieve gtype_real64 measurements from the D2PIO Measurement Buffer for a specified channel. The measurements 
+	Purpose:	Retrieve gtype_real64 measurements from the D2PIO Measurement Buffer for a specified channel. The measurements
 				reported by this routine are actually removed from the D2PIO Measurement Buffer.
 
 				After D2PIO_CMD_ID_START_MEASUREMENTS has been sent to the device, the device starts
-				sending measurements to the host computer. These measurements are stored in the D2PIO Measurement Buffer. 
+				sending measurements to the host computer. These measurements are stored in the D2PIO Measurement Buffer.
 				A separate D2PIO Measurement Buffer is maintained for each channel of the device.
-				
+
 				If D2PIO_Device_GetMeasurementChannelInfo(channel) reports that the NumericMeasType is D2PIO_NUMERIC_MEAS_TYPE_INT32,
 				then call D2PIO_Device_ReadRawMeasurements() to retrieve measurements from the D2PIO Measurement Buffer for the
 				specified channel. If NumericMeasType is D2PIO_NUMERIC_MEAS_TYPE_REAL64, then call D2PIO_Device_ReadMeasurements().
@@ -560,14 +560,14 @@ public interface D2PIOJNALibrary extends Library {
 				returns immediately, so the return value may be less than maxCount.
 
 	****************************************************************************************************************************/
-	int D2PIO_Device_ReadMeasurements( 
+	int D2PIO_Device_ReadMeasurements(
 		Pointer hDevice,	//[in] handle to open device.
 		byte channel,			//[in]
 		double [] pMeasurementsBuf,	//[out] ptr to loc to store measurements.
 		long [] pTimeStamps,		//[out] ptr to loc to store 'tick' resolution timestamps. May be NULL.
-		int maxCount);			//[in] maximum number of measurements to copy to pMeasurementsBuf.		
-		
-		
+		int maxCount);			//[in] maximum number of measurements to copy to pMeasurementsBuf.
+
+
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_Lock()
 
@@ -613,8 +613,8 @@ public interface D2PIOJNALibrary extends Library {
 
 	****************************************************************************************************************************/
 	int D2PIO_Device_Unlock(
-		Pointer hDevice);//[in] handle to open device.		
-		
+		Pointer hDevice);//[in] handle to open device.
+
 
 	/***************************************************************************************************************************
 	Function Name: D2PIO_Device_ClearIO()
@@ -628,8 +628,8 @@ public interface D2PIOJNALibrary extends Library {
 	****************************************************************************************************************************/
 	int D2PIO_Device_ClearIO(
 		Pointer hDevice,	//[in] handle to open device.
-		byte channel);		//[in] -1 => all channels.		
-		
+		byte channel);		//[in] -1 => all channels.
+
 
 }
 

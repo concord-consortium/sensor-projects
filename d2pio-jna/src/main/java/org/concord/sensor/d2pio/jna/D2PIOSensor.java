@@ -54,8 +54,8 @@ public class D2PIOSensor {
 		deviceHandle = libInstance.D2PIO_Device_Open(
 						libHandle, deviceName, null, 0,
 						D2PIOJNALibrary.D2PIO_USB_OPEN_TIMEOUT_MS, null, null);
-		unlock();
 		if (deviceHandle == null) return false;
+		unlock();
 
 		int result;
 		IntByReference pOpenStatus = new IntByReference();
@@ -212,8 +212,10 @@ public class D2PIOSensor {
 		int result = 0;
 		int uChannelMask = 0;
 		ByteByReference pChannelMask = new ByteByReference();
+		lock();
 		result = libInstance.D2PIO_GetMeasurementChannelAvailabilityMask(deviceHandle,
 							pChannelMask);
+		unlock();
 		if (result == 0) {
 			// it is an unsigned char so deal with negative numbers
 	    uChannelMask = pChannelMask.getValue() & 0x0FF;
@@ -228,10 +230,11 @@ public class D2PIOSensor {
 		int result = 0;
 		int sensorId = 0;
 		IntByReference pSensorId = new IntByReference();
+		lock();
 		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorId(deviceHandle,
 							(byte)channel,
 							pSensorId);
-
+		unlock();
 		if (result == 0) {
 			sensorId = pSensorId.getValue();
 			System.out.println("Sensor Channel ID: " + sensorId);
@@ -246,10 +249,12 @@ public class D2PIOSensor {
 		String sensorDesc = "";
 		int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_NUM_BYTES_IN_SENSOR_DESCRIPTION;
 		Pointer pSensorDescription = new Memory(MAX_LEN);
+		lock();
 		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorDescription(deviceHandle,
 							(byte)channel,
 							pSensorDescription,
 							MAX_LEN);
+		unlock();
 		if (result == 0) {
 			sensorDesc = pSensorDescription.getString(0, "UTF-8");
 			System.out.println("Sensor Channel Description: " + sensorDesc);
@@ -264,10 +269,12 @@ public class D2PIOSensor {
 		String sensorUnits = "";
 		int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_NUM_BYTES_IN_SENSOR_UNIT;
 		Pointer pSensorUnit = new Memory(MAX_LEN);
+		lock();
 		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorUnit(deviceHandle,
 							(byte)channel,
 							pSensorUnit,
 							MAX_LEN);
+		unlock();
 		if (result == 0) {
 			sensorUnits = pSensorUnit.getString(0, "UTF-8");
 			System.out.println("Sensor Channel Units: " + sensorUnits);
@@ -281,10 +288,11 @@ public class D2PIOSensor {
 		int result = 0;
 		int numericType = D2PIOJNALibrary.D2PIO_NUMERIC_MEAS_TYPE_REAL64;
 		ByteByReference pNumericMeasType = new ByteByReference();
+		lock();
 		result = libInstance.D2PIO_Device_GetMeasurementChannelNumericType(deviceHandle,
 							(byte)channel,
 							pNumericMeasType);
-
+		unlock();
 		if (result == 0) {
 			numericType = pNumericMeasType.getValue();
 			System.out.println("Sensor Channel Numeric Type: " + pNumericMeasType.getValue());
@@ -357,8 +365,10 @@ public class D2PIOSensor {
 			System.out.println("getDescription calling D2PIO_Device_GetDeviceDescription()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pDescription = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetDeviceDescription(
 										deviceHandle, pDescription, MAX_LEN);
+			unlock();
 			System.out.println("getDescription result: " + result);
 			if (result == 0) {
 				return pDescription.getString(0, "UTF-8");
@@ -378,8 +388,10 @@ public class D2PIOSensor {
 			System.out.println("getOrderCode calling D2PIO_Device_GetOrderCode()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pOrderCode = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetOrderCode(
 										deviceHandle, pOrderCode, MAX_LEN);
+			unlock();
 			System.out.println("getOrderCode result: " + result);
 			if (result == 0) {
 				return pOrderCode.getString(0, "UTF-8");
@@ -393,8 +405,10 @@ public class D2PIOSensor {
 			System.out.println("getSerialNumber calling D2PIO_Device_GetSerialNumber()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pSerialNumber = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetSerialNumber(
 										deviceHandle, pSerialNumber, MAX_LEN);
+			unlock();
 			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				return pSerialNumber.getString(0, "UTF-8");
@@ -410,12 +424,14 @@ public class D2PIOSensor {
 			ShortByReference pManufacturedYear = new ShortByReference();
 			ByteByReference pManufacturedMonth = new ByteByReference();
 			ByteByReference pManufacturedDay = new ByteByReference();
+			lock();
 			int result = libInstance.D2PIO_Device_GetManufacturingInfo(
 										deviceHandle,
 										pManufacturerId,
 										pManufacturedYear,
 										pManufacturedMonth,
 										pManufacturedDay);
+			unlock();
 			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				System.out.println("Manufacturer ID: " + pManufacturerId.getValue());

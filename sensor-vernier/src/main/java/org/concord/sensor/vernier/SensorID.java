@@ -74,4 +74,14 @@ public final class SensorID{
 	public final static int DIG_DCU = 3;
 	public final static int DIG_ROTARY_MOTION = 6;
 	
+	/*
+	 * go direct sensors
+	 */	
+	public final static int GD_TEMPERATURE = 400;
+	public final static int GD_FORCE = 431;
+	public final static int GD_XAXIS_ACCELERATION = 432;
+	public final static int GD_YAXIS_ACCELERATION = 433;
+	public final static int GD_ZAXIS_ACCELERATION = 434;
+	public final static int GD_XAXIS_GYRO = 435;
+	public final static int GD_YAXIS_GYRO = 436;
 }

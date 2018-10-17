@@ -44,7 +44,6 @@ import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.device.UserMessageHandler;
 import org.concord.sensor.impl.Ticker;
 
-
 /**
  * JavaDeviceFactory
  * Class name and description
@@ -128,6 +127,9 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case VERNIER_GO_LINK_JNA:
 				className = "org.concord.sensor.vernier.goio.GoIOSensorDevice";
 				break;
+			case VERNIER_GO_DIRECT:
+				className = "org.concord.sensor.vernier.d2pio.D2PIOSensorDevice";
+				break;				
 			case TI_CONNECT:
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
 				break;				

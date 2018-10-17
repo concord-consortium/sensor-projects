@@ -345,6 +345,49 @@ public class VernierSensor extends SensorConfigImpl
 					break;
 				}
 				break;
+				
+			case SensorID.GD_TEMPERATURE:
+				setUnit("degC");
+				setType(QUANTITY_TEMPERATURE_WAND);
+				setName("Temperature");
+				setStepSize(0.01f);									
+				break;
+			case SensorID.GD_FORCE:
+				setUnit("N");
+				setType(QUANTITY_FORCE);
+				setName("Force");
+				setStepSize(0.01f);									
+				break;					
+			case SensorID.GD_XAXIS_ACCELERATION:
+				setUnit("m/s^2");
+				setType(QUANTITY_ACCELERATION);
+				setName("X-axis Acceleration");
+				setStepSize(0.01f);									
+				break;	
+			case SensorID.GD_YAXIS_ACCELERATION:
+				setUnit("m/s^2");
+				setType(QUANTITY_ACCELERATION);
+				setName("Y-axis Acceleration");
+				setStepSize(0.01f);									
+				break;	
+			case SensorID.GD_ZAXIS_ACCELERATION:
+				setUnit("m/s^2");
+				setType(QUANTITY_ACCELERATION);
+				setName("Z-axis Acceleration");
+				setStepSize(0.01f);									
+				break;	
+			case SensorID.GD_XAXIS_GYRO:
+				setUnit("rad/s");
+				setType(QUANTITY_ANGULAR_VELOCITY);
+				setName("X-axis Gyro");
+				setStepSize(0.01f);									
+				break;	
+			case SensorID.GD_YAXIS_GYRO:
+				setUnit("rad/s");
+				setType(QUANTITY_ANGULAR_VELOCITY);
+				setName("Y-axis Gyro");
+				setStepSize(0.01f);									
+				break;					
 
 			default:
 				setType(QUANTITY_UNKNOWN);

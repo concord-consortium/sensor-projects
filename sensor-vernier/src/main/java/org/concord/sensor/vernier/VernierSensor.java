@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.concord.sensor.vernier;
 
@@ -14,7 +14,7 @@ public class VernierSensor extends SensorConfigImpl
 {
 	public final static int CHANNEL_TYPE_ANALOG = 0;
 	public final static int CHANNEL_TYPE_DIGITAL = 1;
-	
+
 	public final static byte kProbeTypeNoProbe = 0;
 	public final static byte kProbeTypeTime = 1;
 	public final static byte kProbeTypeAnalog5V = 2;
@@ -27,16 +27,16 @@ public class VernierSensor extends SensorConfigImpl
 	public final static byte kProbeTypeRotary = 11;
 	public final static byte kProbeTypeDigitalOut = 12;
 	public final static byte kProbeTypeLabquestAudio = 13;
-	
+
 	/**
-     * 
+     *
      */
     private final VernierSensorDevice device;
 
 	SensorCalibration calibrationEquation;
 
 	private int channelType;
-	
+
 	/**
 	 * This corresponds to the OperationType filed in the SensorDDSRec structure.
 	 * Its values are the constants starting with "kProbeType"
@@ -44,50 +44,50 @@ public class VernierSensor extends SensorConfigImpl
 	 * that defines this property.
 	 */
 	byte vernierProbeType = kProbeTypeAnalog5V;
-	private SensorCalibration postCalibrationEquation;	
-	
+	private SensorCalibration postCalibrationEquation;
+
 	/**
      * @param device
-	 * @param channelNumber 
+	 * @param channelNumber
      */
-    public VernierSensor(VernierSensorDevice device, DeviceService devService, 
+    public VernierSensor(VernierSensorDevice device, DeviceService devService,
     		int channelNumber, int channelType)
     {
         this.device = device;
         setPort(channelNumber);
-        this.channelType = channelType; 
+        this.channelType = channelType;
     }
 
 	public void setCalibration(SensorCalibration calibration)
 	{
 		calibrationEquation = calibration;
 	}
-	   	
+
 	public SensorCalibration getCalibration()
 	{
 		return calibrationEquation;
 	}
-	
+
 	public void setPostCalibration(SensorCalibration calibration)
 	{
 		postCalibrationEquation = calibration;
 	}
-	
+
 	public SensorCalibration getPostCalibration()
 	{
 		return postCalibrationEquation;
 	}
-	
+
 	public float doPostCalibration(float input)
 	{
 		SensorCalibration postCalibration = getPostCalibration();
 		if(postCalibration != null){
 			return postCalibration.calibrate(input);
 		}
-		
+
 		return input;
 	}
-	
+
 	/**
 	 * @param sensorId
 	 * @return
@@ -95,7 +95,7 @@ public class VernierSensor extends SensorConfigImpl
 	public int setupSensor(int sensorId, SensorRequest request)
 	{
 		if(channelType == CHANNEL_TYPE_DIGITAL){
-			
+
 			// This is a motion sensor or a GoMotion
 			if(sensorId == 2 || sensorId == 69) {
 				setConfirmed(true);
@@ -107,18 +107,18 @@ public class VernierSensor extends SensorConfigImpl
 				vernierProbeType = kProbeTypeMD;
 				setStepSize(0.01f);
 			}
-			
+
 		} else if(sensorId >= 20){
-			// This is a smart sensor which means it has 
+			// This is a smart sensor which means it has
 			// calibration information stored in the sensor itself
-			
+
 			setConfirmed(true);
 
 			// TODO get the information from the auto id sensor
 			// sprintf(sensConfig->name, ddsRec.SensorLongName);
 			// state->calibrationFunct = NULL;
 			Range valueRange = null;
-			
+
 			switch(sensorId){
 			case SensorID.BAROMETER:
 				setUnit("kPa");
@@ -126,7 +126,7 @@ public class VernierSensor extends SensorConfigImpl
 				setName("Barometer");
 				// for pressure this is required so it can tell the diff
 				// between barometer and regular pressure
-				setStepSize(0.01f); 
+				setStepSize(0.01f);
 				valueRange = new Range(81.0f, 106.0f);
 				setValueRange(valueRange);
 				break;
@@ -137,7 +137,7 @@ public class VernierSensor extends SensorConfigImpl
 				setName("Biology Gas Pressure");
 				// for pressure this is required so it can tell the diff
 				// between barometer and regular pressure
-				setStepSize(0.05f); 
+				setStepSize(0.05f);
 				break;
 
 			case SensorID.DUAL_R_FORCE_10:
@@ -163,8 +163,8 @@ public class VernierSensor extends SensorConfigImpl
 			case SensorID.SMART_LIGHT_3:
 				setUnit("lux");
 				setType(QUANTITY_LIGHT);
-				setName("Illuminance");				
-				// we keep this artificially low so we don't restrict 
+				setName("Illuminance");
+				// we keep this artificially low so we don't restrict
 				// malformed requests which claim to require small step sizes
 				setStepSize(0.01f);
 				break;
@@ -173,7 +173,7 @@ public class VernierSensor extends SensorConfigImpl
 			case SensorID.MAGNETIC_FIELD_LOW:
 				// turns out on the new sensors the default unit is mT not G
 				// on older sensors I heard second hand that the default is G on the small range
-				
+
 				// So it isn't clear what to do here. On some devices we can query the datasheet
 				// then we can select the correct calibration page, but on the LabPro that doesn't
 				// seem possible.  On the lab pro the best option seems to be processing the
@@ -183,7 +183,7 @@ public class VernierSensor extends SensorConfigImpl
 				setUnit("mT");
 				setType(QUANTITY_MAGNETIC_FIELD);
 				setName("Magnetic Field");
-				// FIXME this should be different for the different sensors. 
+				// FIXME this should be different for the different sensors.
 				setStepSize(0.0032f);
 				break;
 
@@ -222,7 +222,7 @@ public class VernierSensor extends SensorConfigImpl
 				setType(QUANTITY_PH);
 				setName("pH");
 				setStepSize(0.0077f);
-				break;	
+				break;
 
 			case SensorID.UVA_INTENSITY:
 				setUnit("mW/m^2");
@@ -237,7 +237,7 @@ public class VernierSensor extends SensorConfigImpl
 				setType(QUANTITY_UVB_INTENSITY);
 				setName("UVB Intensity");
 				setStepSize(0.25f);
-				setValueRange(new Range(0f, 1000f));				
+				setValueRange(new Range(0f, 1000f));
 				break;
 
 			case SensorID.SALINITY:
@@ -248,7 +248,7 @@ public class VernierSensor extends SensorConfigImpl
 				// cause problems, but again we aren't paying attention
 				// to the step size right now @see AbstractSensorDevice#scoreStepSize
 				setStepSize(0.02f);
-				break;			
+				break;
 
 			case SensorID.CO2_GAS_LOW:
 			case SensorID.CO2_GAS_HIGH:
@@ -257,7 +257,7 @@ public class VernierSensor extends SensorConfigImpl
 				setName("CO2");
 				// This is higher than the others
 				// but we are not currently paying attention to step size
-				// for co2 sensors @see AbstractSensorDevice#scoreStepSize				
+				// for co2 sensors @see AbstractSensorDevice#scoreStepSize
 				setStepSize(4.0f);
 				break;
 
@@ -272,17 +272,17 @@ public class VernierSensor extends SensorConfigImpl
 				setUnit("mm Hg");
 				setType(QUANTITY_BLOOD_PRESSURE);
 				setName("Cuff Pressure");
-				setStepSize(0.11222f); 									
-				break;			
+				setStepSize(0.11222f);
+				break;
 
 			case SensorID.COLORIMETER:
 				setType(QUANTITY_COLORIMETER);
 				setName("Absorbance");
-				
+
 				// I doubt this is the right step size
 				setStepSize(0.057f);
 
-				// the built in calibration done by the LabPro, and LabQuest, and GoIO sdk 
+				// the built in calibration done by the LabPro, and LabQuest, and GoIO sdk
 				// should return %T, so we need to do this postCalibration to turn that into
 				// absorbance
 
@@ -310,31 +310,31 @@ public class VernierSensor extends SensorConfigImpl
 				setUnit("mg/L");
 				setType(QUANTITY_DISSOLVED_OXYGEN);
 				setName("Dissolved Oxygen");
-				setStepSize(0.00654f); 									
+				setStepSize(0.00654f);
 				break;
-				
+
 			case SensorID.OXYGEN_GAS_CK:
 				setUnit("%");
 				setType(QUANTITY_OXYGEN_GAS);
 				setName("Oxygen Gas");
 				setStepSize(0.01f);
 				break;
-				
+
 			case SensorID.SPIROMETER:
 				setUnit("L/s");
 				setType(QUANTITY_LUNG_AIR_FLOW);
 				setName("Flow Rate");
-				setStepSize(0.01437f); 									
+				setStepSize(0.01437f);
 				break;
 
-			case SensorID.CONDUCTIVITY_200: 
+			case SensorID.CONDUCTIVITY_200:
 			case SensorID.CONDUCTIVITY_2000:
 			case SensorID.CONDUCTIVITY_20000:
 				setUnit("uS/cm");
 				setType(QUANTITY_CONDUCTIVITY);
 				setName("Conductivity");
 				switch(sensorId){
-				case SensorID.CONDUCTIVITY_200: 
+				case SensorID.CONDUCTIVITY_200:
 					setStepSize(0.1f);
 					break;
 				case SensorID.CONDUCTIVITY_2000:
@@ -345,58 +345,58 @@ public class VernierSensor extends SensorConfigImpl
 					break;
 				}
 				break;
-				
+
 			case SensorID.GD_TEMPERATURE:
 				setUnit("degC");
 				setType(QUANTITY_TEMPERATURE_WAND);
 				setName("Temperature");
-				setStepSize(0.01f);									
+				setStepSize(0.01f);
 				break;
 			case SensorID.GD_FORCE:
 				setUnit("N");
 				setType(QUANTITY_FORCE);
 				setName("Force");
-				setStepSize(0.01f);									
-				break;					
+				setStepSize(0.01f);
+				break;
 			case SensorID.GD_XAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("X-axis Acceleration");
-				setStepSize(0.01f);									
-				break;	
+				setStepSize(0.01f);
+				break;
 			case SensorID.GD_YAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("Y-axis Acceleration");
-				setStepSize(0.01f);									
-				break;	
+				setStepSize(0.01f);
+				break;
 			case SensorID.GD_ZAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("Z-axis Acceleration");
-				setStepSize(0.01f);									
-				break;	
+				setStepSize(0.01f);
+				break;
 			case SensorID.GD_XAXIS_GYRO:
 				setUnit("rad/s");
 				setType(QUANTITY_ANGULAR_VELOCITY);
 				setName("X-axis Gyro");
-				setStepSize(0.01f);									
-				break;	
+				setStepSize(0.01f);
+				break;
 			case SensorID.GD_YAXIS_GYRO:
 				setUnit("rad/s");
 				setType(QUANTITY_ANGULAR_VELOCITY);
 				setName("Y-axis Gyro");
-				setStepSize(0.01f);									
-				break;					
+				setStepSize(0.01f);
+				break;
 
 			default:
 				setType(QUANTITY_UNKNOWN);
-				break;				
-			}	
+				break;
+			}
 
 		} else if(sensorId != 0) {
 			// These are the "not smart" sensors.  They have an id, but they don't store the calibration on the
-			// device.  
+			// device.
 			setConfirmed(true);
 
 			// do a lookup from our list of known sensors and calibrations
@@ -406,34 +406,34 @@ public class VernierSensor extends SensorConfigImpl
 			case SensorID.TEMPERATURE_C:
 				setUnit("degC");
 				setName("Temperature");
-				setType(QUANTITY_TEMPERATURE);			
-				
-				// we keep this artificially low so we don't restrict 
+				setType(QUANTITY_TEMPERATURE);
+
+				// we keep this artificially low so we don't restrict
 				// malformed requests which claim to require small step sizes
-				setStepSize(0.01f); 
+				setStepSize(0.01f);
 				setCalibration(temperatureCalibration);
 				break;
 			case SensorID.THEROCOUPLE:
 				setUnit("degC");
 				setName("Temperature");
-				setType(QUANTITY_TEMPERATURE);			
-				// we keep this artificially low so we don't restrict 
+				setType(QUANTITY_TEMPERATURE);
+				// we keep this artificially low so we don't restrict
 				// malformed requests which claim to require small step sizes
-				setStepSize(0.01f); 
+				setStepSize(0.01f);
 				setCalibration(temperatureCalibration);
 				break;
 			case SensorID.LIGHT:
 				setUnit("lux");
 				setName("Illuminance");
-				setType(QUANTITY_LIGHT);			
-				
+				setType(QUANTITY_LIGHT);
+
 				// This is higher than the others
 				// but we are not currently paying attention to step size
-				// for light sensors @see AbstractSensorDevice#scoreStepSize				
+				// for light sensors @see AbstractSensorDevice#scoreStepSize
 				setStepSize(2f);
 				setCalibration(lightCalibration);
-				break;			
-			case SensorID.TI_VOLTAGE:			
+				break;
+			case SensorID.TI_VOLTAGE:
 			case SensorID.VOLTAGE:
 			case SensorID.CV_VOLTAGE:
 				setUnit("V");
@@ -445,7 +445,7 @@ public class VernierSensor extends SensorConfigImpl
 				case SensorID.TI_VOLTAGE:
 					setCalibration(tiVoltageCalibration);
 					vernierProbeType = kProbeTypeAnalog10V;
-					break;		
+					break;
 				case SensorID.VOLTAGE:
 					setCalibration(rawVoltageCalibration);
 					break;
@@ -457,24 +457,24 @@ public class VernierSensor extends SensorConfigImpl
 			case SensorID.CO2_GAS:
 				setUnit("ppm");
 				setName("CO2 Gas");
-				setType(QUANTITY_CO2_GAS);			
+				setType(QUANTITY_CO2_GAS);
 
 				// This is higher than the others
 				// but we are not currently paying attention to step size
-				// for co2 sensors @see AbstractSensorDevice#scoreStepSize				
+				// for co2 sensors @see AbstractSensorDevice#scoreStepSize
 				setStepSize(4.0f);
-				setCalibration(co2GasCalibration);			
+				setCalibration(co2GasCalibration);
 				break;
 			case SensorID.OXYGEN_GAS:
 				setUnit("%");
 				setName("Oxygen Gas");
-				setType(QUANTITY_OXYGEN_GAS);			
+				setType(QUANTITY_OXYGEN_GAS);
 
 				// This is higher than the others
 				// but we are not currently paying attention to step size
-				// for oxygen sensors @see AbstractSensorDevice#scoreStepSize				
-				setStepSize(0.01f); 
-				setCalibration(oxygenGasCalibration);			
+				// for oxygen sensors @see AbstractSensorDevice#scoreStepSize
+				setStepSize(0.01f);
+				setCalibration(oxygenGasCalibration);
 				break;
 			case SensorID.EKG:
 				setUnit("mV");
@@ -482,14 +482,14 @@ public class VernierSensor extends SensorConfigImpl
 				setType(QUANTITY_EKG);
 				setStepSize(0.002f); // FIXME: this is a hack we should be able calc this
 
-				// the ekg sensor just returns mV and the software has to convert 
-				// it to a heart rate					
+				// the ekg sensor just returns mV and the software has to convert
+				// it to a heart rate
 				setCalibration(rawVoltageCalibration);
 				break;
 			case SensorID.CV_CURRENT:
 				setUnit("A");
 				setType(QUANTITY_CURRENT);
-				setStepSize(0.0003f); // this is assuming 12bit resolution which is on GoLink, LabPro, LabQuest: 0.31 mA 
+				setStepSize(0.0003f); // this is assuming 12bit resolution which is on GoLink, LabPro, LabQuest: 0.31 mA
 				setValueRange(new Range(-0.6f, 0.6f));
 				setCalibration(new LinearCalibration(
 						0.625f,  // k0
@@ -505,15 +505,15 @@ public class VernierSensor extends SensorConfigImpl
 				this.device.log("Sensor type is not supported yet: " + sensorId);
 				setType(QUANTITY_UNKNOWN);
 				break;
-				
+
 			case SensorID.HEART_RATE:
 				setUnit("v");
 				setName("Heart Rate Signal");
 				setType(QUANTITY_HEART_RATE_SIGNAL);
 				setStepSize(0.002f);
-				setCalibration(rawVoltageCalibration);			
+				setCalibration(rawVoltageCalibration);
 				break;
-				
+
 			default:
 				this.device.log("Unknown sensor id: " + sensorId);
 				setType(QUANTITY_UNKNOWN);
@@ -526,11 +526,11 @@ public class VernierSensor extends SensorConfigImpl
 			// They will not work in the current design
 			// FIXME this code doesn't interact correctly with the AbstractSensorDevice autoid code
 			//   it is never called with a non null request the code below will never be executed.
-			
+
 			setConfirmed(false);
-			
+
 			// This is not an auto id sensor
-			// as long as there is only one sensor that matches 
+			// as long as there is only one sensor that matches
 			// the requested quantity type.  If not then
 			// we are going to have problems.  The api breaks
 			// down here.  Lets cross our fingers and hope we don't
@@ -559,17 +559,17 @@ public class VernierSensor extends SensorConfigImpl
 				break;
 			}
 		}
-		
+
 
 
 		return 0;
 	}
-	
+
 	public byte getVernierProbeType()
 	{
 		return vernierProbeType;
 	}
-	
+
 	public void setVernierProbeType(byte type) {
 		vernierProbeType = type;
 	}
@@ -585,18 +585,18 @@ public class VernierSensor extends SensorConfigImpl
 		} else if(type == QUANTITY_RAW_VOLTAGE_2 ||
 				type == QUANTITY_RAW_DATA_2){
 			// setup sensor to report +/-10V
-			setVernierProbeType(kProbeTypeAnalog10V);			
+			setVernierProbeType(kProbeTypeAnalog10V);
 			setCalibration(rawVoltageCalibration);
 		}
 	}
-	
+
 	/**
-	 * Special calibration function for simply return the data which is 
+	 * Special calibration function for simply return the data which is
 	 * passed in
 	 */
-	public final static SensorCalibration rawVoltageCalibration = 
+	public final static SensorCalibration rawVoltageCalibration =
 		new LinearCalibration(
-				0f,  // k0  
+				0f,  // k0
 				1f   // k1 - return the same value passed in
 				);
 
@@ -605,7 +605,7 @@ public class VernierSensor extends SensorConfigImpl
 	 * it should actually never be called.  So it returns a value
 	 * which is hopefully noticably weird
 	 */
-	public final static SensorCalibration rawDataCalibration = 
+	public final static SensorCalibration rawDataCalibration =
 		new LinearCalibration(
 				0.12345f,  // k0  - return a constant value
 				0f         // k1
@@ -618,13 +618,13 @@ public class VernierSensor extends SensorConfigImpl
 		 * voltage 5V Rknown = resistance of Vres V1 = voltage we measured
 		 * Rsensor = V0*Rknown/(Vres-V0) this equation comes from the standard
 		 * voltage division equation.
-		 * 
-		 * Now with the resistance the equation for the temp in degC is: 
+		 *
+		 * Now with the resistance the equation for the temp in degC is:
 		 * <pre>
-		 * T(degC) = 1/(K0 + K1*ln(1000*R) + K2*ln(1000*R)^3) - 273.15 
-		 * K0 = 1.02119E-3 
-		 * K1 = 2.22468E-4 
-		 * K2 = 1.33342E-7 
+		 * T(degC) = 1/(K0 + K1*ln(1000*R) + K2*ln(1000*R)^3) - 273.15
+		 * K0 = 1.02119E-3
+		 * K1 = 2.22468E-4
+		 * K2 = 1.33342E-7
 		 * </pre>
 		 */
 		public final static float TEMP_K0 = 1.02119E-3f;
@@ -639,7 +639,7 @@ public class VernierSensor extends SensorConfigImpl
 			return 1.0f /(TEMP_K0 + TEMP_K1*lnR + TEMP_K2*lnR*lnR*lnR) - 273.15f;
 		}
 	};
-	
+
 	/**
 	 * Light Light Calibration
 	 */
@@ -647,7 +647,7 @@ public class VernierSensor extends SensorConfigImpl
 		new SensorCalibration(){
 		/*
 		 * From the vernier light sensor booklet.
-		 */ 
+		 */
 		//public final static float ILLUM_B0 = 5.0E-3f;  // most sensitive switch position
 		public final static float ILLUM_B1 = 4.5E-4f;  // middle switch position
 		//public final static float ILLUM_B2 = 2.0E-5f;  // least sensitive (outdoor) position
@@ -666,7 +666,7 @@ public class VernierSensor extends SensorConfigImpl
 		new LinearCalibration(
 				-23.8f,   // k0
 				32.9f);   // k1
-	
+
 	/**
 	 * Student Force
 	 */
@@ -674,7 +674,7 @@ public class VernierSensor extends SensorConfigImpl
 		new LinearCalibration(
 				9.8f,   // k0
 				-9.8f); // k1
-	
+
 	public final static SensorCalibration tiVoltageCalibration =
 		rawVoltageCalibration;
 
@@ -694,8 +694,8 @@ public class VernierSensor extends SensorConfigImpl
 		new LinearCalibration(
 				0f,     // k0
 				2000f   // k1
-				); 
-	
+				);
+
 	/**
 	 * Oxygen Gas Calibration
 	 * this is the % calibration

@@ -5,10 +5,12 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.ShortByReference;
+import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.DoubleByReference;
 
 /**
  * In the GoIO SDK a sensor represents an attached device
- * 
+ *
  * @author kswenson
  *
  */
@@ -18,6 +20,7 @@ public class D2PIOSensor {
 	protected String deviceName;
 	protected String friendlyName;
 	protected Pointer deviceHandle;
+	private static final int LOCK_TIMEOUT_MS = 1000;
 
 	D2PIOSensor(D2PIOJNALibrary libInstance, Pointer libHandle,
 				String deviceName, String friendlyName) {
@@ -52,6 +55,7 @@ public class D2PIOSensor {
 						libHandle, deviceName, null, 0,
 						D2PIOJNALibrary.D2PIO_USB_OPEN_TIMEOUT_MS, null, null);
 		if (deviceHandle == null) return false;
+		unlock();
 
 		int result;
 		IntByReference pOpenStatus = new IntByReference();
@@ -92,11 +96,257 @@ public class D2PIOSensor {
 
 	public int close() {
 		int result = 0;
+		lock();
 		if (deviceHandle != null) {
 			result = libInstance.D2PIO_Device_Close(deviceHandle);
 			deviceHandle = null;
 		}
+		// after the device is closed it cannot be unlocked
 		return result;
+	}
+
+	/**
+	 * There are lock and unlock methods around each D2PIOSensor call.
+	 * These call the built in D2PIO SDK lock and unlock calls.
+	 */
+	private void lock() {
+		int ret = libInstance.D2PIO_Device_Lock(deviceHandle, LOCK_TIMEOUT_MS);
+		if(ret != 0){
+			throw new RuntimeException("Unable to lock device");
+		}
+	}
+
+	private void unlock() {
+		int ret = libInstance.D2PIO_Device_Unlock(deviceHandle);
+		if(ret != 0){
+			throw new RuntimeException("Unable to unlock device");
+		}
+	}
+
+	public void clearIO(int channel) {
+		lock();
+		int ret = libInstance.D2PIO_Device_ClearIO(deviceHandle, (byte)channel);
+		unlock();
+
+		if(ret != 0){
+			throw new RuntimeException("Error clearing IO");
+		}
+	}
+
+	public void startMeasurements() {
+		lock();
+		int ret = sendCmdAndGetResponse(D2PIOJNALibrary.D2PIO_CMD_ID_START_MEASUREMENTS);
+		unlock();
+		if(ret != 0){
+			throw new RuntimeException("Error starting measurements");
+		}
+	}
+
+	public void stopMeasurements() {
+		lock();
+		int ret = sendCmdAndGetResponse(D2PIOJNALibrary.D2PIO_CMD_ID_STOP_MEASUREMENTS);
+		unlock();
+		if(ret != 0){
+			throw new RuntimeException("Error stopping measurements");
+		}
+	}
+
+	public int sendCmdAndGetResponse(byte command) {
+		int status = 0;
+		Pointer pRespBuf = null;
+		IntByReference pnRespBytes = null;
+		lock();
+		status = libInstance.D2PIO_Device_SendCmdAndGetResponse(deviceHandle,
+				command, null,
+				0, pRespBuf, pnRespBytes,
+				D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
+		unlock();
+		if (status == 0) {
+			System.out.println("sendCmdAndGetResponse status: " + status);
+		} else {
+			System.out.println("sendCmdAndGetResponse failed with result: " + status);
+		}
+		return status;
+	}
+
+	public int setMeasurementPeriod(double desiredPeriod) {
+		int result = 0;
+		byte channelNum = -1; //all channels
+		lock();
+		result = libInstance.D2PIO_Device_SetMeasurementPeriod(deviceHandle,
+							channelNum,
+							desiredPeriod,
+							D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
+		unlock();
+		if (result == 0) {
+			System.out.println("Measurement Period: " + desiredPeriod);
+		} else {
+			System.out.println("setMeasurementPeriod failed with result: " + result);
+			throw new RuntimeException("error setting measurement period");
+		}
+		return result;
+	}
+
+	public double getMeasurementPeriod() {
+		int result = 0;
+		byte channelNum = -1; //all channels
+		DoubleByReference pPeriod = new DoubleByReference();
+		double period = 0;
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementPeriod(deviceHandle,
+							channelNum,
+							pPeriod,
+							D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
+		unlock();
+		if (result == 0) {
+			period = pPeriod.getValue();
+			System.out.println("Peroid: " + pPeriod.getValue());
+		} else {
+			System.out.println("getMeasurementPeriod failed with result: " + result);
+			throw new RuntimeException("error getting measurement period");
+		}
+		return period;
+	}
+
+	public int getMeasurementChannelAvailabilityMask() {
+		int result = 0;
+		int uChannelMask = 0;
+		ByteByReference pChannelMask = new ByteByReference();
+		lock();
+		result = libInstance.D2PIO_GetMeasurementChannelAvailabilityMask(deviceHandle,
+							pChannelMask);
+		unlock();
+		if (result == 0) {
+			// it is an unsigned char so deal with negative numbers
+	    uChannelMask = pChannelMask.getValue() & 0x0FF;
+			System.out.println("Channel Mask: " + uChannelMask);
+		} else {
+			System.out.println("getMeasurementChannelAvailabilityMask failed with result: " + result);
+		}
+		return uChannelMask;
+	}
+
+	public int getMeasurementChannelSensorId(int channel) {
+		int result = 0;
+		int sensorId = 0;
+		IntByReference pSensorId = new IntByReference();
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorId(deviceHandle,
+							(byte)channel,
+							pSensorId);
+		unlock();
+		if (result == 0) {
+			sensorId = pSensorId.getValue();
+			System.out.println("Sensor Channel ID: " + sensorId);
+		} else {
+			System.out.println("getMeasurementChannelSensorId failed with result: " + result);
+		}
+		return sensorId;
+	}
+
+	public String getMeasurementChannelSensorDescription(int channel) {
+		int result = 0;
+		String sensorDesc = "";
+		int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_NUM_BYTES_IN_SENSOR_DESCRIPTION;
+		Pointer pSensorDescription = new Memory(MAX_LEN);
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorDescription(deviceHandle,
+							(byte)channel,
+							pSensorDescription,
+							MAX_LEN);
+		unlock();
+		if (result == 0) {
+			sensorDesc = pSensorDescription.getString(0, "UTF-8");
+			System.out.println("Sensor Channel Description: " + sensorDesc);
+		} else {
+			System.out.println("getMeasurementChannelSensorDescription failed with result: " + result);
+		}
+		return sensorDesc;
+	}
+
+	public String getMeasurementChannelSensorUnits(int channel) {
+		int result = 0;
+		String sensorUnits = "";
+		int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_NUM_BYTES_IN_SENSOR_UNIT;
+		Pointer pSensorUnit = new Memory(MAX_LEN);
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelSensorUnit(deviceHandle,
+							(byte)channel,
+							pSensorUnit,
+							MAX_LEN);
+		unlock();
+		if (result == 0) {
+			sensorUnits = pSensorUnit.getString(0, "UTF-8");
+			System.out.println("Sensor Channel Units: " + sensorUnits);
+		} else {
+			System.out.println("getMeasurementChannelSensorUnits failed with result: " + result);
+		}
+		return sensorUnits;
+	}
+
+	public int getMeasurementChannelNumericType(int channel) {
+		int result = 0;
+		int numericType = D2PIOJNALibrary.D2PIO_NUMERIC_MEAS_TYPE_REAL64;
+		ByteByReference pNumericMeasType = new ByteByReference();
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelNumericType(deviceHandle,
+							(byte)channel,
+							pNumericMeasType);
+		unlock();
+		if (result == 0) {
+			numericType = pNumericMeasType.getValue();
+			System.out.println("Sensor Channel Numeric Type: " + pNumericMeasType.getValue());
+		} else {
+			System.out.println("getMeasurementChannelNumericType failed with result: " + result);
+		}
+		return numericType;
+	}
+
+	public boolean measurementIsRaw(int numericType) {
+		return (numericType == D2PIOJNALibrary.D2PIO_NUMERIC_MEAS_TYPE_INT32);
+	}
+
+	public int[] readRawMeasurements(int channel, int maxCount) {
+		int numMeasurements = 0;
+		int [] pMeasurementsBuf = new int[maxCount];
+		long [] pTimeStamps = new long[maxCount];
+		lock();
+		numMeasurements = libInstance.D2PIO_Device_ReadRawMeasurements(deviceHandle,
+							(byte)channel,
+							pMeasurementsBuf,
+							pTimeStamps,
+							maxCount);
+		unlock();
+		if (numMeasurements > 0) {
+			System.out.println("Sensor Raw Measurements Read: " + numMeasurements);
+			int [] retBuffer = new int [numMeasurements];
+			System.arraycopy(pMeasurementsBuf, 0, retBuffer, 0, numMeasurements);
+			return retBuffer;
+		} else {
+			System.out.println("readRawMeasurements found 0 valid measurements");
+			return null;
+		}
+	}
+
+	public double[] readMeasurements(int channel, int maxCount) {
+		int numMeasurements = 0;
+		double [] pMeasurementsBuf = new double[maxCount];
+		lock();
+		numMeasurements = libInstance.D2PIO_Device_ReadMeasurements(deviceHandle,
+							(byte)channel,
+							pMeasurementsBuf,
+							null,
+							maxCount);
+		unlock();
+		if (numMeasurements > 0) {
+			System.out.println("Sensor Measurements Read: " + numMeasurements);
+			double [] retBuffer = new double [numMeasurements];
+			System.arraycopy(pMeasurementsBuf, 0, retBuffer, 0, numMeasurements);
+			return retBuffer;
+		} else {
+			System.out.println("readMeasurements found 0 valid measurements");
+			return null;
+		}
 	}
 
 /*
@@ -115,8 +365,10 @@ public class D2PIOSensor {
 			System.out.println("getDescription calling D2PIO_Device_GetDeviceDescription()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pDescription = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetDeviceDescription(
 										deviceHandle, pDescription, MAX_LEN);
+			unlock();
 			System.out.println("getDescription result: " + result);
 			if (result == 0) {
 				return pDescription.getString(0, "UTF-8");
@@ -130,14 +382,16 @@ public class D2PIOSensor {
 	// 	char *pOrderCode,				//[out] ptr to buffer to store NULL terminated UTF-8 string for the OrderCode.
 	// 	gtype_uint32 Bufsize);			//[in] number of UTF-8 chars in buffer pointed to by pOrderCode. strlen(pOrderCode) < bufSize, because the string is NULL terminated.
 	// 									//strlen(pOrderCode) is guaranteed to be < D2PIO_MAX_ORDERCODE_LENGTH.
-	
+
 	public String getOrderCode() {
 		if (deviceHandle != null) {
 			System.out.println("getOrderCode calling D2PIO_Device_GetOrderCode()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pOrderCode = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetOrderCode(
 										deviceHandle, pOrderCode, MAX_LEN);
+			unlock();
 			System.out.println("getOrderCode result: " + result);
 			if (result == 0) {
 				return pOrderCode.getString(0, "UTF-8");
@@ -151,8 +405,10 @@ public class D2PIOSensor {
 			System.out.println("getSerialNumber calling D2PIO_Device_GetSerialNumber()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pSerialNumber = new Memory(MAX_LEN);
+			lock();
 			int result = libInstance.D2PIO_Device_GetSerialNumber(
 										deviceHandle, pSerialNumber, MAX_LEN);
+			unlock();
 			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				return pSerialNumber.getString(0, "UTF-8");
@@ -168,12 +424,14 @@ public class D2PIOSensor {
 			ShortByReference pManufacturedYear = new ShortByReference();
 			ByteByReference pManufacturedMonth = new ByteByReference();
 			ByteByReference pManufacturedDay = new ByteByReference();
+			lock();
 			int result = libInstance.D2PIO_Device_GetManufacturingInfo(
 										deviceHandle,
 										pManufacturerId,
 										pManufacturedYear,
 										pManufacturedMonth,
 										pManufacturedDay);
+			unlock();
 			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				System.out.println("Manufacturer ID: " + pManufacturerId.getValue());
@@ -184,19 +442,36 @@ public class D2PIOSensor {
 		}
 	}
 
+  public String getDeviceLabel(){
+		return "Go Direct";
+	}
+
+	public int getAttachedSensorId() {
+		// TODO: What do we actually want to return here?
+		// for now let's get the id on the first channel, but this needs to handle other channels
+		int sensorId = 0;
+		int channelMask = this.getMeasurementChannelAvailabilityMask();
+		for (int ch = 0; ch < 32; ch++) {
+			if (((1 << ch) & channelMask) != 0) {
+				sensorId = this.getMeasurementChannelSensorId(ch);
+				break;
+			}
+		}
+		return sensorId;
+	}
+
 	/*
-	private static final int LOCK_TIMEOUT_MS = 1000;
 	GoIOJNALibrary goIOLibrary;
 	char []deviceName = new char[GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME];
 	int productId;
 	Pointer hDevice;
 	@SuppressWarnings("unused")
 	private int openedSensorId;
-	
+
 	public GoIOSensor(GoIOJNALibrary goIOLibrary){
 		this.goIOLibrary = goIOLibrary;
 	}
-	
+
 	// this assumes someone has updated the list of devices with
 	// GoIO_UpdateListOfAvailableDevices
 	public void init(int productId, int index){
@@ -205,127 +480,38 @@ public class D2PIOSensor {
 //				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
 //				productId
 //				);
-		
+
 		this.productId = productId;
-		if(goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME, 
+		if(goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, GoIOJNALibrary.GOIO_MAX_SIZE_DEVICE_NAME,
 				GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID, productId, index) != 0) {
 				// error getting device name
 				// TODO replace with more standard exception
 				throw new RuntimeException("error getting device name");
-		}		
-	}
-	
-	public void open() {
-		hDevice = goIOLibrary.GoIO_Sensor_Open(deviceName, GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID,
-				productId, 0);
-		if(hDevice == null) {
-			throw new RuntimeException("error opening device");
-		}
-	
-		unlock();
-		
-		// This is stored here because the open call also reads the DDS which is specific to the attached
-		// sensor, however with a go link the user can unplug this sensor and plug in another
-		// in which case the sensor should be closed and opened again.
-		openedSensorId = getAttachedSensorId();  
-	}
-	
-	public void close() {
-		lock();
-		goIOLibrary.GoIO_Sensor_Close(hDevice);
-		// after the device is closed it cannot be unlocked
-	}
-
-	/**
-	 * There are lock and unlock methods around each GoIOSensor call.  
-	 * These call the built in GoIO SDK lock and unlock calls.  This wasn't done with java synchronize keyword, 
-	 * because that requires leaving the device unlocked all the time.  
-	 * And the GoIO SDK asserts sometimes when calls are made and it is unlocked.
-	 * 
-	 * When the library asserts on a mac it makes a system beep, this doesn't stop things from running but it can
-	 * be confusing and annoying.
-	 * 
-	private void lock() {
-		int ret = goIOLibrary.GoIO_Sensor_Lock(hDevice, LOCK_TIMEOUT_MS);
-		if(ret != 0){
-			throw new RuntimeException("unable to lock device");
-		}
-	}
-	
-	private void unlock() {
-		int ret = goIOLibrary.GoIO_Sensor_Unlock(hDevice);		
-		if(ret != 0){
-			throw new RuntimeException("unable to unlock device");
-		}
-	}
-	
-	public void clearIO() {
-		lock();
-		int ret = goIOLibrary.GoIO_Sensor_ClearIO(hDevice);
-		unlock();
-		
-		if(ret != 0){
-			throw new RuntimeException("error clearing IO");
 		}
 	}
 
-	public void startMeasurements() {
-		lock();
-		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(hDevice, 
-				GoIOJNALibrary.SKIP_CMD_ID_START_MEASUREMENTS, null,
-		0, null, null,
-		GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
-		unlock();
-		
-		if(ret != 0){
-			throw new RuntimeException("error starting measurments");
-		}
-	}
-	
-	public void stopMeasurements() {
-		lock();
-		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(hDevice, 
-				GoIOJNALibrary.SKIP_CMD_ID_STOP_MEASUREMENTS, null,
-				0, null, null,
-				GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
-		unlock();
-		
-		if(ret != 0){
-			throw new RuntimeException("error stopping measurments");
-		}
-	}
-	
 	public int readRawMeasurements(int [] rawBuffer) {
 		// to be safe make sure it is multiple of 6
 		int safeCount = (rawBuffer.length / 6) * 6;
-		
+
 		lock();
 		int ret = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(hDevice, rawBuffer, safeCount);
 		unlock();
-		return ret;		
+		return ret;
 	}
-	
+
 	public double convertToVoltage(int rawData) {
 		return goIOLibrary.GoIO_Sensor_ConvertToVoltage(hDevice, rawData);
 	}
-	
+
 	public double calibrateData(double voltage) {
 		return goIOLibrary.GoIO_Sensor_CalibrateData(hDevice, voltage);
 	}
-	
-	public void setMeasurementPeriod(double desiredPeriod){
-		lock();
-		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(hDevice, desiredPeriod, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
-		unlock();
-		
-		if(ret != 0) {
-			throw new RuntimeException("error setting measurement period");
-		}		
-	}
+
 
 	public int getAttachedSensorId() {
 		byte [] sensorId = new byte[1];
-		
+
 		lock();
 		int ret = goIOLibrary.GoIO_Sensor_DDSMem_GetSensorNumber(hDevice, sensorId, 1, GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
 	    unlock();
@@ -333,76 +519,48 @@ public class D2PIOSensor {
 	    if(ret != 0) {
 	    	throw new RuntimeException("error getting sensor id");
 	    }
-	    
-	    
+
+
 	    // it is an unsigned char so deal with negative numbers
 	    return sensorId[0] & 0x0FF;
 	}
-	
-	public double getMeasurementPeriod() {
-		
-		lock();
-		double ret = goIOLibrary.GoIO_Sensor_GetMeasurementPeriod(hDevice,  GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
-		unlock();
-		
-		if(ret == 1000000.0) {
-			throw new RuntimeException("error getting measurement period");
-		}
-		return ret;
-	}
-	
+
 	public byte getDDSCheckSum() {
 		lock();
 		byte[] pChecksum = new byte[1];
 		int ret = goIOLibrary.GoIO_Sensor_DDSMem_GetChecksum(hDevice, pChecksum );
 		unlock();
-		
+
 		if(ret != 0){
 			throw new RuntimeException("Can't get DDS checksum");
 		}
-		
+
 		return pChecksum[0];
 	}
 
 	public final static int ANALOG_CHANNEL_5V = 0;
 	public final static int ANALOG_CHANNEL_10V = 1;
-	
+
 	public void setAnalogInputChannel(int channel){
 		byte channelConst = GoIOJNALibrary.SKIP_ANALOG_INPUT_CHANNEL_VIN_LOW;
-		
+
 		if(channel == ANALOG_CHANNEL_5V){
 			channelConst = GoIOJNALibrary.SKIP_ANALOG_INPUT_CHANNEL_VIN_LOW;
 		} else if(channel == ANALOG_CHANNEL_10V){
 			channelConst = GoIOJNALibrary.SKIP_ANALOG_INPUT_CHANNEL_VIN;
 		}
-		
+
 		lock();
 		goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
-				hDevice, GoIOJNALibrary.SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL, 
-				new byte []{channelConst}, 1, null, null, 
+				hDevice, GoIOJNALibrary.SKIP_CMD_ID_SET_ANALOG_INPUT_CHANNEL,
+				new byte []{channelConst}, 1, null, null,
 				GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT);
 		unlock();
 	}
 
-	
-	public String getDeviceLabel(){
-		switch(productId){
-		case GoIOJNALibrary.SKIP_DEFAULT_PRODUCT_ID: 
-			return "GoLink";
-		case GoIOJNALibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID:
-			return "GoTemp";
-		case GoIOJNALibrary.CYCLOPS_DEFAULT_PRODUCT_ID:
-			return "GoMotion";
-		case GoIOJNALibrary.MINI_GC_DEFAULT_PRODUCT_ID:
-			return "MiniGasChromatograph";
-		default:
-			return "Unknown GoIO Device";
-		}
-	}
-
 	public boolean isGoMotion(){
 		return productId == GoIOJNALibrary.CYCLOPS_DEFAULT_PRODUCT_ID;
-	}	
+	}
 	public boolean isGoTemp(){
 		return productId == GoIOJNALibrary.USB_DIRECT_TEMP_DEFAULT_PRODUCT_ID;
 	}

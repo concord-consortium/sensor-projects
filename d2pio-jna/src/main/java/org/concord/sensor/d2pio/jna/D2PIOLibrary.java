@@ -1,9 +1,9 @@
 /*
  * Copied/modified from GoIOLibrary.java
- * TBD: 
+ * TBD:
  * 1) Write proper header comment
  * 2) Add exceptions
- * 3) 
+ * 3)
  * 4) Comment
  * 5) Add vendor & type to GoIOInterface
  */
@@ -40,8 +40,8 @@ public class D2PIOLibrary
 	// 	D2PIOJNALibrary.D2PIO_DEVTYPE_GO_WIRELESS_EA,
 	// 	D2PIOJNALibrary.D2PIO_DEVTYPE_GO_WIRELESS_LINK,
 	// 	D2PIOJNALibrary.D2PIO_DEVTYPE_POLAR_HEART_RATE
-	// }; 
-	
+	// };
+
 
 	protected D2PIOJNALibrary libInstance;
 	protected Pointer libHandle;
@@ -49,7 +49,7 @@ public class D2PIOLibrary
 	public boolean initLibrary()
 	{
 		NativeHelper.removeTemporaryFiles();
-		
+
 		File nativeLibFile = getNativeLibraryFromJar();
 		String nativeLibPath = nativeLibFile.getAbsolutePath();
 		FunctionMapper functMapper = new FunctionMapper(){
@@ -59,7 +59,7 @@ public class D2PIOLibrary
 			// abcd  to D2PIO_Abcd
 			public String getFunctionName(NativeLibrary library, Method method) {
 				return method.getName();
-				// return "D2PIO_" + method.getName().substring(0,1).toUpperCase() + 
+				// return "D2PIO_" + method.getName().substring(0,1).toUpperCase() +
 				// method.getName().substring(1);
 			}
 		};
@@ -74,7 +74,7 @@ public class D2PIOLibrary
 		return libInstance != null;
 	};
 
-	
+
 	public boolean init()
 	{
 		byte initUSB = 1;
@@ -82,11 +82,10 @@ public class D2PIOLibrary
 		libHandle = libInstance.D2PIO_Init(initUSB, initBLE, null, 0);
 		return libHandle != null;
 	}
-	
+
 	public int uninit()
 	{
 		//System.out.println("D2PIOInterface: cleaning up");
-		
 		int ret = libInstance.D2PIO_Uninit(libHandle);
 		libHandle = null;
 		libInstance = null;
@@ -128,7 +127,7 @@ public class D2PIOLibrary
 					? new D2PIOSensorList(libInstance, libHandle)
 					: null;
 	}
-		
+
 	public boolean isSensorAttached() {
 		D2PIOSensorList sensors = this.getSensorList();
 		int sensorCount = 0;
@@ -148,6 +147,16 @@ public class D2PIOLibrary
 		}
 		return sensor;
 	}
+
+	public D2PIOSensor getFirstSensor() {
+		//TODO: do we need to look at a list of device types like we do for goio?
+		D2PIOSensor sensor = this.getSensor(0);
+		if(sensor != null) {
+			return sensor;
+		}
+		return null;
+	}
+
 /*
 	public GoIOSensor getSensor(int productId, int index){
 		int number = goIOLibrary.GoIO_UpdateListOfAvailableDevices(
@@ -157,85 +166,74 @@ public class D2PIOLibrary
 		if(number <= index){
 			return null;
 		}
-		
+
 		GoIOSensor sensor = new GoIOSensor(goIOLibrary);
 		sensor.init(productId, index);
-		return sensor;					
+		return sensor;
 	}
 
-	public GoIOSensor getFirstSensor() {
-		for(int i=0; i<GO_DEVICES.length; i++){			
-			GoIOSensor sensor = getSensor(GO_DEVICES[i], 0);
-			if(sensor != null) {
-				return sensor;
-			}
-		}
-		
-		return null;
-	}
-	
 	public boolean sensorSetMeasurementPeriod(GoIOSensor sensor,double desiredPeriod, int timeoutMs)
 	{
-		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(sensor.hDevice,desiredPeriod,timeoutMs);	
-		
+		int ret = goIOLibrary.GoIO_Sensor_SetMeasurementPeriod(sensor.hDevice,desiredPeriod,timeoutMs);
+
 		return 0 == ret;
 	}
-	
-	
+
+
 	public boolean sensorSendCmd(
-			GoIOSensor sensor,	
-			byte cmd,		
-			byte [] pParams,			
+			GoIOSensor sensor,
+			byte cmd,
+			byte [] pParams,
 			int nParamBytes,
-			Pointer pRespBuf,			
+			Pointer pRespBuf,
 			int []pnRespBytes,
-			int timeoutMs)	
+			int timeoutMs)
 	{
-		
-		
+
+
 		int ret = goIOLibrary.GoIO_Sensor_SendCmdAndGetResponse(
 				sensor.hDevice,
-				cmd,		
-				pParams,			
+				cmd,
+				pParams,
 				nParamBytes,
-				pRespBuf,			
+				pRespBuf,
 				pnRespBytes,
 				timeoutMs);
-		
+
 		return ret==0;
-		
+
 	}
-	
+
 
 	public boolean sensorStartCollectingData(
 			GoIOSensor sensor)
 	{
 		boolean ret = false;
-		
+
 		byte [] pParams = null;
 		Pointer pRespBuf =null;
 		int []pnRespBytes = null;
-		
+
 		ret = sensorSendCmd(sensor,
-									GoIOJNALibrary.SKIP_CMD_ID_START_MEASUREMENTS, 							 
-									pParams, 
+									GoIOJNALibrary.SKIP_CMD_ID_START_MEASUREMENTS,
+									pParams,
 									0, //null,
-									pRespBuf, //null, 
+									pRespBuf, //null,
 									pnRespBytes, //null
 									GoIOJNALibrary.SKIP_TIMEOUT_MS_DEFAULT
 									);
 
 		return ret;
-		
+
 	}
-	
-	
+
+
 	public int[] sensorReadRawMeasuements(
 			GoIOSensor sensor,
 			int maxCount)
 	{
 		int [] pMeasurementsBuf = new int[maxCount];
-		
+
 		int ngot  = goIOLibrary.GoIO_Sensor_ReadRawMeasurements(
 					sensor.hDevice,		//[in] handle to open sensor.
 					pMeasurementsBuf,	//[out] ptr to loc to store measurements.
@@ -243,12 +241,12 @@ public class D2PIOLibrary
 
 		int [] retbuf = new int [ngot];
 		System.arraycopy(pMeasurementsBuf, 0, retbuf, 0, ngot);
-		return retbuf;	
+		return retbuf;
 	}
-	
+
 	//End API
 	//Helper functions:
-	
+
 	protected boolean getDeviceName(char []deviceName, int nameLength, int []pVendorId, int []pProductId)
 	{
 		/*
@@ -256,91 +254,91 @@ public class D2PIOLibrary
 		 * This function is more or less from GoIO_DeviceCheck.cpp
 		 * It seems weird to check for 4 devices
 		 * only to return the one that was found first...
-		 * 
+		 *
 		boolean bFoundDevice = true; //Must be true for code to work
-		
+
 		deviceName[0] = 0;
 		int VDV_ID = GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID;
-		
-		int numSkips     = updateDeviceListEntry(VDV_ID, GoIOJNALibrary.PROBE_GOLINK); 
+
+		int numSkips     = updateDeviceListEntry(VDV_ID, GoIOJNALibrary.PROBE_GOLINK);
 		int numJonahs    = updateDeviceListEntry(VDV_ID, GoIOJNALibrary.PROBE_USB_TEMPERATURE);
 		int numCyclopses = updateDeviceListEntry(VDV_ID, GoIOJNALibrary.PROBE_GOMOTION);
 		int numMiniGCs   = updateDeviceListEntry(VDV_ID, GoIOJNALibrary.MINI_GC_DEFAULT_PRODUCT_ID);
 
-		
-		do //not a loop: Used in stead of else if 
+
+		do //not a loop: Used in stead of else if
 		{
 
 			if(numSkips>0)
 			{
 				pVendorId[0] = GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOJNALibrary.PROBE_GOLINK;		
+				pProductId[0]= GoIOJNALibrary.PROBE_GOLINK;
 				break;
 			}
-			
+
 			if(numJonahs>0)
 			{
 				pVendorId[0] = GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOJNALibrary.PROBE_USB_TEMPERATURE;				
+				pProductId[0]= GoIOJNALibrary.PROBE_USB_TEMPERATURE;
 				break;
 			}
-			
+
 			if(numCyclopses>0)
 			{
 				pVendorId[0] = GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOJNALibrary.PROBE_GOMOTION;		
+				pProductId[0]= GoIOJNALibrary.PROBE_GOMOTION;
 				break;
 			}
-			
+
 			if(numMiniGCs>0)
 			{
 				pVendorId[0] = GoIOJNALibrary.VERNIER_DEFAULT_VENDOR_ID;
-				pProductId[0]= GoIOJNALibrary.PROBE_MINI_GAS_CHROMATOGRAPH;				
+				pProductId[0]= GoIOJNALibrary.PROBE_MINI_GAS_CHROMATOGRAPH;
 				break;
 			}
-			
+
 			//default, no device found:
 			bFoundDevice = false;
-			
+
 		}while(false);
-		
+
 		if(bFoundDevice)
 			goIOLibrary.GoIO_GetNthAvailableDeviceName(deviceName, nameLength, pVendorId[0], pProductId[0], 0);
-		
+
 		return bFoundDevice;
 	}
-	
 
-	
+
+
 	protected Pointer sensorOpen(char []pDeviceName, int vendorId, int productId)
 	{
-		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...		
+		return goIOLibrary.GoIO_Sensor_Open(pDeviceName, vendorId, productId, 0); //last arg 0 in all examples...
 	}
 
-	
+
 	protected int updateDeviceListEntry(int vendor, int device_id)
 	{
-		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);		
+		return goIOLibrary.GoIO_UpdateListOfAvailableDevices(vendor, device_id);
 	}
 */
-	
-	//FIX: Copied from LabQuestLibrary, then modified:	
+
+	//FIX: Copied from LabQuestLibrary, then modified:
     private static File getNativeLibraryFromJar() {
         String libname = getNativeLibraryName();
         String resourceName = getNativeLibraryResourcePath() + "/" + libname;
         URL url = D2PIOLibrary.class.getResource(resourceName);
-		
+
         if (url == null) {
-            throw new UnsatisfiedLinkError("D2PIO (" + resourceName 
+            throw new UnsatisfiedLinkError("D2PIO (" + resourceName
                                            + ") not found in resource path");
         }
-    
+
         File lib = null;
         InputStream is = Native.class.getResourceAsStream(resourceName);
         if (is == null) {
             throw new Error("Can't obtain jnidispatch InputStream");
         }
-        
+
         FileOutputStream fos = null;
         try {
             // Suffix is required on windows, or library fails to load
@@ -375,7 +373,7 @@ public class D2PIOLibrary
         }
         return null;
     }
-    
+
     //FIX: Copied from LabQuestLibrary
     private static String getNativeLibraryResourcePath() {
         String arch = System.getProperty("os.arch").toLowerCase();
@@ -396,7 +394,7 @@ public class D2PIOLibrary
 		}
         return "/org/concord/sensor/d2pio/jna/" + osPrefix; //path == package name
     }
-    
+
     private static class NativeHelper {
     	private static void deleteNativeLibrary(File file) {
     		if (file.delete()) {

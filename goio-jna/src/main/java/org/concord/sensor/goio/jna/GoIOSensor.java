@@ -104,7 +104,7 @@ public class GoIOSensor {
 		unlock();
 		
 		if(ret != 0){
-			throw new RuntimeException("error starting measurments");
+			throw new RuntimeException("error starting measurements");
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class GoIOSensor {
 		unlock();
 		
 		if(ret != 0){
-			throw new RuntimeException("error stopping measurments");
+			throw new RuntimeException("error stopping measurements");
 		}
 	}
 	

@@ -19,6 +19,7 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 	D2PIOLibrary d2pio;
 	String errorMessage;
 	D2PIOSensor currentGoDirectDevice;
+  private static final int MAX_D2PIO_CHANNELS = 32;
 
 	public D2PIOSensorDevice() {
 		deviceLabel = "GODIR";
@@ -141,17 +142,36 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 		// TODO we should set the period range since it is known by the device
 		//   expConfig.getPeriodRange();
 
-		SensorConfig [] sensorConfigs = new SensorConfig[1];
+		int numChannels = 0;
+		int channelMask = currentGoDirectDevice.getMeasurementChannelAvailabilityMask();
+
+		// Use channel mask to count number of channels
+		for (int ch = 0; ch < MAX_D2PIO_CHANNELS; ch++) {
+			if (((1 << ch) & channelMask) != 0) {
+				numChannels++;
+			}
+		}
+
+		SensorConfig [] sensorConfigs = new SensorConfig[numChannels];
 		expConfig.setSensorConfigs(sensorConfigs);
+		int chIndex = 0;
+		for (int ch = 0; ch < MAX_D2PIO_CHANNELS; ch++) {
+			if (((1 << ch) & channelMask) != 0) {
+				// TODO: what should the channel type be?
+				// Is it always CHANNEL_TYPE_ANALOG or is it ever CHANNEL_TYPE_DIGITAL?
+				int channelType = VernierSensor.CHANNEL_TYPE_ANALOG;
+				VernierSensor sensor = new VernierSensor(this, devService, chIndex, channelType);
 
-		// TODO: what should the channel type be?  Is it always analog?
-		int channelType = VernierSensor.CHANNEL_TYPE_ANALOG; //CHANNEL_TYPE_DIGITAL
-		VernierSensor sensor = new VernierSensor(this, devService, 0, channelType);
+				// FIXME if the sensor isn't a known sensor then sensorConfig should return
+				// an unknown type of sensor.  It isn't clear if this should return a valid experiment config or not.
+				int sensorid = currentGoDirectDevice.getAttachedSensorId(ch);
 
-		// FIXME if the sensor isn't a known sensor then sensorConfig should return
-		// an unknown type of sensor.  It isn't clear if this should return a valid experiment config or not.
-		sensor.setupSensor(currentGoDirectDevice.getAttachedSensorId(), null);
-		sensorConfigs[0] = sensor;
+				sensor.setupSensor(currentGoDirectDevice.getAttachedSensorId(ch), null);
+				sensorConfigs[chIndex] = sensor;
+				chIndex++;
+			}
+		}
+
 		expConfig.setValid(true);
 
 		return expConfig;
@@ -238,16 +258,10 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 
 	public int read(float[] values, int offset, int nextSampleOffset,
 			DeviceReader reader) {
-		// To support multiple devices this should be in a loop over the
-		// devices and sensorIndex should be incremented
 		int sensorIndex = 0;
 		int numMeasurements = 0;
-		// loop over all potential channels
-		// see if channel is active from channel mask
-		// if match, get numeric type
-		// either read or readra based on numeric type
 		int channelMask = currentGoDirectDevice.getMeasurementChannelAvailabilityMask();
-		for (int ch = 0; ch < 32; ch++) {
+		for (int ch = 0; ch < MAX_D2PIO_CHANNELS; ch++) {
 			if (((1 << ch) & channelMask) != 0) {
 				int numericType = currentGoDirectDevice.getMeasurementChannelNumericType(ch);
 				if (!currentGoDirectDevice.measurementIsRaw(numericType)) {
@@ -257,7 +271,7 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 						for (int i = 0; i < numMeasurements; i++) {
 							float calibratedData = Float.NaN;
 							calibratedData = (float)calbMeasurements[i];
-							values[offset + sensorIndex + i*nextSampleOffset] = calibratedData;
+							values[offset + sensorIndex + i * nextSampleOffset] = calibratedData;
 						}
 					}
 				} else {
@@ -267,57 +281,13 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 						for (int i = 0; i < numMeasurements; i++) {
 							float rawData = Float.NaN;
 							rawData = (float)rawMeasurements[i];
-							values[offset + sensorIndex + i*nextSampleOffset] = (float)rawData;
+							values[offset + sensorIndex + i * nextSampleOffset] = (float)rawData;
 						}
 					}
 				}
-				break; //TODO: just read the first channel that is valid for now
+				sensorIndex++;
 			}
 		}
-		/*
-		int numMeasurements = currentGoDirectDevice.readRawMeasurements(rawBuffer);
-		if(numMeasurements < 0){
-			errorMessage = "error reading measurements";
-			return -1;
-		}
-
-		SensorConfig [] sensors = currentConfig.getSensorConfigs();
-		VernierSensor sensorConfig = (VernierSensor) sensors[0];
-		int type = sensorConfig.getType();
-
-		// To support multiple devices this should be in a loop over the
-		// devices and sensorIndex should be incremented
-		int sensorIndex = 0;
-
-		for(int i=0; i<numMeasurements; i++){
-
-			float calibratedData = Float.NaN;
-
-			calibratedData = rawBuffer[i];
-			values[offset + sensorIndex + i*nextSampleOffset] = calibratedData;
-			// TODO: do we need to do any sort of calibration for go direct?
-			/*
-			if(type == SensorConfig.QUANTITY_RAW_DATA_1 ||
-					type == SensorConfig.QUANTITY_RAW_DATA_2){
-				calibratedData = rawBuffer[i];
-			} else {
-				// convert to voltage
-				float voltage = (float) currentGoDirectDevice.convertToVoltage(rawBuffer[i]);
-
-				// scytacki: I would think the GoIO sdk would automatically handle calibration for autoid non smart sensors
-				//   but it doesn't.  Instead we use the calibration code that is in VernierSensor class.
-				if(sensorConfig.getCalibration() != null){
-					calibratedData = sensorConfig.getCalibration().calibrate(voltage);
-				} else {
-					// ask goio sdk to convert value
-					calibratedData = (float) currentGoDirectDevice.calibrateData(voltage);
-				}
-				calibratedData = sensorConfig.doPostCalibration(calibratedData);
-			}
-			values[offset + sensorIndex + i*nextSampleOffset] = calibratedData;
-
-		}
-*/
 		return numMeasurements;
 	}
 }

@@ -388,6 +388,18 @@ public class VernierSensor extends SensorConfigImpl
 				setName("Y-axis Gyro");
 				setStepSize(0.01f);
 				break;
+			case SensorID.GD_ZAXIS_GYRO:
+				setUnit("rad/s");
+				setType(QUANTITY_ANGULAR_VELOCITY);
+				setName("Z-axis Gyro");
+				setStepSize(0.01f);
+				break;				
+			case SensorID.GD_PRESSURE:
+				setUnit("kPa");
+				setType(QUANTITY_GAS_PRESSURE);
+				setName("Pressure");
+				setStepSize(0.01f); //maybe .05
+				break;				
 
 			default:
 				setType(QUANTITY_UNKNOWN);

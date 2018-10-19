@@ -77,13 +77,17 @@ public final class SensorID{
 	/*
 	 * go direct sensors
 	 */
-	public final static int GD_TEMPERATURE = 400;
-	public final static int GD_PRESSURE = 409;
-	public final static int GD_FORCE = 431;
-	public final static int GD_XAXIS_ACCELERATION = 432;
-	public final static int GD_YAXIS_ACCELERATION = 433;
-	public final static int GD_ZAXIS_ACCELERATION = 434;
-	public final static int GD_XAXIS_GYRO = 435;
-	public final static int GD_YAXIS_GYRO = 436;
-	public final static int GD_ZAXIS_GYRO = 437;
+	public final static int GDX_TEMPERATURE = 400;
+	public final static int GDX_PRESSURE = 409;
+	public final static int GDX_FORCE = 431;
+	public final static int GDX_XAXIS_ACCELERATION = 432;
+	public final static int GDX_YAXIS_ACCELERATION = 433;
+	public final static int GDX_ZAXIS_ACCELERATION = 434;
+	public final static int GDX_XAXIS_GYRO = 435;
+	public final static int GDX_YAXIS_GYRO = 436;
+	public final static int GDX_ZAXIS_GYRO = 437;
+	public final static int GDX_MOTION = 424;
+	public final static int GDX_MOTION_CART = 509;
+	public final static int GDX_MOTION_WITH_TC = 499;
+	
 }

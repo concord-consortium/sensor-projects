@@ -346,61 +346,78 @@ public class VernierSensor extends SensorConfigImpl
 				}
 				break;
 
-			case SensorID.GD_TEMPERATURE:
+			case SensorID.GDX_TEMPERATURE:
 				setUnit("degC");
 				setType(QUANTITY_TEMPERATURE_WAND);
 				setName("Temperature");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_FORCE:
+			case SensorID.GDX_FORCE:
 				setUnit("N");
 				setType(QUANTITY_FORCE);
 				setName("Force");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_XAXIS_ACCELERATION:
+			case SensorID.GDX_XAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("X-axis Acceleration");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_YAXIS_ACCELERATION:
+			case SensorID.GDX_YAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("Y-axis Acceleration");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_ZAXIS_ACCELERATION:
+			case SensorID.GDX_ZAXIS_ACCELERATION:
 				setUnit("m/s^2");
 				setType(QUANTITY_ACCELERATION);
 				setName("Z-axis Acceleration");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_XAXIS_GYRO:
+			case SensorID.GDX_XAXIS_GYRO:
 				setUnit("rad/s");
 				setType(QUANTITY_ANGULAR_VELOCITY);
 				setName("X-axis Gyro");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_YAXIS_GYRO:
+			case SensorID.GDX_YAXIS_GYRO:
 				setUnit("rad/s");
 				setType(QUANTITY_ANGULAR_VELOCITY);
 				setName("Y-axis Gyro");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_ZAXIS_GYRO:
+			case SensorID.GDX_ZAXIS_GYRO:
 				setUnit("rad/s");
 				setType(QUANTITY_ANGULAR_VELOCITY);
 				setName("Z-axis Gyro");
 				setStepSize(0.01f);
 				break;
-			case SensorID.GD_PRESSURE:
+			case SensorID.GDX_PRESSURE:
 				setUnit("kPa");
 				setType(QUANTITY_GAS_PRESSURE);
 				setName("Pressure");
 				setStepSize(0.01f); //maybe .05
 				break;
-
+			case SensorID.GDX_MOTION:
+				setUnit("m");
+				setType(QUANTITY_DISTANCE);
+				setName("Pressure");
+				setStepSize(0.04f); //30 samples per second max
+				break;
+			case SensorID.GDX_MOTION_CART:
+				setUnit("m");
+				setType(QUANTITY_DISTANCE);
+				setName("Pressure");
+				setStepSize(0.04f); //30 samples per second max
+				break;
+			case SensorID.GDX_MOTION_WITH_TC:
+				setUnit("m");
+				setType(QUANTITY_DISTANCE);
+				setName("Pressure");
+				setStepSize(0.04f); //30 samples per second max
+				break;
 			default:
 				setType(QUANTITY_UNKNOWN);
 				break;

@@ -43,14 +43,6 @@ public class D2PIOSensor {
 	}
 
 	public boolean open() {
-		// byte[] devName = null;
-		// try {
-		// 	devName = (deviceName + '\0').getBytes("UTF-8");
-		// }
-		// catch(Exception ex) {
-		// }
-		// System.out.println("deviceNameStringLength: " + deviceName.length());
-		// System.out.println("devNameBytesLength: " + devName.length);
 		deviceHandle = libInstance.D2PIO_Device_Open(
 						libHandle, deviceName, null, 0,
 						D2PIOJNALibrary.D2PIO_USB_OPEN_TIMEOUT_MS, null, null);
@@ -349,17 +341,6 @@ public class D2PIOSensor {
 		}
 	}
 
-/*
-	public int getType() {
-		int type = 0;
-		if (deviceHandle != null) {
-			System.out.println("getType calling D2PIO_Device_GetOpenDeviceType()");
-			type = libInstance.D2PIO_Device_GetOpenDeviceType(deviceHandle);
-			System.out.println("getType returned " + type);
-		}
-		return type;
-	}
-*/
 	public String getDescription() {
 		if (deviceHandle != null) {
 			System.out.println("getDescription calling D2PIO_Device_GetDeviceDescription()");
@@ -376,12 +357,6 @@ public class D2PIOSensor {
 		}
 		return "";
 	}
-
-	// D2PIO_LIB_INTERFACE_DECL gtype_int32 D2PIO_Device_GetOrderCode(
-	// 	D2PIO_DEVICE_HANDLE hDevice,	//[in] handle to open device.
-	// 	char *pOrderCode,				//[out] ptr to buffer to store NULL terminated UTF-8 string for the OrderCode.
-	// 	gtype_uint32 Bufsize);			//[in] number of UTF-8 chars in buffer pointed to by pOrderCode. strlen(pOrderCode) < bufSize, because the string is NULL terminated.
-	// 									//strlen(pOrderCode) is guaranteed to be < D2PIO_MAX_ORDERCODE_LENGTH.
 
 	public String getOrderCode() {
 		if (deviceHandle != null) {
@@ -450,3 +425,4 @@ public class D2PIOSensor {
 		int sensorId = this.getMeasurementChannelSensorId(channel);
 		return sensorId;
 	}
+}

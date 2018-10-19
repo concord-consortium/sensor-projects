@@ -398,25 +398,25 @@ public class VernierSensor extends SensorConfigImpl
 				setUnit("kPa");
 				setType(QUANTITY_GAS_PRESSURE);
 				setName("Pressure");
-				setStepSize(0.01f); //maybe .05
+				setStepSize(0.02f); //50 samples per second max
 				break;
 			case SensorID.GDX_MOTION:
 				setUnit("m");
 				setType(QUANTITY_DISTANCE);
 				setName("Pressure");
-				setStepSize(0.04f); //30 samples per second max
+				setStepSize(0.034f); //30 samples per second max
 				break;
 			case SensorID.GDX_MOTION_CART:
 				setUnit("m");
 				setType(QUANTITY_DISTANCE);
 				setName("Pressure");
-				setStepSize(0.04f); //30 samples per second max
+				setStepSize(0.034f); //30 samples per second max
 				break;
 			case SensorID.GDX_MOTION_WITH_TC:
 				setUnit("m");
 				setType(QUANTITY_DISTANCE);
 				setName("Pressure");
-				setStepSize(0.04f); //30 samples per second max
+				setStepSize(0.034f); //30 samples per second max
 				break;
 			default:
 				setType(QUANTITY_UNKNOWN);

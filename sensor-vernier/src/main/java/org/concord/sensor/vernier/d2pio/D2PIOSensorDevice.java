@@ -19,10 +19,10 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 	D2PIOLibrary d2pio;
 	String errorMessage;
 	D2PIOSensor currentGoDirectDevice;
-  private static final int MAX_D2PIO_CHANNELS = 32;
+	private static final int MAX_D2PIO_CHANNELS = 32;
 
 	public D2PIOSensorDevice() {
-		deviceLabel = "GODIR";
+		deviceLabel = "GDX";
 		d2pio = new D2PIOLibrary();
 
 		try {
@@ -104,9 +104,6 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 	}
 
 	public ExperimentConfig configure(ExperimentRequest request) {
-		// FIXME this should reject raw* requests if that don't work with the attached device
-		//   for example raw_*2 shouldn't work with the goTemp or goMotion
-
 		ExperimentConfig experimentConfig = autoIdConfigure(request);
 
 		// Because the supported measurement period by the device
@@ -220,7 +217,7 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 			return currentGoDirectDevice.getDeviceLabel();
 		}
 
-		return "GoDirect";
+		return "Go Direct";
 	}
 
 	public boolean start() {

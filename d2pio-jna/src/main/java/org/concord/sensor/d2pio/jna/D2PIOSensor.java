@@ -9,7 +9,7 @@ import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.DoubleByReference;
 
 /**
- * In the GoIO SDK a sensor represents an attached device
+ * In the D2PIO SDK a sensor represents an attached device
  *
  * @author kswenson
  *
@@ -77,8 +77,6 @@ public class D2PIOSensor {
 								pFriendlyName, MAX_NAME_SIZE);
 		if (result == 0) {
 			this.friendlyName = pFriendlyName.getString(0, "UTF-8");
-			System.out.println("D2PIO_Device_GetOpenDeviceName deviceName: " + pDeviceName.getString(0, "UTF-8"));
-			System.out.println("D2PIO_Device_GetOpenDeviceName friendlyName: " + friendlyName);
 		}
 		else {
 			System.out.println("D2PIO_Device_GetOpenDeviceName ERROR: " + result);
@@ -153,10 +151,8 @@ public class D2PIOSensor {
 				0, pRespBuf, pnRespBytes,
 				D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
 		unlock();
-		if (status == 0) {
-			System.out.println("sendCmdAndGetResponse status: " + status);
-		} else {
-			System.out.println("sendCmdAndGetResponse failed with result: " + status);
+		if (status != 0) {
+			System.out.println("sendCmdAndGetResponse ERROR: " + result);
 		}
 		return status;
 	}
@@ -170,10 +166,8 @@ public class D2PIOSensor {
 							desiredPeriod,
 							D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
 		unlock();
-		if (result == 0) {
-			System.out.println("Measurement Period: " + desiredPeriod);
-		} else {
-			System.out.println("setMeasurementPeriod failed with result: " + result);
+		if (result != 0) {
+			System.out.println("setMeasurementPeriod ERROR: " + result);
 			throw new RuntimeException("error setting measurement period");
 		}
 		return result;
@@ -192,9 +186,8 @@ public class D2PIOSensor {
 		unlock();
 		if (result == 0) {
 			period = pPeriod.getValue();
-			System.out.println("Peroid: " + pPeriod.getValue());
 		} else {
-			System.out.println("getMeasurementPeriod failed with result: " + result);
+			System.out.println("getMeasurementPeriod ERROR: " + result);
 			throw new RuntimeException("error getting measurement period");
 		}
 		return period;
@@ -211,9 +204,8 @@ public class D2PIOSensor {
 		if (result == 0) {
 			// it is an unsigned char so deal with negative numbers
 	    uChannelMask = pChannelMask.getValue() & 0x0FF;
-			System.out.println("Channel Mask: " + uChannelMask);
 		} else {
-			System.out.println("getMeasurementChannelAvailabilityMask failed with result: " + result);
+			System.out.println("getMeasurementChannelAvailabilityMask ERROR: " + result);
 		}
 		return uChannelMask;
 	}
@@ -229,9 +221,8 @@ public class D2PIOSensor {
 		unlock();
 		if (result == 0) {
 			sensorId = pSensorId.getValue();
-			System.out.println("Sensor Channel ID: " + sensorId);
 		} else {
-			System.out.println("getMeasurementChannelSensorId failed with result: " + result);
+			System.out.println("getMeasurementChannelSensorId ERROR: " + result);
 		}
 		return sensorId;
 	}
@@ -249,9 +240,8 @@ public class D2PIOSensor {
 		unlock();
 		if (result == 0) {
 			sensorDesc = pSensorDescription.getString(0, "UTF-8");
-			System.out.println("Sensor Channel Description: " + sensorDesc);
 		} else {
-			System.out.println("getMeasurementChannelSensorDescription failed with result: " + result);
+			System.out.println("getMeasurementChannelSensorDescription ERROR: " + result);
 		}
 		return sensorDesc;
 	}
@@ -269,9 +259,8 @@ public class D2PIOSensor {
 		unlock();
 		if (result == 0) {
 			sensorUnits = pSensorUnit.getString(0, "UTF-8");
-			System.out.println("Sensor Channel Units: " + sensorUnits);
 		} else {
-			System.out.println("getMeasurementChannelSensorUnits failed with result: " + result);
+			System.out.println("getMeasurementChannelSensorUnits ERROR: " + result);
 		}
 		return sensorUnits;
 	}
@@ -287,9 +276,8 @@ public class D2PIOSensor {
 		unlock();
 		if (result == 0) {
 			numericType = pNumericMeasType.getValue();
-			System.out.println("Sensor Channel Numeric Type: " + pNumericMeasType.getValue());
 		} else {
-			System.out.println("getMeasurementChannelNumericType failed with result: " + result);
+			System.out.println("getMeasurementChannelNumericType ERROR: " + result);
 		}
 		return numericType;
 	}
@@ -310,7 +298,6 @@ public class D2PIOSensor {
 							maxCount);
 		unlock();
 		if (numMeasurements > 0) {
-			System.out.println("Sensor Raw Measurements Read: " + numMeasurements);
 			int [] retBuffer = new int [numMeasurements];
 			System.arraycopy(pMeasurementsBuf, 0, retBuffer, 0, numMeasurements);
 			return retBuffer;
@@ -331,7 +318,6 @@ public class D2PIOSensor {
 							maxCount);
 		unlock();
 		if (numMeasurements > 0) {
-			System.out.println("Sensor Measurements Read: " + numMeasurements);
 			double [] retBuffer = new double [numMeasurements];
 			System.arraycopy(pMeasurementsBuf, 0, retBuffer, 0, numMeasurements);
 			return retBuffer;
@@ -343,14 +329,12 @@ public class D2PIOSensor {
 
 	public String getDescription() {
 		if (deviceHandle != null) {
-			System.out.println("getDescription calling D2PIO_Device_GetDeviceDescription()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pDescription = new Memory(MAX_LEN);
 			lock();
 			int result = libInstance.D2PIO_Device_GetDeviceDescription(
 										deviceHandle, pDescription, MAX_LEN);
 			unlock();
-			System.out.println("getDescription result: " + result);
 			if (result == 0) {
 				return pDescription.getString(0, "UTF-8");
 			}
@@ -360,14 +344,12 @@ public class D2PIOSensor {
 
 	public String getOrderCode() {
 		if (deviceHandle != null) {
-			System.out.println("getOrderCode calling D2PIO_Device_GetOrderCode()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pOrderCode = new Memory(MAX_LEN);
 			lock();
 			int result = libInstance.D2PIO_Device_GetOrderCode(
 										deviceHandle, pOrderCode, MAX_LEN);
 			unlock();
-			System.out.println("getOrderCode result: " + result);
 			if (result == 0) {
 				return pOrderCode.getString(0, "UTF-8");
 			}
@@ -377,14 +359,12 @@ public class D2PIOSensor {
 
 	public String getSerialNumber() {
 		if (deviceHandle != null) {
-			System.out.println("getSerialNumber calling D2PIO_Device_GetSerialNumber()");
 			int MAX_LEN = D2PIOJNALibrary.D2PIO_MAX_SIZE_DEVICE_NAME;
 			Pointer pSerialNumber = new Memory(MAX_LEN);
 			lock();
 			int result = libInstance.D2PIO_Device_GetSerialNumber(
 										deviceHandle, pSerialNumber, MAX_LEN);
 			unlock();
-			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				return pSerialNumber.getString(0, "UTF-8");
 			}
@@ -394,7 +374,6 @@ public class D2PIOSensor {
 
 	public void getManufactureDate() {
 		if (deviceHandle != null) {
-			System.out.println("getManufactureDate calling D2PIO_Device_GetManufacturingInfo()");
 			ShortByReference pManufacturerId = new ShortByReference();
 			ShortByReference pManufacturedYear = new ShortByReference();
 			ByteByReference pManufacturedMonth = new ByteByReference();
@@ -407,7 +386,6 @@ public class D2PIOSensor {
 										pManufacturedMonth,
 										pManufacturedDay);
 			unlock();
-			System.out.println("D2PIO_Device_GetSerialNumber result: " + result);
 			if (result == 0) {
 				System.out.println("Manufacturer ID: " + pManufacturerId.getValue());
 				System.out.println("Manufacture year: " + pManufacturedYear.getValue());

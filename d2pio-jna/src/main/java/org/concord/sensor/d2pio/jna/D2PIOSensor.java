@@ -152,7 +152,7 @@ public class D2PIOSensor {
 				D2PIOJNALibrary.D2PIO_TIMEOUT_MS_DEFAULT);
 		unlock();
 		if (status != 0) {
-			System.out.println("sendCmdAndGetResponse ERROR: " + result);
+			System.out.println("sendCmdAndGetResponse ERROR: " + status);
 		}
 		return status;
 	}

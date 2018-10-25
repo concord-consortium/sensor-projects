@@ -11,6 +11,7 @@ import org.concord.sensor.d2pio.jna.D2PIOSensor;
 import org.concord.sensor.impl.ExperimentConfigImpl;
 import org.concord.sensor.vernier.VernierSensor;
 import org.concord.sensor.vernier.VernierSensorDevice;
+import org.concord.sensor.impl.Range;
 import javax.swing.JOptionPane;
 
 public class D2PIOSensorDevice extends AbstractSensorDevice implements
@@ -164,6 +165,20 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 				int sensorid = currentGoDirectDevice.getAttachedSensorId(ch);
 
 				sensor.setupSensor(currentGoDirectDevice.getAttachedSensorId(ch), null);
+				// If we fail to find the sensor in our list of known sensors,
+				// read the channels specifics from sensor itself
+				if (sensor.getType() == VernierSensor.QUANTITY_UNKNOWN) {
+					String sensorUnits = currentGoDirectDevice.getMeasurementChannelSensorUnits(ch);
+					sensor.setUnit(sensorUnits);
+					String sensorName = currentGoDirectDevice.getMeasurementChannelSensorDescription(ch);
+					sensor.setName(sensorName);
+					double sensorTypicalStepSize = currentGoDirectDevice.getMeasurementChannelTypicalStepSize(ch);
+					sensor.setStepSize((float)sensorTypicalStepSize);
+					double sensorMinValue = currentGoDirectDevice.getMeasurementChannelMinValue(ch);
+					double sensorMaxValue = currentGoDirectDevice.getMeasurementChannelMaxValue(ch);
+					sensor.setValueRange(new Range((float)sensorMinValue,(float)sensorMaxValue));
+				}
+
 				sensorConfigs[chIndex] = sensor;
 				chIndex++;
 			}

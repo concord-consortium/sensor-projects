@@ -265,6 +265,71 @@ public class D2PIOSensor {
 		return sensorUnits;
 	}
 
+	public double getMeasurementChannelTypicalStepSize(int channel) {
+		int result = 0;
+		DoubleByReference pTypStepSize = new DoubleByReference();
+		DoubleByReference pMinStepSize = new DoubleByReference();
+		DoubleByReference pMaxStepSize = new DoubleByReference();
+		DoubleByReference pStepSizeGran = new DoubleByReference();
+		double typStepSize = 0;
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelPeriodInfo(deviceHandle,
+							(byte)channel,
+							pMinStepSize,
+							pMaxStepSize,
+							pTypStepSize,
+							pStepSizeGran);
+		unlock();
+		if (result == 0) {
+			typStepSize = pTypStepSize.getValue();
+		} else {
+			System.out.println("getMeasurementChannelTypicalStepSize ERROR: " + result);
+		}
+		return typStepSize;
+	}
+
+	public double getMeasurementChannelMinValue(int channel) {
+		int result = 0;
+		DoubleByReference pMeasUncert = new DoubleByReference();
+		DoubleByReference pMinRange = new DoubleByReference();
+		DoubleByReference pMaxRange = new DoubleByReference();
+		double minRange = 0;
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelRangeInfo(deviceHandle,
+							(byte)channel,
+							pMeasUncert,
+							pMinRange,
+							pMaxRange);
+		unlock();
+		if (result == 0) {
+			minRange = pMinRange.getValue();
+		} else {
+			System.out.println("getMeasurementChannelMinValue ERROR: " + result);
+		}
+		return minRange;
+	}
+
+	public double getMeasurementChannelMaxValue(int channel) {
+		int result = 0;
+		DoubleByReference pMeasUncert = new DoubleByReference();
+		DoubleByReference pMinRange = new DoubleByReference();
+		DoubleByReference pMaxRange = new DoubleByReference();
+		double maxRange = 0;
+		lock();
+		result = libInstance.D2PIO_Device_GetMeasurementChannelRangeInfo(deviceHandle,
+							(byte)channel,
+							pMeasUncert,
+							pMinRange,
+							pMaxRange);
+		unlock();
+		if (result == 0) {
+			maxRange = pMaxRange.getValue();
+		} else {
+			System.out.println("getMeasurementChannelMaxValue ERROR: " + result);
+		}
+		return maxRange;
+	}
+
 	public int getMeasurementChannelNumericType(int channel) {
 		int result = 0;
 		int numericType = D2PIOJNALibrary.D2PIO_NUMERIC_MEAS_TYPE_REAL64;

@@ -631,5 +631,37 @@ public interface D2PIOJNALibrary extends Library {
 		byte channel);		//[in] -1 => all channels.
 
 
+	/***************************************************************************************************************************
+	Function Name: D2PIO_Device_GetMeasurementChannelRangeInfo()
+
+	Purpose:	Retrieve the measurement range information for the sensor in the specified channel.
+
+	Return:		0 if successful, else -1.
+
+	****************************************************************************************************************************/
+	int D2PIO_Device_GetMeasurementChannelRangeInfo(
+		Pointer hDevice,	//[in] handle to open device.
+		byte channel,			//[in]
+		DoubleByReference pMeasurementUncertainty, //[out] uncertainty of measurement expressed in SensorUnit's.
+		DoubleByReference pMinMeasurement,	//[out] minimum measurement expressed in SensorUnit's.
+		DoubleByReference pMaxMeasurement);	//[out] maximum measurement expressed in SensorUnit's.
+
+	/***************************************************************************************************************************
+	Function Name: D2PIO_Device_GetMeasurementChannelPeriodInfo()
+
+	Purpose:	Retrieve the measurement period range information for the sensor in the specified channel.
+				This information is only valid for sensors whose sampling mode is D2PIO_SAMPLING_MODE_PERIODIC.
+
+	Return:		0 if successful, else -1.
+
+	****************************************************************************************************************************/
+	int D2PIO_Device_GetMeasurementChannelPeriodInfo(
+		Pointer hDevice,	//[in] handle to open device.
+		byte channel,			//[in]
+		DoubleByReference pMinMeasurementPeriod,//[out] minimum measurement period in seconds
+		DoubleByReference pMaxMeasurementPeriod,//[out] maximum measurement period in seconds
+		DoubleByReference pTypMeasurementPeriod,//[out] typical measurement period in seconds
+		DoubleByReference pMeasurementPeriodGranularity);//[out] in seconds, supported periods are integer multiples of measurementPeriodGranularity.
+
 }
 

@@ -39,6 +39,11 @@
     </dependency>
     <dependency>
       <groupId>org.concord.sensor</groupId>
+      <artifactId>d2pio-jna</artifactId>
+      <optional>true</optional>
+    </dependency>		
+    <dependency>
+      <groupId>org.concord.sensor</groupId>
       <artifactId>sensor</artifactId>
       <type>test-jar</type>
       <scope>test</scope>

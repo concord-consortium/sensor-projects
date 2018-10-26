@@ -28,7 +28,7 @@
  * $Author: scytacki $
  *
  * Licence Information
- * Copyright 2004 The Concord Consortium 
+ * Copyright 2004 The Concord Consortium
 */
 package org.concord.sensor.device.impl;
 
@@ -44,7 +44,6 @@ import org.concord.sensor.device.SensorDevice;
 import org.concord.sensor.device.UserMessageHandler;
 import org.concord.sensor.impl.Ticker;
 
-
 /**
  * JavaDeviceFactory
  * Class name and description
@@ -56,13 +55,13 @@ import org.concord.sensor.impl.Ticker;
  */
 public class JavaDeviceFactory extends JavaDeviceService
 	implements DeviceFactory, DeviceID, DeviceService
-{	
+{
 	private static final Logger logger = Logger.getLogger(JavaDeviceFactory.class.getCanonicalName());
 	Ticker ticker = null;
-		
+
 	Hashtable<String, SensorDevice> deviceTable = new Hashtable<String, SensorDevice>();
 	Hashtable<SensorDevice, String> configTable = new Hashtable<SensorDevice, String>();
-	
+
 	/*
 	 *
 		new DeviceID( 0, "Pseudo Device"           ,null),
@@ -86,7 +85,7 @@ public class JavaDeviceFactory extends JavaDeviceService
 
 	*/
 	/**
-	 * 
+	 *
 	 */
 	public JavaDeviceFactory()
 	{
@@ -101,15 +100,15 @@ public class JavaDeviceFactory extends JavaDeviceService
 		int id = config.getDeviceId();
 		String configStr = config.getConfigString();
 		String deviceConfigId = "" + id + ":" + configStr;
-		SensorDevice existingDevice = 
+		SensorDevice existingDevice =
 			(SensorDevice)deviceTable.get(deviceConfigId);
 		if(existingDevice != null) {
 			return existingDevice;
 		}
-		
+
 		String className = null;
 		SensorDevice device = null;
-		
+
 		switch(id) {
 			case PSEUDO_DEVICE:
 			case PSEUDO_DEVICE_VARIABLE_TIME:
@@ -128,15 +127,18 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case VERNIER_GO_LINK_JNA:
 				className = "org.concord.sensor.vernier.goio.GoIOSensorDevice";
 				break;
+			case VERNIER_GO_DIRECT:
+				className = "org.concord.sensor.vernier.d2pio.D2PIOSensorDevice";
+				break;
 			case TI_CONNECT:
 				className = "org.concord.sensor.nativelib.NativeTISensorDevice";
-				break;				
+				break;
 			case FOURIER:
 			case DATA_HARVEST_USB:
             case DATA_HARVEST_ADVANCED:
             case DATA_HARVEST_QADVANCED:
 			    className = "org.concord.sensor.dataharvest.DataHarvestSensorDevice";
-			    break;			    
+			    break;
 			case PASCO_SERIAL:
 			    className = "org.concord.sensor.pasco.SW500SensorDevice";
 			    break;
@@ -152,12 +154,12 @@ public class JavaDeviceFactory extends JavaDeviceService
 			case COACH:
 				device = null;
 				break;
-				
+
 			// TODO: need to handle config string so
 			// the serial port can be specified
 			case CCPROBE_VERSION_0:
 			    className = "org.concord.sensor.cc.CCInterface0";
-			    break;			    
+			    break;
 			case CCPROBE_VERSION_1:
 				className = "org.concord.sensor.cc.CCInterface1";
 				break;
@@ -167,15 +169,15 @@ public class JavaDeviceFactory extends JavaDeviceService
 		}
 
 		if(className == null) {
-			// We didn't get a class for this device so warn the user 
+			// We didn't get a class for this device so warn the user
 			// at least in the console
 			System.err.println("Unknown Sensor Interface type: " + id);
 			return null;
 		}
-		
+
 		try {
 			System.out.println("Loading sensor device: " + className);
-			Class<?> sensDeviceClass = 
+			Class<?> sensDeviceClass =
 				getClass().getClassLoader().loadClass(className);
 
 			device = (SensorDevice) sensDeviceClass.newInstance();
@@ -196,24 +198,24 @@ public class JavaDeviceFactory extends JavaDeviceService
 
 		deviceTable.put(deviceConfigId, device);
 		configTable.put(device, deviceConfigId);
-		return device;		
+		return device;
 	}
 
 	public void destroyDevice(SensorDevice device)
 	{
 		device.close();
-		
-		String configStr = (String)configTable.get(device);		
+
+		String configStr = (String)configTable.get(device);
 		deviceTable.remove(configStr);
 		configTable.remove(device);
-		
+
 	}
-    
+
     public void log(String message)
     {
-        logger.info(message);        
+        logger.info(message);
     }
-    
+
     public UserMessageHandler getMessageHandler()
     {
         // TODO Auto-generated method stub

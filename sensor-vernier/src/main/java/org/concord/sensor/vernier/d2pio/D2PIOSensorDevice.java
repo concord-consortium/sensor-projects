@@ -266,8 +266,6 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
     	return config;
 	}
 
-	int [] rawBuffer = new int [200];
-
 	public int read(float[] values, int offset, int nextSampleOffset,
 			DeviceReader reader) {
 		int sensorIndex = 0;
@@ -278,9 +276,12 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 				int numericType = currentGoDirectDevice.getMeasurementChannelNumericType(ch);
 				if (!currentGoDirectDevice.measurementIsRaw(numericType)) {
 					double[] calbMeasurements = currentGoDirectDevice.readMeasurements(ch, 200);
-					numMeasurements = calbMeasurements.length;
-					if (numMeasurements > 0) {
-						for (int i = 0; i < numMeasurements; i++) {
+					int numCalbMeasurements = calbMeasurements != null ? calbMeasurements.length: 0;
+					if (numCalbMeasurements > 0) {
+						if (numMeasurements == 0 || numCalbMeasurements < numMeasurements) {
+							numMeasurements = numCalbMeasurements;
+						}
+						for (int i = 0; i < numCalbMeasurements; i++) {
 							float calibratedData = Float.NaN;
 							calibratedData = (float)calbMeasurements[i];
 							values[offset + sensorIndex + i * nextSampleOffset] = calibratedData;
@@ -288,9 +289,12 @@ public class D2PIOSensorDevice extends AbstractSensorDevice implements
 					}
 				} else {
 					int[] rawMeasurements = currentGoDirectDevice.readRawMeasurements(ch, 200);
-					numMeasurements = rawMeasurements.length;
-					if (numMeasurements > 0) {
-						for (int i = 0; i < numMeasurements; i++) {
+					int numRawMeasurements = rawMeasurements != null ? rawMeasurements.length: 0;
+					if (numRawMeasurements > 0) {
+						if (numMeasurements == 0 || numRawMeasurements < numMeasurements) {
+							numMeasurements = numRawMeasurements;
+						}
+						for (int i = 0; i < numRawMeasurements; i++) {
 							float rawData = Float.NaN;
 							rawData = (float)rawMeasurements[i];
 							values[offset + sensorIndex + i * nextSampleOffset] = (float)rawData;

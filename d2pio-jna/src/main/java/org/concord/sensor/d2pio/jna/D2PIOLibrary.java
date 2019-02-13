@@ -96,7 +96,7 @@ public class D2PIOLibrary
 		if (result != 0) return null;
 		return Integer.toString(pMajorVersion.getValue()) + "." + Integer.toString(pMinorVersion.getValue());
 	}
-	
+
 	public D2PIOSensorList getSensorList() {
 		return (libInstance != null) && (libHandle != null)
 					? new D2PIOSensorList(libInstance, libHandle)
@@ -189,7 +189,12 @@ public class D2PIOLibrary
 				String arch = System.getProperty("os.arch").toLowerCase();
 				String osPrefix;
 				if (Platform.isWindows()) {
-					osPrefix = "Win7_Win32";
+					if (arch.indexOf("64") != -1) {
+						osPrefix = "Win7_Win64";
+					}
+					else {
+						osPrefix = "Win7_Win32";
+					}
 				}
 				else if (Platform.isMac()) {
 					osPrefix = "MacOSX";

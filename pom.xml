@@ -34,11 +34,6 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>com.nativelibs4java</groupId>
-        <artifactId>maven-jnaerator-plugin</artifactId>
-        <version>0.12</version>
-      </plugin>
     </plugins>
   </build>
 
